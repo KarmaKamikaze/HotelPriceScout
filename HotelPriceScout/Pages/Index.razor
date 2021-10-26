@@ -1,7 +1,60 @@
 @page "/"
 
-<h1>Hello, world!</h1>
+@code {
+    string monthName = "";
+    DateTime monthEnd;
+    int monthsAway = 0;
+    int numDummyColumn = 0;
+    int year = 0;
+    int month = 0;
+    protected override void OnInitialized()
+    {
+        CreateMonth();
+    }
 
-Welcome to your new app.
+    void CreateMonth()
+    {
+        var tempDate = DateTime.Now.AddMonths(monthsAway);
+        month = tempDate.Month;
+        year = tempDate.Year;
 
-<SurveyPrompt Title="How is Blazor working for you?"/>
+        DateTime monthStart = new DateTime(year, month, 1);
+        monthEnd = monthStart.AddMonths(1).AddDays(-1);
+        monthName = monthStart.Month switch
+        {
+            1 => "Januar",
+            2 => "Februar",
+            3 => "Marts",
+            4 => "April",
+            5 => "Maj",
+            6 => "Juni",
+            7 => "Juli",
+            8 => "August",
+            9 => "September",
+            10 => "Oktober",
+            11 => "November",
+            12 => "December",
+            _ => ""
+        };
+
+        numDummyColumn = (int)monthStart.DayOfWeek;
+    }
+}
+
+<h1>@monthName @year</h1>
+
+<button @onclick="() => { monthsAway--; CreateMonth(); }">Sidste måned</button>
+
+<button @onclick="() => { monthsAway++; CreateMonth(); }">Næste måned</button>
+
+
+<section>
+    @for (int i = 0; i < numDummyColumn; i++)
+    {
+        <div></div>
+    }
+    @for (int i = 1; i <= monthEnd.Day; i++)
+    {
+        <div>@i</div>
+    }
+</section>
