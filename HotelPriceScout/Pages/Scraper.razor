@@ -1,0 +1,14 @@
+@page "/scraper"
+
+@using HotelPriceScout.Data
+
+<h3>Scraper</h3>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        DataScraper kompasScraber = new DataScraper("Kompas");
+        kompasScraber.Start();
+    }
+}
