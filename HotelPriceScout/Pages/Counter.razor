@@ -1,17 +1,88 @@
-@page "/counter"
+@page "/settings"
 
-<h1>Counter</h1>
 
-<p>Current count: @currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<h1>Indstillinger</h1>
+<br />
+    <SfDropDownList TItem="Roomtypes" TValue="string" DataSource="Rooms" 
+            Placeholder="Select room type" PopupWidth="300px" PopupHeight="200px" Width="300px">
+        <DropDownListFieldSettings Text="Roomtype" Value="RoomValue">
+        </DropDownListFieldSettings>
+    </SfDropDownList>
+    <br />&nbsp;<br /><br />&nbsp;<br />
+    
+            <SfMultiSelect TValue="string[]" TItem="Hotels" AllowFiltering="true" Placeholder="Select hotels" Mode="@VisualMode.CheckBox" 
+            DataSource="@Hotellist" PopupWidth="300px" PopupHeight="200px" Width="300px">
+                <MultiSelectFieldSettings Text="HotelName" Value="Zipcode"></MultiSelectFieldSettings>
+            </SfMultiSelect>
+    <br /> 
+
+
+<button1 class="btn btn-primary" @onclick="StopScout">Stop program</button1> 
+<button2 class="btn btn-primary" @onclick="UpdateScout">Update program</button2>
+<button3 class="btn btn-primary" @onclick="StartScout">Start program</button3>
+
+
+
 
 @code {
-    private int currentCount = 0;
 
-    private void IncrementCount()
+    /*Room type list for dropdown menu*/
+    public class Roomtypes
     {
-        currentCount++;
+        public string Roomtype { get; set; }
+        public string RoomValue { get; set; }
+    }
+    List<Roomtypes> Rooms = new List<Roomtypes>
+    {
+        new Roomtypes() { Roomtype= "1 persons", RoomValue="roomtype 1"},
+        new Roomtypes() { Roomtype= "2 persons", RoomValue="roomtype 2"},
+        new Roomtypes() { Roomtype= "4 persons", RoomValue="roomtype 3"}
+    };
+
+
+    /*Stop, update and start buttons*/
+        private void StopScout()
+    {
+        
+    }
+        
+        private void UpdateScout()
+    {
+        
+    }
+       
+        private void StartScout()
+    {
+         
     }
 
+    public class Hotels
+    {
+        public string HotelName { get; set; }
+        public string Zipcode { get; set; }
+    }
+
+
+    public bool EnableSelectionOrders { get; set; } = true;
+
+    List<Hotels> Hotellist { get; set; } = new List<Hotels>
+    {
+        new Hotels() { HotelName= "Cabinn hotel", Zipcode="9000"},
+        new Hotels() { HotelName= "Slotshotellet Aalborg", Zipcode="9000"},
+        new Hotels() { HotelName= "Milling Hotel Aalborg", Zipcode="9000"},
+        new Hotels() { HotelName= "Aalborg Airport hotel", Zipcode="9000"},
+        new Hotels() { HotelName= "Helnan Phoenix Aalborg", Zipcode="9000"},
+        new Hotels() { HotelName= "Hotel Schnellsminde", Zipcode="9000"},
+        new Hotels() { HotelName= "Hotel Jomfru Ane", Zipcode="9000"},
+        new Hotels() { HotelName= "Radisson Blu Limfjord Hotel Aalborg", Zipcode="9000"},
+        new Hotels() { HotelName= "Comwell Hvide Hus Aalborg", Zipcode="9000"},
+        new Hotels() { HotelName= "Zleep Hotel Aalborg", Zipcode="9000"},
+        new Hotels() { HotelName= "Prinsen Hotel", Zipcode="9000"},
+        new Hotels() { HotelName= "Scandic Aalborg Oest", Zipcode="9220"},
+        new Hotels() { HotelName= "Scandic Aalborg City", Zipcode="9000"},
+        new Hotels() { HotelName= "Room Rent Prinsen", Zipcode="9000"}
+    };
+
+  
 }
