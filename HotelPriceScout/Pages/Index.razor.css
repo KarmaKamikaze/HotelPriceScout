@@ -17,3 +17,11 @@
 .table td:hover{
     background-color: pink;
 }
+
+.boxed {
+    border: 1px solid;
+    float: right;
+    width: 50%;
+    position: relative;
+    bottom: 31ex;
+}
