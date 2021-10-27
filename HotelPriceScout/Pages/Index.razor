@@ -42,14 +42,14 @@ else
     <tbody>
         <tr>
             @for (int i = 0; i < numDummyColumn - 1; i++)
-                {
+            {
                 <td></td>
-                }
+            }
 
             @for (int i = 1; i + numDummyColumn - 1 <= 7; i++)
-                {
+            {
                 <td>@i</td>
-                }
+            }
         </tr>
         @for (int i = 8 - numDummyColumn + 1; i <= monthEnd.Day; i += 7)
             {
@@ -124,6 +124,11 @@ else
             12 => "December",
             _ => ""
         };
+        
         numDummyColumn = (int)monthStart.DayOfWeek;
+        @if (numDummyColumn == 0)
+            {
+                numDummyColumn = 7;
+            }
     }
 }
