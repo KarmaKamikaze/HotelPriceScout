@@ -1,12 +1,85 @@
 @page "/"
 
+
+
+<h1>
+
+    @monthName @year
+
+</h1>
+@if (monthsAway > 0)
+{
+    <button @onclick="() => { monthsAway--; CreateMonth(); }"> Sidste måned </button>
+}
+else
+{
+    <button disabled> Sidste måned </button>
+}
+@if (monthsAway < 3)
+{
+    <button @onclick="() => { monthsAway++; CreateMonth(); }">Næste måned</button>
+}
+else
+{
+    <button disabled>Næste måned</button>
+
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th> Mandag </th>
+            <th> Tirsdag </th>
+            <th> Onsdag </th>
+            <th> Torsdag </th>
+            <th> Fredag </th>
+            <th> Lørdag </th>
+            <th> Søndag </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @for (int i = 0; i < numDummyColumn - 1; i++)
+                {
+                <td></td>
+                }
+
+            @for (int i = 1; i + numDummyColumn - 1 <= 7; i++)
+                {
+                <td>@i</td>
+                }
+        </tr>
+        @for (int i = 8 - numDummyColumn + 1; i <= monthEnd.Day; i += 7)
+            {
+            <tr>
+                @for (int j = 0; j < 7; j++)
+                    {
+                    @if (i + j <= monthEnd.Day)
+                        {
+                        <td>@(i + j)</td>
+                        }
+                        else
+                        {
+                        <td></td>
+                        }
+                    }
+            </tr>
+            }
+
+
+    </tbody>
+</table>
+
 @code {
-    string monthName = "";
-    DateTime monthEnd;
-    int monthsAway = 0;
-    int numDummyColumn = 0;
-    int year = 0;
-    int month = 0;
+        string monthName = "";
+        DateTime monthEnd;
+        int monthsAway = 0;
+        int numDummyColumn = 0;
+    private int kage = 1;
+        int year = 0;
+        int month = 0;
     protected override void OnInitialized()
     {
         CreateMonth();
@@ -36,25 +109,6 @@
             12 => "December",
             _ => ""
         };
-
         numDummyColumn = (int)monthStart.DayOfWeek;
     }
 }
-
-<h1>@monthName @year</h1>
-
-<button @onclick="() => { monthsAway--; CreateMonth(); }">Sidste måned</button>
-
-<button @onclick="() => { monthsAway++; CreateMonth(); }">Næste måned</button>
-
-
-<section>
-    @for (int i = 0; i < numDummyColumn; i++)
-    {
-        <div></div>
-    }
-    @for (int i = 1; i <= monthEnd.Day; i++)
-    {
-        <div>@i</div>
-    }
-</section>

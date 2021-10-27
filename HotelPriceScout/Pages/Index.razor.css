@@ -1,11 +1,19 @@
-﻿section
-{
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
+﻿
+.table {
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
 }
 
-section > div
+.table td
 {
     border: 1px solid black;
     padding: 10px;
+    margin: auto;
+}
+
+.table th {
+    border: 1px solid black;
+}
+.table td:hover{
+    background-color: pink;
 }
