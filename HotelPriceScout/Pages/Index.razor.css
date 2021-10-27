@@ -1,21 +1,21 @@
 ﻿
-.table {
+.Cal {
     -webkit-border-horizontal-spacing: 0px;
     -webkit-border-vertical-spacing: 0px;
 }
 
-.table td
+.Cal td
 {
     border: 1px solid black;
     padding: 10px;
     margin: auto;
 }
 
-.table th {
+.Cal th {
     border: 1px solid black;
 }
-.table td:hover{
-    background-color: pink;
+.Cal td:hover{
+    background-color: #F2F2F2;
 }
 
 .boxed {
