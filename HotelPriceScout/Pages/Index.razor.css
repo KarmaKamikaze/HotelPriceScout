@@ -1,27 +1,7 @@
-﻿
-.Cal {
-    -webkit-border-horizontal-spacing: 0px;
-    -webkit-border-vertical-spacing: 0px;
-}
-
-.Cal td
-{
-    border: 1px solid black;
-    padding: 10px;
-    margin: auto;
-}
-
-.Cal th {
-    border: 1px solid black;
-}
-.Cal td:hover{
+﻿.table td:hover {
     background-color: #F2F2F2;
 }
 
-.boxed {
-    border: 1px solid;
-    float: right;
-    width: 50%;
-    position: relative;
-    bottom: 31ex;
+#BtnDisable {
+    opacity: 0.1;
 }

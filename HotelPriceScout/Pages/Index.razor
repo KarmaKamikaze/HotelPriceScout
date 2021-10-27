@@ -9,92 +9,99 @@
 </h1>
 @if (monthsAway > 0)
 {
-    <button @onclick="() => { monthsAway--; CreateMonth(); }"> Sidste måned </button>
+<button type="button" class="btn btn-default btn-lg" @onclick="() => { monthsAway--; CreateMonth(); }">
+    <i class="bi bi-arrow-thick-left"></i>
+    <span class="oi oi-arrow-thick-left"></span>
+</button>
 }
 else
 {
-    <button disabled> Sidste måned </button>
+<button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+    <i class="bi bi-arrow-thick-left"></i>
+    <span class="oi oi-arrow-thick-left"></span>
+</button>
 }
 @if (monthsAway < 3)
 {
-    <button @onclick="() => { monthsAway++; CreateMonth(); }">Næste måned</button>
+<button type="button" class="btn btn-default btn-lg" @onclick="() => { monthsAway++; CreateMonth(); }">
+    <i class="bi bi-arrow-thick-right"></i>
+    <span class="oi oi-arrow-thick-right"></span>
+</button>
 }
 else
 {
-    <button disabled>Næste måned</button>
-
+<button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+    <i class="bi bi-arrow-thick-right"></i>
+    <span class="oi oi-arrow-thick-right"></span>
+</button>
 }
+<div class="row">
+    <div class="col-md-7">
+        <table class="table-bordered col">
+            <thead>
+                <tr>
+                    <th> Mandag </th>
+                    <th> Tirsdag </th>
+                    <th> Onsdag </th>
+                    <th> Torsdag </th>
+                    <th> Fredag </th>
+                    <th> Lørdag </th>
+                    <th> Søndag </th>
 
-
-<table class="Cal">
-    <thead>
-        <tr>
-            <th> Mandag </th>
-            <th> Tirsdag </th>
-            <th> Onsdag </th>
-            <th> Torsdag </th>
-            <th> Fredag </th>
-            <th> Lørdag </th>
-            <th> Søndag </th>
-
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            @for (int i = 0; i < numDummyColumn - 1; i++)
-            {
-                <td></td>
-            }
-
-            @for (int i = 1; i + numDummyColumn - 1 <= 7; i++)
-            {
-                <td>@i</td>
-            }
-        </tr>
-        @for (int i = 8 - numDummyColumn + 1; i <= monthEnd.Day; i += 7)
-            {
-            <tr>
-                @for (int j = 0; j < 7; j++)
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @for (int i = 0; i < numDummyColumn - 1; i++)
                     {
-                    @if (i + j <= monthEnd.Day)
-                        {
-                        <td>@(i + j)</td>
-                        }
-                        else
-                        {
                         <td></td>
-                        }
                     }
-            </tr>
-            }
+
+                    @for (int i = 1; i + numDummyColumn - 1 <= 7; i++)
+                    {
+                        <td>@i</td>
+                    }
+                </tr>
+                @for (int i = 8 - numDummyColumn + 1; i <= monthEnd.Day; i += 7)
+                {
+                    <tr>
+                        @for (int j = 0; j < 7; j++)
+                        {
+                            @if (i + j <= monthEnd.Day)
+                            {
+                                <td>@(i + j)</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                }
 
 
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    </div>
 
-<div class="boxed">
-    Deez fucking nuts
-    <br />
-    Noget mega sejt texe 
-    <br />
-    Hvad fanden skal der stå
-    <br />
-    Hvad mener du med det
-    <br />
-    Syntes du selv det er en god ide
-    <br />
-    Hvem er du nok til det
-    <br />
-    Jeg kan ikke finde på mere 
+    <div class="col-md-5 border">
+        <div>Hej</div>
+        <div>asdasd</div>
+        <div>asdjkfghbsadf</div>
+        <div>asdfsavd</div>
+        <div>quby</div>
+        <div>iuasdbj</div>
+        <div>mosjndf</div>
+        <div>uysvdjh</div>
+    </div>
 </div>
-
 @code {
-        string monthName = "";
-        DateTime monthEnd;
-        int monthsAway = 0;
-        int numDummyColumn = 0;
-        int year = 0;
-        int month = 0;
+    string monthName = "";
+    DateTime monthEnd;
+    int monthsAway = 0;
+    int numDummyColumn = 0;
+    int year = 0;
+    int month = 0;
     protected override void OnInitialized()
     {
         CreateMonth();
@@ -124,11 +131,11 @@ else
             12 => "December",
             _ => ""
         };
-        
+
         numDummyColumn = (int)monthStart.DayOfWeek;
         @if (numDummyColumn == 0)
-            {
-                numDummyColumn = 7;
-            }
+        {
+            numDummyColumn = 7;
+        }
     }
 }
