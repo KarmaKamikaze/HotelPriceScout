@@ -13,9 +13,10 @@
 
 .table th {
     border: 1px solid black;
+    padding: 5px;
 }
 .table td:hover{
-    background-color: pink;
+    background-color: #F2F2F2;
 }
 
 .boxed {
