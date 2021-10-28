@@ -37,7 +37,7 @@ else
 }
 <div class="row">
     <div class="col-md-7">
-        <table class="table-bordered col">
+        <table id="Calendar" class="table-bordered col, table">
             <thead>
                 <tr>
                     <th> Mandag </th>
@@ -64,7 +64,7 @@ else
                 </tr>
                 @for (int i = 8 - numDummyColumn + 1; i <= monthEnd.Day; i += 7)
                 {
-                    <tr class="clickable-row">
+                    <tr>
                         @for (int j = 0; j < 7; j++)
                         {
                             @if (i + j <= monthEnd.Day)
@@ -79,9 +79,11 @@ else
                     </tr>
                 }
 
-
+                
             </tbody>
         </table>
+
+
     </div>
 
     <div class="col-md-5 border">
@@ -143,7 +145,7 @@ else
 
         void MoreInfo(int DayNumber)
         {
-            Console.WriteLine("det køre");
+            Console.WriteLine("det kører");
         }
     }
 }
