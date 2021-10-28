@@ -37,7 +37,7 @@ else
 }
 <div class="row">
     <div class="col-md-7">
-        <table id="Calendar" class="table-bordered col, table">
+        <table class="table-bordered col">
             <thead>
                 <tr>
                     <th> Mandag </th>
@@ -59,17 +59,17 @@ else
 
                     @for (int i = 1; i + numDummyColumn - 1 <= 7; i++)
                     {
-                        <td onclick="MoreInfo()">@i</td>
+                        <td id="@i">@i</td>
                     }
                 </tr>
                 @for (int i = 8 - numDummyColumn + 1; i <= monthEnd.Day; i += 7)
                 {
-                    <tr>
+                    <tr class="clik">
                         @for (int j = 0; j < 7; j++)
                         {
                             @if (i + j <= monthEnd.Day)
                             {
-                                 <td>@(i + j)</td>
+                                <td @onclick = "MoreInfo">@(i + j)</td>
                             }
                             else
                             {
@@ -79,13 +79,12 @@ else
                     </tr>
                 }
 
-                
+
             </tbody>
         </table>
-
-
     </div>
-
+@if (kage == 0)
+    {
     <div class="col-md-5 border">
         <div>Hej</div>
         <div>asdasd</div>
@@ -96,6 +95,7 @@ else
         <div>mosjndf</div>
         <div>uysvdjh</div>
     </div>
+    }
 </div>
 
 
@@ -106,7 +106,7 @@ else
     int numDummyColumn = 0;
     int year = 0;
     int month = 0;
-    int DayNumber = 0;
+    int kage = 4;
     protected override void OnInitialized()
     {
         CreateMonth();
@@ -143,9 +143,11 @@ else
             numDummyColumn = 7;
         }
 
-        void MoreInfo(int DayNumber)
-        {
-            Console.WriteLine("det kører");
-        }
+
+    }
+
+    void MoreInfo()
+    {
+        kage = 0;
     }
 }
