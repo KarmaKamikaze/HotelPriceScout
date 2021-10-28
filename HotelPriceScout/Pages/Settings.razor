@@ -29,16 +29,25 @@
      </SfDropDownList>
      <br />&nbsp;<br /><br />&nbsp;<br />
 
-     
 
+     
      <div class="row">
-        <button type="button" class="border border-dark col-md-1 btn btn-success" disabled=@IsScoutStarted @onclick="Clicked3" > @ScoutStarted</button>
-        
-        <div class=col-md-4>
-        </div>
-        <button type="button" class="border border-dark col-md-1 btn btn-primary" disabled=@IsScoutUpdated @onclick="Clicked2" > @ScoutUpdated</button>
+         @if( showstart)
+         {
+         <button type="button" class="border border-dark col-md-1 btn btn-success" disabled=@IsScoutStarted @onclick="StartProgram" > @ScoutStarted</button>
+         }
+         @if( showstop)
+         {
+         <button type="button" class="border border-dark col-md-1 btn btn-danger" disabled=@IsScoutStopped @onclick="StopProgram" > @ScoutStopped</button>
+         }
+         <div class="col-md-1"></div>
+         @if( showupdate)
+         {
+        <button type="button" class="border border-dark col-md-1 btn btn-primary" disabled=@IsScoutUpdated @onclick="UpdateProgram" > @ScoutUpdated</button>
+         }
         <div class=col-md-3>
-        <button type="button" class="border border-dark col-md-4 btn btn-danger" disabled=@IsScoutStopped @onclick="Clicked" > @ScoutStopped</button>
+
+        
         </div>
     </div>
 
@@ -150,49 +159,71 @@
     string ScoutStopped = "Stop program";
     bool IsScoutUpdated = false;
     string ScoutUpdated = "Update program";
-        bool IsScoutStarted = false;
+    bool IsScoutStarted = false;
     string ScoutStarted = "Start program";
-    async void Clicked()
+
+    /*When stop program button is clicked it replaces itself with start program button*/
+    public void StopProgram()
     {
         IsScoutStopped = true;
-        ScoutStopped = "Program stopped";
-        await OnButtonClick();
+        ScoutStopped = "Stop program";
+        ShowStartButton();
+        ShowStopButton();
+        ShowUpdateButton();
         IsScoutStarted = false;
         StateHasChanged();
     }
 
-        async void Clicked2()
+    /*Update program button*/
+        async void UpdateProgram()
     {
         IsScoutUpdated = true;
-        ScoutUpdated = "Program updated";
-        await OnButtonClick2();
+        ScoutUpdated = "Update program";
+        await OnButtonClick();
         IsScoutUpdated = false;
         StateHasChanged();
     }
 
-        async void Clicked3()
+    /*Same as stop program but reversed*/
+        public void StartProgram()
     {
         IsScoutStarted = true;
-        ScoutStarted = "Program started";
-        await OnButtonClick();
+        ScoutStarted = "Start program";
+        ShowStopButton();
+        ShowUpdateButton();
+        ShowStartButton();
         IsScoutStopped = false;
         StateHasChanged();
         
     }
     
 
+    /*Await function for async method "Update button"*/
     Task OnButtonClick()
     {
-        //here user can perform buton click function
-        return Task.Delay(500);
+        
+        return Task.Delay(2000);
     }
 
-    Task OnButtonClick2()
+
+    /*show/hide the 3 buttons*/
+    private bool showstop = false;
+    private void ShowStopButton()
     {
-        //here user can perform buton click function
-        return Task.Delay(4000);
-    }
+    showstop = !showstop;
+    } 
 
+    private bool showstart = true;
+    private void ShowStartButton()
+    {
+    showstart = !showstart;
+    } 
+
+    private bool showupdate = false;
+    private void ShowUpdateButton()
+    {
+    showupdate = !showupdate;
+    } 
 
 
 }
