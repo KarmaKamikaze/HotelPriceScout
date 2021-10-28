@@ -37,7 +37,7 @@ else
 }
 <div class="row">
     <div class="col-md-7">
-        <table class="table-bordered col">
+        <table class="table table-bordered col">
             <thead>
                 <tr>
                     <th> Mandag </th>
@@ -60,6 +60,7 @@ else
                     @for (int i = 1; i + numDummyColumn - 1 <= 7; i++)
                     {
                         <td id="@i">@i</td>
+                        IDArray[i - 1] = i;
                     }
                 </tr>
                 @for (int i = 8 - numDummyColumn + 1; i <= monthEnd.Day; i += 7)
@@ -69,7 +70,8 @@ else
                         {
                             @if (i + j <= monthEnd.Day)
                             {
-                                <td @onclick = "MoreInfo">@(i + j)</td>
+                                IDArray[(i + j)-1] = (i+j);
+                                <td @onclick = "(() => MoreInfo(IDArray))">@(i + j)</td>
                             }
                             else
                             {
@@ -83,8 +85,7 @@ else
             </tbody>
         </table>
     </div>
-@if (kage == 0)
-    {
+
     <div class="col-md-5 border">
         <div>Hej</div>
         <div>asdasd</div>
@@ -95,7 +96,6 @@ else
         <div>mosjndf</div>
         <div>uysvdjh</div>
     </div>
-    }
 </div>
 
 
@@ -106,7 +106,9 @@ else
     int numDummyColumn = 0;
     int year = 0;
     int month = 0;
-    int kage = 4;
+    int count = 0;
+    int [] IDArray = new int [31];
+
     protected override void OnInitialized()
     {
         CreateMonth();
@@ -146,8 +148,8 @@ else
 
     }
 
-    void MoreInfo()
+    void MoreInfo(int [] IDArray)
     {
-        kage = 0;
+        
     }
 }
