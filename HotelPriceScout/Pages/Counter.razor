@@ -11,16 +11,36 @@
     </SfDropDownList>
     <br />&nbsp;<br /><br />&nbsp;<br />
     
-            <SfMultiSelect TValue="string[]" TItem="Hotels" AllowFiltering="true" Placeholder="Select hotels" Mode="@VisualMode.CheckBox" 
+     <SfMultiSelect TValue="string" TItem="Hotels" AllowFiltering="true" Placeholder="Select hotels" Mode="@VisualMode.CheckBox" 
             DataSource="@Hotellist" PopupWidth="300px" PopupHeight="200px" Width="300px">
                 <MultiSelectFieldSettings Text="HotelName" Value="Zipcode"></MultiSelectFieldSettings>
-            </SfMultiSelect>
-    <br /> 
+     </SfMultiSelect>
+    <br />&nbsp;<br /><br />&nbsp;<br />
+    <SfDropDownList TItem="Margin" TValue="string" DataSource="Margins" 
+            Placeholder="Select margin value" PopupWidth="300px" PopupHeight="200px" Width="300px">
+        <DropDownListFieldSettings Text="MarginValue" Value="LowerMargin">
+        </DropDownListFieldSettings>
+    </SfDropDownList>
+    <br />&nbsp;<br /><br />&nbsp;<br />
+    <SfDropDownList TItem="NotificationTime" TValue="string" DataSource="TimeToNotify" 
+            Placeholder="Select time to notify" PopupWidth="300px" PopupHeight="200px" Width="300px">
+        <DropDownListFieldSettings Text="Time" Value="LowerMargin">
+        </DropDownListFieldSettings>
+     </SfDropDownList>
+     <br />&nbsp;<br /><br />&nbsp;<br />
 
+     
 
-<button1 class="btn btn-primary" @onclick="StopScout">Stop program</button1> 
-<button2 class="btn btn-primary" @onclick="UpdateScout">Update program</button2>
-<button3 class="btn btn-primary" @onclick="StartScout">Start program</button3>
+     <div class="row">
+        <button type="button" class="border border-dark col-md-1 btn btn-success" disabled=@IsScoutStarted @onclick="Clicked3" > @ScoutStarted</button>
+        
+        <div class=col-md-4>
+        </div>
+        <button type="button" class="border border-dark col-md-1 btn btn-primary" disabled=@IsScoutUpdated @onclick="Clicked2" > @ScoutUpdated</button>
+        <div class=col-md-3>
+        <button type="button" class="border border-dark col-md-4 btn btn-danger" disabled=@IsScoutStopped @onclick="Clicked" > @ScoutStopped</button>
+        </div>
+    </div>
 
 
 
@@ -41,22 +61,8 @@
     };
 
 
-    /*Stop, update and start buttons*/
-        private void StopScout()
-    {
-        
-    }
-        
-        private void UpdateScout()
-    {
-        
-    }
-       
-        private void StartScout()
-    {
-         
-    }
 
+    /*Hotel list for dropdown menu*/
     public class Hotels
     {
         public string HotelName { get; set; }
@@ -85,4 +91,108 @@
     };
 
   
+    /*Margin list for dropdown*/
+    public class Margin
+    {
+        public string MarginValue { get; set; }
+        public string UpperMargin { get; set; }
+        public string LowerMargin { get; set; }
+    }
+    List<Margin> Margins = new List<Margin>
+    {
+        new Margin() { MarginValue= "5%", UpperMargin= "+5%", LowerMargin= "-5%"},
+        new Margin() { MarginValue= "10%", UpperMargin= "+10%", LowerMargin= "-10%"},
+        new Margin() { MarginValue= "15%", UpperMargin= "+15%", LowerMargin= "-15%"}
+    };
+
+        /*Margin list for dropdown*/
+    public class NotificationTime
+    {
+        public string Time { get; set; }
+    }
+    List<NotificationTime> TimeToNotify = new List<NotificationTime>
+    {
+        new NotificationTime() { Time= "08:00"},
+        new NotificationTime() { Time= "08:30"},
+        new NotificationTime() { Time= "09:00"},
+        new NotificationTime() { Time= "09:30"},
+        new NotificationTime() { Time= "10:00"},
+        new NotificationTime() { Time= "10:30"},
+        new NotificationTime() { Time= "11:00"},
+        new NotificationTime() { Time= "11:30"},
+        new NotificationTime() { Time= "12:00"},
+        new NotificationTime() { Time= "12:30"},
+        new NotificationTime() { Time= "13:00"},
+        new NotificationTime() { Time= "13:30"},
+        new NotificationTime() { Time= "14:00"},
+        new NotificationTime() { Time= "14:30"},
+        new NotificationTime() { Time= "15:00"},
+        new NotificationTime() { Time= "15:30"},
+        new NotificationTime() { Time= "16:00"},
+        new NotificationTime() { Time= "16:30"},
+        new NotificationTime() { Time= "17:00"},
+        new NotificationTime() { Time= "17:30"},
+        new NotificationTime() { Time= "18:00"},
+        new NotificationTime() { Time= "18:30"},
+        new NotificationTime() { Time= "19:00"},
+        new NotificationTime() { Time= "19:30"},
+        new NotificationTime() { Time= "20:00"},
+        new NotificationTime() { Time= "20:30"},
+        new NotificationTime() { Time= "21:00"},
+        new NotificationTime() { Time= "21:30"},
+        new NotificationTime() { Time= "22:00"},
+        new NotificationTime() { Time= "22:30"},
+        new NotificationTime() { Time= "23:00"},
+    };
+
+
+    bool IsScoutStopped = false;
+    string ScoutStopped = "Stop program";
+    bool IsScoutUpdated = false;
+    string ScoutUpdated = "Update program";
+        bool IsScoutStarted = false;
+    string ScoutStarted = "Start program";
+    async void Clicked()
+    {
+        IsScoutStopped = true;
+        ScoutStopped = "Program stopped";
+        await OnButtonClick();
+        IsScoutStarted = false;
+        StateHasChanged();
+    }
+
+        async void Clicked2()
+    {
+        IsScoutUpdated = true;
+        ScoutUpdated = "Program updated";
+        await OnButtonClick2();
+        IsScoutUpdated = false;
+        StateHasChanged();
+    }
+
+        async void Clicked3()
+    {
+        IsScoutStarted = true;
+        ScoutStarted = "Program started";
+        await OnButtonClick();
+        IsScoutStopped = false;
+        StateHasChanged();
+        
+    }
+    
+
+    Task OnButtonClick()
+    {
+        //here user can perform buton click function
+        return Task.Delay(500);
+    }
+
+    Task OnButtonClick2()
+    {
+        //here user can perform buton click function
+        return Task.Delay(4000);
+    }
+
+
+
 }
