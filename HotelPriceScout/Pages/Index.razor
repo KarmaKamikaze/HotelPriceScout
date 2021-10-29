@@ -1,10 +1,8 @@
 @page "/"
 
-
-
 <h1>
 
-    @monthName @year
+    @monthName @year @tempint
 
 </h1>
 @if (monthsAway > 0)
@@ -59,8 +57,8 @@ else
 
                     @for (int i = 1; i + numDummyColumn - 1 <= 7; i++)
                     {
-                        <td id="@i">@i</td>
-                        IDArray[i - 1] = i;
+                            int k = i;
+                        <td @onclick = "(()=>ShowMoreInfo(k))">@i</td>
                     }
                 </tr>
                 @for (int i = 8 - numDummyColumn + 1; i <= monthEnd.Day; i += 7)
@@ -70,8 +68,8 @@ else
                         {
                             @if (i + j <= monthEnd.Day)
                             {
-                                IDArray[(i + j)-1] = (i+j);
-                                <td @onclick = "(() => MoreInfo(IDArray))">@(i + j)</td>
+                                int k = i + j;
+                                <td @onclick = "(()=>ShowMoreInfo(k))">@(i + j)</td>
                             }
                             else
                             {
@@ -106,8 +104,7 @@ else
     int numDummyColumn = 0;
     int year = 0;
     int month = 0;
-    int count = 0;
-    int [] IDArray = new int [31];
+    int tempint = 0;
 
     protected override void OnInitialized()
     {
@@ -144,12 +141,10 @@ else
         {
             numDummyColumn = 7;
         }
-
-
     }
 
-    void MoreInfo(int [] IDArray)
+    void ShowMoreInfo(int DayClicked)
     {
-        
+        tempint = DayClicked;
     }
 }
