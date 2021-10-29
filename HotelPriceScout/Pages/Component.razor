@@ -1,0 +1,68 @@
+﻿@page "/vaterpas"
+<h3>Component</h3>
+
+
+<div class="row border col-md-5"> <!-- outer layer-->
+
+    <div class="row col-md-12"> <!--Level 1-->
+        <div class="col text-right" id="level1 left-name"><p>@Hotelname1</p></div>
+        <div class="col-md-2 bg-danger" id="level1 price"><p>@price1</p></div>
+        <div class="col text-left" id="level1 right-name"><p>@Hotelnameblank</p></div>
+    </div>
+    <div class="row col-md-12"> <!--Level 2-->
+        <div class="col text-right" id="level2 left-name"><p>@Hotelnameblank</p></div>
+        <div class="col-md-2 bg-danger" id="level2 price"><p>@price2,-</p></div>
+        <div class="col text-left" id="level2 right-name"><p>@Hotelname2</p></div>
+    </div>
+    <div class="row col-md-12"> <!--Level 3-->
+        <div class="col text-right" id="level3 left-name"><p>@Hotelnameblank</p></div>
+        <div class="col-md-2 bg-danger" id="level3 price"><p>@price3,-</p></div>
+        <div class="col text-left" id="level3 right-name"><p>@Hotelname3</p></div>
+    </div>
+    <div class="row col-md-12"> <!--Level 4-->
+        <div class="col text-right" id="level4 left-name"><p>@Hotelnameblank</p></div>
+        <div class="col-md-2 bg-primary" id="level4 price"><p>@price4,-</p></div>
+        <div class="col text-left" id="level4 right-name"><p>@Hotelname4</p></div>
+    </div>
+    <div class="row col-md-12"> <!--Level 5-->
+        <div class="col text-right" id="level5 left-name"><p>@Hotelname5</p></div>
+        <div class="col-md-2 bg-success" id="level5 price"><p>@price5,-</p></div>
+        <div class="col text-left" id="level5 right-name"><p>@Hotelname6</p></div>
+    </div>
+    <div class="row col-md-12"> <!--Level 6-->
+        <div class="col text-right" id="level6 left-name"><p>@Hotelname7</p></div>
+        <div class="col-md-2 bg-success" id="level6 price"><p>@price6,-</p></div>
+        <div class="col text-left" id="level6 right-name"><p>@Hotelnameblank</p></div>
+    </div>
+    <div class="row col-md-12"> <!--Level 7-->
+        <div class="col text-right" id="level7 left-name"><p>@Hotelnameblank</p></div>
+        <div class="col-md-2 bg-success" id="level7 price"><p>@price7,-</p></div>
+        <div class="col text-left" id="level7 right-name"><p>@Hotelnameblank</p></div>
+    </div>
+        
+
+
+</div>
+
+
+@code {
+
+    int price1 = 2;
+    int price2 = 4;
+    int price3 = 12;
+    int price4 = 43;
+    int price5 = 523;
+    int price6 = 43324;
+    int price7 = 213;
+    
+
+    string Hotelname1 = "Hotel compas";
+    string Hotelname2 = "Hotel zleep";
+    string Hotelname3 = "Hotel Sarmi";
+    string Hotelname4 = "Hotel Sarmisuper";
+    string Hotelname5 = "Hotel Salami super";
+    string Hotelname6 = "Hotel Shebabs";
+    string Hotelname7 = "Phønix";
+    string Hotelnameblank = "";
+
+}
