@@ -1,7 +1,7 @@
 ﻿using System;
 namespace HotelPriceScout.Data.Interface
 {
-    class Dashboard
+    public class Dashboard
     {
         public string monthName = "";
         public DateTime monthEnd;
@@ -9,7 +9,7 @@ namespace HotelPriceScout.Data.Interface
         public int numDummyColumn = 0;
         public int year = 0;
         public int month = 0;
-        public int tempint = 0;
+        public int DayClicked = 0;
 
         public void CreateMonth()
         {
@@ -45,13 +45,13 @@ namespace HotelPriceScout.Data.Interface
         }
         public void ShowMoreInfo(int DayClicked)
         {
-            if (DayClicked == tempint)
+            if (DayClicked == this.DayClicked)
             {
-                tempint = 0;
+                this.DayClicked = 0;
             }
             else
             {
-                tempint = DayClicked;
+                this.DayClicked = DayClicked;
             }
         }
     }

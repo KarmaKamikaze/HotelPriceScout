@@ -1,5 +1,7 @@
 @page "/"
-@inject Dashboard cal
+@using HotelPriceScout.Data.Interface
+@inject Dashboard Dashboard
+
 <h1>
     @Cal.monthName @Cal.year
 </h1>
@@ -53,11 +55,14 @@ else
                     {
                         <td></td>
                     }
-
                     @for (int i = 1; i + Cal.numDummyColumn - 1 <= 7; i++)
                     {
                         int k = i;
-                        <td @onclick="(()=>Cal.ShowMoreInfo(k))">@i</td>
+                        <td @onclick="(()=>Cal.ShowMoreInfo(k))">
+                            <div style="font-size: large;">@i</div>
+                            <div style="text-align: right; font-size: small;">You 1337</div>
+                            <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
+                        </td>
                     }
                 </tr>
                 @for (int i = 8 - Cal.numDummyColumn + 1; i <= Cal.monthEnd.Day; i += 7)
@@ -68,7 +73,11 @@ else
                             @if (i + j <= Cal.monthEnd.Day)
                             {
                                 int k = i + j;
-                                <td @onclick="(()=>Cal.ShowMoreInfo(k))">@(i + j)</td>
+                                <td @onclick="(()=>Cal.ShowMoreInfo(k))">
+                                    <div style="font-size: large;">@(i + j)</div>
+                                    <div style="text-align: right; font-size: small;">You 1337</div>
+                                    <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
+                                </td>
                             }
                             else
                             {
@@ -80,14 +89,14 @@ else
             </tbody>
         </table>
     </div>
-    @if (Cal.tempint != 0)
+    @if (Cal.DayClicked != 0)
     {
         <div class="col-md-5 border">
             <div>Vi</div>
             <div>Venter</div>
             <div>På</div>
             <div>Casper</div>
-            <div>@Cal.tempint</div>
+            <div>@Cal.DayClicked</div>
         </div>
     }
 </div>
