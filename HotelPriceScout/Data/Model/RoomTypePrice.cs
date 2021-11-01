@@ -5,19 +5,23 @@ namespace HotelPriceScout.Data.Model
   public class RoomTypePrice
   {
 
-    private DateTime _date;
+    private readonly DateTime _date;
     private decimal _price;
 
-    public RoomTypePrice(DateTime date, decimal price)
+    public RoomTypePrice(DateTime date)
     {
       Date = date;
+      Price = 0;
+    }
+    public RoomTypePrice(DateTime date, decimal price) : this(date)
+    {
       Price = price;
     }
 
     public DateTime Date
     {
       get => _date;
-      set
+      init
       {
         if (value.Date < DateTime.Now.Date)
         {
