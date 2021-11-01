@@ -11,9 +11,9 @@ namespace HotelPriceScout.Data.Model
         {
             try
             {
-                Name = name ?? throw new ArgumentNullException();
-                Type = type ?? throw new ArgumentNullException();
-                Url = url ?? throw new ArgumentNullException();
+                Name = name ?? throw new ArgumentNullException(nameof(name));
+                Type = type ?? throw new ArgumentNullException(nameof(type));
+                Url = url ?? throw new ArgumentNullException(nameof(url));
                 // TODO: Initialize list of hotels.
             }
             catch (ArgumentException e)
