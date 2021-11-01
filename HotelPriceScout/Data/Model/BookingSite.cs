@@ -39,12 +39,12 @@ namespace HotelPriceScout.Data.Model
 
         public string Url { get; }
 
-        private void CreateHotel()
+        private void CreateHotels()
         {
             throw new NotImplementedException();
         }
 
-        public void CreatePriceScraper()
+        private void CreatePriceScraper()
         {
             throw new NotImplementedException();
         }
