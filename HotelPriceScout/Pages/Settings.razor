@@ -2,87 +2,84 @@
 
 
 
-<h1>Indstillinger</h1>
+<h1>Settings</h1>
 <br />
-    <SfDropDownList TItem="Roomtypes" TValue="string" DataSource="Rooms" 
-            Placeholder="Select room type" PopupWidth="300px" PopupHeight="200px" Width="300px">
-        <DropDownListFieldSettings Text="Roomtype" Value="RoomValue">
-        </DropDownListFieldSettings>
-    </SfDropDownList>
-    <br />&nbsp;<br /><br />&nbsp;<br />
+<SfDropDownList TItem="Roomtypes" TValue="string" DataSource="Rooms" Placeholder="Select room type" PopupWidth="300px" PopupHeight="200px" Width="300px">
+    <DropDownListFieldSettings Text="Roomtype" Value="RoomValue">
+    </DropDownListFieldSettings>
+</SfDropDownList>
+<br />&nbsp;<br /><br />&nbsp;<br />
     
-     <SfMultiSelect TValue="string" TItem="Hotels" AllowFiltering="true" Placeholder="Select hotels" Mode="@VisualMode.CheckBox" 
-            DataSource="@Hotellist" PopupWidth="300px" PopupHeight="200px" Width="300px">
-                <MultiSelectFieldSettings Text="HotelName" Value="Zipcode"></MultiSelectFieldSettings>
-     </SfMultiSelect>
-    <br />&nbsp;<br /><br />&nbsp;<br />
+<SfMultiSelect TValue="string" TItem="Hotels" AllowFiltering="true" Placeholder="Select hotels" Mode="@VisualMode.CheckBox" DataSource="@Hotellist" PopupWidth="300px" PopupHeight="200px" Width="300px">
+    <MultiSelectFieldSettings Text="HotelName" Value="Zipcode">
+    </MultiSelectFieldSettings>
+</SfMultiSelect>
+<br />&nbsp;<br /><br />&nbsp;<br />
 
-    <SfDropDownList TItem="Margin" TValue="string" DataSource="Margins" 
-            Placeholder="Select margin value" PopupWidth="300px" PopupHeight="200px" Width="300px">
-        <DropDownListFieldSettings Text="MarginValue" Value="LowerMargin">
-        </DropDownListFieldSettings>
-    </SfDropDownList>
-    <br />&nbsp;<br /><br />&nbsp;<br />
+<SfDropDownList TItem="Margin" TValue="string" DataSource="Margins" Placeholder="Select margin value" PopupWidth="300px" PopupHeight="200px" Width="300px">
+    <DropDownListFieldSettings Text="MarginValue" Value="LowerMargin">
+    </DropDownListFieldSettings>
+</SfDropDownList>
+<br />&nbsp;<br /><br />&nbsp;<br />
 
-    <SfDropDownList TItem="NotificationTime" TValue="string" DataSource="TimeToNotify" 
-            Placeholder="Select time to notify" PopupWidth="300px" PopupHeight="200px" Width="300px">
-        <DropDownListFieldSettings Text="Time" Value="LowerMargin">
-        </DropDownListFieldSettings>
-     </SfDropDownList>
-     <br />&nbsp;<br /><br />&nbsp;<br />
+<SfDropDownList TItem="NotificationTime" TValue="string" DataSource="TimeToNotify" Placeholder="Select time to notify" PopupWidth="300px" PopupHeight="200px" Width="300px">
+    <DropDownListFieldSettings Text="Time" Value="LowerMargin">
+    </DropDownListFieldSettings>
+</SfDropDownList>
+<br />&nbsp;<br /><br />&nbsp;<br />
  
-     <div class="row">
-         @if(showstart)
-         {
-         <button type="button" class="border border-dark col-md-1 btn btn-success" disabled=@IsScoutStarted @onclick="StartProgram" > @ScoutStarted</button>
-         }
+<div class="row">
+    @if(showstart)
+    {
+        <button type="button" class="border border-dark col-md-1 btn btn-success" disabled=@IsScoutStarted @onclick="StartProgram" > @ScoutStarted</button>
+    }
          
     @if (showstop)
     {
-        <button type="button" class="border border-dark col-md-1 btn btn-danger" data-bs-toggle="modal" @onclick="PopUp"> Stop program</button>
+        <button type="button" class="border border-dark col-md-1 btn btn-danger" data-bs-toggle="modal" @onkeydown="@EscapeStop" @onclick="PopUp"> Stop program</button>
     }
-        @if (popup)
-        {
-            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">  
-                <div class="modal-dialog modal-dialog-centered" role="document">  
-                    <div class="modal-content">  
-                        <div class="modal-header">  
-                            <h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
-                        </div> 
-                            <div class="modal-footer">
-                                <button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="StopProgram">Yes </button>
-                                <button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="PopUp"> No </button>
-                            </div>
+    @if (popup)
+    {
+        <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">  
+            <div class="modal-dialog modal-dialog-centered" role="document">  
+                <div class="modal-content">  
+                    <div class="modal-header">  
+                        <h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
+                    </div> 
+                    <div class="modal-footer">
+                        <button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="StopProgram">Yes </button>
+                        <button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="PopUp"> No </button>
                     </div>
                 </div>
             </div>
-        }
-    
-    <div class="col-md-1"></div>
-         @if(showupdate)
-         {
-        <button type="button" class="border border-dark col-md-1 btn btn-primary" data-bs-toggle="modal" @onclick="UpdatePopUp" >Update program</button>
-         }
-                 @if (updatepopup)
-        {
-            
-            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">  
-                <div class="modal-dialog modal-dialog-centered" role="document">  
-                    <div class="modal-content">  
-                        <div class="modal-header">  
-                            <h5 class="modal-title" id="titleLabel">Are you sure you want to update the program?</h5>
-                        </div> 
-                         <div class=modal-footer>
-                            <button type="button" class="form-control border border-dark" col-8 col-sm-3 disabled=@IsScoutUpdated @onclick="UpdateProgram" >Yes</button>
-                            <button type="button" class="form-control border border-dark" col-4 col-sm-3 disabled=@IsScoutUpdated @onclick="UpdatePopUp" >No</button>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-        }
-        <div class=col-md-3>        
         </div>
+    }
+    
+    <div class="col-md-1">
     </div>
+    @if(showupdate)
+    {
+        <button type="button" class="border border-dark col-md-1 btn btn-primary" data-bs-toggle="modal" @onkeydown="@EscapeUpdate" @onclick="UpdatePopUp" >Update program</button>
+    }
+    @if (updatepopup)
+    {
+        <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">  
+            <div class="modal-dialog modal-dialog-centered" role="document">  
+                <div class="modal-content">  
+                    <div class="modal-header">  
+                        <h5 class="modal-title" id="titleLabel">Are you sure you want to update the program?</h5>
+                    </div> 
+                    <div class=modal-footer>
+                        <button type="button" class="form-control border border-dark" col-8 col-sm-3 disabled=@IsScoutUpdated  @onclick="UpdateProgram" >Yes</button>
+                        <button type="button" class="form-control border border-dark" col-4 col-sm-3  disabled=@IsScoutUpdated  @onclick="UpdatePopUp" >No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class=col-md-3>        
+    </div>
+</div>
 
 
 
@@ -102,11 +99,6 @@
         new Roomtypes() { Roomtype= "2 persons", RoomValue="roomtype 2"},
         new Roomtypes() { Roomtype= "4 persons", RoomValue="roomtype 3"}
     };
-
-    public class SettingManager
-    {
-            
-    }
 
     /*Hotel list for dropdown menu*/
     public class Hotels
@@ -265,6 +257,8 @@
     showupdate = !showupdate;
     }
 
+
+    /*Toggle if modal is popped up*/
     public bool popup = false;
     private void PopUp()
     {
@@ -275,6 +269,23 @@
     private void UpdatePopUp()
     {
         updatepopup = !updatepopup;
+    }
+
+    /*Escape key event handler*/
+    public void EscapeUpdate(KeyboardEventArgs e)
+    {
+        if (e.Code == "Escape")
+        {
+            UpdatePopUp();
+        }
+    }
+
+    public void EscapeStop(KeyboardEventArgs f)
+    {
+        if (f.Code == "Escape")
+        {
+            PopUp();
+        }
     }
 
 }
