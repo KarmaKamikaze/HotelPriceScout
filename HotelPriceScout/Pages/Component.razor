@@ -1,118 +1,48 @@
 ﻿@page "/vaterpas"
-<h3>Component</h3>
+<h3>Price thermometer</h3>
 
+<div class="row border col-md-4"> <!-- outer layer-->
 
-<div class="row border col-md-5"> <!-- outer layer-->
+    @if(Test == null){<div><p>Loading data</p> </div>}// checks if thermometer is ready yet
+    else{
 
-    <div class='row col-md-12'><div class='col text-right' id='left-name'><p>Hotel Radison</p></div><div class='col-md-2 bg-danger'><p>999</p></div><div class='col text-left'><p>Blank Name</p></div></div>
-    <div class='row col-md-12'><div class='col text-right' id='left-name'><p>Hotel Zleep</p></div><div class='col-md-2 bg-danger'><p>799</p></div><div class='col text-left'><p>Blank Name</p></div></div>
-    <div class='row col-md-12'><div class='col text-right' id='left-name'><p>Gns. Marked</p></div><div class='col-md-2 bg-primary'><p>679</p></div><div class='col text-left'><p>Blank Name</p></div></div>
-    <div class='row col-md-12'><div class='col text-right' id='left-name'><p>Hotel Kompas</p></div><div class='col-md-2 bg-success'><p>599</p></div><div class='col text-left'><p>Blank Name</p></div></div>
-    <div class='row col-md-12'><div class='col text-right' id='left-name'><p>Hotel Phoenix</p></div><div class='col-md-2 bg-success'><p>499</p></div><div class='col text-left'><p>Blank Name</p></div></div>
-    <div class='row col-md-12'><div class='col text-right' id='left-name'><p>Hotel Cabin</p></div><div class='col-md-2 bg-success'><p>499</p></div><div class='col text-left'><p>Blank Name</p></div></div>
-    @*<div class="row col-md-12"> <!--Level 1-->
-        <div class="col text-right" id="level1 left-name"><p>@Hotelname1</p></div>
-        <div class="col-md-2 bg-danger" id="level1 price"><p>@price1</p></div>
-        <div class="col text-left" id="level1 right-name"><p>@Hotelnameblank</p></div>
-    </div>
-    <div class="row col-md-12"> <!--Level 2-->
-        <div class="col text-right" id="level2 left-name"><p>@Hotelnameblank</p></div>
-        <div class="col-md-2 bg-danger" id="level2 price"><p>@price2,-</p></div>
-        <div class="col text-left" id="level2 right-name"><p>@Hotelname2</p></div>
-    </div>
-    <div class="row col-md-12"> <!--Level 3-->
-        <div class="col text-right" id="level3 left-name"><p>@Hotelnameblank</p></div>
-        <div class="col-md-2 bg-danger" id="level3 price"><p>@price3,-</p></div>
-        <div class="col text-left" id="level3 right-name"><p>@Hotelname3</p></div>
-    </div>
-    <div class="row col-md-12"> <!--Level 4-->
-        <div class="col text-right" id="level4 left-name"><p>@Hotelnameblank</p></div>
-        <div class="col-md-2 bg-primary" id="level4 price"><p>@price4,-</p></div>
-        <div class="col text-left" id="level4 right-name"><p>@Hotelname4</p></div>
-    </div>
-    <div class="row col-md-12"> <!--Level 5-->
-        <div class="col text-right" id="level5 left-name"><p>@Hotelname5</p></div>
-        <div class="col-md-2 bg-success" id="level5 price"><p>@price5,-</p></div>
-        <div class="col text-left" id="level5 right-name"><p>@Hotelname6</p></div>
-    </div>
-    <div class="row col-md-12"> <!--Level 6-->
-        <div class="col text-right" id="level6 left-name"><p>@Hotelname7</p></div>
-        <div class="col-md-2 bg-success" id="level6 price"><p>@price6,-</p></div>
-        <div class="col text-left" id="level6 right-name"><p>@Hotelnameblank</p></div>
-    </div>
-    <div class="row col-md-12"> <!--Level 7-->
-        <div class="col text-right" id="level7 left-name"><p>@Hotelnameblank</p></div>
-        <div class="col-md-2 bg-success" id="level7 price"><p>@price7,-</p></div>
-        <div class="col text-left" id="level7 right-name"><p>@Hotelnameblank</p></div>
-    </div>*@
-    
-    @html
-
-        
-
-
-</div>
+        @foreach (Prices item in Test)
+            {
+                @if(item.Price > MarketPriceItem.Price) 
+                {
+                    <div class='row col-md-12 align-items-center'><div class='col text-right' id='left-name'><p>@item.Name <span class="oi oi-arrow-right"></span></p></div>
+                    <div class='col-md-3 bg-danger '><p>@item.Price,-</p></div>
+                    @*<div class='col text-left'><p>Blank Name</p></div>*@</div>
+                } 
+                else if (item.Price < MarketPriceItem.Price)
+                {
+                   <div class="row col-md-12 align-items-center"><div class="col text-right" id="left-name"><p class="align-middle">@item.Name <span class="oi oi-arrow-right"></span></p></div>
+                   <div class="col-md-3 bg-success"><p class="align-middle">@item.Price,-</p></div>
+                   @*<div class="col text-left"><p>Blank Name</p></div>*@</div>
+                }else 
+                {
+                    <div class='row col-md-12 align-items-center'><div class='col text-right' id='left-name'><p>@MarketPriceItem.Name <span class="oi oi-arrow-right"></span></p></div>
+                   <div class='col-md-3 bg-primary'><p>@MarketPriceItem.Price,-</p></div>
+                   @*<div class='col text-left'><p>Blank Name</p></div>*@</div>
+                }
+                
+            }      
+    }
+ </div>
 
 
 @code 
 {
-    protected override async Task OnInitializedAsync()
-{
-   generatetermometer();
-  
-}
+    protected override async Task OnInitializedAsync() 
+    { generatetermometer(); }
 
+    List<Prices> Test;
+    Prices MarketPriceItem;
     private void generatetermometer()
     {
-        string Abovemarket = "", Market = "", BelowMarket = "";
-
-        List<Prices> Test = PriceMeterGenerator.PriceListGenerator(); // generates test list of hotelprices, where market price is inside.
-        Prices MarketPriceItem = (PriceMeterGenerator.MarketFinder(Test)); // extracts marketprice from list of prices.
-        
-        Test.Remove(MarketPriceItem); //removes market object from list as it has been extracted.
+        Test =  PriceMeterGenerator.PriceListGenerator(); // generates test list of hotelprices, where market price is inside.
+        MarketPriceItem =  (PriceMeterGenerator.MarketFinder(Test)); // extracts marketprice from list of prices.
+        //Test.Remove(MarketPriceItem);  // removes market object from list as it has been extracted.
         Test.Sort();
-
-        foreach (Prices item in Test)
-        {
-            if(item.Price > MarketPriceItem.Price) 
-            {
-                Abovemarket += "<div class='row col-md-12'><div class='col text-right' id='left-name'><p>"+ item.Name +
-                    "</p></div><div class='col-md-2 bg-danger'><p>" + item.Price + "</p></div>"+
-                       "<div class='col text-left'><p>Blank Name</p></div></div>";
-
-            } 
-            else if (item.Price < MarketPriceItem.Price)
-            {
-                BelowMarket += "<div class='row col-md-12'><div class='col text-right' id='left-name'><p>" + item.Name +
-                    "</p></div><div class='col-md-2 bg-success'><p>" + item.Price + "</p></div>" +
-                       "<div class='col text-left'><p>Blank Name</p></div></div>";
-
-            }
-
-        }
-        Market = "<div class='row col-md-12'><div class='col text-right' id='left-name'><p>" + MarketPriceItem.Name +
-                    "</p></div><div class='col-md-2 bg-primary'><p>" + MarketPriceItem.Price + "</p></div>" +
-                       "<div class='col text-left'><p>Blank Name</p></div></div>";
-
-         html = Abovemarket + Market + BelowMarket;
-
-
-    }
-    string html = "";
-    //int price1 = 2;
-    //int price2 = 4;
-    //int price3 = 12;
-    //int price4 = 43;
-    //int price5 = 523;
-    //int price6 = 43324;
-    //int price7 = 213;
-
-    //string Hotelname1 = "Hotel compas";
-    //string Hotelname2 = "Hotel zleep";
-    //string Hotelname3 = "Hotel Sarmi";
-    //string Hotelname4 = "Hotel Sarmisuper";
-    //string Hotelname5 = "Hotel Salami super";
-    //string Hotelname6 = "Hotel Shebabs";
-    //string Hotelname7 = "Phønix";
-    //string Hotelnameblank = "";
+     }
  }
