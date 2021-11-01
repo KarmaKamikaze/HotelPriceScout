@@ -8,4 +8,10 @@
       <PackageReference Include="IronWebScraper" Version="2021.9.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Data\Interface\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Data\Interface\" />
+    </ItemGroup>
 </Project>

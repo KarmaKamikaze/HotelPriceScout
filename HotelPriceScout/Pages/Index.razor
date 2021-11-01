@@ -1,37 +1,36 @@
 @page "/"
 
 <h1>
-
-    @monthName @year @tempint
-
+    @Cal.monthName @Cal.year
 </h1>
-@if (monthsAway > 0)
+
+@if (Cal.monthsAway > 0)
 {
-<button type="button" class="btn btn-default btn-lg" @onclick="() => { monthsAway--; CreateMonth(); }">
-    <i class="bi bi-arrow-thick-left"></i>
-    <span class="oi oi-arrow-thick-left"></span>
-</button>
+    <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway--; Cal.CreateMonth(); }">
+        <i class="bi bi-arrow-thick-left"></i>
+        <span class="oi oi-arrow-thick-left"></span>
+    </button>
 }
 else
 {
-<button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
-    <i class="bi bi-arrow-thick-left"></i>
-    <span class="oi oi-arrow-thick-left"></span>
-</button>
+    <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+        <i class="bi bi-arrow-thick-left"></i>
+        <span class="oi oi-arrow-thick-left"></span>
+    </button>
 }
-@if (monthsAway < 100)
+@if (Cal.monthsAway < 3)
 {
-<button type="button" class="btn btn-default btn-lg" @onclick="() => { monthsAway++; CreateMonth(); }">
-    <i class="bi bi-arrow-thick-right"></i>
-    <span class="oi oi-arrow-thick-right"></span>
-</button>
+    <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway++; Cal.CreateMonth(); }">
+        <i class="bi bi-arrow-thick-right"></i>
+        <span class="oi oi-arrow-thick-right"></span>
+    </button>
 }
 else
 {
-<button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
-    <i class="bi bi-arrow-thick-right"></i>
-    <span class="oi oi-arrow-thick-right"></span>
-</button>
+    <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+        <i class="bi bi-arrow-thick-right"></i>
+        <span class="oi oi-arrow-thick-right"></span>
+    </button>
 }
 <div class="row">
     <div class="col-md-7">
@@ -50,26 +49,26 @@ else
             </thead>
             <tbody>
                 <tr>
-                    @for (int i = 0; i < numDummyColumn - 1; i++)
+                    @for (int i = 0; i < Cal.numDummyColumn - 1; i++)
                     {
                         <td></td>
                     }
 
-                    @for (int i = 1; i + numDummyColumn - 1 <= 7; i++)
+                    @for (int i = 1; i + Cal.numDummyColumn - 1 <= 7; i++)
                     {
                         int k = i;
-                        <td @onclick="(()=>ShowMoreInfo(k))">@i</td>
+                        <td @onclick="(()=>Cal.ShowMoreInfo(k))">@i</td>
                     }
                 </tr>
-                @for (int i = 8 - numDummyColumn + 1; i <= monthEnd.Day; i += 7)
+                @for (int i = 8 - Cal.numDummyColumn + 1; i <= Cal.monthEnd.Day; i += 7)
                 {
                     <tr class="clik">
                         @for (int j = 0; j < 7; j++)
                         {
-                            @if (i + j <= monthEnd.Day)
+                            @if (i + j <= Cal.monthEnd.Day)
                             {
                                 int k = i + j;
-                                <td @onclick="(()=>ShowMoreInfo(k))">@(i + j)</td>
+                                <td @onclick="(()=>Cal.ShowMoreInfo(k))">@(i + j)</td>
                             }
                             else
                             {
@@ -81,73 +80,80 @@ else
             </tbody>
         </table>
     </div>
-    @if (tempint != 0)
-        {
+    @if (Cal.tempint != 0)
+    {
         <div class="col-md-5 border">
             <div>Vi</div>
             <div>Venter</div>
             <div>På</div>
             <div>Casper</div>
+            <div>@Cal.tempint</div>
         </div>
-        }
+    }
 </div>
 
 
 @code {
-    string monthName = "";
-    DateTime monthEnd;
-    int monthsAway = 0;
-    int numDummyColumn = 0;
-    int year = 0;
-    int month = 0;
-    int tempint = 0;
+
+    Dashbord Cal = new Dashbord();
 
     protected override void OnInitialized()
     {
-        CreateMonth();
+        Cal.CreateMonth();
     }
 
-    void CreateMonth()
+    class Dashbord
     {
-        var tempDate = DateTime.Now.AddMonths(monthsAway);
-        month = tempDate.Month;
-        year = tempDate.Year;
+        public string monthName = "";
+        public DateTime monthEnd;
+        public int monthsAway = 0;
+        public int numDummyColumn = 0;
+        public int year = 0;
+        public int month = 0;
+        public int tempint = 0;
 
-        DateTime monthStart = new DateTime(year, month, 1);
-        monthEnd = monthStart.AddMonths(1).AddDays(-1);
-        monthName = monthStart.Month switch
+        public void CreateMonth()
         {
-            1 => "Januar",
-            2 => "Februar",
-            3 => "Marts",
-            4 => "April",
-            5 => "Maj",
-            6 => "Juni",
-            7 => "Juli",
-            8 => "August",
-            9 => "September",
-            10 => "Oktober",
-            11 => "November",
-            12 => "December",
-            _ => ""
-        };
+            var tempDate = DateTime.Now.AddMonths(monthsAway);
+            month = tempDate.Month;
+            year = tempDate.Year;
 
-        numDummyColumn = (int)monthStart.DayOfWeek;
-        @if (numDummyColumn == 0)
-        {
-            numDummyColumn = 7;
+            DateTime monthStart = new DateTime(year, month, 1);
+            monthEnd = monthStart.AddMonths(1).AddDays(-1);
+            monthName = monthStart.Month switch
+            {
+                1 => "Januar",
+                2 => "Februar",
+                3 => "Marts",
+                4 => "April",
+                5 => "Maj",
+                6 => "Juni",
+                7 => "Juli",
+                8 => "August",
+                9 => "September",
+                10 => "Oktober",
+                11 => "November",
+                12 => "December",
+                _ => ""
+            };
+
+            numDummyColumn = (int)monthStart.DayOfWeek;
+
+            @if (numDummyColumn == 0)
+            {
+                numDummyColumn = 7;
+            }
         }
-    }
-
-    void ShowMoreInfo(int DayClicked)
-    {
-        if (DayClicked == tempint)
+        public void ShowMoreInfo(int DayClicked)
         {
-            tempint = 0;
-        }
-        else
-        {
-            tempint = DayClicked;
+            if (DayClicked == tempint)
+            {
+                tempint = 0;
+            }
+            else
+            {
+                tempint = DayClicked;
+            }
         }
     }
 }
