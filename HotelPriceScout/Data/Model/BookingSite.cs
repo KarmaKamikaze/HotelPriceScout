@@ -4,7 +4,6 @@ namespace HotelPriceScout.Data.Model
 {
     public class BookingSite
     {
-        private readonly string _name;
         private readonly string _type;
 
         public BookingSite(string name, string type, string url)
@@ -23,11 +22,7 @@ namespace HotelPriceScout.Data.Model
             }
         }
 
-        public string Name
-        {
-            get => _name;
-            init { if (value != null) _name = value; }
-        }
+        public string Name { get; }
 
         public string Type
         {
