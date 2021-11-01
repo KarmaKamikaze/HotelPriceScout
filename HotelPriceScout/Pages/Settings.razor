@@ -30,9 +30,7 @@
         </DropDownListFieldSettings>
      </SfDropDownList>
      <br />&nbsp;<br /><br />&nbsp;<br />
-
-
-     
+ 
      <div class="row">
          @if(showstart)
          {
@@ -41,37 +39,51 @@
          
     @if (showstop)
     {
-        <button type="button" class="border border-dark col-md-1 btn btn-danger" @onclick="PopUp"> Stop program</button>
+        <button type="button" class="border border-dark col-md-1 btn btn-danger" data-bs-toggle="modal" @onclick="PopUp"> Stop program</button>
     }
         @if (popup)
         {
-            <div class="modal fade show d-block" id="exampleModal" tabindex="-1" role="dialog">  
-                <div class="modal-dialog" role="document">  
+            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">  
+                <div class="modal-dialog modal-dialog-centered" role="document">  
                     <div class="modal-content">  
                         <div class="modal-header">  
-                            <h5 class="modal-title" id="titleLabel">Are you sure?</h5>
-                            <br />&nbsp;<br />
-                                <button type="button" class="border border-dark col-md-1" disabled=@IsScoutStopped @onclick="StopProgram" >Yes</button>
-                                <button type="button" class="border border-dark col-md-1" disabled=@IsScoutStopped @onclick="PopUp" >No</button>
-                            
+                            <h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
                         </div> 
+                            <div class="modal-footer">
+                                <button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="StopProgram">Yes </button>
+                                <button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="PopUp"> No </button>
+                            </div>
                     </div>
                 </div>
             </div>
         }
     
     <div class="col-md-1"></div>
-         @if( showupdate)
+         @if(showupdate)
          {
-        <button type="button" class="border border-dark col-md-1 btn btn-primary" disabled=@IsScoutUpdated @onclick="UpdateProgram" > @ScoutUpdated</button>
+        <button type="button" class="border border-dark col-md-1 btn btn-primary" data-bs-toggle="modal" @onclick="UpdatePopUp" >Update program</button>
          }
-        <div class=col-md-3>
-             
+                 @if (updatepopup)
+        {
             
-
-        
+            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">  
+                <div class="modal-dialog modal-dialog-centered" role="document">  
+                    <div class="modal-content">  
+                        <div class="modal-header">  
+                            <h5 class="modal-title" id="titleLabel">Are you sure you want to update the program?</h5>
+                        </div> 
+                         <div class=modal-footer>
+                            <button type="button" class="form-control border border-dark" col-8 col-sm-3 disabled=@IsScoutUpdated @onclick="UpdateProgram" >Yes</button>
+                            <button type="button" class="form-control border border-dark" col-4 col-sm-3 disabled=@IsScoutUpdated @onclick="UpdatePopUp" >No</button>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+        }
+        <div class=col-md-3>        
         </div>
     </div>
+
 
 
 
@@ -207,6 +219,7 @@
         IsScoutUpdated = true;
         ScoutUpdated = "Update program";
         await OnButtonClick();
+        UpdatePopUp();
         IsScoutUpdated = false;
         StateHasChanged();
     }
@@ -256,6 +269,12 @@
     private void PopUp()
     {
         popup = !popup;
+    }
+
+    public bool updatepopup = false;
+    private void UpdatePopUp()
+    {
+        updatepopup = !updatepopup;
     }
 
 }
