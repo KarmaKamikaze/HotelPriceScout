@@ -2,36 +2,42 @@
 <h3>Price thermometer</h3>
 
 <div class="row border col"> <!-- outer layer-->
-
     @if(Test == null){<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
-    else{
-
-        @foreach (Prices item in Test)
+    else
+        {;
+        <table class="table table-borderless">
+            @foreach (Prices item in Test)
             {
-                @if(item.Price > MarketPriceItem.Price) 
+                if (designInt == 1) // checks if row is the first row 
                 {
-                    <div class='row col-md-12 align-items-center'><div class='col text-right' id='left-name'><p>@item.Name <span class="oi oi-arrow-right"></span></p></div>
-                    <div class='col-md-3 bg-danger '><p class="text-center text-nowrap">@item.Price,-</p></div>
-                    @*<div class='col text-left'><p>Blank Name</p></div>*@</div>
-                } 
-                else if (item.Price < MarketPriceItem.Price)
-                {
-                   <div class="row col-md-12 align-items-center"><div class="col text-right" id="left-name"><p class="align-middle">@item.Name <span class="oi oi-arrow-right"></span></p></div>
-                   <div class="col-md-3 bg-success"><p class="text-center text-nowrap">@item.Price,-</p></div>
-                   @*<div class="col text-left"><p>Blank Name</p></div>*@</div>
-                }else 
-                {
-                    <div class='row col-md-12 align-items-center'><div class='col text-right' id='left-name'><p>@MarketPriceItem.Name <span class="oi oi-arrow-right"></span></p></div>
-                   <div class='col-md-3 bg-primary'><p class="text-center text-nowrap">@MarketPriceItem.Price,-</p></div>
-                   @*<div class='col text-left'><p>Blank Name</p></div>*@</div>
+                    <tr > <td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> <td class="table-danger rounded-top">@item.Price,-</td> </tr>; designInt++;
                 }
-            }      
-    }
+                else if (designInt == Test.Count) // checks if row is the last row 
+                {
+                    <tr> <td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> <td class="table-success rounded-bottom">@item.Price,-</td> </tr>;
+                }
+                else
+                {
+                     if (item.Price > MarketPriceItem.Price) 
+                     {<tr > <td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> <td class="table-danger">@item.Price,-</td> </tr>; designInt++;} 
+
+                     else if (item.Price < MarketPriceItem.Price)
+                     {<tr> <td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> <td class="table-success">@item.Price,-</td> </tr>; designInt++;}
+
+                     else 
+                     {<tr> <td class="col text-center"> @MarketPriceItem.Name<span class="oi oi-arrow-right text-center"></span></td> <td class="table-info">@MarketPriceItem.Price,-</td> </tr>; designInt++;}
+                }
+
+                            
+             }      
+        </table>
+        }
  </div>
+  
 
 @code 
-{
-    protected override void OnInitialized() 
+{   int designInt = 1;
+     protected override void OnInitialized() 
     { GenerateThermometer(); } // runs the code required to load the thermometer when the page is loaded.
 
     List<Prices> Test;
