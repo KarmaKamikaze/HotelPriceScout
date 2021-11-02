@@ -1,6 +1,6 @@
 @page "/"
 @using HotelPriceScout.Data.Interface
-@using HotelPriceScout.Data.Model 
+@using HotelPriceScout.Data.Model
 @inject Dashboard Dashboard
 
 <h1>@Cal.monthName @Cal.year</h1>
@@ -35,7 +35,7 @@ else
     </button>
 }
 <div class="col-md-2">
-    <SfDropDownList TItem="string" TValue="string" DataSource="listOfHotles" Placeholder="Select hotels">
+    <SfDropDownList TItem="string" TValue="IEnumerable<string>" DataSource="listOfHotels" Placeholder="Select hotels">
         <DropDownListFieldSettings Text="Time" Value="LowerMargin">
         </DropDownListFieldSettings>
     </SfDropDownList>
@@ -110,19 +110,14 @@ else
     }
 </div>
 
-
 @code {
 
-            Dashboard Cal = new Dashboard();
-            IEnumerable<string> listOfHotles = Enumerable.Empty<string>();
+    Dashboard Cal = new Dashboard();
+    IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
 
-    protected override void OnInitialized()
-        {
-            Cal.CreateMonth();
-            listOfHotles = StaticData.GetStaticHotelResources("all");
-
-        }
-
-
+    protected override async Task OnInitializedAsync()
+    {
+        listOfHotels = await StaticData.GetStaticHotelResources("all");
+        Cal.CreateMonth();
     }
-
+}
