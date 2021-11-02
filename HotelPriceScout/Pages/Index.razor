@@ -1,6 +1,9 @@
 @page "/"
 @using HotelPriceScout.Data.Interface
+@using HotelPriceScout.Data.Model 
 @inject Dashboard Dashboard
+@inject Hotel Hotel
+@inject RoomType Roomtype
 
 <h1>@Cal.monthName @Cal.year</h1>
 
@@ -33,6 +36,9 @@ else
         <span class="oi oi-arrow-thick-right"></span>
     </button>
 }
+
+
+
 <div class="row">
     <div class="col-md-7">
         <table class="table table-bordered col">
@@ -111,4 +117,8 @@ else
     {
         Cal.CreateMonth();
     }
+
+    
+
 }
+
