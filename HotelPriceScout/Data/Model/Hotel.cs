@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace HotelPriceScout.Data.Model
 {
@@ -9,6 +10,8 @@ namespace HotelPriceScout.Data.Model
             try
             {
                 Name = name ?? throw new ArgumentNullException(nameof(name));
+                RoomTypes = CreateRoomTypes();
+
             }
             catch (ArgumentNullException e)
             {
@@ -19,9 +22,17 @@ namespace HotelPriceScout.Data.Model
 
         public string Name { get; }
 
-        private void CreateRoomType()
+        public List<RoomType> RoomTypes { get; init; }
+
+        private List<RoomType> CreateRoomTypes()
+
         {
-            throw new NotImplementedException();
+            return new List<RoomType>
+            {
+                new RoomType(1),
+                new RoomType(2),
+                new RoomType(4)
+            };
         }
     }
 }
