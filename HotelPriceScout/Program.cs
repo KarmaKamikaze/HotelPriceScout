@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-    
+
 
 namespace HotelPriceScout
 {
@@ -16,6 +16,8 @@ namespace HotelPriceScout
         {
             CreateHostBuilder(args).Build().Run();
         }
+
+
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)

@@ -5,7 +5,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Blazored.Modal" Version="4.1.0" />
       <PackageReference Include="IronWebScraper" Version="2021.9.0" />
+      <PackageReference Include="Syncfusion.Blazor" Version="19.3.0.47" />
     </ItemGroup>
 
     <ItemGroup>
