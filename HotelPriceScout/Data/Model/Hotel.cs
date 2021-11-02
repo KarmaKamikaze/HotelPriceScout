@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace HotelPriceScout.Data.Model
 {
@@ -12,6 +13,7 @@ namespace HotelPriceScout.Data.Model
             {
                 Name = name ?? throw new ArgumentNullException(nameof(name));
                 ZipCode = zipCode;
+                CreateRoomTypes();
             }
             catch (ArgumentNullException e)
             {
@@ -28,14 +30,24 @@ namespace HotelPriceScout.Data.Model
             init
             {
                 if (value is > 0 and < 10_000) _zipCode = value;
-                else throw new ArgumentOutOfRangeException(
+                else
+                {
+                    throw new ArgumentOutOfRangeException(
                     $"{nameof(value)} must be between 0 and 10.000.");
+                }
             }
         }
 
-        private void CreateRoomType()
+        public List<RoomType> RoomTypes { get; private set; }
+
+        private void CreateRoomTypes()
         {
-            throw new NotImplementedException();
+            RoomTypes = new List<RoomType>
+            {
+                new RoomType(1),
+                new RoomType(2),
+                new RoomType(4)
+            };
         }
     }
 }
