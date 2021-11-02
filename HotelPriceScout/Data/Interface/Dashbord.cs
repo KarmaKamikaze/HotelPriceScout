@@ -5,11 +5,11 @@ namespace HotelPriceScout.Data.Interface
     {
         public string monthName = "";
         public DateTime monthEnd;
-        public int monthsAway = 0;
-        public int numDummyColumn = 0;
-        public int year = 0;
-        public int month = 0;
-        public int DayClicked = 0;
+        public int monthsAway = default;
+        public int numDummyColumn = default;
+        public int year = default;
+        public int month = default;
+        public int DayClicked = default;
 
         public void CreateMonth()
         {

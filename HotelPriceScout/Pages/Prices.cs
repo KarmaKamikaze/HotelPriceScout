@@ -13,9 +13,7 @@ namespace HotelPriceScout.Pages
         }
         public int CompareTo(Prices other)
         {
-            if (Price > other.Price) { return -1; }
-            else if (Price < other.Price) { return 1; }
-            else return 0;
+            return other.Price - Price;
         }
     }
 }

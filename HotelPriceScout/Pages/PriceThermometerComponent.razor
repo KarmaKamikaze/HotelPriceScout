@@ -33,11 +33,11 @@
 @code 
 {
     protected override async Task OnInitializedAsync() 
-    { Generatetermometer(); } // runs the code required to load the thermometer when the page is loaded.
+    { GenerateThermometer(); } // runs the code required to load the thermometer when the page is loaded.
 
     List<Prices> Test;
     Prices MarketPriceItem;
-    private void Generatetermometer()
+    private void GenerateThermometer()
     {
         Test =  PriceMeterGenerator.PriceListGenerator(); // generates test list of hotelprices, where market price is inside.
         MarketPriceItem =  (PriceMeterGenerator.MarketFinder(Test)); // extracts marketprice from list of prices.
