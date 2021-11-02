@@ -39,6 +39,5 @@ namespace HotelPriceScout.Data.Model
             }
             return prices;
         }
-
     }
 }
