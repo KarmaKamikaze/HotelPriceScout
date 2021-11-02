@@ -34,11 +34,12 @@ else
         <span class="oi oi-arrow-thick-right"></span>
     </button>
 }
-
-<SfDropDownList TItem="string" TValue="string" DataSource="listOfHotles" Placeholder="Select hotels" PopupWidth="300px" PopupHeight="200px" Width="300px">
-    <DropDownListFieldSettings Text="Time" Value="LowerMargin">
-    </DropDownListFieldSettings>
-</SfDropDownList>
+<div class="col-md-2">
+    <SfDropDownList TItem="string" TValue="string" DataSource="listOfHotles" Placeholder="Select hotels">
+        <DropDownListFieldSettings Text="Time" Value="LowerMargin">
+        </DropDownListFieldSettings>
+    </SfDropDownList>
+</div>
 
 <div class="row">
     <div class="col-md-7">
