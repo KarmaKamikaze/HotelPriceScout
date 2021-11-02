@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-//class that makes the pricethermometer
+
 namespace HotelPriceScout.Pages
 {
         public class PriceMeterGenerator // the generator class
