@@ -10,10 +10,13 @@ jobs:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     # Be sure to update the tag on this image to a more stable version, using latest can result in unstable builds.
-    docker:
-      - image: microsoft/dotnet:latest
+    #docker:
+    #  - image: microsoft/dotnet:latest
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    build:
+    machine:
+      image: ubuntu-2004:202010-01
     steps:
       # Checkout the code as the first step.
       - checkout
@@ -28,7 +31,7 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+  testing: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build-and-test
