@@ -11,18 +11,18 @@
                 @if(item.Price > MarketPriceItem.Price) 
                 {
                     <div class='row col-md-12 align-items-center'><div class='col text-right' id='left-name'><p>@item.Name <span class="oi oi-arrow-right"></span></p></div>
-                    <div class='col-md-3 bg-danger '><p>@item.Price,-</p></div>
+                    <div class='col-md-3 bg-danger '><p class="text-center text-nowrap">@item.Price,-</p></div>
                     @*<div class='col text-left'><p>Blank Name</p></div>*@</div>
                 } 
                 else if (item.Price < MarketPriceItem.Price)
                 {
                    <div class="row col-md-12 align-items-center"><div class="col text-right" id="left-name"><p class="align-middle">@item.Name <span class="oi oi-arrow-right"></span></p></div>
-                   <div class="col-md-3 bg-success"><p class="align-middle">@item.Price,-</p></div>
+                   <div class="col-md-3 bg-success"><p class="text-center text-nowrap">@item.Price,-</p></div>
                    @*<div class="col text-left"><p>Blank Name</p></div>*@</div>
                 }else 
                 {
                     <div class='row col-md-12 align-items-center'><div class='col text-right' id='left-name'><p>@MarketPriceItem.Name <span class="oi oi-arrow-right"></span></p></div>
-                   <div class='col-md-3 bg-primary'><p>@MarketPriceItem.Price,-</p></div>
+                   <div class='col-md-3 bg-primary'><p class="text-center text-nowrap">@MarketPriceItem.Price,-</p></div>
                    @*<div class='col text-left'><p>Blank Name</p></div>*@</div>
                 }
             }      
