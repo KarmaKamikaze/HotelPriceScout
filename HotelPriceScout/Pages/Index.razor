@@ -1,7 +1,113 @@
 @page "/"
+@using HotelPriceScout.Data.Interface
+@inject Dashboard Dashboard
 
-<h1>Hello, world!</h1>
+<h1>@Cal.monthName @Cal.year</h1>
 
-Welcome to your new app.
+@if (Cal.monthsAway > 0)
+{
+    <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway--; Cal.CreateMonth(); }">
+        <i class="bi bi-arrow-thick-left"></i>
+        <span class="oi oi-arrow-thick-left"></span>
+    </button>
+}
+else
+{
+    <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+        <i class="bi bi-arrow-thick-left"></i>
+        <span class="oi oi-arrow-thick-left"></span>
+    </button>
+}
+@if (Cal.monthsAway < 3)
+{
+    <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway++; Cal.CreateMonth(); }">
+        <i class="bi bi-arrow-thick-right"></i>
+        <span class="oi oi-arrow-thick-right"></span>
+    </button>
+}
+else
+{
+    <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+        <i class="bi bi-arrow-thick-right"></i>
+        <span class="oi oi-arrow-thick-right"></span>
+    </button>
+}
+<div class="row">
+    <div class="col-md-7">
+        <table class="table table-bordered col">
+            <thead>
+                <tr>
+                    <th> Mandag </th>
+                    <th> Tirsdag </th>
+                    <th> Onsdag </th>
+                    <th> Torsdag </th>
+                    <th> Fredag </th>
+                    <th> Lørdag </th>
+                    <th> Søndag </th>
 
-<SurveyPrompt Title="How is Blazor working for you?"/>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @for (int i = 0; i < Cal.numDummyColumn - 1; i++)
+                    {
+                        <td></td>
+                    }
+                    @for (int i = 1; i + Cal.numDummyColumn - 1 <= 7; i++)
+                    {
+                        int k = i;
+                        <td @onclick="(()=>Cal.ShowMoreInfo(k))">
+                            <div style="font-size: large;">@i</div>
+                            <div style="text-align: right; font-size: small;">You 1337</div>
+                            <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
+                        </td>
+                    }
+                </tr>
+
+                @for (int i = 8 - Cal.numDummyColumn + 1; i <= Cal.monthEnd.Day; i += 7)
+                {
+                    <tr class="clik">
+                        @for (int j = 0; j < 7; j++)
+                        {
+                            @if (i + j <= Cal.monthEnd.Day)
+                            {
+                                int k = i + j;
+                                <td @onclick="(()=>Cal.ShowMoreInfo(k))">
+                                    <div style="font-size: large;">@(i + j)</div>
+                                    <div style="text-align: right; font-size: small;">You 1337</div>
+                                    <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Cal.DayClicked != 0)
+    {
+        <div class="col-md-5 border">
+            <div>Vi</div>
+            <div>Venter</div>
+            <div>På</div>
+            <div>Casper</div>
+            <div>@Cal.DayClicked</div>
+        </div>
+    }
+</div>
+
+
+@code {
+
+    Dashboard Cal = new Dashboard();
+
+    protected override void OnInitialized()
+    {
+        Cal.CreateMonth();
+    }
+}
