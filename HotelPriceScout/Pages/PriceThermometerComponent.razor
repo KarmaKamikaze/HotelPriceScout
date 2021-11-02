@@ -25,14 +25,13 @@
                    <div class='col-md-3 bg-primary'><p>@MarketPriceItem.Price,-</p></div>
                    @*<div class='col text-left'><p>Blank Name</p></div>*@</div>
                 }
-                
             }      
     }
  </div>
 
 @code 
 {
-    protected override async Task OnInitializedAsync() 
+    protected override void OnInitialized() 
     { GenerateThermometer(); } // runs the code required to load the thermometer when the page is loaded.
 
     List<Prices> Test;

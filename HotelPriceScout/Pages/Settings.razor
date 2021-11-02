@@ -24,7 +24,7 @@
 <div class="row">
     @if (showstart)
     {
-        <button type="button" class="border border-dark col-md-1 btn btn-success" disabled=@IsScoutStarted @onclick="StartProgram"> @ScoutStarted</button>
+        <button type="button" class="border border-dark col-md-1 btn btn-success" disabled=@IsScoutStarted @onclick="StartProgram"> Start program</button>
     }
 
     @if (showstop)
@@ -122,11 +122,8 @@
 
 
     bool IsScoutStopped = false;
-    string ScoutStopped = "Stop program";
     bool IsScoutUpdated = false;
-    string ScoutUpdated = "Update program";
     bool IsScoutStarted = false;
-    string ScoutStarted = "Start program";
 
 
     public void StopProgram()
