@@ -107,9 +107,11 @@ else
 @code {
 
     Dashboard Cal = new Dashboard();
+    IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        listOfHotels = await StaticData.GetStaticHotelResources("all");
         Cal.CreateMonth();
     }
 }
