@@ -4,36 +4,17 @@
 
 <h1>Settings</h1>
 <br />
-<SfDropDownList TItem="Roomtypes" TValue="string" DataSource="Rooms" Placeholder="Select room type" PopupWidth="300px" PopupHeight="200px" Width="300px">
-	<DropDownListFieldSettings Text="Roomtype" Value="RoomValue">
-	</DropDownListFieldSettings>
-</SfDropDownList>
+
+<SfNumericTextBox Width="300px" Placeholder="Insert margin value %" TValue="int?" Step="1" Max="100" Min="1" Value="5"></SfNumericTextBox>
 <br />&nbsp;
 <br />
 <br />&nbsp;
 <br />
 
-<SfMultiSelect TValue="string" TItem="Hotels" AllowFiltering="true" Placeholder="Select hotels" Mode="@VisualMode.CheckBox" DataSource="@Hotellist" PopupWidth="300px" PopupHeight="200px" Width="300px">
-	<MultiSelectFieldSettings Text="HotelName" Value="Zipcode">
-	</MultiSelectFieldSettings>
-</SfMultiSelect>
-<br />&nbsp;
-<br />
-<br />&nbsp;
-<br />
-
-<SfDropDownList TItem="Margin" TValue="string" DataSource="Margins" Placeholder="Select margin value" PopupWidth="300px" PopupHeight="200px" Width="300px">
-	<DropDownListFieldSettings Text="MarginValue" Value="LowerMargin">
-	</DropDownListFieldSettings>
-</SfDropDownList>
-<br />&nbsp;
-<br />
-<br />&nbsp;
-<br />
 
 <SfDropDownList TItem="NotificationTime" TValue="string" DataSource="TimeToNotify" Placeholder="Select time to notify" PopupWidth="300px" PopupHeight="200px" Width="300px">
-	<DropDownListFieldSettings Text="Time" Value="LowerMargin">
-	</DropDownListFieldSettings>
+    <DropDownListFieldSettings Text="Time" Value="LowerMargin">
+    </DropDownListFieldSettings>
 </SfDropDownList>
 <br />&nbsp;
 <br />
@@ -41,56 +22,56 @@
 <br />
 
 <div class="row">
-	@if (showstart)
-	{
-		<button type="button" class="border border-dark col-md-1 btn btn-success" disabled=@IsScoutStarted @onclick="StartProgram"> @ScoutStarted</button>
-	}
+    @if (showstart)
+    {
+        <button type="button" class="border border-dark col-md-1 btn btn-success" disabled=@IsScoutStarted @onclick="StartProgram"> @ScoutStarted</button>
+    }
 
-	@if (showstop)
-	{
-		<button type="button" class="border border-dark col-md-1 btn btn-danger" data-bs-toggle="modal" @onkeydown="@EscapeStop" @onclick="PopUp"> Stop program</button>
-	}
-	@if (popup)
-	{
-		<div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="StopProgram">Yes </button>
-						<button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="PopUp"> No </button>
-					</div>
-				</div>
-			</div>
-		</div>
-	}
+    @if (showstop)
+    {
+        <button type="button" class="border border-dark col-md-1 btn btn-danger" data-bs-toggle="modal" @onkeydown="@EscapeStop" @onclick="PopUp"> Stop program</button>
+    }
+    @if (popup)
+    {
+        <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="StopProgram">Yes </button>
+                        <button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="PopUp"> No </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
-	<div class="col-md-1">
-	</div>
-	@if (showupdate)
-	{
-		<button type="button" class="border border-dark col-md-1 btn btn-primary" data-bs-toggle="modal" @onkeydown="@EscapeUpdate" @onclick="UpdatePopUp">Update program</button>
-	}
-	@if (updatepopup)
-	{
-		<div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="titleLabel">Are you sure you want to update the program?</h5>
-					</div>
-					<div class=modal-footer>
-						<button type="button" class="form-control border border-dark" col-8 col-sm-3 disabled=@IsScoutUpdated @onclick="UpdateProgram">Yes</button>
-						<button type="button" class="form-control border border-dark" col-4 col-sm-3 disabled=@IsScoutUpdated @onclick="UpdatePopUp">No</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	}
-	<div class=col-md-3>
-	</div>
+    <div class="col-md-1">
+    </div>
+    @if (showupdate)
+    {
+        <button type="button" class="border border-dark col-md-1 btn btn-primary" data-bs-toggle="modal" @onkeydown="@EscapeUpdate" @onclick="UpdatePopUp">Update program</button>
+    }
+    @if (updatepopup)
+    {
+        <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="titleLabel">Are you sure you want to update the program?</h5>
+                    </div>
+                    <div class=modal-footer>
+                        <button type="button" class="form-control border border-dark" col-8 col-sm-3 disabled=@IsScoutUpdated @onclick="UpdateProgram">Yes</button>
+                        <button type="button" class="form-control border border-dark" col-4 col-sm-3 disabled=@IsScoutUpdated @onclick="UpdatePopUp">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class=col-md-3>
+    </div>
 </div>
 
 
@@ -99,205 +80,143 @@
 
 @code {
 
-	/*Room type list for dropdown menu*/
-	public class Roomtypes
-	{
-		public string Roomtype { get; set; }
-		public string RoomValue { get; set; }
-	}
-	List<Roomtypes> Rooms = new List<Roomtypes>
-	{
-		new Roomtypes() { Roomtype= "1 persons", RoomValue="roomtype 1"},
-		new Roomtypes() { Roomtype= "2 persons", RoomValue="roomtype 2"},
-		new Roomtypes() { Roomtype= "4 persons", RoomValue="roomtype 3"}
-	};
 
-	/*Hotel list for dropdown menu*/
-	public class Hotels
-	{
-		public string HotelName { get; set; }
-		public string Zipcode { get; set; }
-	}
-
-
-	public bool EnableSelectionOrders { get; set; } = true;
-
-	List<Hotels> Hotellist { get; set; } = new List<Hotels>
-	{
-		new Hotels() { HotelName= "Cabinn hotel", Zipcode="9000"},
-		new Hotels() { HotelName= "Slotshotellet Aalborg", Zipcode="9000"},
-		new Hotels() { HotelName= "Milling Hotel Aalborg", Zipcode="9000"},
-		new Hotels() { HotelName= "Aalborg Airport hotel", Zipcode="9000"},
-		new Hotels() { HotelName= "Helnan Phoenix Aalborg", Zipcode="9000"},
-		new Hotels() { HotelName= "Hotel Schnellsminde", Zipcode="9000"},
-		new Hotels() { HotelName= "Hotel Jomfru Ane", Zipcode="9000"},
-		new Hotels() { HotelName= "Radisson Blu Limfjord Hotel Aalborg", Zipcode="9000"},
-		new Hotels() { HotelName= "Comwell Hvide Hus Aalborg", Zipcode="9000"},
-		new Hotels() { HotelName= "Zleep Hotel Aalborg", Zipcode="9000"},
-		new Hotels() { HotelName= "Prinsen Hotel", Zipcode="9000"},
-		new Hotels() { HotelName= "Scandic Aalborg Oest", Zipcode="9220"},
-		new Hotels() { HotelName= "Scandic Aalborg City", Zipcode="9000"},
-		new Hotels() { HotelName= "Room Rent Prinsen", Zipcode="9000"}
-	};
-
-
-	/*Margin list for dropdown*/
-	public class Margin
-	{
-		public string MarginValue { get; set; }
-		public string UpperMargin { get; set; }
-		public string LowerMargin { get; set; }
-	}
-	List<Margin> Margins = new List<Margin>
-	{
-		new Margin() { MarginValue= "5%", UpperMargin= "+5%", LowerMargin= "-5%"},
-		new Margin() { MarginValue= "10%", UpperMargin= "+10%", LowerMargin= "-10%"},
-		new Margin() { MarginValue= "15%", UpperMargin= "+15%", LowerMargin= "-15%"}
-	};
-
-	/*Margin list for dropdown*/
-	public class NotificationTime
-	{
-		public string Time { get; set; }
-	}
-	List<NotificationTime> TimeToNotify = new List<NotificationTime>
-	{
-		new NotificationTime() { Time= "08:00"},
-		new NotificationTime() { Time= "08:30"},
-		new NotificationTime() { Time= "09:00"},
-		new NotificationTime() { Time= "09:30"},
-		new NotificationTime() { Time= "10:00"},
-		new NotificationTime() { Time= "10:30"},
-		new NotificationTime() { Time= "11:00"},
-		new NotificationTime() { Time= "11:30"},
-		new NotificationTime() { Time= "12:00"},
-		new NotificationTime() { Time= "12:30"},
-		new NotificationTime() { Time= "13:00"},
-		new NotificationTime() { Time= "13:30"},
-		new NotificationTime() { Time= "14:00"},
-		new NotificationTime() { Time= "14:30"},
-		new NotificationTime() { Time= "15:00"},
-		new NotificationTime() { Time= "15:30"},
-		new NotificationTime() { Time= "16:00"},
-		new NotificationTime() { Time= "16:30"},
-		new NotificationTime() { Time= "17:00"},
-		new NotificationTime() { Time= "17:30"},
-		new NotificationTime() { Time= "18:00"},
-		new NotificationTime() { Time= "18:30"},
-		new NotificationTime() { Time= "19:00"},
-		new NotificationTime() { Time= "19:30"},
-		new NotificationTime() { Time= "20:00"},
-		new NotificationTime() { Time= "20:30"},
-		new NotificationTime() { Time= "21:00"},
-		new NotificationTime() { Time= "21:30"},
-		new NotificationTime() { Time= "22:00"},
-		new NotificationTime() { Time= "22:30"},
-		new NotificationTime() { Time= "23:00"},
-	};
+    public class NotificationTime
+    {
+        public string Time { get; set; }
+    }
+    List<NotificationTime> TimeToNotify = new List<NotificationTime>
+    {
+        new NotificationTime() { Time= "08:00"},
+        new NotificationTime() { Time= "08:30"},
+        new NotificationTime() { Time= "09:00"},
+        new NotificationTime() { Time= "09:30"},
+        new NotificationTime() { Time= "10:00"},
+        new NotificationTime() { Time= "10:30"},
+        new NotificationTime() { Time= "11:00"},
+        new NotificationTime() { Time= "11:30"},
+        new NotificationTime() { Time= "12:00"},
+        new NotificationTime() { Time= "12:30"},
+        new NotificationTime() { Time= "13:00"},
+        new NotificationTime() { Time= "13:30"},
+        new NotificationTime() { Time= "14:00"},
+        new NotificationTime() { Time= "14:30"},
+        new NotificationTime() { Time= "15:00"},
+        new NotificationTime() { Time= "15:30"},
+        new NotificationTime() { Time= "16:00"},
+        new NotificationTime() { Time= "16:30"},
+        new NotificationTime() { Time= "17:00"},
+        new NotificationTime() { Time= "17:30"},
+        new NotificationTime() { Time= "18:00"},
+        new NotificationTime() { Time= "18:30"},
+        new NotificationTime() { Time= "19:00"},
+        new NotificationTime() { Time= "19:30"},
+        new NotificationTime() { Time= "20:00"},
+        new NotificationTime() { Time= "20:30"},
+        new NotificationTime() { Time= "21:00"},
+        new NotificationTime() { Time= "21:30"},
+        new NotificationTime() { Time= "22:00"},
+        new NotificationTime() { Time= "22:30"},
+        new NotificationTime() { Time= "23:00"},
+    };
 
 
-	bool IsScoutStopped = false;
-	string ScoutStopped = "Stop program";
-	bool IsScoutUpdated = false;
-	string ScoutUpdated = "Update program";
-	bool IsScoutStarted = false;
-	string ScoutStarted = "Start program";
-
-	/*When stop program button is clicked it replaces itself with start program button*/
-	public void StopProgram()
-	{
-		IsScoutStopped = true;
-		ScoutStopped = "Stop program";
-		ShowStartButton();
-		ShowStopButton();
-		ShowUpdateButton();
-		PopUp();
-		IsScoutStarted = false;
-		StateHasChanged();
-
-	}
-
-	/*Update program button*/
-	async void UpdateProgram()
-	{
-		IsScoutUpdated = true;
-		ScoutUpdated = "Update program";
-		await OnButtonClick();
-		UpdatePopUp();
-		IsScoutUpdated = false;
-		StateHasChanged();
-	}
-
-	/*Same as stop program but reversed*/
-	public void StartProgram()
-	{
-		IsScoutStarted = true;
-		ScoutStarted = "Start program";
-		ShowStopButton();
-		ShowUpdateButton();
-		ShowStartButton();
-		IsScoutStopped = false;
-		StateHasChanged();
-
-	}
+    bool IsScoutStopped = false;
+    string ScoutStopped = "Stop program";
+    bool IsScoutUpdated = false;
+    string ScoutUpdated = "Update program";
+    bool IsScoutStarted = false;
+    string ScoutStarted = "Start program";
 
 
-	/*Await function for async method "Update button"*/
-	Task OnButtonClick()
-	{
+    public void StopProgram()
+    {
+        IsScoutStopped = true;
+        ShowStartButton();
+        ShowStopButton();
+        ShowUpdateButton();
+        PopUp();
+        IsScoutStarted = false;
+        StateHasChanged();
 
-		return Task.Delay(2000);
-	}
-
-
-	/*show/hide the 3 buttons*/
-	private bool showstop = false;
-	private void ShowStopButton()
-	{
-		showstop = !showstop;
-	}
-
-	private bool showstart = true;
-	private void ShowStartButton()
-	{
-		showstart = !showstart;
-	}
-
-	private bool showupdate = false;
-	private void ShowUpdateButton()
-	{
-		showupdate = !showupdate;
-	}
+    }
 
 
-	/*Toggle if modal is popped up*/
-	public bool popup = false;
-	private void PopUp()
-	{
-		popup = !popup;
-	}
+    async void UpdateProgram()
+    {
+        IsScoutUpdated = true;
+        await OnButtonClick();
+        UpdatePopUp();
+        IsScoutUpdated = false;
+        StateHasChanged();
+    }
 
-	public bool updatepopup = false;
-	private void UpdatePopUp()
-	{
-		updatepopup = !updatepopup;
-	}
 
-	/*Escape key event handler*/
-	public void EscapeUpdate(KeyboardEventArgs e)
-	{
-		if (e.Code == "Escape")
-		{
-			UpdatePopUp();
-		}
-	}
+    public void StartProgram()
+    {
+        IsScoutStarted = true;
+        ShowStopButton();
+        ShowUpdateButton();
+        ShowStartButton();
+        IsScoutStopped = false;
+        StateHasChanged();
 
-	public void EscapeStop(KeyboardEventArgs f)
-	{
-		if (f.Code == "Escape")
-		{
-			PopUp();
-		}
-	}
+    }
+
+
+    Task OnButtonClick()
+    {
+
+        return Task.Delay(2000);
+    }
+
+
+    private bool showstop = false;
+    private void ShowStopButton()
+    {
+        showstop = !showstop;
+    }
+
+    private bool showstart = true;
+    private void ShowStartButton()
+    {
+        showstart = !showstart;
+    }
+
+    private bool showupdate = false;
+    private void ShowUpdateButton()
+    {
+        showupdate = !showupdate;
+    }
+
+
+    public bool popup = false;
+    private void PopUp()
+    {
+        popup = !popup;
+    }
+
+    public bool updatepopup = false;
+    private void UpdatePopUp()
+    {
+        updatepopup = !updatepopup;
+    }
+
+
+    public void EscapeUpdate(KeyboardEventArgs e)
+    {
+        if (e.Code == "Escape")
+        {
+            UpdatePopUp();
+        }
+    }
+
+    public void EscapeStop(KeyboardEventArgs f)
+    {
+        if (f.Code == "Escape")
+        {
+            PopUp();
+        }
+    }
 
 }
