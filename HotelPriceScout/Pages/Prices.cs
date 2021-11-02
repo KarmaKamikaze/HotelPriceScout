@@ -1,5 +1,5 @@
 ﻿using System;
-
+//Testing file for creating prices
 
 namespace HotelPriceScout.Pages
 {

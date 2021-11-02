@@ -1,9 +1,9 @@
-﻿@page "/vaterpas"
+﻿@page "/PriceThermometer"
 <h3>Price thermometer</h3>
 
 <div class="row border col-md-4"> <!-- outer layer-->
 
-    @if(Test == null){<div><p>Loading data</p> </div>}// checks if thermometer is ready yet
+    @if(Test == null){<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
     else{
 
         @foreach (Prices item in Test)
@@ -30,19 +30,18 @@
     }
  </div>
 
-
 @code 
 {
     protected override async Task OnInitializedAsync() 
-    { generatetermometer(); }
+    { Generatetermometer(); } // runs the code required to load the thermometer when the page is loaded.
 
     List<Prices> Test;
     Prices MarketPriceItem;
-    private void generatetermometer()
+    private void Generatetermometer()
     {
         Test =  PriceMeterGenerator.PriceListGenerator(); // generates test list of hotelprices, where market price is inside.
         MarketPriceItem =  (PriceMeterGenerator.MarketFinder(Test)); // extracts marketprice from list of prices.
         //Test.Remove(MarketPriceItem);  // removes market object from list as it has been extracted.
         Test.Sort();
-     }
+    }
  }
