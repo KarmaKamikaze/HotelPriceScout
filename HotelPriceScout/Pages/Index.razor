@@ -1,13 +1,7 @@
 @page "/"
 @using HotelPriceScout.Data.Interface
-<<<<<<< HEAD
 @using HotelPriceScout.Data.Model 
-=======
-@using HotelPriceScout.Data.Model
->>>>>>> 3b637a3856c4a52ac58b16e39591dbd9f3796d5d
 @inject Dashboard Dashboard
-@inject Hotel Hotel
-@inject RoomType Roomtype
 
 <h1>@Cal.monthName @Cal.year</h1>
 
@@ -26,7 +20,7 @@ else
         <span class="oi oi-arrow-thick-left"></span>
     </button>
 }
-@if (Cal.monthsAway < 3)
+@if (Cal.monthsAway < 4)
 {
     <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway++; Cal.CreateMonth(); }">
         <i class="bi bi-arrow-thick-right"></i>
@@ -41,14 +35,17 @@ else
     </button>
 }
 
-
+<SfDropDownList TItem="string" TValue="string" DataSource="listOfHotles" Placeholder="Select hotels" PopupWidth="300px" PopupHeight="200px" Width="300px">
+    <DropDownListFieldSettings Text="Time" Value="LowerMargin">
+    </DropDownListFieldSettings>
+</SfDropDownList>
 
 <div class="row">
     <div class="col-md-7">
         <table class="table table-bordered col">
             <thead>
                 <tr>
-                    <th> Mandag </th>
+                    <th> Monday </th>
                     <th> Tirsdag </th>
                     <th> Onsdag </th>
                     <th> Torsdag </th>
@@ -115,14 +112,16 @@ else
 
 @code {
 
-    Dashboard Cal = new Dashboard();
+            Dashboard Cal = new Dashboard();
+            IEnumerable<string> listOfHotles = Enumerable.Empty<string>();
 
     protected override void OnInitialized()
-    {
-        Cal.CreateMonth();
+        {
+            Cal.CreateMonth();
+            listOfHotles = StaticData.GetStaticHotelResources("all");
+
+        }
+
+
     }
-
-    
-
-}
 
