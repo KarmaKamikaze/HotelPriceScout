@@ -11,7 +11,7 @@ namespace HotelPriceScout.Data.Model
         public RoomType(int capacity)
         {
             Capacity = capacity;
-            Create3monthsprices();
+            Prices = Create3monthsprices();
         }
 
         public int Capacity
@@ -27,16 +27,17 @@ namespace HotelPriceScout.Data.Model
             }
         }
 
-        public List<RoomTypePrice> Prices { get; private set; }
+        public List<RoomTypePrice> Prices { get; init; }
 
-        public void Create3monthsprices()
+        private List<RoomTypePrice> Create3monthsprices()
         {
-            Prices = new List<RoomTypePrice>();
+            List<RoomTypePrice> prices = new();
             int i = 0;
             for (DateTime currentdate = DateTime.Now; currentdate.AddDays(i) < currentdate.AddMonths(3); i++)
             {
-                Prices.Add(new RoomTypePrice(currentdate.AddDays(i)));
+                prices.Add(new RoomTypePrice(currentdate.AddDays(i)));
             }
+            return prices;
         }
 
     }

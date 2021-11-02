@@ -13,7 +13,7 @@ namespace HotelPriceScout.Data.Model
             {
                 Name = name ?? throw new ArgumentNullException(nameof(name));
                 ZipCode = zipCode;
-                CreateRoomTypes();
+                RoomTypes = CreateRoomTypes();
             }
             catch (ArgumentNullException e)
             {
@@ -38,11 +38,11 @@ namespace HotelPriceScout.Data.Model
             }
         }
 
-        public List<RoomType> RoomTypes { get; private set; }
+        public List<RoomType> RoomTypes { get; init; }
 
-        private void CreateRoomTypes()
+        private List<RoomType> CreateRoomTypes()
         {
-            RoomTypes = new List<RoomType>
+            return new List<RoomType>
             {
                 new RoomType(1),
                 new RoomType(2),
