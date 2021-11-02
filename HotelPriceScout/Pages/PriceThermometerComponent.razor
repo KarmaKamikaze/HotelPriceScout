@@ -1,0 +1,47 @@
+﻿@page "/PriceThermometer"
+<h3>Price thermometer</h3>
+
+<div class="row border col-md-4"> <!-- outer layer-->
+
+    @if(Test == null){<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
+    else{
+
+        @foreach (Prices item in Test)
+            {
+                @if(item.Price > MarketPriceItem.Price) 
+                {
+                    <div class='row col-md-12 align-items-center'><div class='col text-right' id='left-name'><p>@item.Name <span class="oi oi-arrow-right"></span></p></div>
+                    <div class='col-md-3 bg-danger '><p>@item.Price,-</p></div>
+                    @*<div class='col text-left'><p>Blank Name</p></div>*@</div>
+                } 
+                else if (item.Price < MarketPriceItem.Price)
+                {
+                   <div class="row col-md-12 align-items-center"><div class="col text-right" id="left-name"><p class="align-middle">@item.Name <span class="oi oi-arrow-right"></span></p></div>
+                   <div class="col-md-3 bg-success"><p class="align-middle">@item.Price,-</p></div>
+                   @*<div class="col text-left"><p>Blank Name</p></div>*@</div>
+                }else 
+                {
+                    <div class='row col-md-12 align-items-center'><div class='col text-right' id='left-name'><p>@MarketPriceItem.Name <span class="oi oi-arrow-right"></span></p></div>
+                   <div class='col-md-3 bg-primary'><p>@MarketPriceItem.Price,-</p></div>
+                   @*<div class='col text-left'><p>Blank Name</p></div>*@</div>
+                }
+                
+            }      
+    }
+ </div>
+
+@code 
+{
+    protected override async Task OnInitializedAsync() 
+    { Generatetermometer(); } // runs the code required to load the thermometer when the page is loaded.
+
+    List<Prices> Test;
+    Prices MarketPriceItem;
+    private void Generatetermometer()
+    {
+        Test =  PriceMeterGenerator.PriceListGenerator(); // generates test list of hotelprices, where market price is inside.
+        MarketPriceItem =  (PriceMeterGenerator.MarketFinder(Test)); // extracts marketprice from list of prices.
+        //Test.Remove(MarketPriceItem);  // removes market object from list as it has been extracted.
+        Test.Sort();
+    }
+ }
