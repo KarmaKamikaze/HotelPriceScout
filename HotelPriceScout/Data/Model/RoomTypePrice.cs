@@ -11,7 +11,7 @@ namespace HotelPriceScout.Data.Model
     public RoomTypePrice(DateTime date)
     {
       Date = date;
-      Price = 0;
+      Price = default;
     }
     public RoomTypePrice(DateTime date, decimal price) : this(date)
     {
