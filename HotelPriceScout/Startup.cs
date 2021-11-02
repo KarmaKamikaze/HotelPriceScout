@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using HotelPriceScout.Data;
 using Syncfusion.Blazor;
 using Blazored.Modal;
+using HotelPriceScout.Data.Interface;
 
 namespace HotelPriceScout
 {
@@ -33,7 +34,7 @@ namespace HotelPriceScout
             services.AddSingleton<WeatherForecastService>();
             services.AddSyncfusionBlazor();
             services.AddBlazoredModal();
-            
+            services.AddTransient<Dashboard>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

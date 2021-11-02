@@ -1,0 +1,7 @@
+﻿.table td:hover {
+    background-color: #F2F2F2;
+}
+
+#BtnDisable {
+    opacity: 0.1;
+}
