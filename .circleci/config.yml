@@ -26,6 +26,7 @@ jobs:
           working_directory: ~/project/App.Tests
           name: Run tests
           command: |
+            sudo apt update && sudo apt install dotnet
             dotnet test
 
 # Invoke jobs via workflows
