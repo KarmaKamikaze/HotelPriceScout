@@ -1,10 +1,10 @@
 ﻿@page "/PriceThermometer"
 <h3>Price thermometer</h3>
 
-<div class="row border col"> <!-- outer layer-->
+<div class="row border col-md-4"> <!-- outer layer-->
     @if(Test == null){<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
     else
-        {;
+        {
         <table class="table table-borderless">
             @foreach (Prices item in Test)
             {
