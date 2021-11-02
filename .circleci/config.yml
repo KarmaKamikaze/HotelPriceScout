@@ -26,7 +26,7 @@ jobs:
           working_directory: ~/project/App.Tests
           name: Run tests
           command: |
-            sudo apt update && sudo snap install dotnet-sdk -y
+            sudo apt update && sudo apt-get install -y dotnet-sdk-5.0
             dotnet test
 
 # Invoke jobs via workflows
