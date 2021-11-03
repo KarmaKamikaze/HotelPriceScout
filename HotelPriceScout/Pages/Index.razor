@@ -1,7 +1,8 @@
 @page "/"
 @using HotelPriceScout.Data.Interface
-@using HotelPriceScout.Data.Model
+@using DataAccessLibrary
 @inject Dashboard Dashboard
+@inject SqliteDataAccess _db
 
 <div class="row col-md-7">
     <h1>@Cal.monthName @Cal.year</h1>
@@ -135,7 +136,7 @@
 
         protected override async Task OnInitializedAsync()
         {
-            listOfHotels = await StaticData.GetStaticHotelResources("all");
+            listOfHotels = await _db.LoadStaticHotelResources("total");
             Cal.CreateMonth();
         }
     }
