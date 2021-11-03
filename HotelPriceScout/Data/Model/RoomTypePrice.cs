@@ -38,7 +38,7 @@ namespace HotelPriceScout.Data.Model
       {
         if (value < 0)
         {
-          throw new ArgumentOutOfRangeException();
+          throw new ArgumentOutOfRangeException($"{nameof(value)} cannot be less than zero.");
         }
         _price = value;
       }
