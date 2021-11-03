@@ -1,7 +1,6 @@
 ﻿@page "/PriceThermometer"
 <h3>Price thermometer</h3>
-
-<div class="row border col"> <!-- outer layer-->
+<div class="row col"> <!-- outer layer-->
     @if(priceList == null){<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
     else
         {
@@ -33,8 +32,8 @@
   
 
 @code 
-{  
-     protected override void OnInitialized() 
+{
+    protected override void OnInitialized() 
     { GenerateThermometer(); } // runs the code required to load the thermometer when the page is loaded.
 
     List<Prices> priceList;
@@ -46,4 +45,6 @@
         MarketPriceItem =  (PriceMeterGenerator.MarketFinder(priceList));
         priceList.Sort();
     }
+
+    
  }
