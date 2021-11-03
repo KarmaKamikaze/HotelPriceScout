@@ -2,23 +2,23 @@
 <h3>Price thermometer</h3>
 
 <div class="row border col"> <!-- outer layer-->
-    @if(List == null){<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
+    @if(priceList == null){<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
     else
         {
         <table class="table table-borderless">
-            @foreach (Prices item in List)
+            @foreach (Prices item in priceList)
             {
                 
                      if (item.Price > MarketPriceItem.Price) 
                      {
                          <tr><td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> 
-                         <td class="@(List.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td></tr>
+                         <td class="@(priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td></tr>
                      } 
 
                      else if (item.Price < MarketPriceItem.Price)
                      {
                          <tr><td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td>
-                         <td class="@(List.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td></tr>
+                         <td class="@(priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td></tr>
                      }
 
                      else 
@@ -37,13 +37,13 @@
      protected override void OnInitialized() 
     { GenerateThermometer(); } // runs the code required to load the thermometer when the page is loaded.
 
-    List<Prices> List;
+    List<Prices> priceList;
     Prices MarketPriceItem;
 
     private void GenerateThermometer()
     {
-        List =  PriceMeterGenerator.PriceListGenerator();
-        MarketPriceItem =  (PriceMeterGenerator.MarketFinder(List));
-        List.Sort();
+        priceList =  PriceMeterGenerator.PriceListGenerator();
+        MarketPriceItem =  (PriceMeterGenerator.MarketFinder(priceList));
+        priceList.Sort();
     }
  }
