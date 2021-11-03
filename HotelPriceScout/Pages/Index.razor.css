@@ -6,14 +6,14 @@
     opacity: 0.1;
 }
 
-#option1 {
+#btnradio1 {
+    display:none;
+}
+
+#btnradio2 {
     display: none;
 }
 
-#option2 {
-    display: none;
-}
-
-#option3 {
+#btnradio3 {
     display: none;
 }
