@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using HotelPriceScout.Data;
 using Syncfusion.Blazor;
 using Blazored.Modal;
+using DataAccessLibrary;
 using HotelPriceScout.Data.Interface;
 
 namespace HotelPriceScout
@@ -35,6 +36,7 @@ namespace HotelPriceScout
             services.AddSyncfusionBlazor();
             services.AddBlazoredModal();
             services.AddTransient<Dashboard>();
+            services.AddTransient<SqliteDataAccess>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
