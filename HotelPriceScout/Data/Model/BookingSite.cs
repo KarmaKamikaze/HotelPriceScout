@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace HotelPriceScout.Data.Model
 {
@@ -8,14 +9,14 @@ namespace HotelPriceScout.Data.Model
     private readonly string _name;
     private readonly string _type;
 
-    public BookingSite(string name, string type, string url)
+    public BookingSite(string name, string type, string url, List<string> hotels)
     {
       try
       {
         Name = name ?? throw new ArgumentNullException(nameof(name));
         Type = type ?? throw new ArgumentNullException(nameof(type));
         Url = url ?? throw new ArgumentNullException(nameof(url));
-        // TODO: Initialize list of hotels.
+        HotelsList = CreateHotels(hotels);
       }
       catch (ArgumentException e)
       {
@@ -41,7 +42,10 @@ namespace HotelPriceScout.Data.Model
       }
     }
 
-    // TODO: List property, containing hotels.
+        // TODO: List property, containing hotels.
+    public IEnumerable<Hotel> HotelsList { get; init; }
+
+
 
     public string Url { get; }
 
@@ -50,9 +54,14 @@ namespace HotelPriceScout.Data.Model
       throw new NotImplementedException();
     }
 
-    private void CreateHotel()
+    private IEnumerable<Hotel> CreateHotels(List<string> hotelsStrings)
     {
-      throw new NotImplementedException();
+      List<Hotel> hotels = new List<Hotel>();
+      foreach(string hotel in hotelsStrings)
+        {
+          hotels.Add(new Hotel(hotel));
+        }
+      return hotels;     
     }
   }
 }
