@@ -6,6 +6,7 @@ namespace HotelPriceScout.Data.Model
     public class Scout
     {
         private int _marginValue;
+        private string _state;
 
         public int MarginValue
         {
@@ -20,6 +21,19 @@ namespace HotelPriceScout.Data.Model
             }
         }
 
+        public string State
+        {
+            get => _state;
+            set
+            {
+                if (value is not "stopped" or "started" or "preparing")
+                {
+                    throw new ArgumentOutOfRangeException($"{nameof(value)} can not be anything other than \"stopped\", \"started\" or \"preparing\".");
+                }
+                _state = value;
+            }
+        }
+
         public IEnumerable<BookingSite> BookingSites { get; init; }
 
         //This does not work yet!!!
@@ -30,7 +44,7 @@ namespace HotelPriceScout.Data.Model
             {
                 bookingSites.Add(new BookingSite(bookingSite[0], bookingSite[1], bookingSite[2], bookingSite[3]);
             }
-            
+
             throw new NotImplementedException();
         }
 
