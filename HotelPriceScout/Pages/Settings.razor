@@ -7,14 +7,14 @@
 
 <label>Margin value</label>
 <br />
-<SfNumericTextBox Width="300px" Placeholder="Insert margin value %" TValue="int?" Step="1" Max="100" Min="1" Value="5"></SfNumericTextBox>
+<SfNumericTextBox Width="200px" TValue="int?" Step="1" Max="100" Min="1" Format="" @bind-Value="MarginPicked"></SfNumericTextBox>
 <br />&nbsp;
 <br />
 <br />&nbsp;
 <br />
 
 <label>Amount of notifications</label><br />
-<SfDropDownList Width="300px" TItem="NotificationAmount" TValue="int" DataSource="@Notifications">
+<SfDropDownList Width="200px" TItem="NotificationAmount" TValue="int" @bind-value="NotificationAmountPicked" DataSource="@Notifications">
     <DropDownListFieldSettings Text="Text" Value="Notification"></DropDownListFieldSettings>
 </SfDropDownList>
 <br />&nbsp;
@@ -22,31 +22,20 @@
 <br />&nbsp;
 <br />
 
-<label>Notification time</label>
+<label>Notification time(s)</label>
 <br />
-<SfTimePicker Width="300px" TValue="DateTime?" Value="@TimeValue" Step=60 Format="HH:mm" CssClass="e-small"></SfTimePicker>
-<br />&nbsp;
-<br />
-<br />&nbsp;
-<br />
+<SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue" Step=60 Format="HH:mm" ></SfTimePicker>
 
-@if (notificationpopup2)
+
+@if (NotificationAmountPicked == 2)
 {
-    <label>Notification time 2</label>
-    <br />
-    <SfTimePicker Width="300px" TValue="DateTime?" Value="@TimeValue2" Step=60 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue2" Step=60 Format="HH:mm"></SfTimePicker>
 }
 
-@if (notificationpopup3)
+@if (NotificationAmountPicked == 3)
 {
-    <label>Notification time 2</label>
-    <br />
-    <SfTimePicker Width="300px" TValue="DateTime?" Value="@TimeValue2" Step=60 Format="HH:mm"></SfTimePicker>
-
-    <label>Notification time 3</label>
-    <br />
-    <SfTimePicker Width="300px" TValue="DateTime?" Value="@TimeValue3" Step=60 Format="HH:mm"></SfTimePicker>
-
+    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue2" Step=60 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue3" Step=60 Format="HH:mm"></SfTimePicker>
 }
 
 
@@ -108,6 +97,8 @@
 
 
 @code {
+    public int? MarginPicked = 1;
+    public int NotificationAmountPicked;
 
     public class NotificationAmount
     {
@@ -121,29 +112,10 @@
         new NotificationAmount(){ Notification= 3, Text= "3" },
     };
 
-    private void NotificationsAmount(int Notification)
-    {
-        if (Notification == 2)
-        {
-            NotificationDropdown2();
-        }
-        else if (Notification == 3)
-        {
-            NotificationDropdown3();
-        }
-    }
-    
-    public bool notificationpopup2 = false;
-    private void NotificationDropdown2()
-    {
-        notificationpopup2 = !notificationpopup2;
-    }
 
-    public bool notificationpopup3 = false;
-    private void NotificationDropdown3()
-    {
-        notificationpopup3 = !notificationpopup3;
-    }
+    
+
+
     public DateTime TimeValue { get; set; } = DateTime.Now;
     public DateTime TimeValue2 { get; set; } = DateTime.Now;
     public DateTime TimeValue3 { get; set; } = DateTime.Now;
