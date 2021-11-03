@@ -22,8 +22,15 @@ namespace HotelPriceScout.Data.Model
 
         public IEnumerable<BookingSite> BookingSites { get; init; }
 
-        private IEnumerable<BookingSite> CreateBookingSites(List<string[]> bookingSitesStrings)
+        //This does not work yet!!!
+        private IEnumerable<BookingSite> CreateBookingSites(List<object[]> bookingSitesStrings)
         {
+            List<BookingSite> bookingSites = new List<BookingSite>();
+            foreach (object[] bookingSite in bookingSitesStrings)
+            {
+                bookingSites.Add(new BookingSite(bookingSite[0], bookingSite[1], bookingSite[2], bookingSite[3]);
+            }
+            
             throw new NotImplementedException();
         }
 
