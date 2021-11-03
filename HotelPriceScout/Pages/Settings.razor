@@ -7,7 +7,7 @@
 
 <label>Margin value</label>
 <br />
-<SfNumericTextBox Width="200px" TValue="int?" Step="1" Max="100" Min="1" Format="" @bind-Value="MarginPicked"></SfNumericTextBox>
+<SfNumericTextBox Width="200px" TValue="int?" Step="1" Max="100" Min="1" @bind-Value="MarginPicked"></SfNumericTextBox>
 <br />&nbsp;
 <br />
 <br />&nbsp;
@@ -24,17 +24,17 @@
 
 <label>Notification time(s)</label>
 <br />
-<SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue" Step=60 Format="HH:mm" ></SfTimePicker>
+<SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue" Step=30 Format="HH:mm" ></SfTimePicker>
 
 
 @if (NotificationAmountPicked == 2)
 {
-    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue2" Step=60 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue2" Step=30 Format="HH:mm"></SfTimePicker>
 }
 
 @if (NotificationAmountPicked == 3)
 {
-    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue2" Step=60 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue2" Step=30 Format="HH:mm"></SfTimePicker>
     <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue3" Step=60 Format="HH:mm"></SfTimePicker>
 }
 
@@ -98,7 +98,7 @@
 
 @code {
     public int? MarginPicked = 1;
-    public int NotificationAmountPicked;
+    public int NotificationAmountPicked = 1;
 
     public class NotificationAmount
     {
@@ -111,9 +111,6 @@
         new NotificationAmount(){ Notification= 2, Text= "2" },
         new NotificationAmount(){ Notification= 3, Text= "3" },
     };
-
-
-    
 
 
     public DateTime TimeValue { get; set; } = DateTime.Now;
