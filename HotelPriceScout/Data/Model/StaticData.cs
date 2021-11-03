@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace HotelPriceScout.Data.Model
 {
     public static class StaticData
     {
-        public static IEnumerable<string> GetStaticHotelResources(string filterType)
+        public static async Task<IEnumerable<string>> GetStaticHotelResources(string filterType)
         {
             try
             {
                 List<string> hotels = new List<string>();
                 string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "Data/Model/HotelResources.csv"));
-                Console.WriteLine(path);
-                string[] fileResources = File.ReadAllLines(path);
+                string[] fileResources = await File.ReadAllLinesAsync(path);
 
                 foreach (string type in fileResources)
                 {
