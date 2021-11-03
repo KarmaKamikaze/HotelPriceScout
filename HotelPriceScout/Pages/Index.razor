@@ -3,141 +3,133 @@
 @using HotelPriceScout.Data.Model
 @inject Dashboard Dashboard
 
-<h1>@Cal.monthName @Cal.year</h1>
+<div class="row col-md-7">
+    <h1>@Cal.monthName @Cal.year</h1>
+    @if (Cal.monthsAway > 0)
+    {
+        <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway--; Cal.CreateMonth(); }">
+            <i class="bi bi-arrow-thick-left"></i>
+            <span class="oi oi-arrow-thick-left"></span>
+        </button>
+    }
+    else
+    {
+        <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+            <i class="bi bi-arrow-thick-left"></i>
+            <span class="oi oi-arrow-thick-left"></span>
+        </button>
+    }
+    @if (Cal.monthsAway < 4)
+    {
+        <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway++; Cal.CreateMonth(); }">
+            <i class="bi bi-arrow-thick-right"></i>
+            <span class="oi oi-arrow-thick-right"></span>
+        </button>
+    }
+    else
+    {
+        <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+            <span class="oi oi-arrow-thick-right"></span>
+        </button>
+    }
+</div>
 
 <div class="row col-md-7">
 
-        @if (Cal.monthsAway > 0)
-        {
-            <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway--; Cal.CreateMonth(); }">
-                <i class="bi bi-arrow-thick-left"></i>
-                <span class="oi oi-arrow-thick-left"></span>
-            </button>
-        }
-        else
-        {
-            <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
-                <i class="bi bi-arrow-thick-left"></i>
-                <span class="oi oi-arrow-thick-left"></span>
-            </button>
-        }
-        @if (Cal.monthsAway < 4)
-        {
-            <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway++; Cal.CreateMonth(); }">
-                <i class="bi bi-arrow-thick-right"></i>
-                <span class="oi oi-arrow-thick-right"></span>
-            </button>
-        }
-        else
-        {
-            <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
-                <i class="bi bi-arrow-thick-right"></i>
-                <span class="oi oi-arrow-thick-right"></span>
-            </button>
-        }
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-secondary active">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked> Active
+        </label>
+        <label class="btn btn-secondary">
+            <input type="radio" name="options" id="option2" autocomplete="off"> Radio
+        </label>
+        <label class="btn btn-secondary">
+            <input type="radio" name="options" id="option3" autocomplete="off"> Radio
+        </label>
+    </div>
+
     <div class="col-md-5">
         <SfDropDownList TItem="string" TValue="IEnumerable<string>" DataSource="listOfHotels" Placeholder="Select hotels">
             <DropDownListFieldSettings>
             </DropDownListFieldSettings>
         </SfDropDownList>
     </div>
-
-    <div class="col-md-4">
-        <SfDropDownList TItem="NumberOfAdults" TValue="string" DataSource="noget" Placeholder="Number of adults">
-            <DropDownListFieldSettings Text="Text">
-            </DropDownListFieldSettings>
-        </SfDropDownList>
-    </div>
 </div>
-<div class="row">
-    <div class="col-md-7">
-        <table class="table table-bordered col">
-            <thead>
-                <tr>
-                    <th> Monday </th>
-                    <th> Tirsdag </th>
-                    <th> Onsdag </th>
-                    <th> Torsdag </th>
-                    <th> Fredag </th>
-                    <th> Lørdag </th>
-                    <th> Søndag </th>
 
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    @for (int i = 0; i < Cal.numDummyColumn - 1; i++)
-                    {
-                        <td></td>
-                    }
-                    @for (int i = 1; i + Cal.numDummyColumn - 1 <= 7; i++)
-                    {
-                        int k = i;
-                        <td @onclick="(()=>Cal.ShowMoreInfo(k))">
-                            <div style="font-size: large;">@i</div>
-                            <div style="text-align: right; font-size: small;">You 1337</div>
-                            <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
-                        </td>
-                    }
-                </tr>
+    <div class="row">
+        <div class="col-md-7">
+            <table class="table table-bordered col">
+                <thead>
+                    <tr>
+                        <th> Monday</th>
+                        <th> Tuesday</th>
+                        <th> Wednesday</th>
+                        <th> Thursday</th>
+                        <th> Friday</th>
+                        <th> Saturday</th>
+                        <th> Sunday</th>
 
-                @for (int i = 8 - Cal.numDummyColumn + 1; i <= Cal.monthEnd.Day; i += 7)
-                {
-                    <tr class="clik">
-                        @for (int j = 0; j < 7; j++)
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        @for (int i = 0; i < Cal.numDummyColumn - 1; i++)
                         {
-                            @if (i + j <= Cal.monthEnd.Day)
-                            {
-                                int k = i + j;
-                                <td @onclick="(()=>Cal.ShowMoreInfo(k))">
-                                    <div style="font-size: large;">@(i + j)</div>
-                                    <div style="text-align: right; font-size: small;">You 1337</div>
-                                    <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
-                                </td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
+                            <td></td>
+                        }
+                        @for (int i = 1; i + Cal.numDummyColumn - 1 <= 7; i++)
+                        {
+                            int k = i;
+                            <td @onclick="(()=>Cal.ShowMoreInfo(k))">
+                                <div style="font-size: large;">@i</div>
+                                <div style="text-align: right; font-size: small;">You 1337</div>
+                                <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
+                            </td>
                         }
                     </tr>
-                }
-            </tbody>
-        </table>
+
+                    @for (int i = 8 - Cal.numDummyColumn + 1; i <= Cal.monthEnd.Day; i += 7)
+                    {
+                        <tr class="clik">
+                            @for (int j = 0; j < 7; j++)
+                            {
+                                @if (i + j <= Cal.monthEnd.Day)
+                                {
+                                    int k = i + j;
+                                    <td @onclick="(()=>Cal.ShowMoreInfo(k))">
+                                        <div style="font-size: large;">@(i + j)</div>
+                                        <div style="text-align: right; font-size: small;">You 1337</div>
+                                        <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (Cal.DayClicked != 0)
+        {
+            <div class="col-md-5 border">
+                <PriceThermometerComponent></PriceThermometerComponent>
+                <div>@Cal.DayClicked</div>
+            </div>
+        }
     </div>
 
-    @if (Cal.DayClicked != 0)
-    {
-        <div class="col-md-5 border">
-            <div>Vi</div>
-            <div>Venter</div>
-            <div>På</div>
-            <div>Casper</div>
-            <div>@Cal.DayClicked</div>
-        </div>
+    @code {
+
+        Dashboard Cal = new Dashboard();
+        IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
+
+        protected override async Task OnInitializedAsync()
+        {
+            listOfHotels = await StaticData.GetStaticHotelResources("all");
+            Cal.CreateMonth();
+        }
     }
-</div>
-
-@code {
-
-    Dashboard Cal = new Dashboard();
-    IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
-
-        public class NumberOfAdults
-    {
-        public string adults { get; set; }
-        public string Text { get; set; }
-    }
-    public List<NumberOfAdults> noget = new List<NumberOfAdults>()
-    {
-        new NumberOfAdults(){ adults = "1", Text= "1" },
-        new NumberOfAdults(){ adults = "2", Text= "2" },
-        new NumberOfAdults(){ adults = "4", Text= "4" },
-    };
-
-    protected override async Task OnInitializedAsync()
-    {
-        listOfHotels = await StaticData.GetStaticHotelResources("all");
-        Cal.CreateMonth();
-    }
-}

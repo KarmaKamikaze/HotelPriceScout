@@ -5,3 +5,15 @@
 #BtnDisable {
     opacity: 0.1;
 }
+
+#option1 {
+    display: none;
+}
+
+#option2 {
+    display: none;
+}
+
+#option3 {
+    display: none;
+}
