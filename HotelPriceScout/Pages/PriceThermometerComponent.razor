@@ -1,34 +1,31 @@
 ﻿@page "/PriceThermometer"
 <h3>Price thermometer</h3>
 
-<div class="row border col-md-4"> <!-- outer layer-->
+<div class="row border col"> <!-- outer layer-->
     @if(List == null){<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
     else
         {
         <table class="table table-borderless">
             @foreach (Prices item in List)
             {
-                if (designInt == 1) // checks if row is the first row 
-                {
-                    <tr > <td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> <td class="table-danger rounded-top">@item.Price,-</td> </tr>; designInt++;
-                }
-                else if (designInt == List.Count) // checks if row is the last row 
-                {
-                    <tr> <td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> <td class="table-success rounded-bottom">@item.Price,-</td> </tr>;
-                }
-                else
-                {
+                
                      if (item.Price > MarketPriceItem.Price) 
-                     {<tr > <td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> <td class="table-danger">@item.Price,-</td> </tr>; designInt++;} 
+                     {
+                         <tr><td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> 
+                         <td class="@(List.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td></tr>
+                     } 
 
                      else if (item.Price < MarketPriceItem.Price)
-                     {<tr> <td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> <td class="table-success">@item.Price,-</td> </tr>; designInt++;}
+                     {
+                         <tr><td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td>
+                         <td class="@(List.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td></tr>
+                     }
 
                      else 
-                     {<tr> <td class="col text-center"> @MarketPriceItem.Name<span class="oi oi-arrow-right text-center"></span></td> <td class="table-info">@MarketPriceItem.Price,-</td> </tr>; designInt++;}
-                }
-
-                            
+                     {
+                         <tr><td class="col text-center"> @MarketPriceItem.Name<span class="oi oi-arrow-right text-center"></span></td>
+                         <td class="table-info">@MarketPriceItem.Price,-</td> </tr>
+                     }
              }      
         </table>
         }
@@ -36,17 +33,17 @@
   
 
 @code 
-{   int designInt = 1;
+{  
      protected override void OnInitialized() 
     { GenerateThermometer(); } // runs the code required to load the thermometer when the page is loaded.
 
     List<Prices> List;
     Prices MarketPriceItem;
+
     private void GenerateThermometer()
     {
-        List =  PriceMeterGenerator.PriceListGenerator(); // generates test list of hotelprices, where market price is inside.
-        MarketPriceItem =  (PriceMeterGenerator.MarketFinder(List)); // extracts marketprice from list of prices.
-        //Test.Remove(MarketPriceItem);  // removes market object from list as it has been extracted.
+        List =  PriceMeterGenerator.PriceListGenerator();
+        MarketPriceItem =  (PriceMeterGenerator.MarketFinder(List));
         List.Sort();
     }
  }
