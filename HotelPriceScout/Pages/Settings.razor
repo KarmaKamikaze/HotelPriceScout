@@ -5,22 +5,40 @@
 <h1>Settings</h1>
 <br />
 
-<SfNumericTextBox Width="300px" Placeholder="Insert margin value %" TValue="int?" Step="1" Max="100" Min="1" Value="5"></SfNumericTextBox>
+<label>Margin value</label>
+<br />
+<SfNumericTextBox Width="200px" TValue="int?" Step="1" Max="100" Min="1" @bind-Value="MarginPicked"></SfNumericTextBox>
 <br />&nbsp;
 <br />
 <br />&nbsp;
 <br />
 
-
-<SfDropDownList TItem="NotificationTime" TValue="string" DataSource="TimeToNotify" Placeholder="Select time to notify" PopupWidth="300px" PopupHeight="200px" Width="300px">
-    <DropDownListFieldSettings Text="Time" Value="LowerMargin">
-    </DropDownListFieldSettings>
+<label>Amount of notifications</label><br />
+<SfDropDownList Width="200px" TItem="NotificationAmount" TValue="int" @bind-value="NotificationAmountPicked" DataSource="@Notifications">
+    <DropDownListFieldSettings Text="Text" Value="Notification"></DropDownListFieldSettings>
 </SfDropDownList>
 
 <br />&nbsp;
 <br />
 <br />&nbsp;
 <br />
+
+<label>Notification time(s)</label>
+<br />
+<SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue" Step=30 Format="HH:mm" ></SfTimePicker>
+
+
+@if (NotificationAmountPicked == 2)
+{
+    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue2" Step=30 Format="HH:mm"></SfTimePicker>
+}
+
+@if (NotificationAmountPicked == 3)
+{
+    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue2" Step=30 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue3" Step=60 Format="HH:mm"></SfTimePicker>
+}
+
 
 <div class="row">
     @if (showstart)
@@ -80,46 +98,25 @@
 
 
 @code {
+    public int? MarginPicked = 1;
+    public int NotificationAmountPicked = 1;
 
-
-    public class NotificationTime
+    public class NotificationAmount
     {
-        public string Time { get; set; }
+        public int Notification { get; set; }
+        public string Text { get; set; }
     }
-    List<NotificationTime> TimeToNotify = new List<NotificationTime>
+    public List<NotificationAmount> Notifications = new List<NotificationAmount>()
     {
-        new NotificationTime() { Time= "08:00"},
-        new NotificationTime() { Time= "08:30"},
-        new NotificationTime() { Time= "09:00"},
-        new NotificationTime() { Time= "09:30"},
-        new NotificationTime() { Time= "10:00"},
-        new NotificationTime() { Time= "10:30"},
-        new NotificationTime() { Time= "11:00"},
-        new NotificationTime() { Time= "11:30"},
-        new NotificationTime() { Time= "12:00"},
-        new NotificationTime() { Time= "12:30"},
-        new NotificationTime() { Time= "13:00"},
-        new NotificationTime() { Time= "13:30"},
-        new NotificationTime() { Time= "14:00"},
-        new NotificationTime() { Time= "14:30"},
-        new NotificationTime() { Time= "15:00"},
-        new NotificationTime() { Time= "15:30"},
-        new NotificationTime() { Time= "16:00"},
-        new NotificationTime() { Time= "16:30"},
-        new NotificationTime() { Time= "17:00"},
-        new NotificationTime() { Time= "17:30"},
-        new NotificationTime() { Time= "18:00"},
-        new NotificationTime() { Time= "18:30"},
-        new NotificationTime() { Time= "19:00"},
-        new NotificationTime() { Time= "19:30"},
-        new NotificationTime() { Time= "20:00"},
-        new NotificationTime() { Time= "20:30"},
-        new NotificationTime() { Time= "21:00"},
-        new NotificationTime() { Time= "21:30"},
-        new NotificationTime() { Time= "22:00"},
-        new NotificationTime() { Time= "22:30"},
-        new NotificationTime() { Time= "23:00"},
+        new NotificationAmount(){ Notification= 1, Text= "1" },
+        new NotificationAmount(){ Notification= 2, Text= "2" },
+        new NotificationAmount(){ Notification= 3, Text= "3" },
     };
+
+
+    public DateTime TimeValue { get; set; } = DateTime.Now;
+    public DateTime TimeValue2 { get; set; } = DateTime.Now;
+    public DateTime TimeValue3 { get; set; } = DateTime.Now;
 
 
     bool IsScoutStopped = false;
@@ -165,7 +162,7 @@
     Task OnButtonClick()
     {
 
-        return Task.Delay(2000);
+        return Task.Delay(1000);
     }
 
 
