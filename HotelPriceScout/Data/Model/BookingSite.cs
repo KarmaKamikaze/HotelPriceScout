@@ -42,7 +42,6 @@ namespace HotelPriceScout.Data.Model
       }
     }
 
-        // TODO: List property, containing hotels.
     public IEnumerable<Hotel> HotelsList { get; init; }
 
 
