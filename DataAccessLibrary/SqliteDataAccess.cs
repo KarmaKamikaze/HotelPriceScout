@@ -33,7 +33,7 @@ namespace DataAccessLibrary
             return resources;
         }
 
-        public async Task<List<(string, string, string, Dictionary<string, string>)>> LoadStaticBookingSiteResources()
+        public async Task<IEnumerable<(string, string, string, Dictionary<string, string>)>> LoadStaticBookingSiteResources()
         {
             using IDbConnection connection = new SQLiteConnection(LoadConnectionString());
             IEnumerable<(string name, string type, string url, string hotels)> output = await connection.QueryAsync<(string, string, string, string)>("select * from StaticDataBookingSites", new DynamicParameters());
