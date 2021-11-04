@@ -110,32 +110,70 @@
         @if (Cal.DayClicked != 0)
         {
             <div class="col-md-5 border">
-                <PriceThermometerComponent></PriceThermometerComponent>
-                <div>@Cal.DayClicked</div>
+                <div class="row col"> <!-- outer layer-->
+        @if(priceList == null){<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
+        else
+             {
+            <table class="table table-borderless">
+                @foreach (Prices item in priceList)
+                {
+                
+                         if (item.Price > MarketPriceItem.Price) 
+                         {
+                             <tr><td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> 
+                             <td class="@(priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td></tr>
+                         } 
+
+                         else if (item.Price < MarketPriceItem.Price)
+                         {
+                             <tr><td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td>
+                             <td class="@(priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td></tr>
+                         }
+
+                         else 
+                         {
+                             <tr><td class="col text-center"> @MarketPriceItem.Name<span class="oi oi-arrow-right text-center"></span></td>
+                             <td class="table-info">@MarketPriceItem.Price,-</td> </tr>
+                         }
+                 }      
+               </table>
+            }
+                </div>
+  
+                <div>Date: @Cal.DayClicked</div>
             </div>
         }
     </div>
 
     @code {
         public int AdultsPicked = 1;
-
         public class numberOfAdults
         {
             public int Adults { get; set; }
             public string Text { get; set; }
         }
         public List<numberOfAdults> Adults = new List<numberOfAdults>()
-    {
-        new numberOfAdults(){ Adults= 1, Text= "1 adult" },
-        new numberOfAdults(){ Adults= 2, Text= "2 adults" },
-        new numberOfAdults(){ Adults= 3, Text= "4 adults" },
-    };
+        {
+            new numberOfAdults(){ Adults= 1, Text= "1 adult" },
+            new numberOfAdults(){ Adults= 2, Text= "2 adults" },
+            new numberOfAdults(){ Adults= 3, Text= "4 adults" },
+        };
 
         Dashboard Cal = new Dashboard();
         IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
 
+        List<Prices> priceList;
+        Prices MarketPriceItem;
+        private void GenerateThermometer()
+        {
+            priceList =  PriceMeterGenerator.PriceListGenerator(); // This needs to get its data from the database, as a list of Price objects
+            MarketPriceItem =  (PriceMeterGenerator.MarketFinder(priceList));
+            priceList.Sort();
+        }
+
         protected override async Task OnInitializedAsync()
         {
+            GenerateThermometer();
             listOfHotels = await _db.LoadStaticHotelResources("total");
             Cal.CreateMonth();
         }

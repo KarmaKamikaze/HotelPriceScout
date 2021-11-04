@@ -26,5 +26,7 @@ namespace HotelPriceScout.Pages
                 Prices MarketPriceItem = list.Find(list => list.Name == "Gns. Marked");
                 return MarketPriceItem;
             }
-        }
+       
+        
+    }
 }
