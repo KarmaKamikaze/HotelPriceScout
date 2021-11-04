@@ -58,7 +58,7 @@ namespace HotelPriceScout.Data.Model
       List<Hotel> hotels = new List<Hotel>();
       foreach(string hotel in hotelsStrings)
         {
-          hotels.Add(new Hotel(hotel));
+          //hotels.Add(new Hotel(hotel));
         }
       return hotels;     
     }

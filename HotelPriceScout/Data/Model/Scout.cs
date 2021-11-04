@@ -8,6 +8,16 @@ namespace HotelPriceScout.Data.Model
         private int _marginValue;
         private string _state;
 
+        public Scout(string state, int marginValue, DateTime[] notificationTimes)
+        {
+            State = state;
+            MarginValue = marginValue;
+            NotificationTimes = notificationTimes;
+            //BookingSites = CreateBookingSites(/*This should be the static method that return the booking site information from the database*/);
+        }
+
+        public DateTime[] NotificationTimes { get; init; }
+
         public int MarginValue
         {
             get => _marginValue;
@@ -37,12 +47,12 @@ namespace HotelPriceScout.Data.Model
         public IEnumerable<BookingSite> BookingSites { get; init; }
 
         //This does not work yet!!!
-        private IEnumerable<BookingSite> CreateBookingSites(List<object[]> bookingSitesStrings)
+        private IEnumerable<BookingSite> CreateBookingSites(List<(string name, string type, string url, List<string> hotels)> bookingSitesStrings)
         {
-            List<BookingSite> bookingSites = new List<BookingSite>();
-            foreach (object[] bookingSite in bookingSitesStrings)
+            List<BookingSite> bookingSites = new();
+            foreach ((string name, string type, string url, List<string> hotels) bookingSite in bookingSitesStrings)
             {
-                bookingSites.Add(new BookingSite(bookingSite[0], bookingSite[1], bookingSite[2], bookingSite[3]);
+                bookingSites.Add(new BookingSite(bookingSite.name, bookingSite.type, bookingSite.url, bookingSite.hotels));
             }
 
             throw new NotImplementedException();
