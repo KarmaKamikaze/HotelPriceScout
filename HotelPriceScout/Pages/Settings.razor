@@ -4,8 +4,7 @@
 
 <h1>Settings</h1>
 <br />
-
-<label>Margin value</label>
+<label>Margin value percent</label>
 <br />
 <SfNumericTextBox Width="200px" TValue="int?" Step="1" Max="100" Min="1" @bind-Value="MarginPicked"></SfNumericTextBox>
 <br />&nbsp;
@@ -25,18 +24,18 @@
 
 <label>Notification time(s)</label>
 <br />
-<SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue" Step=30 Format="HH:mm" ></SfTimePicker>
+<SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@TimeValue" Step=30 Format="HH:mm" ></SfTimePicker>
 
 
 @if (NotificationAmountPicked == 2)
 {
-    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue2" Step=30 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@TimeValue2" Step=30 Format="HH:mm" ></SfTimePicker>
 }
 
 @if (NotificationAmountPicked == 3)
 {
-    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue2" Step=30 Format="HH:mm"></SfTimePicker>
-    <SfTimePicker Width="200px" TValue="DateTime?" Value="@TimeValue3" Step=60 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@TimeValue2" Step=30 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@TimeValue3" Step=60 Format="HH:mm"></SfTimePicker>
 }
 
 
@@ -93,14 +92,9 @@
     </div>
 </div>
 
-
-
-
-
 @code {
-    public int? MarginPicked = 1;
-    public int NotificationAmountPicked = 1;
-
+    public static int? MarginPicked = 1;
+    public static int NotificationAmountPicked = 1;
     public class NotificationAmount
     {
         public int Notification { get; set; }
@@ -113,16 +107,13 @@
         new NotificationAmount(){ Notification= 3, Text= "3" },
     };
 
-
-    public DateTime TimeValue { get; set; } = DateTime.Now;
-    public DateTime TimeValue2 { get; set; } = DateTime.Now;
-    public DateTime TimeValue3 { get; set; } = DateTime.Now;
-
+    public static DateTime? TimeValue { get; set; } = DateTime.Now;
+    public static DateTime? TimeValue2 { get; set; } = DateTime.Now;
+    public static DateTime? TimeValue3 { get; set; } = DateTime.Now;
 
     bool IsScoutStopped = false;
     bool IsScoutUpdated = false;
     bool IsScoutStarted = false;
-
 
     public void StopProgram()
     {
@@ -136,7 +127,6 @@
 
     }
 
-
     async void UpdateProgram()
     {
         IsScoutUpdated = true;
@@ -146,7 +136,6 @@
         StateHasChanged();
     }
 
-
     public void StartProgram()
     {
         IsScoutStarted = true;
@@ -155,9 +144,7 @@
         ShowStartButton();
         IsScoutStopped = false;
         StateHasChanged();
-
     }
-
 
     Task OnButtonClick()
     {
@@ -165,20 +152,19 @@
         return Task.Delay(1000);
     }
 
-
-    private bool showstop = false;
+    private static bool showstop = false;
     private void ShowStopButton()
     {
         showstop = !showstop;
     }
 
-    private bool showstart = true;
+    private static bool showstart = true;
     private void ShowStartButton()
     {
         showstart = !showstart;
     }
 
-    private bool showupdate = false;
+    private static bool showupdate = false;
     private void ShowUpdateButton()
     {
         showupdate = !showupdate;
