@@ -9,7 +9,7 @@ namespace HotelPriceScout.Data.Model
     private readonly string _name;
     private readonly string _type;
 
-    public BookingSite(string name, string type, string url, List<string> hotels)
+    public BookingSite(string name, string type, string url, Dictionary<string, string> hotels)
     {
       try
       {
@@ -53,12 +53,12 @@ namespace HotelPriceScout.Data.Model
       throw new NotImplementedException();
     }
 
-    private IEnumerable<Hotel> CreateHotels(List<string> hotelsStrings)
+    private IEnumerable<Hotel> CreateHotels(Dictionary<string, string> hotelsStrings)
     {
       List<Hotel> hotels = new List<Hotel>();
-      foreach(string hotel in hotelsStrings)
+      foreach(KeyValuePair<string, string> hotel in hotelsStrings)
         {
-          //hotels.Add(new Hotel(hotel));
+          hotels.Add(new Hotel(hotel.Key, hotel.Value));
         }
       return hotels;     
     }

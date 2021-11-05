@@ -13,19 +13,12 @@ namespace DataAccessLibrary
     {
         private readonly IConfiguration _config;
 
-        public SqliteDataAccess(IConfiguration config)
-        {
-            _config = config;
-        }
+        private static string connectionString = @"URI=file:../database.sqlite";
 
-        private string LoadConnectionString(string id = "Default")
-        {
-            return _config.GetConnectionString(id);
-        }
         
         public async Task<IEnumerable<string>> LoadStaticHotelResources(string group)
         {
-            using IDbConnection connection = new SQLiteConnection(LoadConnectionString());
+            using IDbConnection connection = new SQLiteConnection(connectionString);
             IEnumerable<string> output = await connection.QueryAsync<string>(
                 $"select HotelName from StaticDataHotels WHERE {group.ToLower()} = TRUE", new DynamicParameters());
             IEnumerable<string> resources = output.ToList();
@@ -35,7 +28,7 @@ namespace DataAccessLibrary
 
         public async Task<IEnumerable<(string, string, string, Dictionary<string, string>)>> LoadStaticBookingSiteResources()
         {
-            using IDbConnection connection = new SQLiteConnection(LoadConnectionString());
+            using IDbConnection connection = new SQLiteConnection(connectionString);
             IEnumerable<(string, string, string, string)> output = await connection.QueryAsync<(string, string, string, string)>("select * from StaticDataBookingSites", new DynamicParameters());
 
             var resources = new List<(string, string, string, Dictionary<string, string>)>();

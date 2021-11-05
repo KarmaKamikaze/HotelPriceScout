@@ -1,5 +1,10 @@
+using DataAccessLibrary;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Threading.Tasks;
+
 
 namespace HotelPriceScout.Data.Model
 {
@@ -8,20 +13,28 @@ namespace HotelPriceScout.Data.Model
         private int _marginValue;
         private string _state;
 
-        public Scout(string state, int marginValue, DateTime[] notificationTimes)
+        //This method is used to create scout objects instead of a typical constructor.
+        //This is due to the fact that the static booking site data should be fetched from the database.
+        //This therefore necessitates a asynchronous function.
+        public static async Task<Scout> CreateScoutAsync(string state, int marginValue, DateTime[] notificationTimes)
         {
-            State = state;
-            MarginValue = marginValue;
-            NotificationTimes = notificationTimes;
-            //BookingSites = CreateBookingSites(/*This should be the static method that return the booking site information from the database*/);
+            Scout scout = new Scout();
+            scout.State = state;
+            scout.MarginValue = marginValue;
+            scout.NotificationTimes = notificationTimes;
+            SqliteDataAccess bookingSiteDB = new SqliteDataAccess();
+            IEnumerable<(string, string, string, Dictionary<string, string>)> bookingSitesData = await bookingSiteDB.LoadStaticBookingSiteResources();
+            scout.BookingSites = scout.CreateBookingSites(bookingSitesData);
+            
+            return scout;
         }
 
-        public DateTime[] NotificationTimes { get; init; }
+        public DateTime[] NotificationTimes { get; private set; }
 
         public int MarginValue
         {
             get => _marginValue;
-            set
+            private set
             {
                 if (value > 100 || value < 0)
                 {
@@ -36,7 +49,7 @@ namespace HotelPriceScout.Data.Model
             get => _state;
             set
             {
-                if (value is not "stopped" or "started" or "preparing")
+                if (value != "stopped" && value != "started" && value != "preparing")
                 {
                     throw new ArgumentOutOfRangeException($"{nameof(value)} can not be anything other than \"stopped\", \"started\" or \"preparing\".");
                 }
@@ -44,22 +57,18 @@ namespace HotelPriceScout.Data.Model
             }
         }
 
-        public IEnumerable<BookingSite> BookingSites { get; init; }
+        public IEnumerable<BookingSite> BookingSites { get; private set; }
 
-        //This does not work yet!!!
-        private IEnumerable<BookingSite> CreateBookingSites(List<(string name, string type, string url, List<string> hotels)> bookingSitesStrings)
+
+        private IEnumerable<BookingSite> CreateBookingSites(IEnumerable<(string, string, string, Dictionary<string, string>)> bookingSitesData)
         {
             List<BookingSite> bookingSites = new();
-            foreach ((string name, string type, string url, List<string> hotels) bookingSite in bookingSitesStrings)
+            foreach ((string name, string type, string url, Dictionary<string, string> hotels) in bookingSitesData)
             {
-                bookingSites.Add(new BookingSite(bookingSite.name, bookingSite.type, bookingSite.url, bookingSite.hotels));
+                bookingSites.Add(new BookingSite(name, type, url, hotels));
             }
 
-            throw new NotImplementedException();
+            return bookingSites;
         }
-
-
     }
-
-
 }
