@@ -5,6 +5,7 @@
 @inject Dashboard Dashboard
 @inject SqliteDataAccess _db
 
+
 <div class="row col-md-7">
     <h1>@Cal.monthName @Cal.year</h1>
     @if (Cal.monthsAway > 0)
@@ -177,8 +178,7 @@
         GenerateThermometer();
         listOfHotels = await _db.LoadStaticHotelResources("total");
         Cal.CreateMonth();
-       
-        
 
+       
     }
     }
