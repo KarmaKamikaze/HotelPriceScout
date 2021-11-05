@@ -19,7 +19,7 @@ namespace HotelPriceScout.Data.Model
             get => _capacity;
             set
             {
-                if (value is not 1 or 2 or 4)
+                if (value != 1 && value != 2 && value != 4)
                 {
                     throw new ArgumentOutOfRangeException($"{nameof(value)} has to be 1, 2 or 4");
                 }

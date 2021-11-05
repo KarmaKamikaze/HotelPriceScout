@@ -15,6 +15,7 @@ using Blazored.Modal;
 using DataAccessLibrary;
 using HotelPriceScout.Data.Interface;
 
+
 namespace HotelPriceScout
 {
     public class Startup
@@ -37,6 +38,7 @@ namespace HotelPriceScout
             services.AddBlazoredModal();
             services.AddTransient<Dashboard>();
             services.AddTransient<SqliteDataAccess>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
