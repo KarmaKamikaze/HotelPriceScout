@@ -12,6 +12,7 @@ namespace HotelPriceScout.Data.Model
         {
             Type = type;
             BookingSites = bookingSites;
+            MarginValue = marginValue;
         }
 
         private bool IsDiscrepancy { get; set; }
@@ -28,6 +29,7 @@ namespace HotelPriceScout.Data.Model
         }
 
         public IEnumerable<BookingSite> BookingSites { get; init; }
+        public int MarginValue { get; init; }
 
         public void ComparePrices()
         {
