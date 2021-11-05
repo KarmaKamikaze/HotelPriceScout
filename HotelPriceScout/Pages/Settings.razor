@@ -6,14 +6,14 @@
 <br />
 <label>Margin value percent</label>
 <br />
-<SfNumericTextBox Width="200px" TValue="int?" Step="1" Max="100" Min="1" @bind-Value="MarginPicked"></SfNumericTextBox>
+<SfNumericTextBox Width="200px" TValue="int?" Step="1" Max="100" Min="1" @bind-Value="marginPicked"></SfNumericTextBox>
 <br />&nbsp;
 <br />
 <br />&nbsp;
 <br />
 
 <label>Amount of notifications</label><br />
-<SfDropDownList Width="200px" TItem="NotificationAmount" TValue="int" @bind-value="NotificationAmountPicked" DataSource="@Notifications">
+<SfDropDownList Width="200px" TItem="NotificationAmount" TValue="int" @bind-value="notificationAmountPicked" DataSource="@Notifications">
     <DropDownListFieldSettings Text="Text" Value="Notification"></DropDownListFieldSettings>
 </SfDropDownList>
 
@@ -24,32 +24,32 @@
 
 <label>Notification time(s)</label>
 <br />
-<SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@TimeValue" Step=30 Format="HH:mm" ></SfTimePicker>
+<SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue" Step=30 Format="HH:mm" ></SfTimePicker>
 
 
-@if (NotificationAmountPicked == 2)
+@if (notificationAmountPicked == 2)
 {
-    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@TimeValue2" Step=30 Format="HH:mm" ></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue2" Step=30 Format="HH:mm" ></SfTimePicker>
 }
 
-@if (NotificationAmountPicked == 3)
+@if (notificationAmountPicked == 3)
 {
-    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@TimeValue2" Step=30 Format="HH:mm"></SfTimePicker>
-    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@TimeValue3" Step=60 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue3" Step=60 Format="HH:mm"></SfTimePicker>
 }
 
 
 <div class="row">
-    @if (showstart)
+    @if (showStart)
     {
-        <button type="button" class="border border-dark col-md-1 btn btn-success" disabled=@IsScoutStarted @onclick="StartProgram"> Start program</button>
+        <button type="button" class="border border-dark col-md-1 btn btn-success" disabled=@isScoutStarted @onclick="StartProgram"> Start program</button>
     }
 
-    @if (showstop)
+    @if (showStop)
     {
         <button type="button" class="border border-dark col-md-1 btn btn-danger" data-bs-toggle="modal" @onkeydown="@EscapeStop" @onclick="PopUp"> Stop program</button>
     }
-    @if (popup)
+    @if (popUp)
     {
         <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -58,8 +58,8 @@
                         <h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="StopProgram">Yes </button>
-                        <button type="button" class="form-control border border-dark" disabled=@IsScoutStopped @onclick="PopUp"> No </button>
+                        <button type="button" class="form-control border border-dark" disabled=@isScoutStopped @onclick="StopProgram">Yes </button>
+                        <button type="button" class="form-control border border-dark" disabled=@isScoutStopped @onclick="PopUp"> No </button>
                     </div>
                 </div>
             </div>
@@ -68,11 +68,11 @@
 
     <div class="col-md-1">
     </div>
-    @if (showupdate)
+    @if (showUdate)
     {
         <button type="button" class="border border-dark col-md-1 btn btn-primary" data-bs-toggle="modal" @onkeydown="@EscapeUpdate" @onclick="UpdatePopUp">Update program</button>
     }
-    @if (updatepopup)
+    @if (updatePopUp)
     {
         <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -81,8 +81,8 @@
                         <h5 class="modal-title" id="titleLabel">Are you sure you want to update the program?</h5>
                     </div>
                     <div class=modal-footer>
-                        <button type="button" class="form-control border border-dark" col-8 col-sm-3 disabled=@IsScoutUpdated @onclick="UpdateProgram">Yes</button>
-                        <button type="button" class="form-control border border-dark" col-4 col-sm-3 disabled=@IsScoutUpdated @onclick="UpdatePopUp">No</button>
+                        <button type="button" class="form-control border border-dark" col-8 col-sm-3 disabled=@isScoutUpdated @onclick="UpdateProgram">Yes</button>
+                        <button type="button" class="form-control border border-dark" col-4 col-sm-3 disabled=@isScoutUpdated @onclick="UpdatePopUp">No</button>
                     </div>
                 </div>
             </div>
@@ -92,9 +92,28 @@
     </div>
 </div>
 
+@*
+---For testing purposes---    
+<p>@marginPickedPass</p><br />
+<p>@notificationPickedPass</p><br />
+<p>@timeValuePass</p><br />
+<p>@timeValuePass2</p><br />
+<p>@timeValuePass3</p><br />*@
+
+
 @code {
-    public static int? MarginPicked = 1;
-    public static int NotificationAmountPicked = 1;
+
+    public static int? marginPicked = 1;
+    public static int notificationAmountPicked = 1;
+    public static DateTime? timeValue { get; set; } = DateTime.Now;
+    public static DateTime? timeValue2 { get; set; } = DateTime.Now;
+    public static DateTime? timeValue3 { get; set; } = DateTime.Now;
+    public static int? marginPickedPass { get; set; }
+    public static int notificationPickedPass { get; set; }
+    public static DateTime? timeValuePass { get; set; } 
+    public static DateTime? timeValuePass2 { get; set; }
+    public static DateTime? timeValuePass3 { get; set; }
+
     public class NotificationAmount
     {
         public int Notification { get; set; }
@@ -106,44 +125,57 @@
         new NotificationAmount(){ Notification= 2, Text= "2" },
         new NotificationAmount(){ Notification= 3, Text= "3" },
     };
-
-    public static DateTime? TimeValue { get; set; } = DateTime.Now;
-    public static DateTime? TimeValue2 { get; set; } = DateTime.Now;
-    public static DateTime? TimeValue3 { get; set; } = DateTime.Now;
-
-    bool IsScoutStopped = false;
-    bool IsScoutUpdated = false;
-    bool IsScoutStarted = false;
+        
+    bool isScoutStopped = false;
+    bool isScoutUpdated = false;
+    bool isScoutStarted = false;
 
     public void StopProgram()
     {
-        IsScoutStopped = true;
+        isScoutStopped = true;
         ShowStartButton();
         ShowStopButton();
         ShowUpdateButton();
         PopUp();
-        IsScoutStarted = false;
+        marginPickedPass = default;
+        notificationPickedPass = default;
+        timeValuePass = default;
+        timeValuePass2 = default;
+        timeValuePass3 = default;
+        isScoutStarted = false;
+        marginPicked = 1;
+        notificationAmountPicked = 1;
         StateHasChanged();
-
     }
 
     async void UpdateProgram()
     {
-        IsScoutUpdated = true;
+        isScoutUpdated = true;
         await OnButtonClick();
         UpdatePopUp();
-        IsScoutUpdated = false;
+        marginPickedPass = marginPicked;
+        notificationPickedPass = notificationAmountPicked;
+        timeValuePass = timeValue;
+        timeValuePass2 = timeValue2;
+        timeValuePass3 = timeValue3;
+        isScoutUpdated = false;
         StateHasChanged();
     }
 
     public void StartProgram()
     {
-        IsScoutStarted = true;
+        marginPickedPass = marginPicked;
+        notificationPickedPass = notificationAmountPicked;
+        timeValuePass = timeValue;
+        timeValuePass2 = timeValue2;
+        timeValuePass3 = timeValue3;
+        isScoutStarted = true;
         ShowStopButton();
         ShowUpdateButton();
         ShowStartButton();
-        IsScoutStopped = false;
+        isScoutStopped = false;
         StateHasChanged();
+        ScoutStart();
     }
 
     Task OnButtonClick()
@@ -152,35 +184,35 @@
         return Task.Delay(1000);
     }
 
-    private static bool showstop = false;
+    private static bool showStop = false;
     private void ShowStopButton()
     {
-        showstop = !showstop;
+        showStop = !showStop;
     }
 
-    private static bool showstart = true;
+    private static bool showStart = true;
     private void ShowStartButton()
     {
-        showstart = !showstart;
+        showStart = !showStart;
     }
 
-    private static bool showupdate = false;
+    private static bool showUdate = false;
     private void ShowUpdateButton()
     {
-        showupdate = !showupdate;
+        showUdate = !showUdate;
     }
 
 
-    public bool popup = false;
+    public bool popUp = false;
     private void PopUp()
     {
-        popup = !popup;
+        popUp = !popUp;
     }
 
-    public bool updatepopup = false;
+    public bool updatePopUp = false;
     private void UpdatePopUp()
     {
-        updatepopup = !updatepopup;
+        updatePopUp = !updatePopUp;
     }
 
 
@@ -198,6 +230,11 @@
         {
             PopUp();
         }
+    }
+
+    public void ScoutStart()
+    {
+        
     }
 
 }
