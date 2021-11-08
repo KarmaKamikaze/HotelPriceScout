@@ -41,8 +41,10 @@ namespace HotelPriceScout.Data.Model
             Dictionary<DateTime, List<decimal>> marketPrices = new();
 
 
-            for (DateTime date = DateTime.Now; date < date.AddMonths(3); date = date.AddDays(1))
+
+            for (DateTime date = DateTime.Now.Date; date < date.AddMonths(3); date = date.AddDays(1))
             {
+                Console.WriteLine("Comp date:" + date);
                 Dictionary<string, decimal> dict1 = new();
                 Dictionary<string, decimal> dict2 = new();
                 Dictionary<string, decimal> dict3 = new();
@@ -59,9 +61,9 @@ namespace HotelPriceScout.Data.Model
                     {
                         foreach ((Dictionary<string, decimal> dict, int capacity) in dictList)
                         {
-                            RoomType roomType = hotel.RoomTypes.Where(r => r.Capacity == capacity).First();
+                            RoomType roomType = hotel.RoomTypes.Single(r => r.Capacity == capacity);
 
-                            RoomTypePrice roomTypePrice = roomType.Prices.Find(p => p.Date == date);
+                            RoomTypePrice roomTypePrice = roomType.Prices.Where(p => p.Date == date).FirstOrDefault();
 
                             if (roomTypePrice != null)
                             {
@@ -84,15 +86,11 @@ namespace HotelPriceScout.Data.Model
                 List<decimal> list = new();
                 foreach ((Dictionary<string, decimal> dict, int capacity) in dictList)
                 {
-                    decimal accumulatedPrice = 0;
-                    foreach(KeyValuePair<string, decimal> keyValuePair in dict)
-                    {
-                        accumulatedPrice += keyValuePair.Value;
-                    }
-                    
-                    list.Add(accumulatedPrice / dict.Count());
+                    list.Add(dict.Values.Average());
+
                 }
                 marketPrices.Add(date, list);
+                
             }
 
 

@@ -33,7 +33,7 @@ namespace HotelPriceScout.Data.Model
         {
             List<RoomTypePrice> prices = new();
             int i = 0;
-            for (DateTime currentdate = DateTime.Now; currentdate.AddDays(i) < currentdate.AddMonths(3); i++)
+            for (DateTime currentdate = DateTime.Now.Date; currentdate.AddDays(i) < currentdate.AddMonths(3); i++)
             {
                 prices.Add(new RoomTypePrice(currentdate.AddDays(i)));
             }
