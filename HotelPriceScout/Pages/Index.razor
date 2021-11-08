@@ -95,8 +95,12 @@
                                 <td @onclick="(()=>Cal.ShowMoreInfo(k))">
                                     <div style="font-size: large;">@(i + j)</div>
                                     <div style="text-align: right; font-size: small;">
-                                        @{IEnumerable<marketprice> SingelMarketPrice
-                                                = Kage.Where(date => date.Date == new DateTime(Cal.year, Cal.month, k)); foreach (marketprice price in SingelMarketPrice) { System.Console.WriteLine(price.Price); }
+                                        @{IEnumerable<marketprice> SingelMarketPrice = CalenderMarket
+                                                .Where(date => date.Date == new DateTime(Cal.year, Cal.month, k));
+                                                foreach (marketprice item in SingelMarketPrice)
+                                                {
+                                                    System.Console.WriteLine(item.Price);
+                                                }
                                             }
                                     </div>
                                     <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
@@ -179,7 +183,7 @@
 
     List<Prices> priceList;
     Prices MarketPriceItem;
-    IEnumerable<marketprice> Kage;
+    IEnumerable<marketprice> CalenderMarket;
 
     private void GenerateThermometer()
     {
@@ -195,7 +199,7 @@
 
 
 
-        Kage = await (Cal.DisplayComaredPrices("2021-11-06"));
+        CalenderMarket = await (Cal.DisplayComaredPrices("2021-11-06"));
 
         Cal.CreateMonth();
     }
