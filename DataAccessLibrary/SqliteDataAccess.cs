@@ -26,6 +26,8 @@ namespace DataAccessLibrary
             return resources;
         }
 
+
+
         public async Task<IEnumerable<(string, string, string, Dictionary<string, string>)>> LoadStaticBookingSiteResources()
         {
             using IDbConnection connection = new SQLiteConnection(connectionString);
