@@ -7,7 +7,7 @@
 
 
 <div class="row col-md-7">
-    <h1>@Cal.monthName @Cal.year</h1>
+    <h1 style="width:350px;">@Cal.monthName @Cal.year</h1>
     @if (Cal.monthsAway > 0)
     {
         <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway--; Cal.CreateMonth();}">
@@ -79,7 +79,16 @@
                         <td @onclick="(()=>Cal.ShowMoreInfo(k))">
                             <div style="font-size: large;">@i</div>
                             <div style="text-align: right; font-size: small;">you 1337 </div>
-                            <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
+                            <div style="text-align: right; font-size: small; opacity: 0.5;">
+                                @{IEnumerable<marketprice> SingelMarketPrice = CalenderMarket
+                                    .Where(date => date.Date == new DateTime(Cal.year, Cal.month, k));
+                                    foreach (marketprice item in SingelMarketPrice)
+                                    {
+                                        System.Console.WriteLine(item.Price);
+                                        p = item.Price;
+                                    }
+                                } Market @p
+                            </div>
                         </td>
                     }
                 </tr>
@@ -95,15 +104,18 @@
                                 <td @onclick="(()=>Cal.ShowMoreInfo(k))">
                                     <div style="font-size: large;">@(i + j)</div>
                                     <div style="text-align: right; font-size: small;">
-                                        @{IEnumerable<marketprice> SingelMarketPrice = CalenderMarket
-                                                .Where(date => date.Date == new DateTime(Cal.year, Cal.month, k));
-                                                foreach (marketprice item in SingelMarketPrice)
-                                                {
-                                                    System.Console.WriteLine(item.Price);
-                                                }
-                                            }
+                                        You 1337
                                     </div>
-                                    <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
+                                    <div style="text-align: right; font-size: small; opacity: 0.5;">
+                                        @{IEnumerable<marketprice> SingelMarketPrice = CalenderMarket
+                                            .Where(date => date.Date == new DateTime(Cal.year, Cal.month, k));
+                                            foreach (marketprice item in SingelMarketPrice)
+                                            {
+                                                System.Console.WriteLine(item.Price);
+                                                p = item.Price;
+                                            }
+                                        } Market @p
+                                    </div>
                                 </td>
                             }
                             else
@@ -119,24 +131,24 @@
 
     @if (Cal.DayClicked != 0)
     {
-         <div class="col-md-4 border">
-             <div class="row col">
+        <div class="col-md-4 border">
+            <div class="row col">
                 <!-- outer layer-->
                 @if (priceList == null)
-                 {<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
-                 else
-                 {
-                     <table class="table table-borderless">
+                {<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
+                else
+                {
+                    <table class="table table-borderless">
                         @foreach (Prices item in priceList)
-                         {
+                        {
 
-                             if (item.Price > MarketPriceItem.Price)
-                             {
-                                 <tr>
+                            if (item.Price > MarketPriceItem.Price)
+                            {
+                                <tr>
                                     <td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td>
                                     <td class="@(priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td>
-                                 </tr>
-                             }
+                                </tr>
+                            }
 
                             else if (item.Price < MarketPriceItem.Price)
                             {
@@ -164,6 +176,7 @@
 </div>
 
 @code {
+    int p;
     public int AdultsPicked = 1;
     public class numberOfAdults
     {
@@ -195,9 +208,6 @@
     protected override async Task OnInitializedAsync()
     {
         GenerateThermometer();
-
-
-
 
         CalenderMarket = await (Cal.DisplayComaredPrices("2021-11-06"));
 
