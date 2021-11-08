@@ -10,7 +10,7 @@
     <h1>@Cal.monthName @Cal.year</h1>
     @if (Cal.monthsAway > 0)
     {
-        <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway--; Cal.CreateMonth(); }">
+        <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway--; Cal.CreateMonth();}">
             <i class="bi bi-arrow-thick-left"></i>
             <span class="oi oi-arrow-thick-left"></span>
         </button>
@@ -78,7 +78,7 @@
                         int k = i;
                         <td @onclick="(()=>Cal.ShowMoreInfo(k))">
                             <div style="font-size: large;">@i</div>
-                            <div style="text-align: right; font-size: small;">You 1337</div>
+                            <div style="text-align: right; font-size: small;">you 1337 </div>
                             <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
                         </td>
                     }
@@ -90,11 +90,13 @@
                         @for (int j = 0; j < 7; j++)
                         {
                             @if (i + j <= Cal.monthEnd.Day)
-                            {
-                                int k = i + j;
+                                {
+                                    int k = i + j;
                                 <td @onclick="(()=>Cal.ShowMoreInfo(k))">
                                     <div style="font-size: large;">@(i + j)</div>
-                                    <div style="text-align: right; font-size: small;">You 1337</div>
+                                    <div style="text-align: right; font-size: small;">
+                                    @{Task<IEnumerable<marketprice>> Daprice = Kage.Where(date => date.Date == new DateTime(Cal.year, Cal.month, k));};
+                                    </div>
                                     <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
                                 </td>
                             }
@@ -167,13 +169,14 @@
             new numberOfAdults(){ Adults= 1, Text= "1 adult" },
             new numberOfAdults(){ Adults= 2, Text= "2 adults" },
             new numberOfAdults(){ Adults= 3, Text= "4 adults" },
-        };
+    };
 
     Dashboard Cal = new Dashboard();
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
 
     List<Prices> priceList;
     Prices MarketPriceItem;
+
     private void GenerateThermometer()
     {
         priceList = PriceMeterGenerator.PriceListGenerator(); // This needs to get its data from the database, as a list of Price objects
@@ -181,14 +184,16 @@
         priceList.Sort();
     }
 
+
     protected override async Task OnInitializedAsync()
     {
         GenerateThermometer();
         listOfHotels = await _db.LoadStaticHotelResources("total");
 
-        Cal.DisplayComaredPrices(14);
+        Task<IEnumerable<marketprice>> Kage;
+
+        Kage = Cal.DisplayComaredPrices("2021-11-06");
 
         Cal.CreateMonth();
-
     }
 }

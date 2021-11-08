@@ -1,8 +1,9 @@
-﻿using System;
-using Dapper;
+﻿using Dapper;
 using DataAccessLibrary;
+using System;
 using System.Linq;
 using System.Collections;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 namespace HotelPriceScout.Data.Interface
 {
@@ -15,6 +16,19 @@ namespace HotelPriceScout.Data.Interface
         public int year = default;
         public int month = default;
         public int DayClicked = default;
+        public int temp = default;
+
+        public async Task <IEnumerable<marketprice>> DisplayComaredPrices(string date)
+        {
+            var tempDate = DateTime.Now.AddMonths(monthsAway);
+            month = tempDate.Month;
+            year = tempDate.Year;
+
+            IEnumerable<marketprice> testliste = await Retrivedatafromdb("Price, Date", "MarketPrices", "Date >= '" + date + "'");
+            List<marketprice> allPrices = testliste.ToList();
+
+            return testliste;
+        }
 
         public void CreateMonth()
         {
@@ -46,17 +60,6 @@ namespace HotelPriceScout.Data.Interface
             if(numDummyColumn == 0)
             {
                 numDummyColumn = 7;
-            }
-        }
-
-        public async void DisplayComaredPrices(int Day)
-        {
-            IEnumerable<marketprice> testliste = await Retrivedatafromdb("Price, Date", "MarketPrices", "Date < '2021-12-01'");
-
-            IEnumerable<marketprice> Daprice = testliste.Where(date => date.Date == new DateTime(year, month, Day));
-            foreach (marketprice price in Daprice)
-            {
-                System.Console.WriteLine(price.Price);
             }
         }
 
