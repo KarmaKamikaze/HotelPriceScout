@@ -179,6 +179,8 @@
         listOfHotels = await _db.LoadStaticHotelResources("total");
         Cal.CreateMonth();
 
-       
+        Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
+
+        
     }
     }

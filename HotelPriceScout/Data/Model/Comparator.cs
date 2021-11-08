@@ -94,6 +94,8 @@ namespace HotelPriceScout.Data.Model
                 }
                 marketPrices.Add(date, list);
             }
+
+
         }
 
         public void SendNotification()
