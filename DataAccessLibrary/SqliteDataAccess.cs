@@ -44,8 +44,8 @@ namespace DataAccessLibrary
 
             using IDbConnection connection = new SQLiteConnection(connectionString);
             IEnumerable<marketprice> output = await connection.QueryAsync<marketprice>($"Select {select} From {From} Where {where}", new DynamicParameters());
-            foreach (marketprice marketprice in output)
-            { System.Console.WriteLine("Date: " + marketprice.Date.ToString("dd/MM/yyyy") + " Marketprice: " + marketprice.Price); };
+            //foreach (marketprice marketprice in output)
+            //{ System.Console.WriteLine("Date: " + marketprice.Date.ToString("dd/MM/yyyy") + " Marketprice: " + marketprice.Price); };
             List<marketprice> resources = output.ToList();
 
             return resources;
