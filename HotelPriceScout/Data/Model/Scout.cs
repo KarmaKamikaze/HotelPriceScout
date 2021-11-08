@@ -60,6 +60,19 @@ namespace HotelPriceScout.Data.Model
         public IEnumerable<BookingSite> BookingSites { get; private set; }
 
 
+        public void RunComparator(string type)
+        {
+            Comparator comparator = new Comparator(type, BookingSites, MarginValue);
+            comparator.ComparePrices();
+
+            if (comparator.IsDiscrepancy && type == "email")
+            {
+                comparator.SendNotification();
+            }
+
+        }
+
+
         private IEnumerable<BookingSite> CreateBookingSites(IEnumerable<(string, string, string, Dictionary<string, string>)> bookingSitesData)
         {
             List<BookingSite> bookingSites = new();
