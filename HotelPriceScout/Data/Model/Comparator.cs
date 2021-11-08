@@ -17,7 +17,7 @@ namespace HotelPriceScout.Data.Model
             MarginValue = marginValue;
         }
 
-        private bool IsDiscrepancy { get; set; }
+        public bool IsDiscrepancy { get; private set; }
 
         public string Type
         {
