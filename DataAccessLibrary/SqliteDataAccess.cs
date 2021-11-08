@@ -9,6 +9,19 @@ using Microsoft.Extensions.Configuration;
 
 namespace DataAccessLibrary
 {
+    public class marketprice
+    {
+        public int Price { get; set; }
+        public DateTime Date { get; set; }
+
+        public marketprice(int price, DateTime date)
+        {
+            Price = price;
+            Date = date;
+
+        }
+    }
+
     public class SqliteDataAccess
     {
         private readonly IConfiguration _config;
@@ -26,7 +39,18 @@ namespace DataAccessLibrary
             return resources;
         }
 
+        public async Task<IEnumerable<marketprice>> Retrivedatafromdb(string select, string From, string where)
+        {
 
+            using IDbConnection connection = new SQLiteConnection(connectionString);
+            IEnumerable<marketprice> output = await connection.QueryAsync<marketprice>($"Select {select} From {From} Where {where}", new DynamicParameters());
+            foreach (marketprice marketprice in output)
+            { System.Console.WriteLine("Date: " + marketprice.Date.ToString("dd/MM/yyyy") + " Marketprice: " + marketprice.Price); };
+            List<marketprice> resources = output.ToList();
+
+            return resources;
+
+        }
 
         public async Task<IEnumerable<(string, string, string, Dictionary<string, string>)>> LoadStaticBookingSiteResources()
         {
