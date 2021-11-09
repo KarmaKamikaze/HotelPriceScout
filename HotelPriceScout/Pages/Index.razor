@@ -161,7 +161,8 @@
         </div>}
 </div>
 
-@code {int mPrice;
+@code {
+    int mPrice;
     public int AdultsPicked = 1;
     public class numberOfAdults
     {
@@ -181,7 +182,7 @@
 
     List<Prices> priceList;
     Prices MarketPriceItem;
-    IEnumerable<marketprice> CalenderMarket;
+    IEnumerable<MarketPriceModel> CalendarMarketPrices;
 
     private void GenerateThermometer()
     {
@@ -192,7 +193,7 @@
 
     public async void OnClickUpdate()
     {
-        CalenderMarket = await (Cal.DisplayComaredPrices(Cal.toDay.ToString("yyyy-MM-dd"), Cal.monthEnd.ToString("yyyy-MM-dd")));
+        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.toDay.ToString("yyyy-MM-dd"), Cal.monthEnd.ToString("yyyy-MM-dd")));
     }
 
     protected override async Task OnInitializedAsync()
@@ -201,14 +202,14 @@
 
         Cal.CreateMonth();
 
-        CalenderMarket = await (Cal.DisplayComaredPrices(Cal.tempDate.ToString("yyyy-MM-dd"), Cal.monthEnd.ToString("yyyy-MM-dd")));
+        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.tempDate.ToString("yyyy-MM-dd"), Cal.monthEnd.ToString("yyyy-MM-dd")));
     }
 
     public int MarketPriceDaySetter(int k)
     {
         if (new DateTime(Cal.year, Cal.month, k, 23, 59, 59) >= Cal.toDay)
         {
-            IEnumerable<marketprice> SingelMarketPrice = CalenderMarket
+            IEnumerable<MarketPriceModel> SingelMarketPrice = CalendarMarketPrices
                         .Where(date => date.Date == new DateTime(Cal.year, Cal.month, k));
             mPrice = SingelMarketPrice.Single().Price;
         }
