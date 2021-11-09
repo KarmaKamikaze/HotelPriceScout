@@ -17,25 +17,25 @@ namespace HotelPriceScout.Data.Interface
         public int month = default;
         public int DayClicked = default;
         public int temp = default;
+        public DateTime tempDate;
+        public DateTime toDay = DateTime.Now;
 
-        public async Task<IEnumerable<marketprice>> DisplayComaredPrices(string date)
+        public async Task<IEnumerable<marketprice>> DisplayComaredPrices(string StartDate, string EndDate)
         {
-            var tempDate = DateTime.Now.AddMonths(monthsAway);
+            tempDate = DateTime.Now.AddMonths(monthsAway);
             month = tempDate.Month;
             year = tempDate.Year;
 
-            IEnumerable<marketprice> testliste = await Retrivedatafromdb("Price, Date", "MarketPrices", "Date < '2021-12-01'");
+            IEnumerable<marketprice> testliste = await Retrivedatafromdb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}'");
 
             IEnumerable<marketprice> Daprice = testliste.Where(date => date.Date == new DateTime(2021, 11, 15));
             
-
-
             return testliste;
         }
 
         public void CreateMonth()
         {
-            var tempDate = DateTime.Now.AddMonths(monthsAway);
+            tempDate = DateTime.Now.AddMonths(monthsAway);
             month = tempDate.Month;
             year = tempDate.Year;
 

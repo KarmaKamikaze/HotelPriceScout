@@ -10,7 +10,8 @@
     <h1 style="width:350px;">@Cal.monthName @Cal.year</h1>
     @if (Cal.monthsAway > 0)
     {
-        <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway--; Cal.CreateMonth();}">
+        <button type="button" class="btn btn-default btn-lg" @onclick="() =>
+                              { Cal.monthsAway--; Cal.CreateMonth(); OnClickUpdate(); Cal.DayClicked = 0; }">
             <i class="bi bi-arrow-thick-left"></i>
             <span class="oi oi-arrow-thick-left"></span>
         </button>
@@ -24,7 +25,8 @@
     }
     @if (Cal.monthsAway < 4)
     {
-        <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway++; Cal.CreateMonth(); }">
+        <button type="button" class="btn btn-default btn-lg" @onclick="() =>
+                              { Cal.monthsAway++; Cal.CreateMonth(); OnClickUpdate();Cal.DayClicked = 0; }">
             <i class="bi bi-arrow-thick-right"></i>
             <span class="oi oi-arrow-thick-right"></span>
         </button>
@@ -80,12 +82,15 @@
                             <div style="font-size: large;">@i</div>
                             <div style="text-align: right; font-size: small;">you 1337 </div>
                             <div style="text-align: right; font-size: small; opacity: 0.5;">
-                                @{IEnumerable<marketprice> SingelMarketPrice = CalenderMarket
-                                    .Where(date => date.Date == new DateTime(Cal.year, Cal.month, k));
-                                    foreach (marketprice item in SingelMarketPrice)
+                                @{if (new DateTime(Cal.year, Cal.month, k, 23, 59, 59) >= Cal.toDay)
                                     {
-                                        System.Console.WriteLine(item.Price);
-                                        p = item.Price;
+                                        IEnumerable<marketprice> SingelMarketPrice = CalenderMarket
+                                                    .Where(date => date.Date == new DateTime(Cal.year, Cal.month, k));
+                                        p = SingelMarketPrice.Single().Price;
+                                    }
+                                    else
+                                    {
+                                        p = 0;
                                     }
                                 } Market @p
                             </div>
@@ -101,20 +106,24 @@
                             @if (i + j <= Cal.monthEnd.Day)
                             {
                                 int k = i + j;
-                                <td @onclick="(()=>Cal.ShowMoreInfo(k))">
+                                <td @onclick="(() => Cal.ShowMoreInfo(k))">
                                     <div style="font-size: large;">@(i + j)</div>
                                     <div style="text-align: right; font-size: small;">
                                         You 1337
                                     </div>
                                     <div style="text-align: right; font-size: small; opacity: 0.5;">
-                                        @{IEnumerable<marketprice> SingelMarketPrice = CalenderMarket
-                                            .Where(date => date.Date == new DateTime(Cal.year, Cal.month, k));
-                                            foreach (marketprice item in SingelMarketPrice)
+                                        @{if (new DateTime(Cal.year, Cal.month, k, 23, 59, 59) >= Cal.toDay)
                                             {
-                                                System.Console.WriteLine(item.Price);
-                                                p = item.Price;
+                                                IEnumerable<marketprice> SingelMarketPrice = CalenderMarket
+                                                            .Where(date => date.Date == new DateTime(Cal.year, Cal.month, k));
+                                                p = SingelMarketPrice.Single().Price;
                                             }
-                                        } Market @p
+                                            else
+                                            {
+                                                p = 0;
+                                            }
+                                        }
+                                        Market @p
                                     </div>
                                 </td>
                             }
@@ -205,12 +214,17 @@
         priceList.Sort();
     }
 
+    public async void OnClickUpdate()
+    {
+        CalenderMarket = await (Cal.DisplayComaredPrices(Cal.toDay.ToString("yyyy-MM-dd"), Cal.monthEnd.ToString("yyyy-MM-dd")));
+    }
+
     protected override async Task OnInitializedAsync()
     {
         GenerateThermometer();
 
-        CalenderMarket = await (Cal.DisplayComaredPrices("2021-11-06"));
-
         Cal.CreateMonth();
+
+        CalenderMarket = await (Cal.DisplayComaredPrices(Cal.tempDate.ToString("yyyy-MM-dd"), Cal.monthEnd.ToString("yyyy-MM-dd")));
     }
 }
