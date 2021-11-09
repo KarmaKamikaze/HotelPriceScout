@@ -47,17 +47,17 @@ namespace DataAccessLibrary
 
             return resources;
         }
-        public async Task SaveData<T>(string sql, T parameters)
-        {
-            string connectionString = _config.GetConnectionString(ConnectionStringName);
-            using (IDbConnection connection = new SQLiteConnection(connectionString))
-            { 
-                await connection.ExecuteAsync(sql, parameters); 
-            }
+        //public async Task SaveData<T>(string sql, T parameters)
+        //{
+           
+        //    using (IDbConnection connection = new SQLiteConnection(connectionString))
+        //    { 
+        //        await connection.ExecuteAsync(sql, parameters); 
+        //    }
                 
 
            
-        }
+        //}
         
 
     }
