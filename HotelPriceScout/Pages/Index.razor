@@ -207,6 +207,7 @@
 
     public int MarketPriceDaySetter(int k)
     {
+        //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct 
         if (new DateTime(Cal.year, Cal.month, k, 23, 59, 59) >= Cal.toDay)
         {
             IEnumerable<MarketPriceModel> SingelMarketPrice = CalendarMarketPrices

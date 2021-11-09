@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 namespace HotelPriceScout.Data.Interface
 {
-    public class Dashboard : SqliteDataAccess
+    public class Dashboard
     {
         public string monthName = "";
         public DateTime monthEnd;
@@ -19,6 +19,7 @@ namespace HotelPriceScout.Data.Interface
         public int temp = default;
         public DateTime tempDate;
         public DateTime toDay = DateTime.Now;
+        private SqliteDataAccess _db = new SqliteDataAccess();
 
         public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate)
         {
@@ -26,7 +27,7 @@ namespace HotelPriceScout.Data.Interface
             month = tempDate.Month;
             year = tempDate.Year;
 
-            IEnumerable<MarketPriceModel> testlist = await RetriveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}'");
+            IEnumerable<MarketPriceModel> testlist = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}'");
             
             return testlist;
         }
