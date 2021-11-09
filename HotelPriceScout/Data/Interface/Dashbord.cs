@@ -27,8 +27,6 @@ namespace HotelPriceScout.Data.Interface
             year = tempDate.Year;
 
             IEnumerable<marketprice> testliste = await Retrivedatafromdb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}'");
-
-            IEnumerable<marketprice> Daprice = testliste.Where(date => date.Date == new DateTime(2021, 11, 15));
             
             return testliste;
         }
