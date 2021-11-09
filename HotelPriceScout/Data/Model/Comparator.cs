@@ -10,41 +10,28 @@ namespace HotelPriceScout.Data.Model
     {
         private readonly string _type;
 
-        public Comparator(string type, IEnumerable<BookingSite> bookingSites, int marginValue)
+        public Comparator()
         {
-            Type = type;
-            BookingSites = bookingSites;
-            MarginValue = marginValue;
+            Roomtype1HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
+            Roomtype2HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
+            Roomtype3HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
+            AvgMarketPrices = new Dictionary<DateTime, List<decimal>>();
         }
 
         public bool IsDiscrepancy { get; private set; }
 
-        public string Type
+        private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype1HotelAvgPrices { get; set; }
+        private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype2HotelAvgPrices { get; set; }
+        private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype3HotelAvgPrices { get; set; }
+        private Dictionary<DateTime, List<decimal>> AvgMarketPrices { get; set; }
+
+        public void ComparePrices(IEnumerable<BookingSite> bookingSites, int marginValue)
         {
-            get => _type;
-            init
+            DateTime LatestScrapedDate = bookingSites.First().HotelsList.First().RoomTypes.First().Prices.Last().Date;
+
+            for (DateTime date = DateTime.Now.Date; date < LatestScrapedDate; date = date.AddDays(1))
             {
-                if (value is "dashboard" or "email") _type = value;
-                else throw new ArgumentOutOfRangeException(
-                    $"{nameof(value)} must be either \"dashboard\" or \"email\".");
-            }
-        }
-
-        public IEnumerable<BookingSite> BookingSites { get; init; }
-        public int MarginValue { get; init; }
-
-        public void ComparePrices()
-        {
-            Dictionary<DateTime, Dictionary<string, decimal>> roomtype1HotelAvgPrices = new();
-            Dictionary<DateTime, Dictionary<string, decimal>> roomtype2HotelAvgPrices = new();
-            Dictionary<DateTime, Dictionary<string, decimal>> roomtype3HotelAvgPrices = new();
-            Dictionary<DateTime, List<decimal>> marketPrices = new();
-
-
-
-            for (DateTime date = DateTime.Now.Date; date < date.AddMonths(3); date = date.AddDays(1))
-            {
-                Console.WriteLine("Comp date:" + date);
+                //These dictionaries describe the values of the key-value-pairs of the RoomtypeXHotelAvgPrices dictionaries.
                 Dictionary<string, decimal> dict1 = new();
                 Dictionary<string, decimal> dict2 = new();
                 Dictionary<string, decimal> dict3 = new();
@@ -55,7 +42,7 @@ namespace HotelPriceScout.Data.Model
                 dictList.Add((dict2, 2));
                 dictList.Add((dict3, 4));
 
-                foreach (BookingSite bookingSite in BookingSites)
+                foreach (BookingSite bookingSite in bookingSites)
                 {
                     foreach (Hotel hotel in bookingSite.HotelsList)
                     {
@@ -80,21 +67,47 @@ namespace HotelPriceScout.Data.Model
                     }
                 }
 
-                roomtype1HotelAvgPrices.Add(date, dict1);
-                roomtype2HotelAvgPrices.Add(date, dict2);
-                roomtype3HotelAvgPrices.Add(date, dict3);
-                List<decimal> list = new();
+                Roomtype1HotelAvgPrices.Add(date, dict1);
+                Roomtype2HotelAvgPrices.Add(date, dict2);
+                Roomtype3HotelAvgPrices.Add(date, dict3);
+
+                List<decimal> roomtypeMarketPrices = new();
                 foreach ((Dictionary<string, decimal> dict, int capacity) in dictList)
                 {
-                    list.Add(dict.Values.Average());
-
+                    Dictionary<string, decimal> competitorDict = dict;
+                    competitorDict.Remove("Kompas Hotel");
+                    roomtypeMarketPrices.Add(competitorDict.Values.Average());
                 }
-                marketPrices.Add(date, list);
-                
+                AvgMarketPrices.Add(date, roomtypeMarketPrices);
+
+            }
+
+            DateTime earliestNotifactionDate = AvgMarketPrices.First().Key;
+            DateTime latestNotificationDate = earliestNotifactionDate.AddMonths(1);
+            for (DateTime date = earliestNotifactionDate; date < latestNotificationDate; date = date.AddDays(1))
+            {
+                CheckDiscrepancy(date, Roomtype1HotelAvgPrices, marginValue);
+
+                CheckDiscrepancy(date, Roomtype2HotelAvgPrices, marginValue);
+
+                CheckDiscrepancy(date, Roomtype3HotelAvgPrices, marginValue);               
             }
 
 
+
+
+
         }
+
+        private void CheckDiscrepancy(DateTime date, Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, int marginValue)
+        {
+            if (hotelAvgPrices[date]["Kompas Hotel"] < (1 - (marginValue / 100)) * AvgMarketPrices[date][0] ||
+                hotelAvgPrices[date]["Kompas Hotel"] > (1 + (marginValue / 100)) * AvgMarketPrices[date][0])
+            {
+                IsDiscrepancy = true;
+            }
+        }
+
 
         public void SendNotification()
         {
