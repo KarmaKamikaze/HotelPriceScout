@@ -47,10 +47,14 @@ namespace DataAccessLibrary
 
             return resources;
         }
-        public async void DbSave(string Table, string Column, string Value)
+        public async Task SaveData<T>(string sql, T parameters)
         {
-            using IDbConnection connection = new SQLiteConnection(connectionString);
-            IEnumerable<string> output = await connection.QueryAsync<string>($"INSERT INTO {Table} ({Column}) VALUES ({Value}) ON DUPLICATE KEY UPDATE ({Value})", new DynamicParameters());
+            string connectionString = _config.GetConnectionString(ConnectionStringName);
+            using (IDbConnection connection = new SQLiteConnection(connectionString))
+            { 
+                await connection.ExecuteAsync(sql, parameters); 
+            }
+                
 
            
         }
