@@ -9,22 +9,22 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard
     {
-        public string monthName { get; private set; } = "";
-        public DateTime monthEnd { get; private set; }
-        public int monthsAway { get; set; } = default;
-        public int numDummyColumn { get; set; } = default;
-        public int year { get; private set; } = default;
-        public int month { get; private set; } = default;
+        public string MonthName { get; private set; } = "";
+        public DateTime MonthEnd { get; private set; }
+        public int MonthsAway { get; set; } = default;
+        public int NumDummyColumn { get; set; } = default;
+        public int Year { get; private set; } = default;
+        public int Month { get; private set; } = default;
         public int DayClicked { get; set; } = default;
-        public DateTime tempDate { get; private set; }
-        public DateTime toDay { get; private set; } = DateTime.Now;
+        public DateTime TempDate { get; private set; }
+        public DateTime ToDay { get; private set; } = DateTime.Now;
         private SqliteDataAccess _db { get; set; } = new SqliteDataAccess();
 
         public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate)
         {
-            tempDate = DateTime.Now.AddMonths(monthsAway);
-            month = tempDate.Month;
-            year = tempDate.Year;
+            TempDate = DateTime.Now.AddMonths(MonthsAway);
+            Month = TempDate.Month;
+            Year = TempDate.Year;
 
             IEnumerable<MarketPriceModel> testlist = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}'");
             
@@ -33,13 +33,13 @@ namespace HotelPriceScout.Data.Interface
 
         public void CreateMonth()
         {
-            tempDate = DateTime.Now.AddMonths(monthsAway);
-            month = tempDate.Month;
-            year = tempDate.Year;
+            TempDate = DateTime.Now.AddMonths(MonthsAway);
+            Month = TempDate.Month;
+            Year = TempDate.Year;
 
-            DateTime monthStart = new DateTime(year, month, 1);
-            monthEnd = monthStart.AddMonths(1).AddDays(-1);
-            monthName = monthStart.Month switch
+            DateTime monthStart = new DateTime(Year, Month, 1);
+            MonthEnd = monthStart.AddMonths(1).AddDays(-1);
+            MonthName = monthStart.Month switch
             {
                 1 => "January",
                 2 => "February",
@@ -56,11 +56,11 @@ namespace HotelPriceScout.Data.Interface
                 _ => ""
             };
 
-            numDummyColumn = (int)monthStart.DayOfWeek;
+            NumDummyColumn = (int)monthStart.DayOfWeek;
 
-            if(numDummyColumn == 0)
+            if(NumDummyColumn == 0)
             {
-                numDummyColumn = 7;
+                NumDummyColumn = 7;
             }
         }
 
