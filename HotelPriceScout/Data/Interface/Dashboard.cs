@@ -9,17 +9,16 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard
     {
-        public string monthName = "";
-        public DateTime monthEnd;
-        public int monthsAway = default;
-        public int numDummyColumn = default;
-        public int year = default;
-        public int month = default;
-        public int DayClicked = default;
-        public int temp = default;
-        public DateTime tempDate;
-        public DateTime toDay = DateTime.Now;
-        private SqliteDataAccess _db = new SqliteDataAccess();
+        public string monthName { get; private set; } = "";
+        public DateTime monthEnd { get; private set; }
+        public int monthsAway { get; set; } = default;
+        public int numDummyColumn { get; set; } = default;
+        public int year { get; private set; } = default;
+        public int month { get; private set; } = default;
+        public int DayClicked { get; set; } = default;
+        public DateTime tempDate { get; private set; }
+        public DateTime toDay { get; private set; } = DateTime.Now;
+        private SqliteDataAccess _db { get; set; } = new SqliteDataAccess();
 
         public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate)
         {
