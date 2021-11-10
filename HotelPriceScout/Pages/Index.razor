@@ -205,8 +205,8 @@
         Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
         scout.RunComparator("dashboard");
 
-        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
-        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
+        CalendarMarketPrices = await (Cal.DisplayComparedPrices(DateTime.Now.ToString("yyyy-MM-dd"),(DateTime.Now.AddMonths(1).AddDays(-DateTime.Now.Day)).ToString("yyyy-MM-dd")));
+        CalendarKompasPrices = await (Cal.DisplayKompasPrices(DateTime.Now.ToString("yyyy-MM-dd"), (DateTime.Now.AddMonths(1).AddDays(-DateTime.Now.Day)).ToString("yyyy-MM-dd")));
 
         Cal.CreateMonth();
         GenerateThermometer();
@@ -219,7 +219,7 @@
         {
             IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarKompasPrices
                         .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
-            KompasPrice = SingleMarketPrice.Single().Price;
+            KompasPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price);
         }
         else
         {
@@ -235,7 +235,7 @@
         {
             IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarMarketPrices
                         .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
-            avgMarketPrice = SingleMarketPrice.Single().Price;
+            avgMarketPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price);
         }
         else
         {

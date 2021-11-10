@@ -28,7 +28,7 @@ namespace HotelPriceScout.Data.Interface
             Month = TempDate.Month;
             Year = TempDate.Year;
 
-            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}'");
+            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}'  AND RoomType = '1'");
             
             return testList;
         }
