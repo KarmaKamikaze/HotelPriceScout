@@ -79,7 +79,7 @@
                             <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
                                 <div style="text-align: right; font-size: small;">you 1337 </div>
                                 <div style="text-align: right; font-size: small; opacity: 0.5;">
-                                    Market @mPrice
+                                    Market @avgMarketPrice
                                 </div>
                             </div>
                         </td>
@@ -101,7 +101,7 @@
                                             You 1337
                                         </div>
                                         <div style="text-align: right; font-size: small; opacity: 0.5;">
-                                            Market @mPrice
+                                            Market @avgMarketPrice
                                         </div>
                                     </div>
                                 </td>
@@ -162,7 +162,7 @@
 </div>
 
 @code {
-    int mPrice;
+    int avgMarketPrice;
     public int AdultsPicked = 1;
     public class numberOfAdults
     {
@@ -212,12 +212,12 @@
         {
             IEnumerable<MarketPriceModel> SingelMarketPrice = CalendarMarketPrices
                         .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
-            mPrice = SingelMarketPrice.Single().Price;
+            avgMarketPrice = SingelMarketPrice.Single().Price;
         }
         else
         {
-            mPrice = 0;
+            avgMarketPrice = 0;
         }
-        return mPrice;
+        return avgMarketPrice;
     }
     }

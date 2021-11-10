@@ -18,7 +18,7 @@ namespace HotelPriceScout.Data.Interface
         public int DayClicked { get; set; } = default;
         public DateTime TempDate { get; private set; }
         public DateTime ToDay { get; private set; } = DateTime.Now;
-        private SqliteDataAccess _db { get; set; } = new SqliteDataAccess();
+        private SqliteDataAccess _db = new SqliteDataAccess();
 
         public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate)
         {
