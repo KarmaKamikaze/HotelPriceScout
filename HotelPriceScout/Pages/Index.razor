@@ -210,9 +210,9 @@
         //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct 
         if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay)
         {
-            IEnumerable<MarketPriceModel> SingelMarketPrice = CalendarMarketPrices
+            IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarMarketPrices
                         .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
-            avgMarketPrice = SingelMarketPrice.Single().Price;
+            avgMarketPrice = SingleMarketPrice.Single().Price;
         }
         else
         {

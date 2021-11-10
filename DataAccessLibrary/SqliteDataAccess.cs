@@ -6,24 +6,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using HotelPriceScout.Data.Model;
 
 namespace DataAccessLibrary
 {
-    public class MarketPriceModel
-    {
-        public int Price { get; set; }
-        public DateTime Date { get; set; }
-
-        public MarketPriceModel(int price, DateTime date)
-        {
-            Price = price;
-            Date = date;
-
-        }
-    }
-
     public class SqliteDataAccess
     {
+
         private readonly IConfiguration _config;
 
         private static string connectionString = @"URI=file:../database.sqlite";

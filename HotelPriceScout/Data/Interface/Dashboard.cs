@@ -5,6 +5,8 @@ using System.Linq;
 using System.Collections;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using HotelPriceScout.Data.Model;
+
 namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard
