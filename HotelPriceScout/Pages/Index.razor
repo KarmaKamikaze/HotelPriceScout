@@ -180,21 +180,6 @@
         Cal.CreateMonth();
 
         Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
-
-        foreach (var item in scout.BookingSites)
-        {
-            System.Console.WriteLine(item.Name + " " + item.Url);
-            foreach (var hotel in item.HotelsList)
-            {
-                System.Console.WriteLine(hotel.Name + " " + hotel.RoomTypes);
-            }
-
-        }
-        foreach (var item in scout.BookingSites.First().HotelsList.Last().RoomTypes.Last().Prices)
-        {
-            System.Console.WriteLine(item.Date + " " + item.Price);
-        }
-        System.Console.WriteLine(scout.BookingSites.Count());
         scout.RunComparator("dashboard");
 
     }
