@@ -33,6 +33,17 @@ namespace HotelPriceScout.Data.Interface
             return testlist;
         }
 
+        public async Task<IEnumerable<MarketPriceModel>> DisplayKompasPrices(string StartDate, string EndDate)
+        {
+            TempDate = DateTime.Now.AddMonths(MonthsAway);
+            Month = TempDate.Month;
+            Year = TempDate.Year;
+
+            IEnumerable<MarketPriceModel> testlist = await _db.RetrieveDataFromDb("HotelName, Price, Date", "RoomType1", $"Date >= '{StartDate}' AND Date <= '{EndDate}' AND HotelName = 'Kompas Hotel'");
+
+            return testlist;
+        }
+       
         public void CreateMonth()
         {
             TempDate = DateTime.Now.AddMonths(MonthsAway);

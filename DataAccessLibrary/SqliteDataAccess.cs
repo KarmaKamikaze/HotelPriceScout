@@ -32,7 +32,7 @@ namespace DataAccessLibrary
         {
 
             using IDbConnection connection = new SQLiteConnection(connectionString);
-            IEnumerable<MarketPriceModel> output = await connection.QueryAsync<MarketPriceModel>($"Select {table} From {column} Where {value}", new DynamicParameters());
+            IEnumerable<MarketPriceModel> output = await connection.QueryAsync<MarketPriceModel>($"Select {column} From {table} Where {value}", new DynamicParameters());
 
             List<MarketPriceModel> resources = output.ToList();
 
