@@ -198,18 +198,18 @@
     {
         CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
         CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
-
     }
 
     protected override async Task OnInitializedAsync()
     {
-        GenerateThermometer();
-
-        Cal.CreateMonth();
+        Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
+        scout.RunComparator("dashboard");
 
         CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
         CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
 
+        Cal.CreateMonth();
+        GenerateThermometer();
     }
 
     public int KompasPriceDaySetter(int k)
@@ -243,4 +243,6 @@
         }
         return avgMarketPrice;
     }
-    }
+
+}
+
