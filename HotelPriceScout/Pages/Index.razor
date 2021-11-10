@@ -7,34 +7,32 @@
 
 
 <div class="row col-md-7">
-    <h1>@Cal.monthName @Cal.year</h1>
-    @if (Cal.monthsAway > 0)
+    <h1 style="width:350px;">@Cal.MonthName @Cal.Year</h1>
+    @if (Cal.MonthsAway > 0)
     {
-        <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway--; Cal.CreateMonth(); }">
+        <button type="button" class="btn btn-default btn-lg" @onclick="() =>
+                                                                       { Cal.MonthsAway--; Cal.CreateMonth(); OnClickUpdate(); Cal.DayClicked = 0; }">
             <i class="bi bi-arrow-thick-left"></i>
             <span class="oi oi-arrow-thick-left"></span>
-        </button>
-    }
+        </button> }
     else
     {
         <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
             <i class="bi bi-arrow-thick-left"></i>
             <span class="oi oi-arrow-thick-left"></span>
-        </button>
-    }
-    @if (Cal.monthsAway < 4)
+        </button>}
+    @if (Cal.MonthsAway < 4)
     {
-        <button type="button" class="btn btn-default btn-lg" @onclick="() => { Cal.monthsAway++; Cal.CreateMonth(); }">
+        <button type="button" class="btn btn-default btn-lg" @onclick="() =>
+                                                                       { Cal.MonthsAway++; Cal.CreateMonth(); OnClickUpdate();Cal.DayClicked = 0; }">
             <i class="bi bi-arrow-thick-right"></i>
             <span class="oi oi-arrow-thick-right"></span>
-        </button>
-    }
+        </button> }
     else
     {
         <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
             <span class="oi oi-arrow-thick-right"></span>
-        </button>
-    }
+        </button>}
 </div>
 
 <div class="row col-md-7">
@@ -42,145 +40,189 @@
         <SfDropDownList Width="200px" TItem="numberOfAdults" TValue="int" @bind-value="AdultsPicked" DataSource="@Adults">
             <DropDownListFieldSettings Text="Text" Value="Adults"></DropDownListFieldSettings>
         </SfDropDownList>
-        </div>
-
-        <div class="col-md-5">
-            <SfDropDownList TItem="string" TValue="IEnumerable<string>" DataSource="listOfHotels" Placeholder="Select hotels">
-                <DropDownListFieldSettings>
-                </DropDownListFieldSettings>
-            </SfDropDownList>
-        </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-7">
-            <table class="table table-bordered col">
-                <thead>
-                    <tr>
-                        <th> Monday</th>
-                        <th> Tuesday</th>
-                        <th> Wednesday</th>
-                        <th> Thursday</th>
-                        <th> Friday</th>
-                        <th> Saturday</th>
-                        <th> Sunday</th>
+    <div class="col-md-5">
+        <SfDropDownList TItem="string" TValue="IEnumerable<string>" DataSource="listOfHotels" Placeholder="Select hotels">
+            <DropDownListFieldSettings>
+            </DropDownListFieldSettings>
+        </SfDropDownList>
+    </div>
+</div>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        @for (int i = 0; i < Cal.numDummyColumn - 1; i++)
-                        {
-                            <td></td>
-                        }
-                        @for (int i = 1; i + Cal.numDummyColumn - 1 <= 7; i++)
-                        {
-                            int k = i;
-                            <td @onclick="(()=>Cal.ShowMoreInfo(k))">
-                                <div style="font-size: large;">@i</div>
-                                <div style="text-align: right; font-size: small;">You 1337</div>
-                                <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
-                            </td>
-                        }
-                    </tr>
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-bordered col">
+            <thead>
+                <tr>
+                    <th style="width:14%"> Monday</th>
+                    <th style="width:14%"> Tuesday</th>
+                    <th style="width:14%"> Wednesday</th>
+                    <th style="width:14%"> Thursday</th>
+                    <th style="width:14%"> Friday</th>
+                    <th style="width:14%"> Saturday</th>
+                    <th style="width:14%"> Sunday</th>
 
-                    @for (int i = 8 - Cal.numDummyColumn + 1; i <= Cal.monthEnd.Day; i += 7)
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @for (int i = 0; i < Cal.NumDummyColumn - 1; i++)
                     {
-                        <tr class="clik">
-                            @for (int j = 0; j < 7; j++)
-                            {
-                                @if (i + j <= Cal.monthEnd.Day)
-                                {
-                                    int k = i + j;
-                                    <td @onclick="(()=>Cal.ShowMoreInfo(k))">
-                                        <div style="font-size: large;">@(i + j)</div>
-                                        <div style="text-align: right; font-size: small;">You 1337</div>
-                                        <div style="text-align: right; font-size: small; opacity: 0.5;">Market 666</div>
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td></td>
-                                }
-                            }
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                        <td></td>
+                     }
+                    @for (int i = 1; i + Cal.NumDummyColumn - 1 <= 7; i++)
+                    {
+                        int k = i;
+                        <td style="height:100px;" @onclick="(()=>Cal.ShowMoreInfo(k))">
+                            <div style="font-size: large;">@i</div>
+                            <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
+                                <div style="text-align: right; font-size: small;">you 1337 </div>
+                                <div style="text-align: right; font-size: small; opacity: 0.5;">
+                                    Market @avgMarketPrice
+                                </div>
+                            </div>
+                        </td>
+                     }
+                </tr>
 
-        @if (Cal.DayClicked != 0)
-        {
-            <div class="col-md-5 border">
-                <div class="row col"> <!-- outer layer-->
-        @if(priceList == null){<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
-        else
-             {
-            <table class="table table-borderless">
-                @foreach (Prices item in priceList)
+                @for (int i = 8 - Cal.NumDummyColumn + 1; i <= Cal.MonthEnd.Day; i += 7)
                 {
-                
-                         if (item.Price > MarketPriceItem.Price) 
+                    <tr class="clik">
+                        @for (int j = 0; j < 7; j++)
                          {
-                             <tr><td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td> 
-                             <td class="@(priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td></tr>
-                         } 
-
-                         else if (item.Price < MarketPriceItem.Price)
-                         {
-                             <tr><td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td>
-                             <td class="@(priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td></tr>
+                            @if (i + j <= Cal.MonthEnd.Day)
+                            {
+                                int k = i + j;
+                                <td style="height:100px;" @onclick="(() => Cal.ShowMoreInfo(k))">
+                                    <div style="font-size: large;">@(i + j)</div>
+                                    <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
+                                        <div style="text-align: right; font-size: small;">
+                                            You 1337
+                                        </div>
+                                        <div style="text-align: right; font-size: small; opacity: 0.5;">
+                                            Market @avgMarketPrice
+                                        </div>
+                                    </div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
                          }
-
-                         else 
-                         {
-                             <tr><td class="col text-center"> @MarketPriceItem.Name<span class="oi oi-arrow-right text-center"></span></td>
-                             <td class="table-info">@MarketPriceItem.Price,-</td> </tr>
-                         }
-                 }      
-               </table>
-            }
-                </div>
-  
-                <div>Date: @Cal.DayClicked</div>
-            </div>
-        }
+                    </tr>
+                 }
+            </tbody>
+        </table>
     </div>
+
+    @if (Cal.DayClicked != 0)
+    {
+        <div class="col-md-4 border">
+            <div class="row col">
+                <!-- outer layer-->
+                @if (priceList == null)
+                {<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
+                else
+                {
+                    <table class="table table-borderless">
+                        @foreach (Prices item in priceList)
+                        {
+
+                            if (item.Price > MarketPriceItem.Price)
+                            {
+                                <tr>
+                                    <td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="@(priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td>
+                                </tr>
+                            }
+
+                            else if (item.Price < MarketPriceItem.Price)
+                            {
+                                <tr>
+                                    <td class="col text-center">@item.Name<span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="@(priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td>
+                                </tr>
+                            }
+
+                            else
+                            {
+                                <tr>
+                                    <td class="col text-center"> @MarketPriceItem.Name<span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="table-info">@MarketPriceItem.Price,-</td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                    }
+            </div>
+            <div>Date: @Cal.DayClicked</div>
+        </div>}
+</div>
 
 @code {
+    int avgMarketPrice;
     public int AdultsPicked = 1;
     public class numberOfAdults
     {
         public int Adults { get; set; }
         public string Text { get; set; }
     }
+
     public List<numberOfAdults> Adults = new List<numberOfAdults>()
-        {
+    {
             new numberOfAdults(){ Adults= 1, Text= "1 adult" },
             new numberOfAdults(){ Adults= 2, Text= "2 adults" },
             new numberOfAdults(){ Adults= 3, Text= "4 adults" },
-        };
+    };
 
     Dashboard Cal = new Dashboard();
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
 
     List<Prices> priceList;
     Prices MarketPriceItem;
+    IEnumerable<MarketPriceModel> CalendarMarketPrices;
+
     private void GenerateThermometer()
     {
-        priceList =  PriceMeterGenerator.PriceListGenerator(); // This needs to get its data from the database, as a list of Price objects
-        MarketPriceItem =  (PriceMeterGenerator.MarketFinder(priceList));
+        priceList = PriceMeterGenerator.PriceListGenerator(); // This needs to get its data from the database, as a list of Price objects
+        MarketPriceItem = (PriceMeterGenerator.MarketFinder(priceList));
         priceList.Sort();
+    }
+
+    public async void OnClickUpdate()
+    {
+        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
     }
 
     protected override async Task OnInitializedAsync()
     {
         GenerateThermometer();
-        listOfHotels = await _db.LoadStaticHotelResources("total");
+
         Cal.CreateMonth();
 
         Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
         scout.RunComparator("dashboard");
 
+        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
     }
+
+    public int MarketPriceDaySetter(int k)
+    {
+        //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct 
+        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay)
+        {
+            IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarMarketPrices
+                        .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
+            avgMarketPrice = SingleMarketPrice.Single().Price;
+        }
+        else
+        {
+            avgMarketPrice = 0;
+        }
+        return avgMarketPrice;
+
     }
+
+}
