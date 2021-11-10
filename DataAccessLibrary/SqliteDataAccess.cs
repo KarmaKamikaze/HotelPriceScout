@@ -6,11 +6,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using HotelPriceScout.Data.Model;
 
 namespace DataAccessLibrary
 {
     public class SqliteDataAccess
     {
+
         private readonly IConfiguration _config;
 
         private static string connectionString = @"URI=file:../database.sqlite";
@@ -24,6 +26,18 @@ namespace DataAccessLibrary
             IEnumerable<string> resources = output.ToList();
 
             return resources;
+        }
+
+        public async Task<IEnumerable<MarketPriceModel>> RetrieveDataFromDb(string table, string column, string value)
+        {
+
+            using IDbConnection connection = new SQLiteConnection(connectionString);
+            IEnumerable<MarketPriceModel> output = await connection.QueryAsync<MarketPriceModel>($"Select {table} From {column} Where {value}", new DynamicParameters());
+
+            List<MarketPriceModel> resources = output.ToList();
+
+            return resources;
+
         }
 
         public async Task<IEnumerable<(string, string, string, Dictionary<string, string>)>> LoadStaticBookingSiteResources()
