@@ -77,7 +77,7 @@
                         <td style="height:100px;" @onclick="(()=>Cal.ShowMoreInfo(k))">
                             <div style="font-size: large;">@i</div>
                             <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
-                                <div style="text-align: right; font-size: small;">you 1337 </div>
+                                <div style="text-align: right; font-size: small;" class="@(KompasPriceDaySetter(k))">You @KompasPrice </div>
                                 <div style="text-align: right; font-size: small; opacity: 0.5;">
                                     Market @avgMarketPrice
                                 </div>
@@ -97,8 +97,8 @@
                                 <td style="height:100px;" @onclick="(() => Cal.ShowMoreInfo(k))">
                                     <div style="font-size: large;">@(i + j)</div>
                                     <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
-                                        <div style="text-align: right; font-size: small;">
-                                            You 1337
+                                        <div style="text-align: right; font-size: small;" class="@(KompasPriceDaySetter(k))">
+                                            You @KompasPrice
                                         </div>
                                         <div style="text-align: right; font-size: small; opacity: 0.5;">
                                             Market @avgMarketPrice
@@ -163,6 +163,7 @@
 
 @code {
     int avgMarketPrice;
+    int KompasPrice;
     public int AdultsPicked = 1;
     public class numberOfAdults
     {
@@ -183,6 +184,8 @@
     List<Prices> priceList;
     Prices MarketPriceItem;
     IEnumerable<MarketPriceModel> CalendarMarketPrices;
+    IEnumerable<MarketPriceModel> CalendarKompasPrices;
+
 
     private void GenerateThermometer()
     {
@@ -194,6 +197,8 @@
     public async void OnClickUpdate()
     {
         CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
+        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
+
     }
 
     protected override async Task OnInitializedAsync()
@@ -203,8 +208,26 @@
         Cal.CreateMonth();
 
         CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
+        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
+
     }
 
+    public int KompasPriceDaySetter(int k)
+    {
+        //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct 
+        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay)
+        {
+            IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarKompasPrices
+                        .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
+            KompasPrice = SingleMarketPrice.Single().Price;
+        }
+        else
+        {
+            KompasPrice = 0;
+        }
+        return KompasPrice;
+    }
+    
     public int MarketPriceDaySetter(int k)
     {
         //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct 
