@@ -28,9 +28,9 @@ namespace HotelPriceScout.Data.Interface
             Month = TempDate.Month;
             Year = TempDate.Year;
 
-            IEnumerable<MarketPriceModel> testlist = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}'");
+            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}'");
             
-            return testlist;
+            return testList;
         }
 
         public async Task<IEnumerable<MarketPriceModel>> DisplayKompasPrices(string StartDate, string EndDate)
@@ -39,9 +39,9 @@ namespace HotelPriceScout.Data.Interface
             Month = TempDate.Month;
             Year = TempDate.Year;
 
-            IEnumerable<MarketPriceModel> testlist = await _db.RetrieveDataFromDb("HotelName, Price, Date", "RoomType1", $"HotelName = 'Kompas Hotel Aalborg' AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
+            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("HotelName, Price, Date", "RoomType1", $"HotelName = 'Kompas Hotel Aalborg' AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
 
-            return testlist;
+            return testList;
         }
        
         public void CreateMonth()
