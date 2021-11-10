@@ -28,7 +28,7 @@ namespace DataAccessLibrary
             return resources;
         }
 
-        public async Task<IEnumerable<MarketPriceModel>> RetrieveDataFromDb(string table, string column, string value)
+        public async Task<IEnumerable<MarketPriceModel>> RetrieveDataFromDb(string column, string table, string value)
         {
 
             using IDbConnection connection = new SQLiteConnection(connectionString);
