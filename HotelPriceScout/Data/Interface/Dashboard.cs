@@ -19,28 +19,22 @@ namespace HotelPriceScout.Data.Interface
         public int Month { get; private set; } = default;
         public int DayClicked { get; set; } = default;
         public DateTime TempDate { get; private set; }
-        public DateTime ToDay { get; private set; } = DateTime.Now;
+        public DateTime ToDay { get;  set; } = DateTime.Now;
+        public DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
+        public DateTime EndOfMonth { get; set; } = DateTime.Now.AddMonths(1).AddDays(-DateTime.Now.Day);
         private SqliteDataAccess _db = new SqliteDataAccess();
 
-        public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate)
+        public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate, int RoomType)
         {
-            TempDate = DateTime.Now.AddMonths(MonthsAway);
-            Month = TempDate.Month;
-            Year = TempDate.Year;
-
-            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}'  AND RoomType = '1'");
-            
+            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}' AND RoomType = '{RoomType}'");
+            System.Console.WriteLine("Roomtype For Market= "+RoomType);
             return testList;
         }
 
-        public async Task<IEnumerable<MarketPriceModel>> DisplayKompasPrices(string StartDate, string EndDate)
+        public async Task<IEnumerable<MarketPriceModel>> DisplayKompasPrices(string StartDate, string EndDate, int RoomType)
         {
-            TempDate = DateTime.Now.AddMonths(MonthsAway);
-            Month = TempDate.Month;
-            Year = TempDate.Year;
-
-            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("HotelName, Price, Date", "RoomType1", $"HotelName = 'Kompas Hotel Aalborg' AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
-
+            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("HotelName, Price, Date", $"RoomType{RoomType}", $"HotelName = 'Kompas Hotel Aalborg' AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
+            System.Console.WriteLine("Roomtype For Kompas = " + RoomType);
             return testList;
         }
        
@@ -83,10 +77,17 @@ namespace HotelPriceScout.Data.Interface
             {
                 this.DayClicked = 0;
             }
-            else
-            {
-                this.DayClicked = DayClicked;
-            }
+            else{ this.DayClicked = DayClicked; }
+        }
+        public void NextMonth()
+        { 
+            StartOfMonth = StartOfMonth.AddMonths(1);
+            EndOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
+        }
+        public void PreviousMonth()
+        {
+            StartOfMonth = StartOfMonth.AddMonths(-1);
+            EndOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
         }
     }
 }
