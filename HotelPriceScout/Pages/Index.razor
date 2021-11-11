@@ -10,35 +10,38 @@
     <h1 style="width:350px;">@Cal.MonthName @Cal.Year</h1>
     @if (Cal.MonthsAway > 0)
     {
-        <button type="button" class="btn btn-default btn-lg" @onclick="() =>
-                                                                       { Cal.MonthsAway--; Cal.CreateMonth(); OnClickUpdate(); Cal.DayClicked = 0; }">
+        <button type="button" class="btn btn-default btn-lg" @onclick='() =>{OnClickUpdate("Previous");}'>
             <i class="bi bi-arrow-thick-left"></i>
             <span class="oi oi-arrow-thick-left"></span>
-        </button> }
+        </button> 
+    }
     else
     {
         <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
             <i class="bi bi-arrow-thick-left"></i>
             <span class="oi oi-arrow-thick-left"></span>
-        </button>}
-    @if (Cal.MonthsAway < 4)
+        </button>
+    }
+    @if (Cal.MonthsAway < 3)
     {
-        <button type="button" class="btn btn-default btn-lg" @onclick="() =>
-                                                                       { Cal.MonthsAway++; Cal.CreateMonth(); OnClickUpdate();Cal.DayClicked = 0; }">
+        <button type="button" class="btn btn-default btn-lg" @onclick='() =>{OnClickUpdate("Next");}'>
             <i class="bi bi-arrow-thick-right"></i>
             <span class="oi oi-arrow-thick-right"></span>
-        </button> }
+        </button> 
+    }
     else
     {
         <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
             <span class="oi oi-arrow-thick-right"></span>
-        </button>}
+        </button>
+    }
 </div>
 
 <div class="row col-md-7">
     <div class="col-md-4">
         <SfDropDownList Width="200px" TItem="numberOfAdults" TValue="int" @bind-value="AdultsPicked" DataSource="@Adults">
             <DropDownListFieldSettings Text="Text" Value="Adults"></DropDownListFieldSettings>
+            <DropDownListEvents TValue="int" TItem="numberOfAdults" ValueChange='() => {OnClickUpdate("Update");}'></DropDownListEvents> 
         </SfDropDownList>
     </div>
 
@@ -70,12 +73,13 @@
                     @for (int i = 0; i < Cal.NumDummyColumn - 1; i++)
                     {
                         <td></td>
-                     }
+                    }
                     @for (int i = 1; i + Cal.NumDummyColumn - 1 <= 7; i++)
                     {
                         int k = i;
-                        <td style="height:100px;" @onclick="(()=>Cal.ShowMoreInfo(k))">
-                            <div style="font-size: large;">@i</div>
+                        string dateConcatenated = (Cal.Year.ToString() +"-"+ Cal.Month.ToString() +"-"+ k.ToString("00"));
+                        <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Cal.ShowMoreInfo(k))">
+                            <div style="font-size: large; @(MarketPriceDaySetter(k) == 0 ? "opacity: 0.3;" : "")">@i</div>
                             <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
                                 <div style="text-align: right; font-size: small;" class="@(KompasPriceDaySetter(k))">You @KompasPrice </div>
                                 <div style="text-align: right; font-size: small; opacity: 0.5;">
@@ -94,8 +98,9 @@
                             @if (i + j <= Cal.MonthEnd.Day)
                             {
                                 int k = i + j;
-                                <td style="height:100px;" @onclick="(() => Cal.ShowMoreInfo(k))">
-                                    <div style="font-size: large;">@(i + j)</div>
+                                string dateConcatenated = (Cal.Year.ToString() + "-" + Cal.Month.ToString() + "-" + k.ToString("00"));
+                        <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="(() => Cal.ShowMoreInfo(k))">
+                            <div style="font-size: large; @(MarketPriceDaySetter(k) == 0 ? "opacity: 0.3;" : "")">@(i + j)</div>
                                     <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
                                         <div style="text-align: right; font-size: small;" class="@(KompasPriceDaySetter(k))">
                                             You @KompasPrice
@@ -120,16 +125,18 @@
     @if (Cal.DayClicked != 0)
     {
         <div class="col-md-4 border">
+            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@ShowCurrentDayAsString()</h1>
             <div class="row col">
                 <!-- outer layer-->
                 @if (priceList == null)
-                {<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
+                {
+                    <div><p>Loading data</p> </div>// <--- checks if thermometer is ready yet
+                }
                 else
                 {
-                    <table class="table table-borderless">
+                    <table class="table table-borderless noHover">
                         @foreach (Prices item in priceList)
                         {
-
                             if (item.Price > MarketPriceItem.Price)
                             {
                                 <tr>
@@ -137,7 +144,6 @@
                                     <td class="@(priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td>
                                 </tr>
                             }
-
                             else if (item.Price < MarketPriceItem.Price)
                             {
                                 <tr>
@@ -145,7 +151,6 @@
                                     <td class="@(priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td>
                                 </tr>
                             }
-
                             else
                             {
                                 <tr>
@@ -157,7 +162,6 @@
                     </table>
                     }
             </div>
-            <div>Date: @Cal.DayClicked</div>
         </div>}
 </div>
 
@@ -175,7 +179,7 @@
     {
             new numberOfAdults(){ Adults= 1, Text= "1 adult" },
             new numberOfAdults(){ Adults= 2, Text= "2 adults" },
-            new numberOfAdults(){ Adults= 3, Text= "4 adults" },
+            new numberOfAdults(){ Adults= 4, Text= "4 adults" },
     };
 
     Dashboard Cal = new Dashboard();
@@ -186,7 +190,6 @@
     IEnumerable<MarketPriceModel> CalendarMarketPrices;
     IEnumerable<MarketPriceModel> CalendarKompasPrices;
 
-
     private void GenerateThermometer()
     {
         priceList = PriceMeterGenerator.PriceListGenerator(); // This needs to get its data from the database, as a list of Price objects
@@ -194,10 +197,24 @@
         priceList.Sort();
     }
 
-    public async void OnClickUpdate()
+    public async void OnClickUpdate(string s)
     {
-        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
-        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
+        if(s == "Next")
+        {
+            Cal.DayClicked = 0;
+            Cal.MonthsAway++;
+            Cal.CreateMonth();
+            Cal.NextMonth();
+        }
+        else if (s == "Previous")
+        {
+            Cal.DayClicked = 0;
+            Cal.MonthsAway--;
+            Cal.CreateMonth();
+            Cal.PreviousMonth();
+        }
+        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"),Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
     }
 
     protected override async Task OnInitializedAsync()
@@ -205,8 +222,8 @@
         Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
         scout.RunComparator("dashboard");
 
-        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
-        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.TempDate.ToString("yyyy-MM-dd"), Cal.MonthEnd.ToString("yyyy-MM-dd")));
+        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"),Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.ToDay.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
 
         Cal.CreateMonth();
         GenerateThermometer();
@@ -215,34 +232,32 @@
     public int KompasPriceDaySetter(int k)
     {
         //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct 
-        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay)
+        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay && new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3))
         {
             IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarKompasPrices
-                        .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
-            KompasPrice = SingleMarketPrice.Single().Price;
+             .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
+            KompasPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price);
         }
-        else
-        {
-            KompasPrice = 0;
-        }
+        else{ KompasPrice = 0; }
         return KompasPrice;
     }
-    
+
     public int MarketPriceDaySetter(int k)
     {
         //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct 
-        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay)
+        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay && new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3) )
         {
             IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarMarketPrices
-                        .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
-            avgMarketPrice = SingleMarketPrice.Single().Price;
+            .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
+            avgMarketPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price);
+
         }
-        else
-        {
-            avgMarketPrice = 0;
-        }
+        else { avgMarketPrice = 0; }
         return avgMarketPrice;
     }
 
+    public string ShowCurrentDayAsString()
+    {
+        return Cal.DayClicked.ToString("") + ". " + Cal.MonthName + " " + Cal.Year.ToString("");
+    }
 }
-

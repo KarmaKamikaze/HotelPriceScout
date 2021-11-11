@@ -19,28 +19,20 @@ namespace HotelPriceScout.Data.Interface
         public int Month { get; private set; } = default;
         public int DayClicked { get; set; } = default;
         public DateTime TempDate { get; private set; }
-        public DateTime ToDay { get; private set; } = DateTime.Now;
+        public DateTime ToDay { get;  set; } = DateTime.Now;
+        public DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
+        public DateTime LastDayOfMonth { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
         private SqliteDataAccess _db = new SqliteDataAccess();
 
-        public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate)
+        public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate, int RoomType)
         {
-            TempDate = DateTime.Now.AddMonths(MonthsAway);
-            Month = TempDate.Month;
-            Year = TempDate.Year;
-
-            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}'");
-            
+            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}' AND RoomType = '{RoomType}'");
             return testList;
         }
 
-        public async Task<IEnumerable<MarketPriceModel>> DisplayKompasPrices(string StartDate, string EndDate)
+        public async Task<IEnumerable<MarketPriceModel>> DisplayKompasPrices(string StartDate, string EndDate, int RoomType)
         {
-            TempDate = DateTime.Now.AddMonths(MonthsAway);
-            Month = TempDate.Month;
-            Year = TempDate.Year;
-
-            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("HotelName, Price, Date", "RoomType1", $"HotelName = 'Kompas Hotel Aalborg' AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
-
+            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("HotelName, Price, Date", $"RoomType{RoomType}", $"HotelName = 'Kompas Hotel Aalborg' AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
             return testList;
         }
        
@@ -72,22 +64,36 @@ namespace HotelPriceScout.Data.Interface
             NumDummyColumn = (int)monthStart.DayOfWeek;
 
             if(NumDummyColumn == 0)
-            {
-                NumDummyColumn = 7;
-            }
+            {NumDummyColumn = 7;}
         }
 
-        public void ShowMoreInfo(int DayClicked)
+        public void ShowMoreInfo(int dayClicked)
         {
-            if (DayClicked == this.DayClicked)
+            if (new DateTime(Year, Month, dayClicked, 23, 59, 59) >= DateTime.Now && new DateTime(Year, Month, dayClicked) <= ToDay.AddMonths(3))
             {
-                this.DayClicked = 0;
+                if (dayClicked == DayClicked)
+                {
+                    DayClicked = 0;
+                }
+                else
+                {
+                    DayClicked = dayClicked;
+                }
             }
             else
             {
-                this.DayClicked = DayClicked;
+                DayClicked = 0;
             }
+        }
+        public void NextMonth()
+        { 
+            StartOfMonth = StartOfMonth.AddMonths(1);
+            LastDayOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
+        }
+        public void PreviousMonth()
+        {
+            StartOfMonth = StartOfMonth.AddMonths(-1);
+            LastDayOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
         }
     }
 }
-

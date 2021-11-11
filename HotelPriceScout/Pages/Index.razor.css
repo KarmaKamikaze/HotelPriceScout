@@ -5,3 +5,21 @@
 #BtnDisable {
     opacity: 0.1;
 }
+
+.bg-warning {
+    background-color: #fffee0 !important;
+}
+
+.table td:focus {
+    background-color: #dbefff !important;
+}
+
+.rightHandDate {
+    font-weight: 500;
+    font-size: 40px !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.noHover {
+    pointer-events: none !important;
+}
