@@ -209,8 +209,8 @@
              Cal.CreateMonth();
              Cal.PreviousMonth(); 
         }
-        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"),Cal.EndOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
-        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"), Cal.EndOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"),Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
     }
 
     protected override async Task OnInitializedAsync()
@@ -218,8 +218,8 @@
         Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
         scout.RunComparator("dashboard");
 
-        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"),(Cal.ToDay.AddMonths(1).AddDays(-DateTime.Now.Day)).ToString("yyyy-MM-dd"), AdultsPicked));
-        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.ToDay.ToString("yyyy-MM-dd"), (Cal.ToDay.AddMonths(1).AddDays(-DateTime.Now.Day)).ToString("yyyy-MM-dd"), AdultsPicked));
+        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"),Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.ToDay.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
 
         Cal.CreateMonth();
         GenerateThermometer();
