@@ -28,11 +28,11 @@ namespace DataAccessLibrary
             return resources;
         }
 
-        public async Task<IEnumerable<MarketPriceModel>> RetrieveDataFromDb(string table, string column, string value)
+        public async Task<IEnumerable<MarketPriceModel>> RetrieveDataFromDb(string column, string table, string value)
         {
 
             using IDbConnection connection = new SQLiteConnection(connectionString);
-            IEnumerable<MarketPriceModel> output = await connection.QueryAsync<MarketPriceModel>($"Select {table} From {column} Where {value}", new DynamicParameters());
+            IEnumerable<MarketPriceModel> output = await connection.QueryAsync<MarketPriceModel>($"Select {column} From {table} Where {value}", new DynamicParameters());
 
             List<MarketPriceModel> resources = output.ToList();
 
@@ -61,18 +61,11 @@ namespace DataAccessLibrary
 
             return resources;
         }
-        //public async Task SaveData<T>(string sql, T parameters)
-        //{
-           
-        //    using (IDbConnection connection = new SQLiteConnection(connectionString))
-        //    { 
-        //        await connection.ExecuteAsync(sql, parameters); 
-        //    }
-                
 
-           
-        //}
-        
-
+        public async Task SaveToDB<T>(string sqlQuery, T parameters)
+        {
+            using IDbConnection connection = new SQLiteConnection(connectionString);
+            await connection.ExecuteAsync(sqlQuery, parameters);
+        } 
     }
 }

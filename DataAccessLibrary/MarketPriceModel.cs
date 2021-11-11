@@ -3,14 +3,19 @@ namespace HotelPriceScout.Data.Model
 {
     public class MarketPriceModel
     {
-        public int Price { get; set; }
+        public decimal Price { get; set; }
         public DateTime Date { get; set; }
-
-        public MarketPriceModel(int price, DateTime date)
+        public string HotelName { get; set;  }
+        public MarketPriceModel(decimal price, DateTime date)
         {
             Price = price;
             Date = date;
-
+        }
+        public MarketPriceModel(string hotelname, decimal price, DateTime date)
+        {
+            Price = price;
+            Date = date;
+            HotelName = hotelname;
         }
     }
 }
