@@ -1,4 +1,6 @@
 using DataAccessLibrary;
+using MailKit.Net.Smtp;
+using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +18,7 @@ namespace HotelPriceScout.Data.Model
             Roomtype1HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
             Roomtype2HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
             Roomtype4HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
-            AvgMarketPrices = new Dictionary<DateTime, List<decimal>>();
+            AvgMarketPrices = new List<MarketPriceModel>();
         }
 
         public bool IsDiscrepancy { get; private set; }
@@ -24,7 +26,7 @@ namespace HotelPriceScout.Data.Model
         private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype1HotelAvgPrices { get; set; }
         private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype2HotelAvgPrices { get; set; }
         private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype4HotelAvgPrices { get; set; }
-        private Dictionary<DateTime, List<decimal>> AvgMarketPrices { get; set; }
+        private List<MarketPriceModel> AvgMarketPrices { get; set; }
 
         public async void ComparePrices(IEnumerable<BookingSite> bookingSites, int marginValue)
         {
@@ -72,22 +74,19 @@ namespace HotelPriceScout.Data.Model
                 Roomtype2HotelAvgPrices.Add(date, dict2);
                 Roomtype4HotelAvgPrices.Add(date, dict4);
 
-                List<decimal> roomtypeMarketPrices = new();
                 foreach ((Dictionary<string, decimal> dict, int capacity) in dictList)
                 {
-                    roomtypeMarketPrices.Add(dict.Values.Average());
+                    AvgMarketPrices.Add(new MarketPriceModel(decimal.ToInt32(dict.Values.Average()), date, capacity));
                 }
-                AvgMarketPrices.Add(date, roomtypeMarketPrices);
-
             }
 
-            DateTime earliestNotifactionDate = AvgMarketPrices.First().Key;
+            DateTime earliestNotifactionDate = AvgMarketPrices.Min(price => price.Date);
             DateTime latestNotificationDate = earliestNotifactionDate.AddMonths(1);
             for (DateTime date = earliestNotifactionDate; date < latestNotificationDate; date = date.AddDays(1))
             {
-                CheckDiscrepancy(date, Roomtype1HotelAvgPrices, marginValue);
-                CheckDiscrepancy(date, Roomtype2HotelAvgPrices, marginValue);
-                CheckDiscrepancy(date, Roomtype4HotelAvgPrices, marginValue);               
+                CheckDiscrepancy(date, Roomtype1HotelAvgPrices, marginValue, 1);
+                CheckDiscrepancy(date, Roomtype2HotelAvgPrices, marginValue, 2);
+                CheckDiscrepancy(date, Roomtype4HotelAvgPrices, marginValue, 4);               
             }
 
             StoreAvgHotelPrices(Roomtype1HotelAvgPrices, "RoomType1");
@@ -95,22 +94,16 @@ namespace HotelPriceScout.Data.Model
             StoreAvgHotelPrices(Roomtype4HotelAvgPrices, "RoomType4");
 
             string valueDB = $"INSERT INTO MarketPrices (Date,Price,RoomType) VALUES ";
-            foreach (KeyValuePair<DateTime, List<decimal>> datePricesPair in AvgMarketPrices)
-            {
-                int roomTypeIdentifier = 1;
-                foreach (decimal avgPrice in datePricesPair.Value)
-                {
-                    valueDB += $"('{datePricesPair.Key.ToString("yyyy-MM-dd")}','{avgPrice}','{roomTypeIdentifier}'),";
-                    roomTypeIdentifier++;
-                    if (roomTypeIdentifier == 3) roomTypeIdentifier++;                   
-                }
+            foreach (MarketPriceModel marketPrice in AvgMarketPrices)
+            {               
+                valueDB += $"('{marketPrice.Date.ToString("yyyy-MM-dd")}','{decimal.ToInt32(marketPrice.Price)}','{marketPrice.RoomType}'),";
             }
 
             valueDB = valueDB.TrimEnd(',');
             valueDB += ";";
 
             await _db.SaveToDB<dynamic>($"DROP TABLE IF EXISTS MarketPrices;", new { });
-            await _db.SaveToDB<dynamic>($"CREATE TABLE [MarketPrices] ([Date] date NOT NULL, [Price] decimal NOT NULL, [RoomType] int NOT NULL);", new { });
+            await _db.SaveToDB<dynamic>($"CREATE TABLE [MarketPrices] ([Date] date NOT NULL, [Price] int NOT NULL, [RoomType] int NOT NULL);", new { });
             await _db.SaveToDB<dynamic>(valueDB, new { });
 
         }
@@ -122,30 +115,47 @@ namespace HotelPriceScout.Data.Model
             {
                 foreach (KeyValuePair<string, decimal> hotelPricePair in dateHotelsPair.Value)
                 {
-                    valueDB += $"('{dateHotelsPair.Key.ToString("yyyy-MM-dd")}','{hotelPricePair.Key}','{hotelPricePair.Value}'),";
+                    valueDB += $"('{dateHotelsPair.Key.ToString("yyyy-MM-dd")}','{hotelPricePair.Key}','{decimal.ToInt32(hotelPricePair.Value)}'),";
                 }
             }
             valueDB = valueDB.TrimEnd(',');
             valueDB += ";";
 
             await _db.SaveToDB<dynamic>($"DROP TABLE IF EXISTS {tableName};", new { });
-            await _db.SaveToDB<dynamic>($"CREATE TABLE [{tableName}] ([HotelName] text NOT NULL, [Price] decimal NOT NULL, [Date] date NOT NULL);", new { });
+            await _db.SaveToDB<dynamic>($"CREATE TABLE [{tableName}] ([HotelName] text NOT NULL, [Price] int NOT NULL, [Date] date NOT NULL);", new { });
             await _db.SaveToDB<dynamic>(valueDB, new { });
         }
 
 
-        private void CheckDiscrepancy(DateTime date, Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, int marginValue)
+        private void CheckDiscrepancy(DateTime date, Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, int marginValue, int capacity)
         {
-            if (hotelAvgPrices[date]["Kompas Hotel Aalborg"] < (1 - (marginValue / 100)) * AvgMarketPrices[date][0] ||
-                hotelAvgPrices[date]["Kompas Hotel Aalborg"] > (1 + (marginValue / 100)) * AvgMarketPrices[date][0])
+            MarketPriceModel avgMarketPrice = AvgMarketPrices.Where(price => price.Date == date).Single(price => price.RoomType == capacity);
+            if (hotelAvgPrices[date]["Kompas Hotel Aalborg"] < (1 - (marginValue / 100)) * avgMarketPrice.Price ||
+                hotelAvgPrices[date]["Kompas Hotel Aalborg"] > (1 + (marginValue / 100)) * avgMarketPrice.Price)
             {
                 IsDiscrepancy = true;
+                avgMarketPrice.MarkedForDiscrepancy = true;
             }
         }
 
         public void SendNotification()
         {
-            throw new NotImplementedException();
+            MimeMessage mail = new();
+            mail.From.Add(new MailboxAddress("Hotel Price Scout", "hotelpricescout@gmail.com"));
+            mail.To.Add(new MailboxAddress("CS-21-SW-3-12", "cs-21-sw-3-12@student.aau.dk"));
+            mail.Subject = "Tobias sucks";
+            mail.Body = new TextPart("html")
+            {
+                Text = "TOBIAS RÆKKEDE FUCK TIL MIG HE IS A BAD BOY"
+        };
+
+            SmtpClient smtpClient = new();
+            smtpClient.Connect("smtp.gmail.com", 465, true);
+            smtpClient.Authenticate("hotelpricescout@gmail.com", "cs-21-sw-3-12");
+            smtpClient.Send(mail);
+            smtpClient.Disconnect(true);
+            
+            
         }
 
     }
