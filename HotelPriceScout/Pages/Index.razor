@@ -200,18 +200,18 @@
     public async void OnClickUpdate(string s)
     {
         if(s == "Next")
-        { 
+        {
             Cal.DayClicked = 0;
-            Cal.MonthsAway++; 
-            Cal.CreateMonth(); 
-            Cal.NextMonth(); 
+            Cal.MonthsAway++;
+            Cal.CreateMonth();
+            Cal.NextMonth();
         }
         else if (s == "Previous")
-        { 
-             Cal.DayClicked = 0; 
-             Cal.MonthsAway--; 
-             Cal.CreateMonth();
-             Cal.PreviousMonth(); 
+        {
+            Cal.DayClicked = 0;
+            Cal.MonthsAway--;
+            Cal.CreateMonth();
+            Cal.PreviousMonth();
         }
         CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"),Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
         CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
@@ -246,11 +246,11 @@
     {
         //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct 
         if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay && new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3) )
-        {  
-                IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarMarketPrices
-                .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
-                avgMarketPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price); 
-              
+        {
+            IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarMarketPrices
+            .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
+            avgMarketPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price);
+
         }
         else { avgMarketPrice = 0; }
         return avgMarketPrice;
@@ -258,8 +258,6 @@
 
     public string ShowCurrentDayAsString()
     {
-        string currentDate = Cal.DayClicked.ToString("") + ". " + Cal.MonthName + " " + Cal.Year.ToString("");
-
-        return currentDate;
+        return Cal.DayClicked.ToString("") + ". " + Cal.MonthName + " " + Cal.Year.ToString("");
     }
 }
