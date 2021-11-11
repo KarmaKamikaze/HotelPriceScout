@@ -1,6 +1,7 @@
 using DataAccessLibrary;
 using MailKit.Net.Smtp;
 using MimeKit;
+using MimeKit.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -143,11 +144,17 @@ namespace HotelPriceScout.Data.Model
             MimeMessage mail = new();
             mail.From.Add(new MailboxAddress("Hotel Price Scout", "hotelpricescout@gmail.com"));
             mail.To.Add(new MailboxAddress("CS-21-SW-3-12", "cs-21-sw-3-12@student.aau.dk"));
-            mail.Subject = "Tobias sucks";
-            mail.Body = new TextPart("html")
+            mail.Subject = "Tobias sucks and so does spam filters hehehehe";
+            mail.Importance = MessageImportance.High;
+            mail.Priority = MessagePriority.Urgent;
+
+            mail.Body = new TextPart(TextFormat.Html)
             {
                 Text = "TOBIAS RÆKKEDE FUCK TIL MIG HE IS A BAD BOY"
-        };
+            };
+
+            
+
 
             SmtpClient smtpClient = new();
             smtpClient.Connect("smtp.gmail.com", 465, true);
