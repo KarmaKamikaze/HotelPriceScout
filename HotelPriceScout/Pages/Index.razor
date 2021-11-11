@@ -74,8 +74,9 @@
                     @for (int i = 1; i + Cal.NumDummyColumn - 1 <= 7; i++)
                     {
                         int k = i;
-                        <td style="height:100px;" @onclick="(()=>Cal.ShowMoreInfo(k))">
-                            <div style="font-size: large;">@i</div>
+                        string dateConcatenated = (Cal.Year.ToString() +"-"+ Cal.Month.ToString() +"-"+ k.ToString("00"));
+                        <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Cal.ShowMoreInfo(k))">
+                            <div style="font-size: large; @(MarketPriceDaySetter(k) == 0 ? "opacity: 0.3;" : "")">@i</div>
                             <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
                                 <div style="text-align: right; font-size: small;">you 1337 </div>
                                 <div style="text-align: right; font-size: small; opacity: 0.5;">
@@ -94,17 +95,18 @@
                             @if (i + j <= Cal.MonthEnd.Day)
                             {
                                 int k = i + j;
-                                <td style="height:100px;" @onclick="(() => Cal.ShowMoreInfo(k))">
-                                    <div style="font-size: large;">@(i + j)</div>
-                                    <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
-                                        <div style="text-align: right; font-size: small;">
-                                            You 1337
-                                        </div>
-                                        <div style="text-align: right; font-size: small; opacity: 0.5;">
-                                            Market @avgMarketPrice
-                                        </div>
-                                    </div>
-                                </td>
+                                string dateConcatenated = (Cal.Year.ToString() + "-" + Cal.Month.ToString() + "-" + k.ToString("00"));
+                        <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="(() => Cal.ShowMoreInfo(k))">
+                            <div style="font-size: large; @(MarketPriceDaySetter(k) == 0 ? "opacity: 0.3;" : "")">@(i + j)</div>
+                            <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
+                                <div style="text-align: right; font-size: small;">
+                                    You 1337
+                                </div>
+                                <div style="text-align: right; font-size: small; opacity: 0.5;">
+                                    Market @avgMarketPrice
+                                </div>
+                            </div>
+                        </td>
                             }
                             else
                             {
@@ -120,13 +122,16 @@
     @if (Cal.DayClicked != 0)
     {
         <div class="col-md-4 border">
+            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@ShowCurrentDayAsString()</h1>
             <div class="row col">
                 <!-- outer layer-->
                 @if (priceList == null)
-                {<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
+                {
+                    <div><p>Loading data</p> </div>// <--- checks if thermometer is ready yet
+                }
                 else
                 {
-                    <table class="table table-borderless">
+                    <table class="table table-borderless noHover">
                         @foreach (Prices item in priceList)
                         {
 
@@ -157,7 +162,6 @@
                     </table>
                     }
             </div>
-            <div>Date: @Cal.DayClicked</div>
         </div>}
 </div>
 
@@ -220,4 +224,12 @@
         }
         return avgMarketPrice;
     }
+
+    public string ShowCurrentDayAsString()
+    {
+        string currentDate = Cal.DayClicked.ToString("") + ". " + Cal.MonthName + " " + Cal.Year.ToString("");
+
+        return currentDate;
+    }
+
     }

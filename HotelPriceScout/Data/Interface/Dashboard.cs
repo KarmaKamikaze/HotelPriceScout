@@ -22,6 +22,7 @@ namespace HotelPriceScout.Data.Interface
         public DateTime ToDay { get; private set; } = DateTime.Now;
         private SqliteDataAccess _db = new SqliteDataAccess();
 
+
         public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate)
         {
             TempDate = DateTime.Now.AddMonths(MonthsAway);
@@ -68,13 +69,20 @@ namespace HotelPriceScout.Data.Interface
 
         public void ShowMoreInfo(int DayClicked)
         {
-            if (DayClicked == this.DayClicked)
+            if (new DateTime(DateTime.Now.Year, DateTime.Now.Month, DayClicked, 23, 59, 59) >= ToDay)
             {
-                this.DayClicked = 0;
+                if (DayClicked == this.DayClicked)
+                {
+                    this.DayClicked = 0;
+                }
+                else
+                {
+                    this.DayClicked = DayClicked;
+                }
             }
             else
             {
-                this.DayClicked = DayClicked;
+                this.DayClicked = 0;
             }
         }
     }
