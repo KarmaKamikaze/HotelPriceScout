@@ -69,7 +69,7 @@ namespace HotelPriceScout.Data.Interface
 
         public void ShowMoreInfo(int DayClicked)
         {
-            if (new DateTime(DateTime.Now.Year, DateTime.Now.Month, DayClicked, 23, 59, 59) >= ToDay)
+            if (new DateTime(Year, Month, DayClicked, 23, 59, 59) >= DateTime.Now)
             {
                 if (DayClicked == this.DayClicked)
                 {
