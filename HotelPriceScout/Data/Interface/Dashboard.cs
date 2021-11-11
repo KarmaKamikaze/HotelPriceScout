@@ -67,13 +67,23 @@ namespace HotelPriceScout.Data.Interface
             {NumDummyColumn = 7;}
         }
 
-        public void ShowMoreInfo(int DayClicked)
+        public void ShowMoreInfo(int dayClicked)
         {
-            if (DayClicked == this.DayClicked)
+            if (new DateTime(Year, Month, dayClicked, 23, 59, 59) >= DateTime.Now && new DateTime(Year, Month, dayClicked) <= ToDay.AddMonths(3))
             {
-                this.DayClicked = 0;
+                if (dayClicked == DayClicked)
+                {
+                    DayClicked = 0;
+                }
+                else
+                {
+                    DayClicked = dayClicked;
+                }
             }
-            else{ this.DayClicked = DayClicked; }
+            else
+            {
+                DayClicked = 0;
+            }
         }
         public void NextMonth()
         { 

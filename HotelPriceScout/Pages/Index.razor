@@ -77,8 +77,9 @@
                     @for (int i = 1; i + Cal.NumDummyColumn - 1 <= 7; i++)
                     {
                         int k = i;
-                        <td style="height:100px;" @onclick="(()=>Cal.ShowMoreInfo(k))">
-                            <div style="font-size: large;">@i</div>
+                        string dateConcatenated = (Cal.Year.ToString() +"-"+ Cal.Month.ToString() +"-"+ k.ToString("00"));
+                        <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Cal.ShowMoreInfo(k))">
+                            <div style="font-size: large; @(MarketPriceDaySetter(k) == 0 ? "opacity: 0.3;" : "")">@i</div>
                             <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
                                 <div style="text-align: right; font-size: small;" class="@(KompasPriceDaySetter(k))">You @KompasPrice </div>
                                 <div style="text-align: right; font-size: small; opacity: 0.5;">
@@ -97,8 +98,9 @@
                             @if (i + j <= Cal.MonthEnd.Day)
                             {
                                 int k = i + j;
-                                <td style="height:100px;" @onclick="(() => Cal.ShowMoreInfo(k))">
-                                    <div style="font-size: large;">@(i + j)</div>
+                                string dateConcatenated = (Cal.Year.ToString() + "-" + Cal.Month.ToString() + "-" + k.ToString("00"));
+                        <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="(() => Cal.ShowMoreInfo(k))">
+                            <div style="font-size: large; @(MarketPriceDaySetter(k) == 0 ? "opacity: 0.3;" : "")">@(i + j)</div>
                                     <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
                                         <div style="text-align: right; font-size: small;" class="@(KompasPriceDaySetter(k))">
                                             You @KompasPrice
@@ -123,13 +125,16 @@
     @if (Cal.DayClicked != 0)
     {
         <div class="col-md-4 border">
+            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@ShowCurrentDayAsString()</h1>
             <div class="row col">
                 <!-- outer layer-->
                 @if (priceList == null)
-                {<div><p>Loading data</p> </div>}// <--- checks if thermometer is ready yet
+                {
+                    <div><p>Loading data</p> </div>// <--- checks if thermometer is ready yet
+                }
                 else
                 {
-                    <table class="table table-borderless">
+                    <table class="table table-borderless noHover">
                         @foreach (Prices item in priceList)
                         {
                             if (item.Price > MarketPriceItem.Price)
@@ -157,7 +162,6 @@
                     </table>
                     }
             </div>
-            <div>Date: @Cal.DayClicked</div>
         </div>}
 </div>
 
@@ -196,18 +200,18 @@
     public async void OnClickUpdate(string s)
     {
         if(s == "Next")
-        { 
+        {
             Cal.DayClicked = 0;
-            Cal.MonthsAway++; 
-            Cal.CreateMonth(); 
-            Cal.NextMonth(); 
+            Cal.MonthsAway++;
+            Cal.CreateMonth();
+            Cal.NextMonth();
         }
         else if (s == "Previous")
-        { 
-             Cal.DayClicked = 0; 
-             Cal.MonthsAway--; 
-             Cal.CreateMonth();
-             Cal.PreviousMonth(); 
+        {
+            Cal.DayClicked = 0;
+            Cal.MonthsAway--;
+            Cal.CreateMonth();
+            Cal.PreviousMonth();
         }
         CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"),Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
         CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
@@ -242,15 +246,18 @@
     {
         //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct 
         if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay && new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3) )
-        {  
-                IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarMarketPrices
-                .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
-                avgMarketPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price); 
-              
+        {
+            IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarMarketPrices
+            .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
+            avgMarketPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price);
+
         }
         else { avgMarketPrice = 0; }
         return avgMarketPrice;
     }
 
+    public string ShowCurrentDayAsString()
+    {
+        return Cal.DayClicked.ToString("") + ". " + Cal.MonthName + " " + Cal.Year.ToString("");
+    }
 }
-
