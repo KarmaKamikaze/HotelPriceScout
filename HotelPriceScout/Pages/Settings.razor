@@ -1,5 +1,6 @@
 @page "/settings"
-
+@using HotelPriceScout.Data.Interface
+@inherits SettingsManager
 
 
 <h1>Settings</h1>
@@ -48,8 +49,8 @@
     }
     @if (modalStart)
     {
-                            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
                         <h4 class="modal-title" id="titleLabel">Settings have been set and the program has started!</h4>
@@ -102,10 +103,10 @@
             </div>
         </div>
     }
-            @if (updateYes)
-        {
-            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+    @if (updateYes)
+    {
+        <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
                         <h2 class="modal-title" id="titleLabel">The program has been updated!</h2>
@@ -113,24 +114,13 @@
                 </div>
             </div>
         </div>
-        }
+    }
     <div class=col-md-3>
     </div>
 </div>
 
 
 @code {
-
-    public static int? marginPicked = 1;
-    public static int notificationAmountPicked = 1;
-    public static DateTime? timeValue { get; set; } = DateTime.Now;
-    public static DateTime? timeValue2 { get; set; } = DateTime.Now;
-    public static DateTime? timeValue3 { get; set; } = DateTime.Now;
-    public static int? marginPickedPass { get; set; }
-    public static int notificationPickedPass { get; set; }
-    public static DateTime? timeValuePass { get; set; }
-    public static DateTime? timeValuePass2 { get; set; }
-    public static DateTime? timeValuePass3 { get; set; }
 
     public class NotificationAmount
     {
@@ -144,10 +134,6 @@
         new NotificationAmount(){ Notification= 2, Text= "2" },
         new NotificationAmount(){ Notification= 3, Text= "3" },
     };
-
-    bool isScoutStopped = false;
-    bool isScoutUpdated = false;
-    bool isScoutStarted = false;
 
     public void StopProgram()
     {
@@ -167,7 +153,7 @@
         StateHasChanged();
     }
 
-    public bool updateYes = false;
+
     async void UpdateProgram()
     {
         isScoutUpdated = true;
@@ -184,10 +170,8 @@
         await Task.Delay(1500);
         updateYes = false;
         StateHasChanged();
-        
-
     }
-    public bool modalStart = false;
+
     public async void StartProgram()
     {
         marginPickedPass = marginPicked;
@@ -210,37 +194,6 @@
     Task OnButtonClick()
     {
         return Task.Delay(1000);
-    }
-
-    private static bool showStop = false;
-    private void ShowStopButton()
-    {
-        showStop = !showStop;
-    }
-
-    private static bool showStart = true;
-    private void ShowStartButton()
-    {
-        showStart = !showStart;
-    }
-
-    private static bool showUdate = false;
-    private void ShowUpdateButton()
-    {
-        showUdate = !showUdate;
-    }
-
-
-    public bool popUp = false;
-    private void PopUp()
-    {
-        popUp = !popUp;
-    }
-
-    public bool updatePopUp = false;
-    private void UpdatePopUp()
-    {
-        updatePopUp = !updatePopUp;
     }
 
 
