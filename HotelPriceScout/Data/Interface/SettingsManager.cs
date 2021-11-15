@@ -6,16 +6,16 @@ namespace HotelPriceScout.Data.Interface
 {
     public class SettingsManager : ComponentBase
     {
-        public static int? marginPicked = 1;
+        public static int marginPicked = 1;
         public static int notificationAmountPicked = 1;
-        public static DateTime? timeValue { get; set; } = DateTime.Now;
-        public static DateTime? timeValue2 { get; set; } = DateTime.Now;
-        public static DateTime? timeValue3 { get; set; } = DateTime.Now;
-        public static int? marginPickedPass { get; set; }
+        public static DateTime timeValue { get; set; } = DateTime.Now;
+        public static DateTime timeValue2 { get; set; } = DateTime.Now;
+        public static DateTime timeValue3 { get; set; } = DateTime.Now;
+        public static int marginPickedPass { get; set; }
         public static int notificationPickedPass { get; set; }
-        public static DateTime? timeValuePass { get; set; }
-        public static DateTime? timeValuePass2 { get; set; }
-        public static DateTime? timeValuePass3 { get; set; }
+        public static DateTime timeValuePass { get; set; }
+        public static DateTime timeValuePass2 { get; set; }
+        public static DateTime timeValuePass3 { get; set; }
         public bool isScoutStopped = false;
         public bool isScoutUpdated = false;
         public bool isScoutStarted = false;
@@ -34,10 +34,10 @@ namespace HotelPriceScout.Data.Interface
             showStart = !showStart;
         }
 
-        public static bool showUdate = false;
+        public static bool showUpdate = false;
         public void ShowUpdateButton()
         {
-            showUdate = !showUdate;
+            showUpdate = !showUpdate;
         }
 
 

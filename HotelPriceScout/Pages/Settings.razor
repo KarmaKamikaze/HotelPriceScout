@@ -7,7 +7,7 @@
 <br />
 <label>Margin value percent</label>
 <br />
-<SfNumericTextBox Width="200px" TValue="int?" Step="1" Max="100" Min="1" @bind-Value="marginPicked"></SfNumericTextBox>
+<SfNumericTextBox Width="200px" TValue="int" Step="1" Max="100" Min="1" @bind-Value="marginPicked"></SfNumericTextBox>
 <br />&nbsp;
 <br />
 <br />&nbsp;
@@ -26,18 +26,18 @@
 
 <label>Notification time(s)</label>
 <br />
-<SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
+<SfTimePicker Width="200px" TValue="DateTime "@bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
 
 
 @if (notificationAmountPicked == 2)
 {
-    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker>
 }
 
 @if (notificationAmountPicked == 3)
 {
-    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker>
-    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue3" Step=60 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime" @bind-Value="@timeValue3" Step=60 Format="HH:mm"></SfTimePicker>
 }
 <br />&nbsp;
 <br />
@@ -83,7 +83,7 @@
 
     <div class="col-md-1">
     </div>
-    @if (showUdate)
+    @if (showUpdate)
     {
         <button type="button" class="border border-dark col-md-1 btn btn-primary" data-bs-toggle="modal" @onkeydown="@EscapeUpdate" @onclick="UpdatePopUp">Update program</button>
     }
