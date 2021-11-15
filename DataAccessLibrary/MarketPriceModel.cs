@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace HotelPriceScout.Data.Model
 {
     public class MarketPriceModel

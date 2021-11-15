@@ -43,9 +43,7 @@ namespace HotelPriceScout.Data.Model
     }
 
     public IEnumerable<Hotel> HotelsList { get; init; }
-
-
-
+    
     public string Url { get; }
 
     public void CreatePriceScraper()
