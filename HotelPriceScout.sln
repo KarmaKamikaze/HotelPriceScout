@@ -7,11 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelPriceScout", "HotelPri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{B8B4D92D-1DC2-4733-87F2-F694AAC63734}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{CDFADEF2-854F-45B3-8CCB-6979BE9DCDBA}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B8B4D92D-1DC2-4733-87F2-F694AAC63734} = {B8B4D92D-1DC2-4733-87F2-F694AAC63734}
-		{DA9CB3C8-76E7-45F2-B6C0-EF99DC5C66BC} = {DA9CB3C8-76E7-45F2-B6C0-EF99DC5C66BC}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{EDFCEEFD-5425-4752-B168-2685429544F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +23,10 @@ Global
 		{B8B4D92D-1DC2-4733-87F2-F694AAC63734}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8B4D92D-1DC2-4733-87F2-F694AAC63734}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8B4D92D-1DC2-4733-87F2-F694AAC63734}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CDFADEF2-854F-45B3-8CCB-6979BE9DCDBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CDFADEF2-854F-45B3-8CCB-6979BE9DCDBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CDFADEF2-854F-45B3-8CCB-6979BE9DCDBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CDFADEF2-854F-45B3-8CCB-6979BE9DCDBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDFCEEFD-5425-4752-B168-2685429544F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDFCEEFD-5425-4752-B168-2685429544F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDFCEEFD-5425-4752-B168-2685429544F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDFCEEFD-5425-4752-B168-2685429544F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
