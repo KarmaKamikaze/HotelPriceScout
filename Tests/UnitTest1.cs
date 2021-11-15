@@ -1,14 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
+using Xunit;
+using Assert = Xunit.Assert;
 
 namespace Tests
 {
-    [TestClass]
-    public class RENAME_THIS_TEST_CLASS
+    public class Test
     {
-        [TestMethod]
-        public void TestMethod1()
-        {
-        }
+
     }
 }
