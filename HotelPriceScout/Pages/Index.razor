@@ -219,7 +219,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
+        Scout scout = await Scout.CreateScoutAsync("preparing", 20, new DateTime[] { DateTime.Now });
         scout.RunComparator("dashboard");
 
         CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"),Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));

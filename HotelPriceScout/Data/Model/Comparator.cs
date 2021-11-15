@@ -128,11 +128,11 @@ namespace HotelPriceScout.Data.Model
         }
 
 
-        private void CheckDiscrepancy(DateTime date, Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, int marginValue, int capacity)
+        private void CheckDiscrepancy(DateTime date, Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, decimal marginValue, int capacity)
         {
             MarketPriceModel avgMarketPrice = AvgMarketPrices.Where(price => price.Date == date).Single(price => price.RoomType == capacity);
-            if (hotelAvgPrices[date]["Kompas Hotel Aalborg"] < (1 - (marginValue / 100)) * avgMarketPrice.Price ||
-                hotelAvgPrices[date]["Kompas Hotel Aalborg"] > (1 + (marginValue / 100)) * avgMarketPrice.Price)
+            if (hotelAvgPrices[date]["Kompas Hotel Aalborg"] < ((1 - marginValue / 100) * avgMarketPrice.Price) ||
+                hotelAvgPrices[date]["Kompas Hotel Aalborg"] > ((1 + marginValue / 100) * avgMarketPrice.Price))
             {
                 IsDiscrepancy = true;
                 avgMarketPrice.MarkedForDiscrepancy = true;
@@ -143,15 +143,39 @@ namespace HotelPriceScout.Data.Model
         {
             MimeMessage mail = new();
             mail.From.Add(new MailboxAddress("Hotel Price Scout", "hotelpricescout@gmail.com"));
-            mail.To.Add(new MailboxAddress("CS-21-SW-3-12", "cs-21-sw-3-12@student.aau.dk"));
-            mail.Subject = "Tobias sucks and so does spam filters hehehehe";
+            mail.To.Add(new MailboxAddress("CS-21-SW-3-12", "stharm20@student.aau.dk"));
+            mail.Subject = "Hotel Price Scout has noticed a price discrepancy!";
             mail.Importance = MessageImportance.High;
             mail.Priority = MessagePriority.Urgent;
 
+            string mailContent = "<p><a href=https://localhost:44317>Go to dashboard!</a></p><p>Here is a list of days where a discrepancy has been noticed:</p>";
+            mailContent += "";
+            foreach (MarketPriceModel price in AvgMarketPrices.Where(p => p.MarkedForDiscrepancy && p.Date < DateTime.Now.AddMonths(1)).ToList())
+            {
+                KeyValuePair<DateTime, Dictionary<string, decimal>> query;
+                if (price.RoomType == 1)
+                {
+                    query = Roomtype1HotelAvgPrices.Single(hp => hp.Key == price.Date);                    
+                }
+                else if (price.RoomType == 2)
+                {
+                    query = Roomtype2HotelAvgPrices.Single(hp => hp.Key == price.Date);                   
+                }
+                else
+                {
+                    query = Roomtype4HotelAvgPrices.Single(hp => hp.Key == price.Date);                  
+                }
+                decimal hostprice = query.Value["Kompas Hotel Aalborg"];
+
+                mailContent += $"<p>{price.Date.ToString("d")}: Room type {price.RoomType} Market price {price.Price} Your price {hostprice} </p>";
+            }
+
+
             mail.Body = new TextPart(TextFormat.Html)
             {
-                Text = "TOBIAS RÆKKEDE FUCK TIL MIG HE IS A BAD BOY"
+                Text = mailContent
             };
+
 
             
 
