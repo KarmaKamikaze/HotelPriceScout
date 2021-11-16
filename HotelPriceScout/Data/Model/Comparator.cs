@@ -144,7 +144,7 @@ namespace HotelPriceScout.Data.Model
             mail.Importance = MessageImportance.High;
             mail.Priority = MessagePriority.Urgent;
             
-            string tempMail= File.ReadAllText("Data/Model/Mail_strings/Bottom_Mail.txt");
+            string tempMail= File.ReadAllText("Data/Model/Mail_strings/mailTemplate.txt");
             string startOfMail = tempMail.Split("SPLIT HERE")[0];
             string endOfMail = tempMail.Split("SPLIT HERE")[1];
             string mailContent = startOfMail;
@@ -202,11 +202,11 @@ namespace HotelPriceScout.Data.Model
             else { containerString += $"<td style='text-align:center; background-color: #fc4119;'>{hostprice},-</td></tr>"; }
             return containerString;
         }
-        private string MailHeadBuilder(string roomtype, string Containerstring)
+        private string MailHeadBuilder(string roomtype, string containerString)
         {
             string result = $"<p><b>{roomtype}</p></b>" +
             "<table><thead><tr><th> Date </th><th> Market Price </th><th> Your Price </th></tr></thead>" +
-            Containerstring + "</table><br>";
+            containerString + "</table><br>";
             return result;
         }
 
