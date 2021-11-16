@@ -31,7 +31,7 @@ namespace HotelPriceScout.Data.Function
         
         public BookingSite BookingSite { get; }
 
-        public void StartScraping(int margin)
+        public void StartScraping(decimal margin)
         {
             // Sets the initial room type prices for all 90 days.
             _firstTimeUpdate = true;
@@ -46,7 +46,7 @@ namespace HotelPriceScout.Data.Function
             throw new System.NotImplementedException();
         }
 
-        private void UpdatePrices(int margin)
+        private void UpdatePrices(decimal margin)
         {
             foreach (Hotel hotel in BookingSite.HotelsList)
             {
@@ -57,7 +57,7 @@ namespace HotelPriceScout.Data.Function
             }
         }
 
-        private void AssignRoomPrices(RoomType room, int margin)
+        private void AssignRoomPrices(RoomType room, decimal margin)
         {
             switch (room.Capacity)
             {
@@ -73,7 +73,7 @@ namespace HotelPriceScout.Data.Function
             }
         }
 
-        private void SetPrice(RoomType room, int margin, decimal hostPriceType)
+        private void SetPrice(RoomType room, decimal margin, decimal hostPriceType)
         {
             decimal maxPrice = (1 + margin / 100) * hostPriceType;
             decimal minPrice = (1 - margin / 100) * hostPriceType;
