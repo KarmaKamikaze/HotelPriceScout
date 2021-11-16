@@ -10,11 +10,9 @@ using System.IO;
 
 namespace HotelPriceScout.Data.Model
 {
-
     public class Comparator
     {
         private SqliteDataAccess _db = new SqliteDataAccess();
-
         public Comparator()
         {
             Roomtype1HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
@@ -107,7 +105,6 @@ namespace HotelPriceScout.Data.Model
             await _db.SaveToDB<dynamic>($"DROP TABLE IF EXISTS MarketPrices;", new { });
             await _db.SaveToDB<dynamic>($"CREATE TABLE [MarketPrices] ([Date] date NOT NULL, [Price] int NOT NULL, [RoomType] int NOT NULL);", new { });
             await _db.SaveToDB<dynamic>(valueDB, new { });
-
         }
 
         public async void StoreAvgHotelPrices(Dictionary<DateTime, Dictionary<string, decimal>> roomtypeHotelAvgPrices, string tableName)
@@ -124,10 +121,9 @@ namespace HotelPriceScout.Data.Model
             valueDB += ";";
 
             await _db.SaveToDB<dynamic>($"DROP TABLE IF EXISTS {tableName};", new { });
-            await _db.SaveToDB<dynamic>($"CREATE TABLE [{tableName}] ([HotelName] ttext NOT NULL, [Price] int NOT NULL, [Date] date NOT NULL);", new { });
+            await _db.SaveToDB<dynamic>($"CREATE TABLE [{tableName}] ([HotelName] text NOT NULL, [Price] int NOT NULL, [Date] date NOT NULL);", new { });
             await _db.SaveToDB<dynamic>(valueDB, new { });
         }
-
 
         private void CheckDiscrepancy(DateTime date, Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, decimal marginValue, int capacity)
         {
@@ -139,7 +135,6 @@ namespace HotelPriceScout.Data.Model
                 avgMarketPrice.MarkedForDiscrepancy = true;
             }
         }
-
         public void SendNotification()
         {
             MimeMessage mail = new();
@@ -148,69 +143,43 @@ namespace HotelPriceScout.Data.Model
             mail.Subject = "Hotel Price Scout has noticed a price discrepancy!";
             mail.Importance = MessageImportance.High;
             mail.Priority = MessagePriority.Urgent;
-
-            string startOfMail = File.ReadAllText(@"..\HotelPriceScout\Data\Model\Mail_strings\Top_Mail.txt");
+            
+            string tempMail= File.ReadAllText("Data/Model/Mail_strings/Bottom_Mail.txt");
+            string startOfMail = tempMail.Split("SPLIT HERE")[0];
+            string endOfMail = tempMail.Split("SPLIT HERE")[1];
             string mailContent = startOfMail;
 
-            string roomType1Mail = "";
-            string roomType2Mail = "";
-            string roomType4Mail = "";
-
-
+            string roomType1Mail ="", roomType2Mail="", roomType4Mail = "";
+            
             foreach (MarketPriceModel price in AvgMarketPrices.Where(p => p.MarkedForDiscrepancy && p.Date < DateTime.Now.AddMonths(1)).ToList())
             {
                 KeyValuePair<DateTime, Dictionary<string, decimal>> query;
                 if (price.RoomType == 1)
                 {
-                    query = Roomtype1HotelAvgPrices.Single(hp => hp.Key == price.Date);
-                    decimal hostprice = query.Value["Kompas Hotel Aalborg"];
-                    roomType1Mail += $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>{price.Price},-</td>";
-                    if (price.Price > hostprice)
-                    { roomType1Mail+= $"<td style='text-align:center; background-color: #39a459;'>{hostprice},-</td></tr>"; }
-                    else { roomType1Mail += $"<td style='text-align:center; background-color: #fc4119;'>{hostprice},-</td></tr>"; }
+                    roomType1Mail = MailDataBuilder(Roomtype1HotelAvgPrices, roomType1Mail, price);
                 }
                 else if (price.RoomType == 2)
                 {
-                    query = Roomtype2HotelAvgPrices.Single(hp => hp.Key == price.Date);
-                    decimal hostprice = query.Value["Kompas Hotel Aalborg"];
-                    roomType2Mail += $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>{price.Price},-</td>";
-                    if (price.Price > hostprice)
-                    { roomType2Mail += $"<td style='text-align:center; background-color: #39a459;'>{hostprice},-</td></tr>"; }
-                    else { roomType2Mail += $"<td style='text-align:center; background-color: #fc4119;'>{hostprice},-</td></tr>"; }
+                    roomType2Mail = MailDataBuilder(Roomtype2HotelAvgPrices, roomType2Mail, price);
                 }
                 else
                 {
-                    query = Roomtype4HotelAvgPrices.Single(hp => hp.Key == price.Date);
-                    decimal hostprice = query.Value["Kompas Hotel Aalborg"];
-                    roomType4Mail += $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>{price.Price},-</td>";
-                    if (price.Price > hostprice)
-                    { roomType4Mail += $"<td style='text-align:center; background-color: #39a459;'>{hostprice},-</td></tr>"; }
-                    else { roomType4Mail += $"<td style='text-align:center; background-color: #fc4119;'>{hostprice},-</td></tr>"; }
+                    roomType4Mail = MailDataBuilder(Roomtype1HotelAvgPrices, roomType4Mail, price);
                 }
             }
+            
             if (roomType1Mail != "") {
-                mailContent += "<p><b>Roomtype 1</p></b>" +
-                "<table><thead><tr><th> Date </th><th> Market Price </th><th> Your Price </th></tr></thead>" +
-                 roomType1Mail +
-                 "</table><br>";
+                mailContent += MailHeadBuilder("Roomtype 1", roomType1Mail);
             }
             if (roomType2Mail != "")
             {
-                mailContent += "<p><b>Roomtype 2</p></b>" +
-                "<table><thead><tr><th> Date </th><th> Market Price </th><th> Your Price </th></tr></thead>" +
-                 roomType2Mail +
-                 "</table><br>";
+                mailContent += MailHeadBuilder("Roomtype 2", roomType2Mail);
             }
             if (roomType4Mail != "")
             {
-                mailContent += "<p><b>Roomtype 4</p></b>" +
-                "<table><thead><tr><th> Date </th><th> Market Price </th><th> Your Price </th></tr></thead>" +
-                 roomType4Mail +
-                 "</table><br>";
+                mailContent += MailHeadBuilder("Roomtype 4", roomType4Mail);
             }
-            string endOfMail = File.ReadAllText(@"..\HotelPriceScout\Data\Model\Mail_strings\Bottom_Mail.txt");
             mailContent += endOfMail;
-
             mail.Body = new TextPart(TextFormat.Html)
             {
                 Text = mailContent
@@ -221,8 +190,24 @@ namespace HotelPriceScout.Data.Model
             smtpClient.Authenticate("hotelpricescout@gmail.com", "cs-21-sw-3-12");
             smtpClient.Send(mail);
             smtpClient.Disconnect(true);
-            
-            
+        }
+        private string MailDataBuilder(Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, string containerString, MarketPriceModel price)
+        {
+            KeyValuePair<DateTime, Dictionary<string, decimal>> query;
+            query = hotelAvgPrices.Single(hp => hp.Key == price.Date);
+            decimal hostprice = query.Value["Kompas Hotel Aalborg"];
+            containerString += $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>{price.Price},-</td>";
+            if (price.Price > hostprice)
+            { containerString += $"<td style='text-align:center; background-color: #39a459;'>{hostprice},-</td></tr>"; }
+            else { containerString += $"<td style='text-align:center; background-color: #fc4119;'>{hostprice},-</td></tr>"; }
+            return containerString;
+        }
+        private string MailHeadBuilder(string roomtype, string Containerstring)
+        {
+            string result = $"<p><b>{roomtype}</p></b>" +
+            "<table><thead><tr><th> Date </th><th> Market Price </th><th> Your Price </th></tr></thead>" +
+            Containerstring + "</table><br>";
+            return result;
         }
 
     }

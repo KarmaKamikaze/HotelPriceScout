@@ -14,11 +14,11 @@ namespace HotelPriceScout.Data.Model
             Date = date;
         }
 
-        public MarketPriceModel(string hotelname, int price, DateTime date)
+        public MarketPriceModel(string hotelName, int price, DateTime date)
         {
             Price = price;
             Date = date;
-            HotelName = hotelname;
+            HotelName = hotelName;
         }
 
         public MarketPriceModel(int price, DateTime date, int roomType)
