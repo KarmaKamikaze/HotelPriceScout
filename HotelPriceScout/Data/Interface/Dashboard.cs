@@ -11,6 +11,8 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard
     {
+        public string All { get; set; } = "";
+        public decimal Average { get; set; } = default;
         public string MonthName { get; private set; } = "";
         public DateTime MonthEnd { get; private set; }
         public int MonthsAway { get; set; } = default;
@@ -23,13 +25,44 @@ namespace HotelPriceScout.Data.Interface
         public DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
         public DateTime LastDayOfMonth { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
         private SqliteDataAccess _db = new SqliteDataAccess();
+        public List<decimal> Kage;
 
-        public void noget(List<string> testS)
+        public async Task<decimal> noget(List<string> testS, string StartDate, string EndDate, int RoomType)
         {
-            foreach(string item in testS)
+            if (testS.Contains("Local"))
             {
-                System.Console.WriteLine(item);
+                testS.Add("Cabinn Aalborg");
+                testS.Add("Slotshotellet Aalborg");
+                testS.Add("Kompas Hotel Aalborg");
             }
+            if (testS.Contains("No budget"))
+            {
+                testS.Add("Kompas Hotel Aalborg");
+                testS.Add("Slotshotellet Aalborg");
+                testS.Add("Milling Hotel Aalborg");
+                testS.Add("Aalborg Airport Hotel");
+                testS.Add("Helnan Phønix Hotel");
+                testS.Add("Hotel Schellsminde");
+                testS.Add("Radisson Blu Limfjord Hotel Aalborg");
+                testS.Add("Comwell Hvide Hus Aalborg");
+                testS.Add("Scandic Aalborg Øst");
+                testS.Add("Scandic Aalborg City");
+            }
+
+            foreach (string item in testS)
+            {
+                All += item;
+                All += " OR ";
+            }
+            System.Console.WriteLine(All);
+            IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("HotelName, Price, Date", $"RoomType{RoomType}",
+                                                         $"HotelName = '{All}'AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
+            foreach (var item in testList)
+            {
+                Kage.Add(item.Price);
+            }
+            Average = Kage.Average();
+            return Average;
         }
 
         public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate, int RoomType)

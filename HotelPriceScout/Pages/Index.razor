@@ -48,7 +48,6 @@
                        EnableSelectionOrder="false" FilterBarPlaceholder="Search hotels" EnableGroupCheckBox="true" PopupHeight="350px">
             <MultiSelectEvents TValue="List<string>" TItem="string" ValueChange='() => { OnClickUpdate("update Hotel");}'></MultiSelectEvents>
         </SfMultiSelect>
-
     </div>
 </div>
 
@@ -164,11 +163,12 @@
         </div>}
 </div>
 
-@code {
+@code
+{
     int avgMarketPrice;
     int KompasPrice;
     public int AdultsPicked = 1;
-    public List<string?> testS;
+    public List<string> testS;
 
     public class numberOfAdults
     {
@@ -177,7 +177,7 @@
     }
 
     public List<numberOfAdults> Adults = new List<numberOfAdults>()
-{
+    {
             new numberOfAdults(){ Adults= 1, Text= "1 adult" },
             new numberOfAdults(){ Adults= 2, Text= "2 adults" },
             new numberOfAdults(){ Adults= 4, Text= "4 adults" },
@@ -217,11 +217,7 @@
         }
         else if (s == "update Hotel")
         {
-            if (testS == null)
-            {
-                testS.Add("");
-            }
-            Cal.noget(testS);
+            await Cal.noget(testS, Cal.StartOfMonth.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked);
         }
 
         CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
@@ -266,7 +262,6 @@
             IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarMarketPrices
             .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
             avgMarketPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price);
-
         }
         else { avgMarketPrice = 0; }
         return avgMarketPrice;
@@ -276,4 +271,4 @@
     {
         return Cal.DayClicked.ToString("") + ". " + Cal.MonthName + " " + Cal.Year.ToString("");
     }
-    }
+}
