@@ -6,9 +6,9 @@ namespace HotelPriceScout.Data.Function
 {
     public class TimeKeeper
     {
-        public TimeKeeper(int minuteOfDay, ElapsedEventHandler receiver)
+        public TimeKeeper(int minutes, ElapsedEventHandler receiver)
         {
-            Timer = SetupTimer(SetMinuteTrigger(minuteOfDay), receiver);
+            Timer = SetupTimer(SetMinuteTrigger(minutes), receiver);
         }
         
         public TimeKeeper(int hourOfDay, int minuteOfDay, ElapsedEventHandler receiver)
