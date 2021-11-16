@@ -102,5 +102,15 @@ namespace Tests
             Assert.Equal(type, bookingSite.Type);
         }
 
+        [Fact]
+        public void HotelsListAssignsCorrectlyTest()
+        {
+            //Arrange
+            BookingSite bookingSite = new BookingSite("name", "multi", "url", );
+
+
+
+        }
+
     }
 }
