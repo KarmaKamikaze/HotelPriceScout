@@ -6,6 +6,6 @@ namespace HotelPriceScout.Data.Function
     public interface IDataScraper
     {
         BookingSite BookingSite { get; }
-        void StartScraping(decimal margin, DateTime[] notificationTimes);
+        void StartScraping(decimal margin);
     }
 }

@@ -6,20 +6,34 @@ namespace HotelPriceScout.Data.Function
 {
     public class TimeKeeper
     {
+        public TimeKeeper(int minuteOfDay, ElapsedEventHandler receiver)
+        {
+            Timer = SetupTimer(SetMinuteTrigger(minuteOfDay), receiver);
+        }
+        
         public TimeKeeper(int hourOfDay, int minuteOfDay, ElapsedEventHandler receiver)
         {
-            Timer = SetupTimer(SetTimeTrigger(hourOfDay, minuteOfDay), receiver);
+            Timer = SetupTimer(SetDailyTimeTrigger(hourOfDay, minuteOfDay), receiver);
         }
 
         public Timer Timer { get; }
 
-        private TimeSpan SetTimeTrigger(int hourOfDay, int minuteOfDay)
+        private TimeSpan SetMinuteTrigger(int minuteOfDay)
+        {
+            return new TimeSpan(00, minuteOfDay, 00);
+        }
+
+        private TimeSpan SetDailyTimeTrigger(int hourOfDay, int minuteOfDay)
         {
             TimeSpan day = new TimeSpan(24, 00, 00);
             TimeSpan now = TimeSpan.Parse(DateTime.Now.ToString("HH:mm", CultureInfo.InvariantCulture));
             TimeSpan triggerTime = new TimeSpan(hourOfDay, minuteOfDay, 0);
 
-            return day - now + triggerTime;
+            TimeSpan firstTrigger = ((day - now) + triggerTime);
+            if (firstTrigger.TotalHours > 24) // Make sure to trigger today, if time span is larger than 24 hours
+                firstTrigger -= day;
+            
+            return firstTrigger;
         }
 
         private Timer SetupTimer(TimeSpan triggerInterval, ElapsedEventHandler receiver)

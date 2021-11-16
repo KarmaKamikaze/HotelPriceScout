@@ -17,12 +17,15 @@ namespace HotelPriceScout.Data.Function
         private const int PRICE_CHANGE_PROBABILITY = 100 / 15;
         private const int ABOVE_OR_BELOW_MARGIN_PROBABILITY = 100 / 50;
         private const int VARIANCE = 200;
+        private const int RUN_SCRAPER_INTERVAL_IN_MINUTES = 30;
         private bool _firstTimeUpdate;
         private readonly decimal _hostPriceTypeOne;
         private readonly decimal _hostPriceTypeTwo;
         private readonly decimal _hostPriceTypeFour;
         private readonly Random _random = new();
         private decimal _margin;
+        private TimeKeeper _updater;
+        
         
         
         public PseudoScraper(BookingSite bookingSite)
@@ -34,9 +37,8 @@ namespace HotelPriceScout.Data.Function
         }
         
         public BookingSite BookingSite { get; }
-        public IEnumerable<TimeKeeper> TimeKeepers { get; private set; }
 
-        public void StartScraping(decimal margin, DateTime[] notificationTimes)
+        public void StartScraping(decimal margin)
         {
             _margin = margin;
             // Sets the initial room type prices for all 90 days.
@@ -44,13 +46,7 @@ namespace HotelPriceScout.Data.Function
             UpdatePrices();
             _firstTimeUpdate = false;
 
-            List<TimeKeeper> timers = new List<TimeKeeper>();
-            foreach (DateTime interval in notificationTimes)
-            {
-                timers.Add(new TimeKeeper(interval.Hour, interval.Minute, UpdatePricesAtInterval));
-            }
-
-            TimeKeepers = timers;
+            _updater = new TimeKeeper(RUN_SCRAPER_INTERVAL_IN_MINUTES, UpdatePricesAtInterval);
         }
 
         private void SendMissingDataWarning() // May ned to be event/delegate pair
