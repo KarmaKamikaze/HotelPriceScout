@@ -1,11 +1,11 @@
-using System.Collections.Generic;
+using System;
 using HotelPriceScout.Data.Model;
 
 namespace HotelPriceScout.Data.Function
 {
     public interface IDataScraper
     {
-        public BookingSite BookingSite { get; }
+        BookingSite BookingSite { get; }
         void StartScraping(decimal margin);
     }
 }
