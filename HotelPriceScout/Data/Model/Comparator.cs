@@ -32,6 +32,7 @@ namespace HotelPriceScout.Data.Model
         {
             DateTime LatestScrapedDate = bookingSites.First().HotelsList.First().RoomTypes.First().Prices.Last().Date;
 
+            //For loop that iterates through each date that have been scraped
             for (DateTime date = DateTime.Now.Date; date <= LatestScrapedDate; date = date.AddDays(1))
             {
                 //These dictionaries describe the values of the key-value-pairs of the RoomtypeXHotelAvgPrices dictionaries.
@@ -49,6 +50,7 @@ namespace HotelPriceScout.Data.Model
                 {
                     foreach (Hotel hotel in bookingSite.HotelsList)
                     {
+                        //Foreach loop that iterates through the different dictionaries which each are coupled to a roomtype 
                         foreach ((Dictionary<string, decimal> dict, int capacity) in dictList)
                         {
                             RoomType roomType = hotel.RoomTypes.Single(r => r.Capacity == capacity);
@@ -80,6 +82,7 @@ namespace HotelPriceScout.Data.Model
                 }
             }
 
+            //Notification should only be sent for discrepancies in the next month
             DateTime earliestNotifactionDate = AvgMarketPrices.Min(price => price.Date);
             DateTime latestNotificationDate = earliestNotifactionDate.AddMonths(1);
             for (DateTime date = earliestNotifactionDate; date < latestNotificationDate; date = date.AddDays(1))
@@ -93,6 +96,7 @@ namespace HotelPriceScout.Data.Model
             StoreAvgHotelPrices(Roomtype2HotelAvgPrices, "RoomType2");
             StoreAvgHotelPrices(Roomtype4HotelAvgPrices, "RoomType4");
 
+            //Store AvgMarketPrices into the database
             string valueDB = $"INSERT INTO MarketPrices (Date,Price,RoomType) VALUES ";
             foreach (MarketPriceModel marketPrice in AvgMarketPrices)
             {               
