@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Timers;
 using HotelPriceScout.Data.Model;
 
 namespace HotelPriceScout.Data.Function
@@ -15,11 +17,13 @@ namespace HotelPriceScout.Data.Function
         private const int PRICE_CHANGE_PROBABILITY = 100 / 15;
         private const int ABOVE_OR_BELOW_MARGIN_PROBABILITY = 100 / 50;
         private const int VARIANCE = 200;
+        private bool _firstTimeUpdate;
         private readonly decimal _hostPriceTypeOne;
         private readonly decimal _hostPriceTypeTwo;
         private readonly decimal _hostPriceTypeFour;
         private readonly Random _random = new();
-        private bool _firstTimeUpdate;
+        private decimal _margin;
+        
         
         public PseudoScraper(BookingSite bookingSite)
         {
@@ -30,15 +34,23 @@ namespace HotelPriceScout.Data.Function
         }
         
         public BookingSite BookingSite { get; }
+        public IEnumerable<TimeKeeper> TimeKeepers { get; private set; }
 
-        public void StartScraping(decimal margin)
+        public void StartScraping(decimal margin, DateTime[] notificationTimes)
         {
+            _margin = margin;
             // Sets the initial room type prices for all 90 days.
             _firstTimeUpdate = true;
-            UpdatePrices(margin);
+            UpdatePrices();
             _firstTimeUpdate = false;
-            
-            // TODO: Do the rest of the infinite scraping loop using timed events so we do not block
+
+            List<TimeKeeper> timers = new List<TimeKeeper>();
+            foreach (DateTime interval in notificationTimes)
+            {
+                timers.Add(new TimeKeeper(interval.Hour, interval.Minute, UpdatePricesAtInterval));
+            }
+
+            TimeKeepers = timers;
         }
 
         private void SendMissingDataWarning() // May ned to be event/delegate pair
@@ -46,37 +58,42 @@ namespace HotelPriceScout.Data.Function
             throw new System.NotImplementedException();
         }
 
-        private void UpdatePrices(decimal margin)
+        private void UpdatePricesAtInterval(object sender, ElapsedEventArgs eventArgs)
+        {
+            UpdatePrices();
+        }
+
+        private void UpdatePrices()
         {
             foreach (Hotel hotel in BookingSite.HotelsList)
             {
                 foreach (RoomType roomType in hotel.RoomTypes)
                 {
-                    AssignRoomPrices(roomType, margin);
+                    AssignRoomPrices(roomType);
                 }
             }
         }
 
-        private void AssignRoomPrices(RoomType room, decimal margin)
+        private void AssignRoomPrices(RoomType room)
         {
             switch (room.Capacity)
             {
                 case 1:
-                    SetPrice(room, margin, _hostPriceTypeOne);
+                    SetPrice(room, _hostPriceTypeOne);
                     break;
                 case 2:
-                    SetPrice(room, margin, _hostPriceTypeTwo);
+                    SetPrice(room, _hostPriceTypeTwo);
                     break;
                 case 4:
-                    SetPrice(room, margin, _hostPriceTypeFour);
+                    SetPrice(room, _hostPriceTypeFour);
                     break;
             }
         }
 
-        private void SetPrice(RoomType room, decimal margin, decimal hostPriceType)
+        private void SetPrice(RoomType room, decimal hostPriceType)
         {
-            decimal maxPrice = (1 + margin / 100) * hostPriceType;
-            decimal minPrice = (1 - margin / 100) * hostPriceType;
+            decimal maxPrice = (1 + _margin / 100) * hostPriceType;
+            decimal minPrice = (1 - _margin / 100) * hostPriceType;
             
             foreach (RoomTypePrice price in room.Prices)
             {
