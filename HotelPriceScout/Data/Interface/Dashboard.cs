@@ -24,6 +24,14 @@ namespace HotelPriceScout.Data.Interface
         public DateTime LastDayOfMonth { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
         private SqliteDataAccess _db = new SqliteDataAccess();
 
+        public void noget(List<string> testS)
+        {
+            foreach(string item in testS)
+            {
+                System.Console.WriteLine(item);
+            }
+        }
+
         public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate, int RoomType)
         {
             IEnumerable<MarketPriceModel> testList = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices", $"Date >= '{StartDate}' AND Date <= '{EndDate}' AND RoomType = '{RoomType}'");
