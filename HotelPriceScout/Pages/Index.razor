@@ -325,9 +325,8 @@
         listOfSelectedHotels = listOfHotels.ToList();
         listOfSelectedHotels.Add("Local");
         listOfSelectedHotels.Add("No budget");
-
-        Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
-        scout.RunComparator("dashboard");
+        
+        _scout.RunComparator("dashboard");
 
         CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"),
             Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
