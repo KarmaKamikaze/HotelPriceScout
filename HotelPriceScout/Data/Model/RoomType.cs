@@ -11,7 +11,7 @@ namespace HotelPriceScout.Data.Model
         public RoomType(int capacity)
         {
             Capacity = capacity;
-            Prices = Create3monthsprices();
+            Prices = CreateThreeMonthsPrices();
         }
 
         public int Capacity
@@ -29,7 +29,7 @@ namespace HotelPriceScout.Data.Model
 
         public List<RoomTypePrice> Prices { get; init; }
 
-        private List<RoomTypePrice> Create3monthsprices()
+        private List<RoomTypePrice> CreateThreeMonthsPrices()
         {
             List<RoomTypePrice> prices = new();
             int i = 0;

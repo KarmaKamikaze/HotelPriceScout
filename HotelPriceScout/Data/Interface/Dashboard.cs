@@ -1,8 +1,5 @@
-﻿using Dapper;
-using DataAccessLibrary;
+﻿using DataAccessLibrary;
 using System;
-using System.Linq;
-using System.Collections;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using HotelPriceScout.Data.Model;
@@ -15,16 +12,16 @@ namespace HotelPriceScout.Data.Interface
         public decimal Average { get; set; } = default;
         public string MonthName { get; private set; } = "";
         public DateTime MonthEnd { get; private set; }
-        public int MonthsAway { get; set; } = default;
-        public int NumDummyColumn { get; set; } = default;
-        public int Year { get; private set; } = default;
-        public int Month { get; private set; } = default;
-        public int DayClicked { get; set; } = default;
+        public int MonthsAway { get; set; }
+        public int NumDummyColumn { get; set; }
+        public int Year { get; private set; }
+        public int Month { get; private set; }
+        public int DayClicked { get; set; }
         public DateTime TempDate { get; private set; }
         public DateTime ToDay { get;  set; } = DateTime.Now;
         public DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
         public DateTime LastDayOfMonth { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
-        private SqliteDataAccess _db = new SqliteDataAccess();
+        private readonly SqliteDataAccess _db = new();
 
         public async Task<IEnumerable<MarketPriceModel>> DisplaySelectedComparedPrices(List<string> SelectedHotels, string StartDate, string EndDate, int RoomType)
         {
@@ -103,7 +100,7 @@ namespace HotelPriceScout.Data.Interface
                 6 => "June",
                 7 => "July",
                 8 => "August",
-                9 => "Septemeber",
+                9 => "September",
                 10 => "October",
                 11 => "November",
                 12 => "December",

@@ -1,12 +1,13 @@
 @page "/settings"
-
+@using HotelPriceScout.Data.Interface
+@inherits SettingsManager
 
 
 <h1>Settings</h1>
 <br />
 <label>Margin value percent</label>
 <br />
-<SfNumericTextBox Width="200px" TValue="int?" Step="1" Max="100" Min="1" @bind-Value="marginPicked"></SfNumericTextBox>
+<SfNumericTextBox Width="200px" TValue="int" Step="1" Max="100" Min="1" @bind-Value="marginPicked"></SfNumericTextBox>
 <br />&nbsp;
 <br />
 <br />&nbsp;
@@ -25,18 +26,18 @@
 
 <label>Notification time(s)</label>
 <br />
-<SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
+<SfTimePicker Width="200px" TValue="DateTime "@bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
 
 
 @if (notificationAmountPicked == 2)
 {
-    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker>
 }
 
 @if (notificationAmountPicked == 3)
 {
-    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker>
-    <SfTimePicker Width="200px" TValue="DateTime?" @bind-Value="@timeValue3" Step=60 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker>
+    <SfTimePicker Width="200px" TValue="DateTime" @bind-Value="@timeValue3" Step=60 Format="HH:mm"></SfTimePicker>
 }
 <br />&nbsp;
 <br />
@@ -48,8 +49,8 @@
     }
     @if (modalStart)
     {
-                            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
                         <h4 class="modal-title" id="titleLabel">Settings have been set and the program has started!</h4>
@@ -82,7 +83,7 @@
 
     <div class="col-md-1">
     </div>
-    @if (showUdate)
+    @if (showUpdate)
     {
         <button type="button" class="border border-dark col-md-1 btn btn-primary" data-bs-toggle="modal" @onkeydown="@EscapeUpdate" @onclick="UpdatePopUp">Update program</button>
     }
@@ -102,10 +103,10 @@
             </div>
         </div>
     }
-            @if (updateYes)
-        {
-            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+    @if (updateYes)
+    {
+        <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
                         <h2 class="modal-title" id="titleLabel">The program has been updated!</h2>
@@ -113,24 +114,13 @@
                 </div>
             </div>
         </div>
-        }
+    }
     <div class=col-md-3>
     </div>
 </div>
 
 
 @code {
-
-    public static int? marginPicked = 1;
-    public static int notificationAmountPicked = 1;
-    public static DateTime? timeValue { get; set; } = DateTime.Now;
-    public static DateTime? timeValue2 { get; set; } = DateTime.Now;
-    public static DateTime? timeValue3 { get; set; } = DateTime.Now;
-    public static int? marginPickedPass { get; set; }
-    public static int notificationPickedPass { get; set; }
-    public static DateTime? timeValuePass { get; set; }
-    public static DateTime? timeValuePass2 { get; set; }
-    public static DateTime? timeValuePass3 { get; set; }
 
     public class NotificationAmount
     {
@@ -139,14 +129,11 @@
     }
     public List<NotificationAmount> Notifications = new List<NotificationAmount>()
     {
+        new NotificationAmount(){ Notification= 0, Text= "0" },
         new NotificationAmount(){ Notification= 1, Text= "1" },
         new NotificationAmount(){ Notification= 2, Text= "2" },
         new NotificationAmount(){ Notification= 3, Text= "3" },
     };
-
-    bool isScoutStopped = false;
-    bool isScoutUpdated = false;
-    bool isScoutStarted = false;
 
     public void StopProgram()
     {
@@ -166,7 +153,7 @@
         StateHasChanged();
     }
 
-    public bool updateYes = false;
+
     async void UpdateProgram()
     {
         isScoutUpdated = true;
@@ -183,10 +170,8 @@
         await Task.Delay(1500);
         updateYes = false;
         StateHasChanged();
-        
-
     }
-    public bool modalStart = false;
+
     public async void StartProgram()
     {
         marginPickedPass = marginPicked;
@@ -209,37 +194,6 @@
     Task OnButtonClick()
     {
         return Task.Delay(1000);
-    }
-
-    private static bool showStop = false;
-    private void ShowStopButton()
-    {
-        showStop = !showStop;
-    }
-
-    private static bool showStart = true;
-    private void ShowStartButton()
-    {
-        showStart = !showStart;
-    }
-
-    private static bool showUdate = false;
-    private void ShowUpdateButton()
-    {
-        showUdate = !showUdate;
-    }
-
-
-    public bool popUp = false;
-    private void PopUp()
-    {
-        popUp = !popUp;
-    }
-
-    public bool updatePopUp = false;
-    private void UpdatePopUp()
-    {
-        updatePopUp = !updatePopUp;
     }
 
 

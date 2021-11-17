@@ -1,22 +1,34 @@
 ﻿using System;
+
 namespace HotelPriceScout.Data.Model
 {
     public class MarketPriceModel
     {
-        public decimal Price { get; set; }
+        public int Price { get; set; }
         public DateTime Date { get; set; }
         public string HotelName { get; set;  }
-        public MarketPriceModel(decimal price, DateTime date)
+        public bool MarkedForDiscrepancy { get; set; } = false;
+        public int RoomType { get; private set; } 
+        public MarketPriceModel(int price, DateTime date)
         {
             Price = price;
             Date = date;
         }
-        public MarketPriceModel(string hotelname, decimal price, DateTime date)
+
+        public MarketPriceModel(string hotelName, int price, DateTime date)
         {
             Price = price;
             Date = date;
-            HotelName = hotelname;
+            HotelName = hotelName;
         }
+
+        public MarketPriceModel(int price, DateTime date, int roomType)
+        {
+            Price = price;
+            Date = date;
+            RoomType = roomType;
+        }
+
     }
 }
 
