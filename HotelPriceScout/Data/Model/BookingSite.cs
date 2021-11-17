@@ -7,6 +7,7 @@ namespace HotelPriceScout.Data.Model
     public class BookingSite
     {
         private readonly string _type;
+        private readonly string _url;
 
         public BookingSite(string name, string type, string url, Dictionary<string, string> hotels)
         {
@@ -23,7 +24,8 @@ namespace HotelPriceScout.Data.Model
             get => _type;
             init
             {
-                if (value != "single" && value != "multi") {
+                if (value != "single" && value != "multi")
+                {
                     throw new ArgumentOutOfRangeException(
                         $"{nameof(value)} must be either \"single\" or \"multi\".");
                 }
@@ -31,7 +33,18 @@ namespace HotelPriceScout.Data.Model
             }
         }
 
-        public string Url { get; }
+        public string Url
+        {
+            get => _url;
+            init
+            {
+                if (!Uri.IsWellFormedUriString(value, UriKind.Absolute))
+                {
+                    throw new UriFormatException($"{value} is not a valid URL");
+                }
+                _url = value;
+            }
+        }
 
         public IEnumerable<Hotel> HotelsList { get; init; }
 
