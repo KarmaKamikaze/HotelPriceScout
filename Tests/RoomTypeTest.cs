@@ -25,34 +25,42 @@ namespace Tests
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(4)]
-        [InlineData(5)]
         [Theory]
         public void Test_Capacity_For_Validity_RoomType_One(int value)
         {
-            //Arrange
-            DateTime date = DateTime.Now;
-
-            //Act
-            RoomType Capacity = new RoomType(capacity);
+            //Arrange and Act
+            RoomType roomType = new RoomType(value);
 
             //Assert
-            Assert.Equal(value, capacity);
+            Assert.Equal(value, roomType.Capacity);
         }
+
+        [Fact]
+        public void Test_Length_Of_Prices_List()
+        {
+            //Arrange
+            int value = ((DateTime.Now.AddMonths(3).DayOfYear) - DateTime.Now.DayOfYear);
+
+            //Makes sure that if there's a year change, it'll + the days to the total amount
+            if(value < 0)
+            {
+                value = value + 366;
+            }
+
+            RoomType roomType = new RoomType(1);
+
+            Assert.Equal(roomType.Prices.Count, value);
+        }
+
+        [Fact]
+        public void Test_For_Minimum_Date()
+        {
+            //Arrange
+
+            //Act
+
+            //Assert
+        }
+
     }
-}
-
-
-[Theory]
-[InlineData(0)]
-[InlineData(1)]
-public void PriceSetterCorrectlyAssignsValueTest(decimal price)
-{
-    //Arrange
-    DateTime date = DateTime.Now;
-
-    //Act
-    RoomTypePrice roomTypePrice = new RoomTypePrice(date, price);
-
-    //Assert
-    Assert.Equal(price, roomTypePrice.Price);
 }
