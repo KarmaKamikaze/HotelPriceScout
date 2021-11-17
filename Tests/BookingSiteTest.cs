@@ -103,14 +103,73 @@ namespace Tests
         }
 
         [Fact]
-        public void HotelsListAssignsCorrectlyTest()
+        public void HotelsListCorrectLengthTest()
         {
             //Arrange
-            BookingSite bookingSite = new BookingSite("name", "multi", "url", );
+            Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
+            {
+                { "hotel1", "tag1" },
+                { "hotel2", "tag2" },
+                { "hotel3", "tag3" }
+            };
+            int expected = 3;
 
+            //Act
+            BookingSite bookingSite = new BookingSite("name", "multi", "url", hotelStrings);
 
-
+            //Assert
+            Assert.Equal(expected, bookingSite.HotelsList.Count());
         }
 
+        [Fact]
+        public void HotelsListIsEmptyWhenDictionaryIsEmptyTest()
+        {
+            //Arrange
+            Dictionary<string, string> hotelStrings = new Dictionary<string, string>();
+            int expected = 0;
+
+            //Act
+            BookingSite bookingSite = new BookingSite("name", "multi", "url", hotelStrings);
+
+            //Assert
+            Assert.Equal(expected, bookingSite.HotelsList.Count());
+        }
+
+        [Fact]
+        public void HotelsListOnlyContainsDataFromTheDictionaryTest()
+        {
+            //Arrange
+            Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
+            {
+                { "hotel1", "tag1" },
+                { "hotel2", "tag2" },
+                { "hotel3", "tag3" }
+            };
+
+            //Act
+            BookingSite bookingSite = new BookingSite("name", "multi", "url", hotelStrings);
+
+            //Assert
+            Assert.All(bookingSite.HotelsList, hotel => Assert.True(hotelStrings.Keys.Contains(hotel.Name)
+                && hotelStrings[hotel.Name] == hotel.Tag));
+        }
+
+        [Fact]
+        public void HotelsListOnlyContainsUniqueHotelNamesTest()
+        {
+            //Arrange
+            Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
+            {
+                { "hotel1", "tag1" },
+                { "hotel2", "tag2" },
+                { "hotel3", "tag3" }
+            };
+
+            //Act
+            BookingSite bookingSite = new BookingSite("name", "multi", "url", hotelStrings);
+
+            //Assert
+            Assert.All(bookingSite.HotelsList, hotel => Assert.True(bookingSite.HotelsList.Where(h => h.Name == hotel.Name).Count() == 1));
+        }
     }
 }
