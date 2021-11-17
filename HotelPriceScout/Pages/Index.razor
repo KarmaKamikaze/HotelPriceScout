@@ -44,7 +44,7 @@
         </SfDropDownList>
     </div>
     <div class="col-lg-6" style="padding:0;">
-        <SfMultiSelect TValue="List<string>" @bind-Value="testS" AllowFiltering="true" TItem="string" Mode="@VisualMode.CheckBox" Placeholder="Select hotels" DataSource="testlist" ShowSelectAll="true"
+        <SfMultiSelect TValue="List<string>" @bind-Value="SelectedHotels" AllowFiltering="true" TItem="string" Mode="@VisualMode.CheckBox" Placeholder="Select hotels" DataSource="listOfSelectedHotels" ShowSelectAll="true"
                        EnableSelectionOrder="false" FilterBarPlaceholder="Search hotels" EnableGroupCheckBox="true" PopupHeight="350px">
             <MultiSelectEvents TValue="List<string>" TItem="string" ValueChange='() => { OnClickUpdate("update Hotel");}'></MultiSelectEvents>
         </SfMultiSelect>
@@ -168,7 +168,7 @@
     int avgMarketPrice;
     int KompasPrice;
     public int AdultsPicked = 1;
-    public List<string> testS;
+    public List<string> SelectedHotels;
 
     public class numberOfAdults
     {
@@ -177,7 +177,7 @@
     }
 
     public List<numberOfAdults> Adults = new List<numberOfAdults>()
-    {
+{
             new numberOfAdults(){ Adults= 1, Text= "1 adult" },
             new numberOfAdults(){ Adults= 2, Text= "2 adults" },
             new numberOfAdults(){ Adults= 4, Text= "4 adults" },
@@ -185,7 +185,7 @@
 
     Dashboard Cal = new Dashboard();
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
-    List<string> testlist;
+    List<string> listOfSelectedHotels;
 
     List<Prices> priceList;
     Prices MarketPriceItem;
@@ -193,8 +193,8 @@
     IEnumerable<MarketPriceModel> CalendarKompasPrices;
 
     private void GenerateThermometer()
-    {
-        priceList = PriceMeterGenerator.PriceListGenerator(); // This needs to get its data from the database, as a list of Price objects
+    {   // This needs to get its data from the database, as a list of Price objects
+        priceList = PriceMeterGenerator.PriceListGenerator();
         MarketPriceItem = (PriceMeterGenerator.MarketFinder(priceList));
         priceList.Sort();
     }
@@ -217,25 +217,35 @@
         }
         else if (s == "update Hotel")
         {
-            await Cal.noget(testS, Cal.StartOfMonth.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked);
+            if (SelectedHotels != null)
+            {
+                CalendarMarketPrices = await Cal.DisplaySelectedComparedPrices(SelectedHotels, Cal.StartOfMonth.ToString("yyyy-MM-dd"),
+                    Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked);
+            }
         }
-
-        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
-        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+        if (SelectedHotels != null)
+        {
+            CalendarMarketPrices = await Cal.DisplaySelectedComparedPrices(SelectedHotels, Cal.StartOfMonth.ToString("yyyy-MM-dd"),
+                Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked);
+        }
+        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"),
+            Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
     }
 
     protected override async Task OnInitializedAsync()
     {
         listOfHotels = await _db.LoadStaticHotelResources("total");
-        testlist = listOfHotels.ToList();
-        testlist.Add("Local");
-        testlist.Add("No budget");
+        listOfSelectedHotels = listOfHotels.ToList();
+        listOfSelectedHotels.Add("Local");
+        listOfSelectedHotels.Add("No budget");
 
         Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
         scout.RunComparator("dashboard");
 
-        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
-        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.ToDay.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"),
+            Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.ToDay.ToString("yyyy-MM-dd"),
+            Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
 
         Cal.CreateMonth();
         GenerateThermometer();
@@ -244,7 +254,8 @@
     public int KompasPriceDaySetter(int k)
     {
         //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
-        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay && new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3))
+        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay &&
+            new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3))
         {
             IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarKompasPrices
              .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
@@ -257,11 +268,18 @@
     public int MarketPriceDaySetter(int k)
     {
         //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
-        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay && new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3))
+        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay &&
+            new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3))
         {
-            IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarMarketPrices
+            List<int> Listofprices = new();
+            IEnumerable<MarketPriceModel> listOfDayPrice = CalendarMarketPrices
             .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
-            avgMarketPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price);
+
+            foreach(var MarketPriceModel in listOfDayPrice)
+            {
+                Listofprices.Add(Decimal.ToInt32(MarketPriceModel.Price));
+            }
+            avgMarketPrice = (int)Listofprices.Average();
         }
         else { avgMarketPrice = 0; }
         return avgMarketPrice;
