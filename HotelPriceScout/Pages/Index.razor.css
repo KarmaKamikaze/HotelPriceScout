@@ -23,3 +23,58 @@
 .noHover {
     pointer-events: none !important;
 }
+
+.high {
+    color: red !important;
+    font-weight: 700 !important;
+}
+
+.low {
+    color: #00cc36 !important;
+    font-weight: 700 !important;
+}
+
+.oi-caret-bottom {
+    color: red;
+}
+
+.oi-caret-top {
+    color: #00cc36 !important;
+}
+
+.table-borderless {
+    z-index: 1;
+}
+
+.calendar {
+    z-index:2 !important;
+    background-color: white !important;
+}
+
+.table {
+    z-index: 2 !important;
+}
+
+.animation1 {
+    animation-name: animation;
+    animation-duration: 0.5s;
+    position: relative;
+}
+
+.animation2 {
+    animation-fill-mode: forwards;
+    animation-name: animation;
+    animation-duration: 0.5s;
+    position: relative;
+    animation-direction: reverse;
+}
+
+    @keyframes animation {
+        0% {
+            left: -460px;
+        }
+
+        100% {
+            left: 0px;
+        }
+    }

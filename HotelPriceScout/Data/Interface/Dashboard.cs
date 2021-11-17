@@ -9,6 +9,8 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard
     {
+        public int TempAniDate { get; set; }
+        public bool CheckForAlternateClick { get; set; } = true;
         public string AllSelectedHotels { get; set; } = "";
         public string MonthName { get; private set; } = "";
         public DateTime MonthEnd { get; private set; }
@@ -109,10 +111,11 @@ namespace HotelPriceScout.Data.Interface
             {
                 if (dayClicked == DayClicked)
                 {
-                    DayClicked = 0;
+                    CheckForAlternateClick = false;
                 }
                 else
                 {
+                    CheckForAlternateClick = true;
                     DayClicked = dayClicked;
                 }
             }
