@@ -15,7 +15,7 @@ namespace HotelPriceScout.Data.Model
         //This method is used to create scout objects instead of a typical constructor.
         //This is due to the fact that the static booking site data should be fetched from the database.
         //This therefore necessitates a asynchronous function.
-        public static async Task<Scout> CreateScoutAsync(string state, int marginValue, DateTime[] notificationTimes)
+        public static async Task<Scout> CreateScoutAsync(string state, int marginValue, IEnumerable<DateTime> notificationTimes)
         {
             Scout scout = new Scout();
             scout.State = state;
@@ -41,7 +41,7 @@ namespace HotelPriceScout.Data.Model
             GC.SuppressFinalize(this);
         }
 
-        public DateTime[] NotificationTimes { get; private set; }
+        public IEnumerable<DateTime> NotificationTimes { get; private set; }
 
         public int MarginValue
         {

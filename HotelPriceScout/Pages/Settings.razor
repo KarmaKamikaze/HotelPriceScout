@@ -1,6 +1,8 @@
 @page "/settings"
 @using HotelPriceScout.Data.Interface
+@using HotelPriceScout.Data.Model
 @inherits SettingsManager
+@inject Scout _scout;
 
 
 <h1>Settings</h1>
@@ -188,7 +190,7 @@
         await Task.Delay(2000);
         modalStart = false;
         StateHasChanged();
-        ScoutStart();
+        ScoutStart(marginPickedPass, GetNotificationTimes());
     }
 
     Task OnButtonClick()
@@ -213,9 +215,10 @@
         }
     }
 
-    public void ScoutStart()
+    private async void ScoutStart(int margin, IEnumerable<DateTime> dates)
     {
-
+        _scout = await Scout.CreateScoutAsync("preparing", margin, dates);
+        _scout.StartScout();
     }
 
 }
