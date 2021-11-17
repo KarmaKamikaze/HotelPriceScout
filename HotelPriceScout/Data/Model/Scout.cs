@@ -2,6 +2,7 @@ using DataAccessLibrary;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HotelPriceScout.Data.Function;
 
 
 namespace HotelPriceScout.Data.Model
@@ -25,6 +26,16 @@ namespace HotelPriceScout.Data.Model
             scout.BookingSites = scout.CreateBookingSites(bookingSitesData);
             
             return scout;
+        }
+
+        public void StartScout()
+        {
+
+        }
+        
+        public void StopScout()
+        {
+            throw new NotImplementedException();
         }
 
         public DateTime[] NotificationTimes { get; private set; }

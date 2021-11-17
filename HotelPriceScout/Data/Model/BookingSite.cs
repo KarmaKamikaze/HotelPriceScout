@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using HotelPriceScout.Data.Function;
 
 namespace HotelPriceScout.Data.Model
 {
-
     public class BookingSite
     {
         private readonly string _type;
@@ -23,10 +23,12 @@ namespace HotelPriceScout.Data.Model
             get => _type;
             init
             {
-                if (value != "single" && value != "multi") {
+                if (value != "single" && value != "multi")
+                {
                     throw new ArgumentOutOfRangeException(
                         $"{nameof(value)} must be either \"single\" or \"multi\".");
                 }
+
                 _type = value;
             }
         }
@@ -47,6 +49,7 @@ namespace HotelPriceScout.Data.Model
             {
                 hotels.Add(new Hotel(hotel.Key, hotel.Value));
             }
+
             return hotels;
         }
     }
