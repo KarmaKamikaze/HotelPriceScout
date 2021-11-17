@@ -209,7 +209,7 @@
 
 @code
 {
-    int avgMarketPrice;
+    public int avgMarketPrice;
     int KompasPrice;
     public int AdultsPicked = 1;
     public List<string> SelectedHotels;
@@ -309,13 +309,13 @@
                     Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked);
             }
         }
-        if (SelectedHotels != null)
-        {
-            CalendarMarketPrices = await Cal.DisplaySelectedComparedPrices(SelectedHotels, Cal.StartOfMonth.ToString("yyyy-MM-dd"),
-                Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked);
-        }
-        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"),
+        
+            CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"),
             Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+
+            CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"),
+            Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+
     }
 
     protected override async Task OnInitializedAsync()
@@ -361,9 +361,9 @@
             IEnumerable<MarketPriceModel> listOfDayPrice = CalendarMarketPrices
             .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
 
-            foreach(var MarketPriceModel in listOfDayPrice)
+            foreach(var item in listOfDayPrice)
             {
-                Listofprices.Add(Decimal.ToInt32(MarketPriceModel.Price));
+                Listofprices.Add(Decimal.ToInt32(item.Price));
             }
             avgMarketPrice = (int)Listofprices.Average();
         }
