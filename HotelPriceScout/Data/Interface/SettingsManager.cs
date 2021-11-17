@@ -28,17 +28,14 @@ namespace HotelPriceScout.Data.Interface
             List<DateTime> result = new List<DateTime>();
             switch (notificationPickedPass)
             {
+                case 3:
+                    result.Add(timeValuePass3);
+                    goto case 2;
+                case 2:
+                    result.Add(timeValuePass2);
+                    goto case 1;
                 case 1:
                     result.Add(timeValuePass);
-                    break;
-                case 2:
-                    result.Add(timeValuePass);
-                    result.Add(timeValuePass2);
-                    break;
-                case 3:
-                    result.Add(timeValuePass);
-                    result.Add(timeValuePass2);
-                    result.Add(timeValuePass3);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(notificationPickedPass) + "must be 1, 2, or 3.");
