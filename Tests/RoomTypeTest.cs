@@ -27,7 +27,7 @@ namespace Tests
         [InlineData(2)]
         [InlineData(4)]
         [Theory]
-        public void Test_Capacity_For_Validity_RoomType_One(int value)
+        public void Test_If_Capacity_Accepts_Correct_Input(int value)
         {
             //Arrange and Act
             RoomType roomType = new RoomType(value);
@@ -86,11 +86,9 @@ namespace Tests
         {
             //Arrange and Act
             RoomType roomType = new RoomType(value);
-            object zero = 0;
-
 
             //Assert
-            Assert.DoesNotContain(zero, roomType.Prices);
+            Assert.All(roomType.Prices, price => Assert.True(price.Price != 0));
         }
     }
 }
