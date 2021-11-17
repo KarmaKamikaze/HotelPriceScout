@@ -15,7 +15,7 @@ namespace Tests
             string name = null;
             void Action()
             {
-                new BookingSite(name, "single", "https://www.test.com", new Dictionary<string, string>());
+                new BookingSite(name, "single", "https://www.url.com", new Dictionary<string, string>());
             }
 
             //Act and Assert
@@ -29,7 +29,7 @@ namespace Tests
             string name = "test";
 
             //Act
-            BookingSite bookingSite = new BookingSite(name, "single", "https://www.test.com", new Dictionary<string, string>());
+            BookingSite bookingSite = new BookingSite(name, "single", "https://www.url.com", new Dictionary<string, string>());
 
             //Assert
             Assert.Equal(name, bookingSite.Name);
@@ -50,8 +50,8 @@ namespace Tests
         }
 
         [Theory]
-        [InlineData("url")]
-        [InlineData("www.url.com")]
+        [InlineData("test")]
+        [InlineData("www.test.com")]
         public void URLThrowsWhenWrongFormatTest(string url)
         {
             //Arrange
@@ -86,7 +86,7 @@ namespace Tests
             string type = null;
             void Action()
             {
-                new BookingSite("name", type, "https://www.test.com", new Dictionary<string, string>());
+                new BookingSite("name", type, "https://www.url.com", new Dictionary<string, string>());
             }
 
             //Act and Assert
@@ -100,7 +100,7 @@ namespace Tests
             string type = "test";
             void Action()
             {
-                new BookingSite("name", type, "https://www.test.com", new Dictionary<string, string>());
+                new BookingSite("name", type, "https://www.url.com", new Dictionary<string, string>());
             }
 
             //Act and Assert
@@ -113,7 +113,7 @@ namespace Tests
         public void TypeSetterAssignsCorrectlyTest(string type)
         {
             //Arrange and Act
-            BookingSite bookingSite = new BookingSite("name", type, "https://www.test.com", new Dictionary<string, string>());
+            BookingSite bookingSite = new BookingSite("name", type, "https://www.url.com", new Dictionary<string, string>());
 
             //Assert
             Assert.Equal(type, bookingSite.Type);
@@ -132,7 +132,7 @@ namespace Tests
             int expected = 3;
 
             //Act
-            BookingSite bookingSite = new BookingSite("name", "multi", "https://www.test.com", hotelStrings);
+            BookingSite bookingSite = new BookingSite("name", "multi", "https://www.url.com", hotelStrings);
 
             //Assert
             Assert.Equal(expected, bookingSite.HotelsList.Count());
@@ -146,7 +146,7 @@ namespace Tests
             int expected = 0;
 
             //Act
-            BookingSite bookingSite = new BookingSite("name", "multi", "https://www.test.com", hotelStrings);
+            BookingSite bookingSite = new BookingSite("name", "multi", "https://www.url.com", hotelStrings);
 
             //Assert
             Assert.Equal(expected, bookingSite.HotelsList.Count());
@@ -164,7 +164,7 @@ namespace Tests
             };
 
             //Act
-            BookingSite bookingSite = new BookingSite("name", "multi", "https://www.test.com", hotelStrings);
+            BookingSite bookingSite = new BookingSite("name", "multi", "https://www.url.com", hotelStrings);
 
             //Assert
             Assert.All(bookingSite.HotelsList, hotel => Assert.True(hotelStrings.Keys.Contains(hotel.Name)
@@ -183,7 +183,7 @@ namespace Tests
             };
 
             //Act
-            BookingSite bookingSite = new BookingSite("name", "multi", "https://www.test.com", hotelStrings);
+            BookingSite bookingSite = new BookingSite("name", "multi", "https://www.url.com", hotelStrings);
 
             //Assert
             Assert.All(bookingSite.HotelsList, hotel => Assert.True(bookingSite.HotelsList.Where(h => h.Name == hotel.Name).Count() == 1));
