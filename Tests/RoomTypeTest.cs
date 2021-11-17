@@ -7,10 +7,10 @@ namespace Tests
 {
     public class RoomTypeTest
     {
+        [Theory]
         [InlineData(-33)]
         [InlineData(3)]
         [InlineData(124)]
-        [Theory]
         public void Test_Capacity_For_Validity_Throws(int value)
         {
             //Arrange and act
@@ -23,10 +23,10 @@ namespace Tests
 
         }
 
+        [Theory]
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(4)]
-        [Theory]
         public void Test_If_Capacity_Accepts_Correct_Input(int value)
         {
             //Arrange and Act
@@ -65,10 +65,10 @@ namespace Tests
             Assert.Equal(roomType.Prices.Min(price => price.Date), value);
         }
 
+        [Theory]
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(4)]
-        [Theory]
         public void Test_For_No_Null_Prices(int value)
         {
             //Arrange and Act
@@ -78,10 +78,10 @@ namespace Tests
             Assert.DoesNotContain(null, roomType.Prices);
         }
 
+        [Theory]
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(4)]
-        [Theory]
         public void Test_For_No_Zero_Prices(int value)
         {
             //Arrange and Act
