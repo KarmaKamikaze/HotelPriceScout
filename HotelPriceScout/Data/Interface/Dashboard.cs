@@ -25,55 +25,119 @@ namespace HotelPriceScout.Data.Interface
         public DateTime LastDayOfMonth { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
         private readonly SqliteDataAccess _db = new();
 
-        public async Task<IEnumerable<MarketPriceModel>> DisplaySelectedComparedPrices(List<string> SelectedHotels, string StartDate, string EndDate, int RoomType)
+        public IEnumerable<MarketPriceModel> SelectedMonthMarketPrices(DateTime StartDate, DateTime EndDate, int RoomType, List<string> SelectedHotels, IEnumerable<MarketPriceModel> DataList)
         {
-            if (SelectedHotels.Contains("Local"))
+            List<int> TempList = new();
+            List<MarketPriceModel> ListOfSingelDatePrices = new();
+            //DateTime tempDate = StartDate;
+            for(DateTime tempDate = StartDate; tempDate <= EndDate;)
             {
-                SelectedHotels.Add("Cabinn Aalborg");
-                SelectedHotels.Add("Slotshotellet Aalborg");
-                SelectedHotels.Add("Kompas Hotel Aalborg");
-            }
-            if (SelectedHotels.Contains("No budget"))
-            {
-                SelectedHotels.Add("Kompas Hotel Aalborg");
-                SelectedHotels.Add("Slotshotellet Aalborg");
-                SelectedHotels.Add("Milling Hotel Aalborg");
-                SelectedHotels.Add("Aalborg Airport Hotel");
-                SelectedHotels.Add("Helnan Phønix Hotel");
-                SelectedHotels.Add("Hotel Schellsminde");
-                SelectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
-                SelectedHotels.Add("Comwell Hvide Hus Aalborg");
-                SelectedHotels.Add("Scandic Aalborg Øst");
-                SelectedHotels.Add("Scandic Aalborg City");
-            }
-            var last = SelectedHotels.LastOrDefault();
-            foreach (var item in SelectedHotels)
-            {
-                AllSelectedHotels += "'" + item + "'";
-                if (!item.Equals(last))
+                foreach (var item in DataList)
                 {
-                    AllSelectedHotels += " OR HotelName = ";
+                    if (item.Date == tempDate)
+                    {
+                         TempList.Add(item.Price);
+                    }
+                }
+                MarketPriceModel SingelDayMarketPrice = new MarketPriceModel((int)TempList.Average(), tempDate);
+                ListOfSingelDatePrices.Add(SingelDayMarketPrice);
+                tempDate = tempDate.AddDays(1);
+            }
+            
+            
+            DataList = ListOfSingelDatePrices;
+            return DataList;
+        }
+        public int SingleDayMarketPrice(IEnumerable<MarketPriceModel> MultipleMarketPrices, int SpeceficDay)
+        {
+            //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
+            if (new DateTime(Year, Month, SpeceficDay, 23, 59, 59) >= ToDay &&
+                new DateTime(Year, Month, SpeceficDay) <= ToDay.AddMonths(3))
+            {
+                foreach (var item in MultipleMarketPrices)
+                {
+                    if ((item.Date).Date == new DateTime(Year, Month, SpeceficDay).Date)
+                    {
+                        return item.Price;
+                    }
+                     /*throw new Exception($"Market price for date:{new DateTime(Year, Month, SpeceficDay)}, was not in list of marketprices ");*/
                 }
             }
-            IEnumerable<MarketPriceModel> SelectedHotelsList = await _db.RetrieveDataFromDb("HotelName, Price, Date", $"RoomType{RoomType}",
-                                                                    $"HotelName = {AllSelectedHotels} AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
-            return SelectedHotelsList;
+            return 0;
         }
 
-        public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate, int RoomType)
+        public async Task<IEnumerable<MarketPriceModel>> RetrieveSelectDataFromDb(DateTime StartDate, DateTime EndDate, int RoomType, string WantedOutput, List<string> SelectedHotels)
         {
-            IEnumerable<MarketPriceModel> ComparedPricesList = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices",
-                                  $"Date >= '{StartDate}' AND Date <= '{EndDate}' AND RoomType = '{RoomType}'");
-            return ComparedPricesList;
+            IEnumerable<MarketPriceModel> DataList = await _db.RetrieveDataFromDb("*", $"RoomType{RoomType}",
+                                         $" Date >= '{StartDate.ToString("yyyy-MM-dd")}' AND Date <= '{EndDate.ToString("yyyy-MM-dd")}'");
+            List<MarketPriceModel> tempDataList = new();
+            if (WantedOutput == "Select Prices")
+            {
+                if (SelectedHotels != null) 
+                {
+                    if (SelectedHotels.Contains("Local"))
+                    {
+                        SelectedHotels.Add("Cabinn Aalborg");
+                        SelectedHotels.Add("Slotshotellet Aalborg");
+                        SelectedHotels.Add("Kompas Hotel Aalborg");
+                    }
+                    if (SelectedHotels.Contains("No budget"))
+                    {
+                        SelectedHotels.Add("Kompas Hotel Aalborg");
+                        SelectedHotels.Add("Slotshotellet Aalborg");
+                        SelectedHotels.Add("Milling Hotel Aalborg");
+                        SelectedHotels.Add("Aalborg Airport Hotel");
+                        SelectedHotels.Add("Helnan Phønix Hotel");
+                        SelectedHotels.Add("Hotel Schellsminde");
+                        SelectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
+                        SelectedHotels.Add("Comwell Hvide Hus Aalborg");
+                        SelectedHotels.Add("Scandic Aalborg Øst");
+                        SelectedHotels.Add("Scandic Aalborg City");
+                    }
+                    foreach (var item in DataList)
+                    { 
+                        if (SelectedHotels.Contains(item.HotelName)) 
+                        { 
+                            tempDataList.Add(item); 
+                        } 
+                    }
+                    DataList = tempDataList; // as the temp list is not an ienumerable it is put in DataList which is, and returned
+                    return DataList;
+                }
+                else 
+                {
+                     return DataList; //if no hotels are selected alle data is returned
+                }
+            }
+            else if (WantedOutput == "Kompas Prices")
+            {
+                foreach (var item in DataList)
+                {
+                    if (item.HotelName == "Kompas Hotel Aalborg") // picks all HotelKompas prices
+                    {
+                        tempDataList.Add(item);
+                    }
+                }
+                DataList = tempDataList; // as the temp list is not an ienumerable it is put in DataList which is, and returned
+                return DataList;
+            }
+            throw new Exception("Fatal error: Method Called without WantedOutput parameter");
         }
 
-        public async Task<IEnumerable<MarketPriceModel>> DisplayKompasPrices(string StartDate, string EndDate, int RoomType)
+        public int SingleDayKompasPrice(IEnumerable<MarketPriceModel> DataList, int SpeceficDay)
         {
-            IEnumerable<MarketPriceModel> KompasPriceList = await _db.RetrieveDataFromDb("HotelName, Price, Date", $"RoomType{RoomType}",
-                                         $"HotelName = 'Kompas Hotel Aalborg' AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
-            return KompasPriceList;
+            //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
+            if (new DateTime(Year, Month, SpeceficDay, 23, 59, 59) >= ToDay &&
+                new DateTime(Year, Month, SpeceficDay) <= ToDay.AddMonths(3))
+            {
+                IEnumerable<MarketPriceModel> SingleKompasPrice = DataList
+                    .Where(MarketPriceModel => MarketPriceModel.Date == new DateTime(Year, Month, SpeceficDay)
+                    && MarketPriceModel.HotelName == "Kompas Hotel Aalborg");
+                return SingleKompasPrice.Single().Price;
+            }
+            return 0;
         }
-       
+
         public void CreateMonth()
         {
             TempDate = DateTime.Now.AddMonths(MonthsAway);
