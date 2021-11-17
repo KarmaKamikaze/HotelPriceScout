@@ -60,7 +60,7 @@ namespace HotelPriceScout.Data.Model
 
         public void RunComparator(string type)
         {
-            Comparator comparator = new Comparator();
+            IComparator comparator = new Comparator();
             comparator.ComparePrices(BookingSites, MarginValue);
 
             /*comparator.SendNotification(); < ----ACTIVATE IF YOU WANT MAILS  */
@@ -69,7 +69,6 @@ namespace HotelPriceScout.Data.Model
             {
                 comparator.SendNotification();   
             }
-
         }
 
 

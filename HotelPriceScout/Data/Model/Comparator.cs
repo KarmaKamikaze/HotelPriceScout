@@ -9,7 +9,7 @@ using System.IO;
 
 namespace HotelPriceScout.Data.Model
 {
-    public class Comparator
+    public class Comparator : IComparator
     {
         private SqliteDataAccess _db = new SqliteDataAccess();
         public Comparator()
@@ -88,7 +88,7 @@ namespace HotelPriceScout.Data.Model
             {
                 CheckDiscrepancy(date, Roomtype1HotelAvgPrices, marginValue, 1);
                 CheckDiscrepancy(date, Roomtype2HotelAvgPrices, marginValue, 2);
-                CheckDiscrepancy(date, Roomtype4HotelAvgPrices, marginValue, 4);               
+                CheckDiscrepancy(date, Roomtype4HotelAvgPrices, marginValue, 4);
             }
 
             StoreAvgHotelPrices(Roomtype1HotelAvgPrices, "RoomType1");
@@ -98,7 +98,7 @@ namespace HotelPriceScout.Data.Model
             //Store AvgMarketPrices into the database
             string valueDB = $"INSERT INTO MarketPrices (Date,Price,RoomType) VALUES ";
             foreach (MarketPriceModel marketPrice in AvgMarketPrices)
-            {               
+            {
                 valueDB += $"('{marketPrice.Date.ToString("yyyy-MM-dd")}','{decimal.ToInt32(marketPrice.Price)}','{marketPrice.RoomType}'),";
             }
 
@@ -110,7 +110,7 @@ namespace HotelPriceScout.Data.Model
             await _db.SaveToDB<dynamic>(valueDB, new { });
         }
 
-        public async void StoreAvgHotelPrices(Dictionary<DateTime, Dictionary<string, decimal>> roomtypeHotelAvgPrices, string tableName)
+        private async void StoreAvgHotelPrices(Dictionary<DateTime, Dictionary<string, decimal>> roomtypeHotelAvgPrices, string tableName)
         {
             string valueDB = $"INSERT INTO {tableName} (Date,HotelName,Price) VALUES ";
             foreach (KeyValuePair<DateTime, Dictionary<string, decimal>> dateHotelsPair in roomtypeHotelAvgPrices)
@@ -146,14 +146,14 @@ namespace HotelPriceScout.Data.Model
             mail.Subject = "Hotel Price Scout has noticed a price discrepancy!";
             mail.Importance = MessageImportance.High;
             mail.Priority = MessagePriority.Urgent;
-            
-            string tempMail= File.ReadAllText("Data/Model/Mail_strings/mailTemplate.txt");
+
+            string tempMail = File.ReadAllText("Data/Model/Mail_strings/mailTemplate.txt");
             string startOfMail = tempMail.Split("SPLIT HERE")[0];
             string endOfMail = tempMail.Split("SPLIT HERE")[1];
             string mailContent = startOfMail;
 
-            string roomType1Mail ="", roomType2Mail="", roomType4Mail = "";
-            
+            string roomType1Mail = "", roomType2Mail = "", roomType4Mail = "";
+
             foreach (MarketPriceModel price in AvgMarketPrices.Where(p => p.MarkedForDiscrepancy && p.Date < DateTime.Now.AddMonths(1)).ToList())
             {
                 KeyValuePair<DateTime, Dictionary<string, decimal>> query;
@@ -170,8 +170,9 @@ namespace HotelPriceScout.Data.Model
                     roomType4Mail = MailDataBuilder(Roomtype1HotelAvgPrices, roomType4Mail, price);
                 }
             }
-            
-            if (roomType1Mail != "") {
+
+            if (roomType1Mail != "")
+            {
                 mailContent += MailHeadBuilder("Roomtype 1", roomType1Mail);
             }
             if (roomType2Mail != "")
