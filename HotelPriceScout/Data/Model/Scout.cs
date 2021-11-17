@@ -30,12 +30,15 @@ namespace HotelPriceScout.Data.Model
 
         public void StartScout()
         {
-
+            foreach (BookingSite bookingSite in BookingSites)
+            {
+                bookingSite.DataScraper.StartScraping(MarginValue);
+            }
         }
         
         public void StopScout()
         {
-            throw new NotImplementedException();
+            GC.SuppressFinalize(this);
         }
 
         public DateTime[] NotificationTimes { get; private set; }
