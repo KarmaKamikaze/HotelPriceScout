@@ -47,10 +47,9 @@ namespace HotelPriceScout.Data.Interface
             var last = SelectedHotels.LastOrDefault();
             foreach (var item in SelectedHotels)
             {
-                    AllSelectedHotels += "'" + item + "'";
+                AllSelectedHotels += "'" + item + "'";
                 if (!item.Equals(last))
                 {
-                    AllSelectedHotels += "'" + item + "'";
                     AllSelectedHotels += " OR HotelName = ";
                 }
             }
