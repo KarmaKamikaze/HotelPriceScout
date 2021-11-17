@@ -5,7 +5,6 @@
 @inject Dashboard Dashboard
 @inject SqliteDataAccess _db
 
-
 <div class="row col-md-7">
     <h1 style="width:350px;">@Cal.MonthName @Cal.Year</h1>
     @if (Cal.MonthsAway > 0)
@@ -38,15 +37,14 @@
     <div class="col-md-4">
         <SfDropDownList Width="200px" TItem="numberOfAdults" TValue="int" @bind-value="AdultsPicked" DataSource="@Adults">
             <DropDownListFieldSettings Text="Text" Value="Adults"></DropDownListFieldSettings>
-            <DropDownListEvents TValue="int" TItem="numberOfAdults" ValueChange='() => {OnClickUpdate("Update");}'></DropDownListEvents> 
+            <DropDownListEvents TValue="int" TItem="numberOfAdults" ValueChange='() => {OnClickUpdate("Update");}'></DropDownListEvents>
         </SfDropDownList>
     </div>
-
-    <div class="col-md-5">
-        <SfDropDownList TItem="string" TValue="IEnumerable<string>" DataSource="listOfHotels" Placeholder="Select hotels">
-            <DropDownListFieldSettings>
-            </DropDownListFieldSettings>
-        </SfDropDownList>
+    <div class="col-lg-6" style="padding:0;">
+        <SfMultiSelect TValue="List<string>" @bind-Value="SelectedHotels" AllowFiltering="true" TItem="string" Mode="@VisualMode.CheckBox" Placeholder="Select hotels" DataSource="listOfSelectedHotels" ShowSelectAll="true"
+                       EnableSelectionOrder="false" FilterBarPlaceholder="Search hotels" EnableGroupCheckBox="true" PopupHeight="350px">
+            <MultiSelectEvents TValue="List<string>" TItem="string" ValueChange='() => { OnClickUpdate("update Hotel");}'></MultiSelectEvents>
+        </SfMultiSelect>
     </div>
 </div>
 
@@ -74,7 +72,7 @@
                     @for (int i = 1; i + Cal.NumDummyColumn - 1 <= 7; i++)
                     {
                         int k = i;
-                        string dateConcatenated = (Cal.Year.ToString() +"-"+ Cal.Month.ToString() +"-"+ k.ToString("00"));
+                        string dateConcatenated = (Cal.Year.ToString() + "-" + Cal.Month.ToString() + "-" + k.ToString("00"));
                         <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Cal.ShowMoreInfo(k))">
                             <div style="font-weight: 700; font-size: 24px; @(MarketPriceDaySetter(k) == 0 ? "opacity: 0.3;" : "")">@i <span class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "") @(ArrowDecider(k))"></span></div>
                             <div class="@(MarketPriceDaySetter(k) == 0 ? "d-none" : "")">
@@ -84,14 +82,14 @@
                                 </div>
                             </div>
                         </td>
-                     }
+                    }
                 </tr>
 
                 @for (int i = 8 - Cal.NumDummyColumn + 1; i <= Cal.MonthEnd.Day; i += 7)
                 {
                     <tr class="clik rows">
                         @for (int j = 0; j < 7; j++)
-                         {
+                        {
                             @if (i + j <= Cal.MonthEnd.Day)
                             {
                                 int k = i + j;
@@ -112,9 +110,9 @@
                             {
                                 <td></td>
                             }
-                         }
+                        }
                     </tr>
-                 }
+                }
             </tbody>
         </table>
     </div>
@@ -209,10 +207,13 @@
 </div>
 
 
-@code {
-    public int avgMarketPrice;
+@code
+{
+    int avgMarketPrice;
     int KompasPrice;
     public int AdultsPicked = 1;
+    public List<string> SelectedHotels;
+
     public class numberOfAdults
     {
         public int Adults { get; set; }
@@ -228,6 +229,7 @@
 
     Dashboard Cal = new Dashboard();
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
+    List<string> listOfSelectedHotels;
 
     List<Prices> priceList;
     Prices MarketPriceItem;
@@ -235,8 +237,8 @@
     IEnumerable<MarketPriceModel> CalendarKompasPrices;
 
     private void GenerateThermometer()
-    {
-        priceList = PriceMeterGenerator.PriceListGenerator(); // This needs to get its data from the database, as a list of Price objects
+    {   // This needs to get its data from the database, as a list of Price objects
+        priceList = PriceMeterGenerator.PriceListGenerator();
         MarketPriceItem = (PriceMeterGenerator.MarketFinder(priceList));
         priceList.Sort();
     }
@@ -285,7 +287,7 @@
 
     public async void OnClickUpdate(string s)
     {
-        if(s == "Next")
+        if (s == "Next")
         {
             Cal.DayClicked = 0;
             Cal.MonthsAway++;
@@ -299,17 +301,37 @@
             Cal.CreateMonth();
             Cal.PreviousMonth();
         }
-        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"),Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
-        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+        else if (s == "update Hotel")
+        {
+            if (SelectedHotels != null)
+            {
+                CalendarMarketPrices = await Cal.DisplaySelectedComparedPrices(SelectedHotels, Cal.StartOfMonth.ToString("yyyy-MM-dd"),
+                    Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked);
+            }
+        }
+        if (SelectedHotels != null)
+        {
+            CalendarMarketPrices = await Cal.DisplaySelectedComparedPrices(SelectedHotels, Cal.StartOfMonth.ToString("yyyy-MM-dd"),
+                Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked);
+        }
+        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.StartOfMonth.ToString("yyyy-MM-dd"),
+            Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
     }
 
     protected override async Task OnInitializedAsync()
     {
+        listOfHotels = await _db.LoadStaticHotelResources("total");
+        listOfSelectedHotels = listOfHotels.ToList();
+        listOfSelectedHotels.Add("Local");
+        listOfSelectedHotels.Add("No budget");
+
         Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
         scout.RunComparator("dashboard");
 
-        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"),Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
-        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.ToDay.ToString("yyyy-MM-dd"), Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+        CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"),
+            Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
+        CalendarKompasPrices = await (Cal.DisplayKompasPrices(Cal.ToDay.ToString("yyyy-MM-dd"),
+            Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
 
         Cal.CreateMonth();
         GenerateThermometer();
@@ -317,26 +339,33 @@
 
     public int KompasPriceDaySetter(int k)
     {
-        //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct 
-        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay && new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3))
+        //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
+        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay &&
+            new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3))
         {
             IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarKompasPrices
              .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
             KompasPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price);
         }
-        else{ KompasPrice = 0; }
+        else { KompasPrice = 0; }
         return KompasPrice;
     }
 
     public int MarketPriceDaySetter(int k)
     {
-        //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct 
-        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay && new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3) )
+        //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
+        if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay &&
+            new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3))
         {
-            IEnumerable<MarketPriceModel> SingleMarketPrice = CalendarMarketPrices
+            List<int> Listofprices = new();
+            IEnumerable<MarketPriceModel> listOfDayPrice = CalendarMarketPrices
             .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
-            avgMarketPrice = Decimal.ToInt32(SingleMarketPrice.Single().Price);
 
+            foreach(var MarketPriceModel in listOfDayPrice)
+            {
+                Listofprices.Add(Decimal.ToInt32(MarketPriceModel.Price));
+            }
+            avgMarketPrice = (int)Listofprices.Average();
         }
         else { avgMarketPrice = 0; }
         return avgMarketPrice;
@@ -346,4 +375,4 @@
     {
         return Cal.DayClicked.ToString("") + ". " + Cal.MonthName + " " + Cal.Year.ToString("");
     }
-}
+ }

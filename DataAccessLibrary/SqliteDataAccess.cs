@@ -1,22 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Microsoft.Extensions.Configuration;
 using HotelPriceScout.Data.Model;
 
 namespace DataAccessLibrary
 {
     public class SqliteDataAccess
     {
-
-        private readonly IConfiguration _config;
-
         private static string connectionString = @"URI=file:../database.sqlite";
-
         
         public async Task<IEnumerable<string>> LoadStaticHotelResources(string group)
         {

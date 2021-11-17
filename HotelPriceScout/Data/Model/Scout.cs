@@ -1,8 +1,6 @@
 using DataAccessLibrary;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Threading.Tasks;
 
 
@@ -65,9 +63,11 @@ namespace HotelPriceScout.Data.Model
             Comparator comparator = new Comparator();
             comparator.ComparePrices(BookingSites, MarginValue);
 
+            /*comparator.SendNotification(); < ----ACTIVATE IF YOU WANT MAILS  */
+
             if (comparator.IsDiscrepancy && type == "email")
             {
-                comparator.SendNotification();
+                comparator.SendNotification();   
             }
 
         }

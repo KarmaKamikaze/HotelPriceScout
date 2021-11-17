@@ -7,19 +7,9 @@ namespace HotelPriceScout.Data.Model
     {
         public Hotel(string name, string tag)
         {
-            try
-            {
-                Name = name ?? throw new ArgumentNullException(nameof(name));
-                Tag = tag ?? throw new ArgumentNullException(nameof(tag));
-                RoomTypes = CreateRoomTypes();
-                
-            }
-            catch (ArgumentNullException e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Tag = tag ?? throw new ArgumentNullException(nameof(tag));
+            RoomTypes = CreateRoomTypes();
         }
 
         public string Tag { get; }

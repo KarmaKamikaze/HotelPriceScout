@@ -1,8 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelPriceScout", "HotelPriceScout\HotelPriceScout.csproj", "{DA9CB3C8-76E7-45F2-B6C0-EF99DC5C66BC}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31710.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelPriceScout", "HotelPriceScout\HotelPriceScout.csproj", "{DA9CB3C8-76E7-45F2-B6C0-EF99DC5C66BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{B8B4D92D-1DC2-4733-87F2-F694AAC63734}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{B8B4D92D-1DC2-4733-87F2-F694AAC63734}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{EDFCEEFD-5425-4752-B168-2685429544F2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DA9CB3C8-76E7-45F2-B6C0-EF99DC5C66BC} = {DA9CB3C8-76E7-45F2-B6C0-EF99DC5C66BC}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +26,15 @@ Global
 		{B8B4D92D-1DC2-4733-87F2-F694AAC63734}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8B4D92D-1DC2-4733-87F2-F694AAC63734}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8B4D92D-1DC2-4733-87F2-F694AAC63734}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDFCEEFD-5425-4752-B168-2685429544F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDFCEEFD-5425-4752-B168-2685429544F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDFCEEFD-5425-4752-B168-2685429544F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDFCEEFD-5425-4752-B168-2685429544F2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {797F10E3-0F4B-4AA6-A380-FDB3D139144C}
 	EndGlobalSection
 EndGlobal
