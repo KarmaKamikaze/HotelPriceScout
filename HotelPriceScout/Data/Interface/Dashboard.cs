@@ -3,13 +3,13 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using HotelPriceScout.Data.Model;
+using System.Linq;
 
 namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard
     {
-        public string All { get; set; } = "";
-        public decimal Average { get; set; } = default;
+        public string AllSelectedHotels { get; set; } = "";
         public string MonthName { get; private set; } = "";
         public DateTime MonthEnd { get; private set; }
         public int MonthsAway { get; set; }
@@ -47,24 +47,15 @@ namespace HotelPriceScout.Data.Interface
             var last = SelectedHotels.LastOrDefault();
             foreach (var item in SelectedHotels)
             {
-                if (item.Equals(last))
+                    AllSelectedHotels += "'" + item + "'";
+                if (!item.Equals(last))
                 {
-                    All += "'";
-                    All += item;
-                    All += "'";
-                }
-                else
-                {
-                    All += "'";
-                    All += item;
-                    All += "'";
-                    All += " OR ";
-                    All += "HotelName = ";
+                    AllSelectedHotels += "'" + item + "'";
+                    AllSelectedHotels += " OR HotelName = ";
                 }
             }
-            System.Console.Write(All);
             IEnumerable<MarketPriceModel> SelectedHotelsList = await _db.RetrieveDataFromDb("HotelName, Price, Date", $"RoomType{RoomType}",
-                                                                    $"HotelName = {All} AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
+                                                                    $"HotelName = {AllSelectedHotels} AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
             return SelectedHotelsList;
         }
 
