@@ -156,7 +156,6 @@ namespace HotelPriceScout.Data.Model
 
             foreach (MarketPriceModel price in AvgMarketPrices.Where(p => p.MarkedForDiscrepancy && p.Date < DateTime.Now.AddMonths(1)).ToList())
             {
-                KeyValuePair<DateTime, Dictionary<string, decimal>> query;
                 if (price.RoomType == 1)
                 {
                     roomType1Mail = MailDataBuilder(Roomtype1HotelAvgPrices, roomType1Mail, price);
