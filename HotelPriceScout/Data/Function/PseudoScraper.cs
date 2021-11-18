@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using HotelPriceScout.Data.Model;
-using HotelPriceScout.Pages;
-using Syncfusion.Blazor.Grids;
 
 namespace HotelPriceScout.Data.Function
 {
@@ -25,9 +22,6 @@ namespace HotelPriceScout.Data.Function
         private const int VARIANCE = 200;
         private const int RUN_SCRAPER_INTERVAL_IN_MINUTES = 30;
         private bool _firstTimeUpdate;
-        private readonly decimal _hostPriceTypeOne;
-        private readonly decimal _hostPriceTypeTwo;
-        private readonly decimal _hostPriceTypeFour;
         private readonly Random _random = new();
         private decimal _margin;
         private TimeKeeper _updater;
@@ -37,9 +31,6 @@ namespace HotelPriceScout.Data.Function
         public PseudoScraper(BookingSite bookingSite)
         {
             BookingSite = bookingSite ?? throw new NullReferenceException();
-            _hostPriceTypeOne = _random.Next(TYPE_ONE_MIN, TYPE_ONE_MAX);
-            _hostPriceTypeTwo = _random.Next(TYPE_TWO_MIN, TYPE_TWO_MAX);
-            _hostPriceTypeFour = _random.Next(TYPE_FOUR_MIN, TYPE_FOUR_MAX);
         }
         
         public BookingSite BookingSite { get; }
@@ -70,27 +61,60 @@ namespace HotelPriceScout.Data.Function
 
         private void UpdatePrices()
         {
-            foreach (Hotel hotel in BookingSite.HotelsList)
+            foreach (Hotel hotel in BookingSite.HotelsList.Where(hotel => hotel.Name == "Kompas Hotel Aalborg"))
             {
                 foreach (RoomType roomType in hotel.RoomTypes)
                 {
-                    AssignRoomPrices(roomType);
+                    AssignHostRoomPrices(roomType);
+                }
+            }
+            
+            foreach (Hotel hotel in BookingSite.HotelsList.Where(hotel => hotel.Name != "Kompas Hotel Aalborg"))
+            {
+                foreach (RoomType roomType in hotel.RoomTypes)
+                {
+                    AssignCompetitorRoomPrices(roomType);
                 }
             }
         }
 
-        private void AssignRoomPrices(RoomType room)
+        private void AssignHostRoomPrices(RoomType room)
         {
             switch (room.Capacity)
             {
                 case 1:
-                    SetPrice(room, _hostPriceTypeOne);
+                    foreach (RoomTypePrice price in room.Prices)
+                    {
+                        price.Price = _random.Next(TYPE_ONE_MIN, TYPE_ONE_MAX);
+                    }
                     break;
                 case 2:
-                    SetPrice(room, _hostPriceTypeTwo);
+                    foreach (RoomTypePrice price in room.Prices)
+                    {
+                        price.Price = _random.Next(TYPE_TWO_MIN, TYPE_TWO_MAX);
+                    }
                     break;
                 case 4:
-                    SetPrice(room, _hostPriceTypeFour);
+                    foreach (RoomTypePrice price in room.Prices)
+                    {
+                        price.Price = _random.Next(TYPE_FOUR_MIN, TYPE_FOUR_MAX);
+                    }
+                    break;
+            }
+        }
+
+        private void AssignCompetitorRoomPrices(RoomType room)
+        {
+            switch (room.Capacity)
+            {
+                case 1:
+                    SetPrice(room, _random.Next(TYPE_ONE_MIN, TYPE_ONE_MAX));
+                    break;
+                case 2:
+                    SetPrice(room, _random.Next(TYPE_TWO_MIN, TYPE_TWO_MAX));
+                    break;
+                case 4:
+                    SetPrice(room, _random.Next(TYPE_FOUR_MIN, TYPE_FOUR_MAX));
                     break;
             }
         }
@@ -123,8 +147,7 @@ namespace HotelPriceScout.Data.Function
 
         private bool CheckOutcome(int weight)
         {
-            if (_random.Next(100) < weight) return true;
-            return false;
+            return _random.Next(100) < weight;
         }
     }
 }
