@@ -36,7 +36,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ComparePricesIsDiscrepancyIsFalseWhenHighMarginTest()
+        public void ComparePricesIsDiscrepancyIsFalseWhenMaxMarginTest()
         {
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
