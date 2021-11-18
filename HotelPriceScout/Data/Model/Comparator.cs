@@ -138,6 +138,7 @@ namespace HotelPriceScout.Data.Model
                 avgMarketPrice.MarkedForDiscrepancy = true;
             }
         }
+
         public void SendNotification()
         {
             MimeMessage mail = new();
@@ -194,6 +195,7 @@ namespace HotelPriceScout.Data.Model
             smtpClient.Send(mail);
             smtpClient.Disconnect(true);
         }
+
         private string MailDataBuilder(Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, string containerString, MarketPriceModel price)
         {
             KeyValuePair<DateTime, Dictionary<string, decimal>> query;

@@ -62,7 +62,7 @@ namespace Tests
 
             //Act and Assert
             Assert.Throws<UriFormatException>(Action);
-
+            
         }
 
 

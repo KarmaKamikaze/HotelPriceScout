@@ -97,9 +97,12 @@ namespace HotelPriceScout.Data.Function
                 {
                     if (CheckOutcome(DISCREPANCY_PROBABILITY))
                     {
+
                         price.Price = CheckOutcome(ABOVE_OR_BELOW_MARGIN_PROBABILITY)
                             ? _random.Next((int) maxPrice, (int) (maxPrice + VARIANCE))
-                            : _random.Next((int) (minPrice - VARIANCE), (int) minPrice);
+                            : minPrice - VARIANCE > 0 
+                            ? _random.Next((int) (minPrice - VARIANCE), (int) minPrice)
+                            : 1;
                     }
                     else
                     {
