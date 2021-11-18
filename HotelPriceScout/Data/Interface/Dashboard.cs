@@ -13,7 +13,7 @@ namespace HotelPriceScout.Data.Interface
     {
         public List<Prices> priceList { get; private set; }
         public Prices MarketPriceItem { get; private set; }
-        private int DataUnavailable = 0;
+        private const int DATAUNAVAILABLE = 0;
         public int TempAniDate { get; set; }
         public bool CheckForAlternateClick { get; set; } = true;
         public string AllSelectedHotels { get; set; } = "";
@@ -53,7 +53,7 @@ namespace HotelPriceScout.Data.Interface
             {
                     return MultipleMarketPrices.Single(mp => mp.Date == new DateTime(Year, Month, SpecificDay).Date).Price;
             }
-            return DataUnavailable;
+            return DATAUNAVAILABLE;
         }
         public async Task<IEnumerable<MarketPriceModel>> RetrieveSelectDataFromDb(DateTime StartDate, DateTime EndDate, int RoomType, string WantedOutput, [Optional] List<string>  SelectedHotels)
         {              
@@ -112,7 +112,7 @@ namespace HotelPriceScout.Data.Interface
             {
                 return CalendarKompasPrices.Single(mp => mp.Date == new DateTime(Year, Month, SpeceficDay) && mp.HotelName == "Kompas Hotel Aalborg").Price;
             }
-            return DataUnavailable;
+            return DATAUNAVAILABLE;
         }
        
         public void GenerateThermometer(int Day,int Monthaway, IEnumerable<MarketPriceModel> MonthData, int MarketPrice)
