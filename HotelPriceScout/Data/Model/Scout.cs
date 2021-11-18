@@ -17,10 +17,12 @@ namespace HotelPriceScout.Data.Model
         //This therefore necessitates a asynchronous function.
         public static async Task<Scout> CreateScoutAsync(string state, int marginValue, IEnumerable<DateTime> notificationTimes)
         {
-            Scout scout = new Scout();
-            scout.State = state;
-            scout.MarginValue = marginValue;
-            scout.NotificationTimes = notificationTimes;
+            Scout scout = new Scout
+            {
+                State = state,
+                MarginValue = marginValue,
+                NotificationTimes = notificationTimes
+            };
             SqliteDataAccess bookingSiteDB = new SqliteDataAccess();
             IEnumerable<(string, string, string, Dictionary<string, string>)> bookingSitesData = await bookingSiteDB.LoadStaticBookingSiteResources();
             scout.BookingSites = scout.CreateBookingSites(bookingSitesData);

@@ -32,7 +32,7 @@ namespace HotelPriceScout
             services.AddBlazoredModal();
             services.AddTransient<Dashboard>();
             services.AddTransient<SqliteDataAccess>();
-            services.AddScoped<Scout>();
+            services.AddScoped<ScoutSharedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
