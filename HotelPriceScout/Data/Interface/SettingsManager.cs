@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 
 
 namespace HotelPriceScout.Data.Interface
@@ -21,6 +22,27 @@ namespace HotelPriceScout.Data.Interface
         public bool isScoutStarted = false;
         public bool modalStart = false;
         public bool updateYes = false;
+
+        public IEnumerable<DateTime> GetNotificationTimes()
+        {
+            List<DateTime> result = new List<DateTime>();
+            switch (notificationPickedPass)
+            {
+                case 3:
+                    result.Add(timeValuePass3);
+                    goto case 2;
+                case 2:
+                    result.Add(timeValuePass2);
+                    goto case 1;
+                case 1:
+                    result.Add(timeValuePass);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(notificationPickedPass) + "must be 1, 2, or 3.");
+            }
+
+            return result;
+        }
 
         public static bool showStop = false;
         public void ShowStopButton()

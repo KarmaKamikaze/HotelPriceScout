@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using HotelPriceScout.Data.Function;
 
 namespace HotelPriceScout.Data.Model
 {
-
     public class BookingSite
     {
         private readonly string _type;
@@ -15,6 +15,8 @@ namespace HotelPriceScout.Data.Model
             Type = type ?? throw new ArgumentNullException(nameof(type));
             Url = url ?? throw new ArgumentNullException(nameof(url));
             HotelsList = CreateHotels(hotels);
+
+            DataScraper = new PseudoScraper(this);
         }
 
         public string Name { get; }
@@ -22,13 +24,14 @@ namespace HotelPriceScout.Data.Model
         public string Type
         {
             get => _type;
-            init
+            private init
             {
                 if (value != "single" && value != "multi")
                 {
                     throw new ArgumentOutOfRangeException(
                         $"{nameof(value)} must be either \"single\" or \"multi\".");
                 }
+
                 _type = value;
             }
         }
@@ -46,12 +49,9 @@ namespace HotelPriceScout.Data.Model
             }
         }
 
-        public IEnumerable<Hotel> HotelsList { get; init; }
+        public IDataScraper DataScraper { get; }
 
-        public void CreatePriceScraper()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<Hotel> HotelsList { get; init; }
 
         private IEnumerable<Hotel> CreateHotels(Dictionary<string, string> hotelsStrings)
         {
@@ -60,6 +60,7 @@ namespace HotelPriceScout.Data.Model
             {
                 hotels.Add(new Hotel(hotel.Key, hotel.Value));
             }
+
             return hotels;
         }
     }

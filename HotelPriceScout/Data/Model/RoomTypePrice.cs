@@ -8,12 +8,9 @@ namespace HotelPriceScout.Data.Model
     private readonly DateTime _date;
     private decimal _price;
 
-        private static Random random = new Random();
-
     public RoomTypePrice(DateTime date)
     {
       Date = date;
-      Price = random.Next(1000);
     }
     public RoomTypePrice(DateTime date, decimal price) : this(date)
     {

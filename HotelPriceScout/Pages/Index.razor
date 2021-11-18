@@ -4,6 +4,7 @@
 @using HotelPriceScout.Data.Model
 @inject Dashboard Dashboard
 @inject SqliteDataAccess _db
+@inject ScoutSharedService _scoutService
 
 <div class="row col-md-7">
     <h1 style="width:350px;">@Cal.MonthName @Cal.Year</h1>
@@ -324,9 +325,8 @@
         listOfSelectedHotels = listOfHotels.ToList();
         listOfSelectedHotels.Add("Local");
         listOfSelectedHotels.Add("No budget");
-
-        Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
-        scout.RunComparator("dashboard");
+        
+        _scoutService.Scout.RunComparator("dashboard");
 
         CalendarMarketPrices = await (Cal.DisplayComparedPrices(Cal.ToDay.ToString("yyyy-MM-dd"),
             Cal.LastDayOfMonth.ToString("yyyy-MM-dd"), AdultsPicked));
