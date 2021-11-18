@@ -30,96 +30,96 @@ namespace HotelPriceScout.Data.Interface
         public DateTime LastDayOfMonth { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
         private readonly SqliteDataAccess _db = new();
 
-        public IEnumerable<MarketPriceModel> SelectedMonthMarketPrices(DateTime StartDate, DateTime EndDate, IEnumerable<MarketPriceModel> DataList)
+        public IEnumerable<MarketPriceModel> SelectedMonthMarketPrices(DateTime startDate, DateTime endDate, IEnumerable<MarketPriceModel> dataList)
         {
             List<int> TempList = new();
             List<MarketPriceModel> ListOfSingleDatePrices = new();
-            for(DateTime tempDate = StartDate; tempDate <= EndDate; tempDate = tempDate.AddDays(1))
+            for(DateTime tempDate = startDate; tempDate <= endDate; tempDate = tempDate.AddDays(1))
             {
-                TempList.AddRange(from item in DataList
+                TempList.AddRange(from item in dataList
                                   where item.Date == tempDate
                                   select item.Price);
                 MarketPriceModel SingleDayMarketPrice = new MarketPriceModel((int)TempList.Average(), tempDate);
                 ListOfSingleDatePrices.Add(SingleDayMarketPrice);
             }
-            DataList = ListOfSingleDatePrices;
-            return DataList;
+            dataList = ListOfSingleDatePrices;
+            return dataList;
         }
-        public int GetSingleDayMarketPrice(IEnumerable<MarketPriceModel> MultipleMarketPrices, int SpecificDay)
+        public int GetSingleDayMarketPrice(IEnumerable<MarketPriceModel> multipleMarketPrices, int specificDay)
         {   
             //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
-            if (new DateTime(Year, Month, SpecificDay, 23, 59, 59) >= ToDay &&
-                new DateTime(Year, Month, SpecificDay) <= ToDay.AddMonths(3))
+            if (new DateTime(Year, Month, specificDay, 23, 59, 59) >= ToDay &&
+                new DateTime(Year, Month, specificDay) <= ToDay.AddMonths(3))
             {
-                    return MultipleMarketPrices.Single(mp => mp.Date == new DateTime(Year, Month, SpecificDay).Date).Price;
+                    return multipleMarketPrices.Single(mp => mp.Date == new DateTime(Year, Month, specificDay).Date).Price;
             }
             return DATAUNAVAILABLE;
         }
-        public async Task<IEnumerable<MarketPriceModel>> RetrieveSelectDataFromDb(DateTime StartDate, DateTime EndDate, int RoomType, string WantedOutput, [Optional] List<string>  SelectedHotels)
+        public async Task<IEnumerable<MarketPriceModel>> RetrieveSelectDataFromDb(DateTime startDate, DateTime endDate, int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
         {              
-            IEnumerable<MarketPriceModel> DataList = await _db.RetrieveDataFromDb("*", $"RoomType{RoomType}",
-                                         $" Date >= '{StartDate.ToString("yyyy-MM-dd")}' AND Date <= '{EndDate.ToString("yyyy-MM-dd")}'");
-            List<MarketPriceModel> ResultDataList = new();
-            if (WantedOutput == "Select Prices")
+            IEnumerable<MarketPriceModel> dataList = await _db.RetrieveDataFromDb("*", $"RoomType{roomType}",
+                                         $" Date >= '{startDate.ToString("yyyy-MM-dd")}' AND Date <= '{endDate.ToString("yyyy-MM-dd")}'");
+            List<MarketPriceModel> resultDataList = new();
+            if (wantedOutput == "Select Prices")
             {
-                if (SelectedHotels != null) 
+                if (selectedHotels != null) 
                 {
-                    if (SelectedHotels.Contains("Local"))
+                    if (selectedHotels.Contains("Local"))
                     {
-                        SelectedHotels.Add("Cabinn Aalborg");
-                        SelectedHotels.Add("Slotshotellet Aalborg");
-                        SelectedHotels.Add("Kompas Hotel Aalborg");
+                        selectedHotels.Add("Cabinn Aalborg");
+                        selectedHotels.Add("Slotshotellet Aalborg");
+                        selectedHotels.Add("Kompas Hotel Aalborg");
                     }
-                    if (SelectedHotels.Contains("No budget"))
+                    if (selectedHotels.Contains("No budget"))
                     {
-                        SelectedHotels.Add("Kompas Hotel Aalborg");
-                        SelectedHotels.Add("Slotshotellet Aalborg");
-                        SelectedHotels.Add("Milling Hotel Aalborg");
-                        SelectedHotels.Add("Aalborg Airport Hotel");
-                        SelectedHotels.Add("Helnan Phønix Hotel");
-                        SelectedHotels.Add("Hotel Schellsminde");
-                        SelectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
-                        SelectedHotels.Add("Comwell Hvide Hus Aalborg");
-                        SelectedHotels.Add("Scandic Aalborg Øst");
-                        SelectedHotels.Add("Scandic Aalborg City");
+                        selectedHotels.Add("Kompas Hotel Aalborg");
+                        selectedHotels.Add("Slotshotellet Aalborg");
+                        selectedHotels.Add("Milling Hotel Aalborg");
+                        selectedHotels.Add("Aalborg Airport Hotel");
+                        selectedHotels.Add("Helnan Phønix Hotel");
+                        selectedHotels.Add("Hotel Schellsminde");
+                        selectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
+                        selectedHotels.Add("Comwell Hvide Hus Aalborg");
+                        selectedHotels.Add("Scandic Aalborg Øst");
+                        selectedHotels.Add("Scandic Aalborg City");
                     }
-                    ResultDataList.AddRange(from item in DataList
-                                          where SelectedHotels.Contains(item.HotelName)
+                    resultDataList.AddRange(from item in dataList
+                                          where selectedHotels.Contains(item.HotelName)
                                           select item);
                    
-                    return ResultDataList;
+                    return resultDataList;
                 }
                 else 
                 {
-                     return DataList; //if no hotels are selected all data is returned
+                     return dataList; //if no hotels are selected all data is returned
                 }
             }
-            else if (WantedOutput == "Kompas Prices")
+            else if (wantedOutput == "Kompas Prices")
             {
-                ResultDataList.AddRange(from item in DataList
+                resultDataList.AddRange(from item in dataList
                                       where item.HotelName == "Kompas Hotel Aalborg"// picks all Kompas Hotel prices
                                       select item);
                 
-                return ResultDataList;
+                return resultDataList;
             }
             throw new Exception("Fatal error: Method Called without WantedOutput parameter");
         }
-        public int SingleDayKompasPrice(IEnumerable<MarketPriceModel> CalendarKompasPrices, int SpeceficDay)
+        public int SingleDayKompasPrice(IEnumerable<MarketPriceModel> calendarKompasPrices, int speceficDay)
         {
             //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
-            if (new DateTime(Year, Month, SpeceficDay, 23, 59, 59) >= ToDay &&
-                new DateTime(Year, Month, SpeceficDay) <= ToDay.AddMonths(3))
+            if (new DateTime(Year, Month, speceficDay, 23, 59, 59) >= ToDay &&
+                new DateTime(Year, Month, speceficDay) <= ToDay.AddMonths(3))
             {
-                return CalendarKompasPrices.Single(mp => mp.Date == new DateTime(Year, Month, SpeceficDay) && mp.HotelName == "Kompas Hotel Aalborg").Price;
+                return calendarKompasPrices.Single(mp => mp.Date == new DateTime(Year, Month, speceficDay) && mp.HotelName == "Kompas Hotel Aalborg").Price;
             }
             return DATAUNAVAILABLE;
         }
        
-        public void GenerateThermometer(int Day,int Monthaway, IEnumerable<MarketPriceModel> MonthData, int MarketPrice)
+        public void GenerateThermometer(int day, int monthaway, IEnumerable<MarketPriceModel> monthData)
         {
-            DateTime TodayDate = new DateTime(Year, Month, Day);
-            TodayDate.AddMonths(Monthaway);
-            priceList = PriceMeterGenerator.PriceListGenerator(TodayDate, MonthData);
+            DateTime todayDate = new DateTime(Year, Month, day);
+            todayDate.AddMonths(monthaway);
+            priceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData);
             MarketPriceItem = PriceMeterGenerator.MarketFinder(priceList);
             priceList.Sort();
         }
@@ -161,15 +161,15 @@ namespace HotelPriceScout.Data.Interface
             if(NumDummyColumn == 0)
             {NumDummyColumn = 7;}
         }
-        public string ChangeTextColorBasedOnMargin(int Marketprice, int KompasPrice)
+        public string ChangeTextColorBasedOnMargin(int marketprice, int kompasPrice)
         {
-            int result = (KompasPrice / 100) * SettingsManager.marginPickedPass;
+            int result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
 
-            if (Marketprice > (KompasPrice + result))
+            if (marketprice > (kompasPrice + result))
             {
                 return "low";
             }
-            else if (Marketprice < (KompasPrice - result))
+            else if (marketprice < (kompasPrice - result))
             {
                 return "high";
             }
@@ -178,16 +178,16 @@ namespace HotelPriceScout.Data.Interface
                 return "";
             }
         }
-        public string ArrowDecider(int MarketPrice, int KompasPrice)
+        public string ArrowDecider(int marketPrice, int kompasPrice)
         {
 
-            int result = (KompasPrice / 100) * SettingsManager.marginPickedPass;
+            int result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
 
-            if (MarketPrice > (KompasPrice + result))
+            if (marketPrice > (kompasPrice + result))
             {
                 return "oi oi-caret-top";
             }
-            else if (MarketPrice < (KompasPrice - result))
+            else if (marketPrice < (kompasPrice - result))
             {
                 return "oi oi-caret-bottom";
             }
