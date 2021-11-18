@@ -131,8 +131,11 @@ namespace HotelPriceScout.Data.Interface
             MarketPriceItem = (PriceMeterGenerator.MarketFinder(priceList));
             priceList.Sort();
         }
-
-    public string ShowCurrentDayAsString()
+        public void UpdateUiMissingDataWarning(BookingSite bookingSite)
+        {
+            throw new NotImplementedException();
+        }
+        public string ShowCurrentDayAsString()
         {
             return DayClicked.ToString("") + ". " + MonthName + " " + Year.ToString("");
         }

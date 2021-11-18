@@ -286,7 +286,7 @@
 
         foreach (BookingSite bookingSite in _scoutService.Scout.BookingSites)
         {
-            bookingSite.DataScraper.SendMissingDataWarning += UpdateUiMissingDataWarning;
+            bookingSite.DataScraper.SendMissingDataWarning += Cal.UpdateUiMissingDataWarning;
         }
 
         MonthData = await Cal.RetrieveSelectDataFromDb((Cal.ToDay).Date,(Cal.LastDayOfMonth).Date, AdultsPicked, "Select Prices", SelectedHotels);
@@ -296,10 +296,8 @@
         Cal.CreateMonth();
     }
 
-    private void UpdateUiMissingDataWarning(BookingSite bookingSite)
-    {
-        throw new NotImplementedException();
-    }
+
+    
 
 
  }
