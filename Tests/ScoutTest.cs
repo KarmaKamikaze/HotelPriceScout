@@ -39,12 +39,5 @@ namespace Tests
             //Assert
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(ActionAsync);
         }
-
-        [Theory]
-        [InlineData()]
-        public void Check_If_RunComparator_Compares_Prices_Correctly()
-        {
-
-        }
     }
 }
