@@ -8,8 +8,8 @@
 @inject ScoutSharedService _scoutService
 
 <div class="row col-md-7">
-    <h1 style="width:350px;">@Cal.MonthName @Cal.Year</h1>
-    @if (Cal.MonthsAway > 0)
+    <h1 style="width:350px;">@Dashboard.MonthName @Dashboard.Year</h1>
+    @if (Dashboard.MonthsAway > 0)
     {
         <button type="button" class="btn btn-default btn-lg" @onclick='() =>{OnClickUpdate("Previous");}'>
             <span class="oi oi-arrow-thick-left" style="font-size:30px"></span>
@@ -21,7 +21,7 @@
             <span class="oi oi-arrow-thick-left" style="font-size:30px"></span>
         </button>
     }
-    @if (Cal.MonthsAway < 3)
+    @if (Dashboard.MonthsAway < 3)
     {
         <button type="button" class="btn btn-default btn-lg" @onclick='() =>{OnClickUpdate("Next");}'>
             <span class="oi oi-arrow-thick-right" style="font-size:30px"></span>
@@ -67,20 +67,20 @@
             </thead>
             <tbody>
                 <tr class="rows">
-                    @for (int i = 0; i < Cal.NumDummyColumn - 1; i++)
+                    @for (int i = 0; i < Dashboard.NumDummyColumn - 1; i++)
                     {
                         <td></td>
                     }
-                    @for (int i = 1; i + Cal.NumDummyColumn - 1 <= 7; i++)
+                    @for (int i = 1; i + Dashboard.NumDummyColumn - 1 <= 7; i++)
                     {
                         int Day = i;
-                        int MarketPrice = Cal.SingleDayMarketPrice(MonthMarketData, Day);
-                        int KompasPrice = Cal.SingleDayKompasPrice(MonthKompasPrices, Day);
-                        string dateConcatenated = (Cal.Year.ToString() + "-" + Cal.Month.ToString() + "-" + Day.ToString("00"));
-                        <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Cal.ShowMoreInfo(Day))">
-                            <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@i <span class="@(MarketPrice == 0 ? "d-none" : "") @(Cal.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
+                        int MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
+                        int KompasPrice = Dashboard.SingleDayKompasPrice(MonthKompasPrices, Day);
+                        string dateConcatenated = (Dashboard.Year.ToString() + "-" + Dashboard.Month.ToString() + "-" + Day.ToString("00"));
+                        <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Dashboard.ShowMoreInfo(Day))">
+                            <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@i <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
                             <div class="@(MarketPrice == 0 ? "d-none" : "")">
-                                <div style="text-align: right; font-size: small; font-weight: 700" class="@(Cal.ChangeTextColorBasedOnMargin(MarketPrice,KompasPrice))">You: <span>@KompasPrice,-</span></div>
+                                <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice,KompasPrice))">You: <span>@KompasPrice,-</span></div>
                                 <div style="font-weight: 700; text-align: right; font-size: small; opacity: 0.8;">
                                     Market: <span>@MarketPrice,-</span>
                                 </div>
@@ -89,21 +89,21 @@
                     }
                 </tr>
 
-                @for (int i = 8 - Cal.NumDummyColumn + 1; i <= Cal.MonthEnd.Day; i += 7)
+                @for (int i = 8 - Dashboard.NumDummyColumn + 1; i <= Dashboard.MonthEnd.Day; i += 7)
                 {
                     <tr class="clik rows">
                         @for (int j = 0; j < 7; j++)
                         {
-                            @if (i + j <= Cal.MonthEnd.Day)
+                            @if (i + j <= Dashboard.MonthEnd.Day)
                             {
                                 int Day = i + j;
-                                int MarketPrice = Cal.SingleDayMarketPrice(MonthMarketData, Day);
-                                int KompasPrice = Cal.SingleDayKompasPrice(MonthKompasPrices,Day);
-                                string dateConcatenated = (Cal.Year.ToString() + "-" + Cal.Month.ToString() + "-" + Day.ToString("00"));
-                        <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="(() => Cal.ShowMoreInfo(Day))">
-                            <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(MarketPrice == 0 ? "d-none" : "") @(Cal.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
+                                int MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
+                                int KompasPrice = Dashboard.SingleDayKompasPrice(MonthKompasPrices,Day);
+                                string dateConcatenated = (Dashboard.Year.ToString() + "-" + Dashboard.Month.ToString() + "-" + Day.ToString("00"));
+                        <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="(() => Dashboard.ShowMoreInfo(Day))">
+                            <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
                                     <div class="@(MarketPrice == 0 ? "d-none" : "")">
-                                        <div style="text-align: right; font-size: small; font-weight: 700" class="@(Cal.ChangeTextColorBasedOnMargin(MarketPrice, KompasPrice))">
+                                        <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice, KompasPrice))">
                                             You: <span>@KompasPrice,-</span>
                                         </div>
                                         <div style="font-weight: 700; text-align: right; font-size: small; opacity: 0.8;">
@@ -124,77 +124,77 @@
     </div>
 
 
-    @if (Cal.DayClicked != 0 && Cal.CheckForAlternateClick)
-    {Cal.GenerateThermometer(Cal.DayClicked,Cal.MonthsAway, MonthData, MarketPrice);
+    @if (Dashboard.DayClicked != 0 && Dashboard.CheckForAlternateClick)
+    {Dashboard.GenerateThermometer(Dashboard.DayClicked,Dashboard.MonthsAway, MonthData, MarketPrice);
         <div class="animation1 col-md-4 table-borderless">
-            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Cal.ShowCurrentDayAsString()</h1>
+            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
             <div class="row col d-flex justify-content-center">
                 <!-- outer layer-->
-                @if (Cal.priceList == null)
+                @if (Dashboard.priceList == null)
                 {
                     <div><p>Loading data</p></div>// <--- checks if thermometer is ready yet
                 }
                 else
                 {
                     <table class="table table-borderless noHover" style="max-width:90%">
-                        @foreach (Prices item in Cal.priceList)
+                        @foreach (Prices item in Dashboard.priceList)
                         {
-                            if (item.Price > Cal.MarketPriceItem.Price)
+                            if (item.Price > Dashboard.MarketPriceItem.Price)
                             {
                                 <tr style="text-align:right">
                                     <td class="col">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="col @(Cal.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td>
+                                    <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td>
                                 </tr>
                             }
-                            else if (item.Price < Cal.MarketPriceItem.Price)
+                            else if (item.Price < Dashboard.MarketPriceItem.Price)
                             {
                                 <tr>
                                     <td class="col text-right">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="@(Cal.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td>
+                                    <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td>
                                 </tr>
                             }
                             else
                             {
                                 <tr>
-                                    <td class="col text-right"> @Cal.MarketPriceItem.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="table-info">@Cal.MarketPriceItem.Price,-</td>
+                                    <td class="col text-right"> @Dashboard.MarketPriceItem.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="table-info">@Dashboard.MarketPriceItem.Price,-</td>
                                 </tr>
                             }
                         }
                     </table>
-                    Cal.TempAniDate = Cal.DayClicked;
+                    Dashboard.TempAniDate = Dashboard.DayClicked;
                 }
             </div>
         </div>
     }
-    else if (Cal.DayClicked != 0 && !Cal.CheckForAlternateClick && Cal.TempAniDate == Cal.DayClicked)
+    else if (Dashboard.DayClicked != 0 && !Dashboard.CheckForAlternateClick && Dashboard.TempAniDate == Dashboard.DayClicked)
     {
        
         <div class="animation2 col-md-4 table-borderless">
-            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Cal.ShowCurrentDayAsString()</h1>
+            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
             <div class="row col d-flex justify-content-center">
                 <!-- outer layer-->
-                @if (Cal.priceList == null)
+                @if (Dashboard.priceList == null)
                 {
                     <div><p>Loading data</p></div>// <--- checks if thermometer is ready yet
                 }
                 else
                 {
                     <table class="table table-borderless noHover" style="max-width:90%">
-                       @* @foreach (Prices item in Cal.priceList)
+                       @* @foreach (Prices item in Dashboard.priceList)
                         {
-                            if (item.Price > Cal.MarketPriceItem.Price)
+                            if (item.Price > Dashboard.MarketPriceItem.Price)
                             {
                                 <tr style="text-align:right">
                                     <td class="col">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="col @(Cal.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td>
+                                    <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td>
                                 </tr>
                             }
-                            else if (item.Price < Cal.MarketPriceItem.Price)
+                            else if (item.Price < Dashboard.MarketPriceItem.Price)
                             {
                                 <tr>
                                     <td class="col text-right">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="@(Cal.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td>
+                                    <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td>
                                 </tr>
                             }
                             else
@@ -206,7 +206,7 @@
                             }
                         }*@
                     </table>
-                    Cal.DayClicked = 0;
+                    Dashboard.DayClicked = 0;
                 }
             </div>
         </div>
@@ -250,50 +250,51 @@
     {
         if (s == "Next")
         {
-            Cal.DayClicked = 0;
-            Cal.MonthsAway++;
-            Cal.CreateMonth();
-            Cal.NextMonth();
+            Dashboard.DayClicked = 0;
+            Dashboard.MonthsAway++;
+            Dashboard.CreateMonth();
+            Dashboard.NextMonth();
         }
         else if (s == "Previous")
         {
-            Cal.DayClicked = 0;
-            Cal.MonthsAway--;
-            Cal.CreateMonth();
-            Cal.PreviousMonth();
+            Dashboard.DayClicked = 0;
+            Dashboard.MonthsAway--;
+            Dashboard.CreateMonth();
+            Dashboard.PreviousMonth();
         }
         else if (s == "update Hotel")
         {
             if (SelectedHotels != null)
             {
-                MonthData = await Cal.RetrieveSelectDataFromDb((Cal.ToDay.Date),(Cal.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
-                MonthMarketData = Cal.SelectedMonthMarketPrices((Cal.ToDay.Date), (Cal.LastDayOfMonth.Date),MonthData);
+                MonthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
+                MonthMarketData = Dashboard.SelectedMonthMarketPrices((Dashboard.ToDay.Date), (Dashboard.LastDayOfMonth.Date),MonthData);
             }
         }
-        MonthData = await Cal.RetrieveSelectDataFromDb((Cal.ToDay.Date),(Cal.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
-        MonthMarketData = Cal.SelectedMonthMarketPrices((Cal.ToDay.Date), (Cal.LastDayOfMonth.Date), MonthData);
-        MonthKompasPrices = await Cal.RetrieveSelectDataFromDb((Cal.ToDay.Date),(Cal.LastDayOfMonth.Date), AdultsPicked, "Kompas Prices");
+        MonthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
+        MonthMarketData = Dashboard.SelectedMonthMarketPrices((Dashboard.ToDay.Date), (Dashboard.LastDayOfMonth.Date), MonthData);
+        MonthKompasPrices = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Kompas Prices");
     }
 
     protected override async Task OnInitializedAsync()
     {
-        listOfHotels = await _db.LoadStaticHotelResources("total");//loads list of hotels to the dropdown
+        listOfHotels = await _db.LoadStaticHotelResources("total");//Loads list of hotels to the dropdown
         listOfSelectedHotels = listOfHotels.ToList();
-        listOfSelectedHotels.Add("Local");//adds the 2 extr options
-        listOfSelectedHotels.Add("No budget");//adds the 2 extr options
+        //Adds the 2 extra options
+        listOfSelectedHotels.Add("Local");
+        listOfSelectedHotels.Add("No budget");
 
         _scoutService.Scout.RunComparator("dashboard");
 
         foreach (BookingSite bookingSite in _scoutService.Scout.BookingSites)
         {
-            bookingSite.DataScraper.SendMissingDataWarning += Cal.UpdateUiMissingDataWarning;
+            bookingSite.DataScraper.SendMissingDataWarning += Dashboard.UpdateUiMissingDataWarning;
         }
 
-        MonthData = await Cal.RetrieveSelectDataFromDb((Cal.ToDay).Date,(Cal.LastDayOfMonth).Date, AdultsPicked, "Select Prices", SelectedHotels);
-        MonthMarketData =  Cal.SelectedMonthMarketPrices((Cal.ToDay).Date, (Cal.LastDayOfMonth).Date,MonthData);
-        MonthKompasPrices = await Cal.RetrieveSelectDataFromDb((Cal.ToDay).Date, (Cal.LastDayOfMonth).Date, AdultsPicked, "Kompas Prices");
+        MonthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay).Date,(Dashboard.LastDayOfMonth).Date, AdultsPicked, "Select Prices", SelectedHotels);
+        MonthMarketData =  Dashboard.SelectedMonthMarketPrices((Dashboard.ToDay).Date, (Dashboard.LastDayOfMonth).Date,MonthData);
+        MonthKompasPrices = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay).Date, (Dashboard.LastDayOfMonth).Date, AdultsPicked, "Kompas Prices");
 
-        Cal.CreateMonth();
+        Dashboard.CreateMonth();
     }
 
 

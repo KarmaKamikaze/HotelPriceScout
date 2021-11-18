@@ -5,7 +5,7 @@ using System;
 
 namespace HotelPriceScout.Pages
 {
-        public class PriceMeterGenerator // the generator class
+        public class PriceMeterGenerator
         {
             public static List<Prices> PriceListGenerator(DateTime TodayDate, IEnumerable<MarketPriceModel> MonthData) // generates a test list of hotels and their prices.
             {
@@ -19,7 +19,7 @@ namespace HotelPriceScout.Pages
                 return PriceDataList;
             }
             public static Prices MarketFinder(List<Prices> list)
-            // finds the market price in the list of prices,
+            // Finds the market price in the list of prices,
             // This shall not be used if market price comes from somewhere else.
             {
                 Prices MarketPriceItem = list.Find(list => list.Name == "Gns. Marked");
