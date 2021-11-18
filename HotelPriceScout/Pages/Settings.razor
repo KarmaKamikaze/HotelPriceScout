@@ -152,7 +152,7 @@
         isScoutStarted = false;
         marginPicked = 1;
         notificationAmountPicked = 1;
-        _scoutService.Scout.StopScout();
+        _scoutService.Scout.Dispose();
         StateHasChanged();
     }
 
