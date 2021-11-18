@@ -1,9 +1,11 @@
 @page "/"
 @using HotelPriceScout.Data.Interface
 @using DataAccessLibrary
+@using HotelPriceScout.Data.Function
 @using HotelPriceScout.Data.Model
 @inject Dashboard Dashboard
 @inject SqliteDataAccess _db
+@inject ScoutSharedService _scoutService
 
 <div class="row col-md-7">
     <h1 style="width:350px;">@Cal.MonthName @Cal.Year</h1>
@@ -73,7 +75,7 @@
                     {
                         int Day = i;
                         int MarketPrice = Cal.SingleDayMarketPrice(MonthMarketData, Day);
-                        int KompasPrice = Cal.SingleDayKompasPrice(MonthKompasPrices,Day);
+                        int KompasPrice = Cal.SingleDayKompasPrice(MonthKompasPrices, Day);
                         string dateConcatenated = (Cal.Year.ToString() + "-" + Cal.Month.ToString() + "-" + Day.ToString("00"));
                         <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Cal.ShowMoreInfo(Day))">
                             <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@i <span class="@(MarketPrice == 0 ? "d-none" : "") @(Cal.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
@@ -280,8 +282,12 @@
         listOfSelectedHotels.Add("Local");//adds the 2 extr options
         listOfSelectedHotels.Add("No budget");//adds the 2 extr options
 
-        Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
-        scout.RunComparator("dashboard");
+        _scoutService.Scout.RunComparator("dashboard");
+
+        foreach (BookingSite bookingSite in _scoutService.Scout.BookingSites)
+        {
+            bookingSite.DataScraper.SendMissingDataWarning += UpdateUiMissingDataWarning;
+        }
 
         MonthData = await Cal.RetrieveSelectDataFromDb((Cal.ToDay).Date,(Cal.LastDayOfMonth).Date, AdultsPicked, "Select Prices", SelectedHotels);
         MonthMarketData =  Cal.SelectedMonthMarketPrices((Cal.ToDay).Date, (Cal.LastDayOfMonth).Date,MonthData);
@@ -290,5 +296,10 @@
         Cal.CreateMonth();
     }
 
-    
+    private void UpdateUiMissingDataWarning(BookingSite bookingSite)
+    {
+        throw new NotImplementedException();
+    }
+
+
  }
