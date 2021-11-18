@@ -12,8 +12,8 @@ namespace Tests
     {
         [Theory]
         [InlineData("stopped", -1000, null)]
-        [InlineData("started", -1, null)]
-        [InlineData("started", 101, null)]
+        [InlineData("stopped", -1, null)]
+        [InlineData("stopped", 101, null)]
         [InlineData("stopped", 1000, null)]
         public async Task Check_If_MarginValue_Throws(string state, int marginvalue, DateTime[] value)
         {
@@ -28,8 +28,8 @@ namespace Tests
 
         [Theory]
         [InlineData("test", 0, null)]
-        [InlineData("falsk", 55, null)]
-        [InlineData("programmering", 100, null)]
+        [InlineData("false", 55, null)]
+        [InlineData("programming", 100, null)]
         public async Task Check_If_State_Throws(string state, int marginvalue, DateTime[] value)
         {
             async Task ActionAsync()
