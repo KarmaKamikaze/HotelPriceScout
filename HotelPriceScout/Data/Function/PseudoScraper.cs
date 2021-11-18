@@ -1,12 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Timers;
 using HotelPriceScout.Data.Model;
+using HotelPriceScout.Pages;
+using Syncfusion.Blazor.Grids;
 
 namespace HotelPriceScout.Data.Function
 {
+    public delegate void MissingDataWarning(BookingSite bookingSite);
+        
     public class PseudoScraper : IDataScraper
     {
+        public event MissingDataWarning SendMissingDataWarning;
         private const int TYPE_ONE_MIN = 900;
         private const int TYPE_ONE_MAX = 1400;
         private const int TYPE_TWO_MIN = 900;
@@ -44,14 +50,17 @@ namespace HotelPriceScout.Data.Function
             // Sets the initial room type prices for all 90 days.
             _firstTimeUpdate = true;
             UpdatePrices();
+            ValidatePriceData();
             _firstTimeUpdate = false;
 
             _updater = new TimeKeeper(RUN_SCRAPER_INTERVAL_IN_MINUTES, UpdatePricesAtInterval);
         }
 
-        private void SendMissingDataWarning() // May ned to be event/delegate pair
+        private void ValidatePriceData()
         {
-            throw new System.NotImplementedException();
+            if (BookingSite.HotelsList.Any(hotels =>
+                hotels.RoomTypes.Any(roomType => roomType.Prices.Any(roomTypePrice => roomTypePrice.Price == 0))))
+                SendMissingDataWarning?.Invoke(BookingSite);
         }
 
         private void UpdatePricesAtInterval(object sender, ElapsedEventArgs eventArgs)
