@@ -39,7 +39,7 @@ namespace HotelPriceScout.Data.Interface
                 TempList.AddRange(from item in dataList
                                   where item.Date == tempDate
                                   select item.Price);
-                MarketPriceModel SingleDayMarketPrice = new MarketPriceModel((int)TempList.Average(), tempDate);
+                MarketPriceModel SingleDayMarketPrice = new MarketPriceModel(Convert.ToInt32(TempList.Average()), tempDate);
                 ListOfSingleDatePrices.Add(SingleDayMarketPrice);
             }
             dataList = ListOfSingleDatePrices;
@@ -87,11 +87,11 @@ namespace HotelPriceScout.Data.Interface
                                           where selectedHotels.Contains(item.HotelName)
                                           select item);
                    
-                    return resultDataList;
+                    return resultDataList.Distinct();
                 }
                 else 
                 {
-                     return dataList; //if no hotels are selected all data is returned
+                    return dataList; //if no hotels are selected all data is returned
                 }
             }
             else if (wantedOutput == "Kompas Prices")
@@ -156,7 +156,7 @@ namespace HotelPriceScout.Data.Interface
                 _ => ""
             };
 
-            NumDummyColumn = (int)monthStart.DayOfWeek;
+            NumDummyColumn = Convert.ToInt32(monthStart.DayOfWeek);
 
             if(NumDummyColumn == 0)
             {NumDummyColumn = 7;}
