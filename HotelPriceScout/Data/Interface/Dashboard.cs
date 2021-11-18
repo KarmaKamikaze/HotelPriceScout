@@ -123,9 +123,11 @@ namespace HotelPriceScout.Data.Interface
         }
         public List<Prices> priceList;
         public Prices MarketPriceItem;
-        public void GenerateThermometer(int Day, IEnumerable<MarketPriceModel> MonthData, int MarketPrice)
+        public void GenerateThermometer(int Day,int Monthaway, IEnumerable<MarketPriceModel> MonthData, int MarketPrice)
         {  // This needs to get its data from the database, as a list of Price objects
-            priceList = PriceMeterGenerator.PriceListGenerator(Day, MonthData);
+            DateTime TodayDate = new DateTime(Year, Month, Day);
+            TodayDate.AddMonths(Monthaway);
+            priceList = PriceMeterGenerator.PriceListGenerator(TodayDate, MonthData);
             MarketPriceItem = (PriceMeterGenerator.MarketFinder(priceList));
             priceList.Sort();
         }

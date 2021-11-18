@@ -123,7 +123,7 @@
 
 
     @if (Cal.DayClicked != 0 && Cal.CheckForAlternateClick)
-    {Cal.GenerateThermometer(Cal.DayClicked, MonthData, MarketPrice);
+    {Cal.GenerateThermometer(Cal.DayClicked,Cal.MonthsAway, MonthData, MarketPrice);
         <div class="animation1 col-md-4 table-borderless">
             <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Cal.ShowCurrentDayAsString()</h1>
             <div class="row col d-flex justify-content-center">
