@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using HotelPriceScout.Data.Model;
+using System.Runtime.InteropServices;
 using System.Linq;
 
 namespace HotelPriceScout.Data.Interface
@@ -25,7 +26,7 @@ namespace HotelPriceScout.Data.Interface
         public DateTime LastDayOfMonth { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
         private readonly SqliteDataAccess _db = new();
 
-        public IEnumerable<MarketPriceModel> SelectedMonthMarketPrices(DateTime StartDate, DateTime EndDate, int RoomType, List<string> SelectedHotels, IEnumerable<MarketPriceModel> DataList)
+        public IEnumerable<MarketPriceModel> SelectedMonthMarketPrices(DateTime StartDate, DateTime EndDate, IEnumerable<MarketPriceModel> DataList)
         {
             List<int> TempList = new();
             List<MarketPriceModel> ListOfSingelDatePrices = new();
@@ -43,8 +44,6 @@ namespace HotelPriceScout.Data.Interface
                 ListOfSingelDatePrices.Add(SingelDayMarketPrice);
                 tempDate = tempDate.AddDays(1);
             }
-            
-            
             DataList = ListOfSingelDatePrices;
             return DataList;
         }
@@ -66,8 +65,8 @@ namespace HotelPriceScout.Data.Interface
             return 0;
         }
 
-        public async Task<IEnumerable<MarketPriceModel>> RetrieveSelectDataFromDb(DateTime StartDate, DateTime EndDate, int RoomType, string WantedOutput, List<string> SelectedHotels)
-        {
+        public async Task<IEnumerable<MarketPriceModel>> RetrieveSelectDataFromDb(DateTime StartDate, DateTime EndDate, int RoomType, string WantedOutput, [Optional] List<string>  SelectedHotels)
+        {              
             IEnumerable<MarketPriceModel> DataList = await _db.RetrieveDataFromDb("*", $"RoomType{RoomType}",
                                          $" Date >= '{StartDate.ToString("yyyy-MM-dd")}' AND Date <= '{EndDate.ToString("yyyy-MM-dd")}'");
             List<MarketPriceModel> tempDataList = new();
@@ -118,19 +117,19 @@ namespace HotelPriceScout.Data.Interface
                         tempDataList.Add(item);
                     }
                 }
-                DataList = tempDataList; // as the temp list is not an ienumerable it is put in DataList which is, and returned
-                return DataList;
+                 // as the temp list is not an ienumerable it is put in DataList which is, and returned
+                return tempDataList;
             }
             throw new Exception("Fatal error: Method Called without WantedOutput parameter");
         }
 
-        public int SingleDayKompasPrice(IEnumerable<MarketPriceModel> DataList, int SpeceficDay)
+        public int SingleDayKompasPrice(IEnumerable<MarketPriceModel> CalendarKompasPrices, int SpeceficDay)
         {
             //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
             if (new DateTime(Year, Month, SpeceficDay, 23, 59, 59) >= ToDay &&
                 new DateTime(Year, Month, SpeceficDay) <= ToDay.AddMonths(3))
             {
-                IEnumerable<MarketPriceModel> SingleKompasPrice = DataList
+                IEnumerable<MarketPriceModel> SingleKompasPrice = CalendarKompasPrices
                     .Where(MarketPriceModel => MarketPriceModel.Date == new DateTime(Year, Month, SpeceficDay)
                     && MarketPriceModel.HotelName == "Kompas Hotel Aalborg");
                 return SingleKompasPrice.Single().Price;

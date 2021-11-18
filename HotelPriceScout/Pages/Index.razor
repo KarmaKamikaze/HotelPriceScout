@@ -76,7 +76,7 @@
                         <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Cal.ShowMoreInfo(k))">
                             <div style="font-weight: 700; font-size: 24px; @(Cal.SingleDayMarketPrice(MonthMarketData,k) == 0 ? "opacity: 0.3;" : "")">@i <span class="@(Cal.SingleDayMarketPrice(MonthMarketData,k) == 0 ? "d-none" : "") @(ArrowDecider(k))"></span></div>
                             <div class="@(Cal.SingleDayMarketPrice(MonthMarketData,k) == 0 ? "d-none" : "")">
-                                <div style="text-align: right; font-size: small; font-weight: 700" class="@(Cal.SingleDayKompasPrice(MonthData,k))) @(ChangeTextColorBasedOnMargin(k))">You: <span>@KompasPrice,-</span></div>
+                                <div style="text-align: right; font-size: small; font-weight: 700" class="@(Cal.SingleDayKompasPrice(MonthKompasPrices,k))) @(ChangeTextColorBasedOnMargin(k))">You: <span>@KompasPrice,-</span></div>
                                 <div style="font-weight: 700; text-align: right; font-size: small; opacity: 0.5;">
                                     Market: <span>@avgMarketPrice,-</span>
                                 </div>
@@ -97,7 +97,7 @@
                         <td class="@(Cal.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="(() => Cal.ShowMoreInfo(k))">
                             <div style="font-weight: 700; font-size: 24px; @(Cal.SingleDayMarketPrice(MonthMarketData,k) == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(Cal.SingleDayMarketPrice(MonthMarketData,k) == 0 ? "d-none" : "") @(ArrowDecider(k))"></span></div>
                                     <div class="@(Cal.SingleDayMarketPrice(MonthMarketData,k) == 0 ? "d-none" : "")">
-                                        <div style="text-align: right; font-size: small; font-weight: 700" class="@(Cal.SingleDayKompasPrice(MonthData,k)) @(ChangeTextColorBasedOnMargin(k))">
+                                        <div style="text-align: right; font-size: small; font-weight: 700" class="@(Cal.SingleDayKompasPrice(MonthKompasPrices,k)) @(ChangeTextColorBasedOnMargin(k))">
                                             You: <span>@KompasPrice,-</span>
                                         </div>
                                         <div style="font-weight: 700; text-align: right; font-size: small; opacity: 0.8;">
@@ -235,7 +235,7 @@
     Prices MarketPriceItem;
     IEnumerable<MarketPriceModel> MonthData;
     IEnumerable<MarketPriceModel> MonthMarketData;
-    IEnumerable<MarketPriceModel> CalendarKompasPrices;
+    IEnumerable<MarketPriceModel> MonthKompasPrices;
 
     private void GenerateThermometer()
     {   // This needs to get its data from the database, as a list of Price objects
@@ -247,7 +247,7 @@
     public string ChangeTextColorBasedOnMargin(int k)
     {
         avgMarketPrice = Cal.SingleDayMarketPrice(MonthMarketData,k);
-        KompasPrice = Cal.SingleDayKompasPrice(MonthData,k);
+        KompasPrice = Cal.SingleDayKompasPrice(MonthKompasPrices,k);
 
         int result = (KompasPrice / 100) * SettingsManager.marginPickedPass;
 
@@ -268,7 +268,7 @@
     public string ArrowDecider(int k)
     {
         avgMarketPrice = Cal.SingleDayMarketPrice(MonthMarketData,k);
-        KompasPrice = Cal.SingleDayKompasPrice(MonthData,k);
+        KompasPrice = Cal.SingleDayKompasPrice(MonthKompasPrices,k);
 
         int result = (KompasPrice / 100) * SettingsManager.marginPickedPass;
 
@@ -288,6 +288,7 @@
 
     public async void OnClickUpdate(string s)
     {
+        
         if (s == "Next")
         {
             Cal.DayClicked = 0;
@@ -306,58 +307,32 @@
         {
             if (SelectedHotels != null)
             {
-                MonthData = await Cal.RetrieveSelectDataFromDb((Cal.ToDay.Date),(Cal.LastDayOfMonth.Date), AdultsPicked, "Select Prices", listOfSelectedHotels);
-                MonthMarketData = Cal.SelectedMonthMarketPrices((Cal.ToDay.Date), (Cal.LastDayOfMonth.Date), AdultsPicked, listOfSelectedHotels,MonthData);
-                
+                MonthData = await Cal.RetrieveSelectDataFromDb((Cal.ToDay.Date),(Cal.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
+                MonthMarketData = Cal.SelectedMonthMarketPrices((Cal.ToDay.Date), (Cal.LastDayOfMonth.Date),MonthData);
             }
         }
-
-        CalendarKompasPrices = await Cal.RetrieveSelectDataFromDb((Cal.ToDay.Date),(Cal.LastDayOfMonth.Date), AdultsPicked, "Kompas Prices", listOfSelectedHotels);
-
-        MonthData = await Cal.RetrieveSelectDataFromDb((Cal.ToDay.Date),(Cal.LastDayOfMonth.Date), AdultsPicked, "Select Prices", listOfSelectedHotels);
-        MonthMarketData = Cal.SelectedMonthMarketPrices((Cal.ToDay.Date), (Cal.LastDayOfMonth.Date), AdultsPicked, listOfSelectedHotels,MonthData);
-
+        MonthData = await Cal.RetrieveSelectDataFromDb((Cal.ToDay.Date),(Cal.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
+        MonthMarketData = Cal.SelectedMonthMarketPrices((Cal.ToDay.Date), (Cal.LastDayOfMonth.Date), MonthData);
+        MonthKompasPrices = await Cal.RetrieveSelectDataFromDb((Cal.ToDay.Date),(Cal.LastDayOfMonth.Date), AdultsPicked, "Kompas Prices");
     }
 
     protected override async Task OnInitializedAsync()
     {
-        listOfHotels = await _db.LoadStaticHotelResources("total");
+        listOfHotels = await _db.LoadStaticHotelResources("total");//loads list of hotels to the dropdown
         listOfSelectedHotels = listOfHotels.ToList();
-        listOfSelectedHotels.Add("Local");
-        listOfSelectedHotels.Add("No budget");
+        listOfSelectedHotels.Add("Local");//adds the 2 extr options
+        listOfSelectedHotels.Add("No budget");//adds the 2 extr options
 
         Scout scout = await Scout.CreateScoutAsync("preparing", 10, new DateTime[] { DateTime.Now });
         scout.RunComparator("dashboard");
 
-        MonthData = await Cal.RetrieveSelectDataFromDb((Cal.ToDay).Date,(Cal.LastDayOfMonth).Date, AdultsPicked, "Select Prices", listOfSelectedHotels);
-        MonthMarketData =  Cal.SelectedMonthMarketPrices((Cal.ToDay).Date, (Cal.LastDayOfMonth).Date, AdultsPicked, listOfSelectedHotels,MonthData);
-        CalendarKompasPrices = await Cal.RetrieveSelectDataFromDb((Cal.ToDay).Date,(Cal.LastDayOfMonth).Date, AdultsPicked, "Kompas Prices", listOfSelectedHotels);
+        MonthData = await Cal.RetrieveSelectDataFromDb((Cal.ToDay).Date,(Cal.LastDayOfMonth).Date, AdultsPicked, "Select Prices", SelectedHotels);
+        MonthMarketData =  Cal.SelectedMonthMarketPrices((Cal.ToDay).Date, (Cal.LastDayOfMonth).Date,MonthData);
+        MonthKompasPrices = await Cal.RetrieveSelectDataFromDb((Cal.ToDay).Date, (Cal.LastDayOfMonth).Date, AdultsPicked, "Kompas Prices");
 
         Cal.CreateMonth();
         GenerateThermometer();
     }
-
-    
-
-    //public int MarketPriceDaySetter(int k)
-    //{
-    //    //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
-    //    if (new DateTime(Cal.Year, Cal.Month, k, 23, 59, 59) >= Cal.ToDay &&
-    //        new DateTime(Cal.Year, Cal.Month, k) <= Cal.ToDay.AddMonths(3))
-    //    {
-    //        List<int> Listofprices = new();
-    //        IEnumerable<MarketPriceModel> listOfDayPrice = CalendarMarketPrices
-    //        .Where(date => date.Date == new DateTime(Cal.Year, Cal.Month, k));
-
-    //        foreach(var item in listOfDayPrice)
-    //        {
-    //            Listofprices.Add(Decimal.ToInt32(item.Price));
-    //        }
-    //        avgMarketPrice = (int)Listofprices.Average();
-    //    }
-    //    else { avgMarketPrice = 0; }
-    //    return avgMarketPrice;
-    //}
 
     public string ShowCurrentDayAsString()
     {
