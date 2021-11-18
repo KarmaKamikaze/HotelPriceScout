@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using HotelPriceScout.Data.Model;
 using System.Runtime.InteropServices;
 using System.Linq;
+using HotelPriceScout.Pages;
 
 namespace HotelPriceScout.Data.Interface
 {
@@ -33,13 +34,9 @@ namespace HotelPriceScout.Data.Interface
             //DateTime tempDate = StartDate;
             for(DateTime tempDate = StartDate; tempDate <= EndDate;)
             {
-                foreach (var item in DataList)
-                {
-                    if (item.Date == tempDate)
-                    {
-                         TempList.Add(item.Price);
-                    }
-                }
+                TempList.AddRange(from item in DataList
+                                  where item.Date == tempDate
+                                  select item.Price);
                 MarketPriceModel SingelDayMarketPrice = new MarketPriceModel((int)TempList.Average(), tempDate);
                 ListOfSingelDatePrices.Add(SingelDayMarketPrice);
                 tempDate = tempDate.AddDays(1);
@@ -53,18 +50,15 @@ namespace HotelPriceScout.Data.Interface
             if (new DateTime(Year, Month, SpeceficDay, 23, 59, 59) >= ToDay &&
                 new DateTime(Year, Month, SpeceficDay) <= ToDay.AddMonths(3))
             {
-                foreach (var item in MultipleMarketPrices)
+                foreach (var item in from item in MultipleMarketPrices
+                                     where (item.Date).Date == new DateTime(Year, Month, SpeceficDay).Date
+                                     select item/*throw new Exception($"Market price for date:{new DateTime(Year, Month, SpeceficDay)}, was not in list of marketprices ");*/)
                 {
-                    if ((item.Date).Date == new DateTime(Year, Month, SpeceficDay).Date)
-                    {
-                        return item.Price;
-                    }
-                     /*throw new Exception($"Market price for date:{new DateTime(Year, Month, SpeceficDay)}, was not in list of marketprices ");*/
+                    return item.Price;
                 }
             }
             return 0;
         }
-
         public async Task<IEnumerable<MarketPriceModel>> RetrieveSelectDataFromDb(DateTime StartDate, DateTime EndDate, int RoomType, string WantedOutput, [Optional] List<string>  SelectedHotels)
         {              
             IEnumerable<MarketPriceModel> DataList = await _db.RetrieveDataFromDb("*", $"RoomType{RoomType}",
@@ -93,13 +87,9 @@ namespace HotelPriceScout.Data.Interface
                         SelectedHotels.Add("Scandic Aalborg Øst");
                         SelectedHotels.Add("Scandic Aalborg City");
                     }
-                    foreach (var item in DataList)
-                    { 
-                        if (SelectedHotels.Contains(item.HotelName)) 
-                        { 
-                            tempDataList.Add(item); 
-                        } 
-                    }
+                    tempDataList.AddRange(from item in DataList
+                                          where SelectedHotels.Contains(item.HotelName)
+                                          select item);
                     DataList = tempDataList; // as the temp list is not an ienumerable it is put in DataList which is, and returned
                     return DataList;
                 }
@@ -110,19 +100,14 @@ namespace HotelPriceScout.Data.Interface
             }
             else if (WantedOutput == "Kompas Prices")
             {
-                foreach (var item in DataList)
-                {
-                    if (item.HotelName == "Kompas Hotel Aalborg") // picks all HotelKompas prices
-                    {
-                        tempDataList.Add(item);
-                    }
-                }
-                 // as the temp list is not an ienumerable it is put in DataList which is, and returned
+                tempDataList.AddRange(from item in DataList
+                                      where item.HotelName == "Kompas Hotel Aalborg"// picks all HotelKompas prices
+                                      select item);
+                // as the temp list is not an ienumerable it is put in DataList which is, and returned
                 return tempDataList;
             }
             throw new Exception("Fatal error: Method Called without WantedOutput parameter");
         }
-
         public int SingleDayKompasPrice(IEnumerable<MarketPriceModel> CalendarKompasPrices, int SpeceficDay)
         {
             //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
@@ -136,7 +121,19 @@ namespace HotelPriceScout.Data.Interface
             }
             return 0;
         }
+        public List<Prices> priceList;
+        public Prices MarketPriceItem;
+        public void GenerateThermometer(int Day, IEnumerable<MarketPriceModel> MonthData, int MarketPrice)
+        {  // This needs to get its data from the database, as a list of Price objects
+            priceList = PriceMeterGenerator.PriceListGenerator(Day, MonthData);
+            MarketPriceItem = (PriceMeterGenerator.MarketFinder(priceList));
+            priceList.Sort();
+        }
 
+    public string ShowCurrentDayAsString()
+        {
+            return DayClicked.ToString("") + ". " + MonthName + " " + Year.ToString("");
+        }
         public void CreateMonth()
         {
             TempDate = DateTime.Now.AddMonths(MonthsAway);
@@ -167,7 +164,41 @@ namespace HotelPriceScout.Data.Interface
             if(NumDummyColumn == 0)
             {NumDummyColumn = 7;}
         }
+        public string ChangeTextColorBasedOnMargin(int Marketprice, int KompasPrice)
+        {
+            int result = (KompasPrice / 100) * SettingsManager.marginPickedPass;
 
+            if (Marketprice > (KompasPrice + result))
+            {
+                return "low";
+            }
+            else if (Marketprice < (KompasPrice - result))
+            {
+                return "high";
+            }
+            else
+            {
+                return "";
+            }
+        }
+        public string ArrowDecider(int MarketPrice, int KompasPrice)
+        {
+
+            int result = (KompasPrice / 100) * SettingsManager.marginPickedPass;
+
+            if (MarketPrice > (KompasPrice + result))
+            {
+                return "oi oi-caret-top";
+            }
+            else if (MarketPrice < (KompasPrice - result))
+            {
+                return "oi oi-caret-bottom";
+            }
+            else
+            {
+                return "oi oi-minus";
+            }
+        }
         public void ShowMoreInfo(int dayClicked)
         {
             if (new DateTime(Year, Month, dayClicked, 23, 59, 59) >= DateTime.Now && new DateTime(Year, Month, dayClicked) <= ToDay.AddMonths(3))
