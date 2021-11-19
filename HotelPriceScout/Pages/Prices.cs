@@ -2,7 +2,7 @@
 
 namespace HotelPriceScout.Pages
 {
-    public class Prices /*: IComparable<Prices>*/
+    public class Prices : IComparable<Prices>
     {
         public string Name { get; set; }
         public decimal Price { get; set; }
@@ -11,9 +11,9 @@ namespace HotelPriceScout.Pages
             Name = _name; 
             Price = _price;
         }
-        //public int CompareTo(Prices other)
-        //{
-        //    return other.Price - Price;
-        //}
+        public int CompareTo(Prices other)
+        {
+           return (int)(other.Price - Price);
+        }
     }
 }
