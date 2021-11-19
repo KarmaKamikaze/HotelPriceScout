@@ -214,11 +214,5 @@ namespace HotelPriceScout.Data.Model
             containerString + "</table><br>";
             return result;
         }
-
     }
-
-
-
-
-
 }

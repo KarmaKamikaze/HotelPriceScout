@@ -7,7 +7,7 @@ using HotelPriceScout.Data.Function;
 
 namespace HotelPriceScout.Data.Model
 {
-    public class Scout
+    public class Scout : IDisposable
     {
         private int _marginValue;
         private string _state;
@@ -36,11 +36,6 @@ namespace HotelPriceScout.Data.Model
             {
                 bookingSite.DataScraper.StartScraping(MarginValue);
             }
-        }
-        
-        public void StopScout()
-        {
-            GC.SuppressFinalize(this);
         }
 
         public IEnumerable<DateTime> NotificationTimes { get; private set; }
@@ -97,6 +92,11 @@ namespace HotelPriceScout.Data.Model
             }
 
             return bookingSites;
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
     }
 }
