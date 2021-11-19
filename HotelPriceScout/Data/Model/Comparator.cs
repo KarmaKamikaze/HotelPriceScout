@@ -77,7 +77,7 @@ namespace HotelPriceScout.Data.Model
 
                 foreach ((Dictionary<string, decimal> dict, int capacity) in dictList)
                 {
-                    AvgMarketPrices.Add(new MarketPriceModel(decimal.ToInt32(dict.Values.Average()), date, capacity));
+                    AvgMarketPrices.Add(new MarketPriceModel(dict.Values.Average(), date, capacity));
                 }
             }
 
@@ -99,14 +99,14 @@ namespace HotelPriceScout.Data.Model
             string valueDB = $"INSERT INTO MarketPrices (Date,Price,RoomType) VALUES ";
             foreach (MarketPriceModel marketPrice in AvgMarketPrices)
             {
-                valueDB += $"('{marketPrice.Date.ToString("yyyy-MM-dd")}','{decimal.ToInt32(marketPrice.Price)}','{marketPrice.RoomType}'),";
+                valueDB += $"('{marketPrice.Date.ToString("yyyy-MM-dd")}','{marketPrice.Price}','{marketPrice.RoomType}'),";
             }
 
             valueDB = valueDB.TrimEnd(',');
             valueDB += ";";
 
             await _db.SaveToDB<dynamic>($"DROP TABLE IF EXISTS MarketPrices;", new { });
-            await _db.SaveToDB<dynamic>($"CREATE TABLE [MarketPrices] ([Date] date NOT NULL, [Price] int NOT NULL, [RoomType] int NOT NULL);", new { });
+            await _db.SaveToDB<dynamic>($"CREATE TABLE [MarketPrices] ([Date] date NOT NULL, [Price] decimal NOT NULL, [RoomType] int NOT NULL);", new { });
             await _db.SaveToDB<dynamic>(valueDB, new { });
         }
 
@@ -117,14 +117,14 @@ namespace HotelPriceScout.Data.Model
             {
                 foreach (KeyValuePair<string, decimal> hotelPricePair in dateHotelsPair.Value)
                 {
-                    valueDB += $"('{dateHotelsPair.Key.ToString("yyyy-MM-dd")}','{hotelPricePair.Key}','{decimal.ToInt32(hotelPricePair.Value)}'),";
+                    valueDB += $"('{dateHotelsPair.Key.ToString("yyyy-MM-dd")}','{hotelPricePair.Key}','{hotelPricePair.Value}'),";
                 }
             }
             valueDB = valueDB.TrimEnd(',');
             valueDB += ";";
 
             await _db.SaveToDB<dynamic>($"DROP TABLE IF EXISTS {tableName};", new { });
-            await _db.SaveToDB<dynamic>($"CREATE TABLE [{tableName}] ([HotelName] text NOT NULL, [Price] int NOT NULL, [Date] date NOT NULL);", new { });
+            await _db.SaveToDB<dynamic>($"CREATE TABLE [{tableName}] ([HotelName] text NOT NULL, [Price] decimal NOT NULL, [Date] date NOT NULL);", new { });
             await _db.SaveToDB<dynamic>(valueDB, new { });
         }
 

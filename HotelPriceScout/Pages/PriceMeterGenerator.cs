@@ -13,7 +13,7 @@ namespace HotelPriceScout.Pages
                 PriceDataList.AddRange(from MarketPriceModel item in MonthData
                                        where (item.Date) == TodayDate.Date
                                        select new Prices(item.HotelName, item.Price));
-                int MarketPrice = (int)PriceDataList.Average(x => x.Price);
+                decimal MarketPrice = PriceDataList.Average(x => x.Price);
                 PriceDataList.Add(new Prices("Gns. Marked", MarketPrice));
                 PriceDataList.Sort();
                 return PriceDataList;

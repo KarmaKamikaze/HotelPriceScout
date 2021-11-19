@@ -32,20 +32,20 @@ namespace HotelPriceScout.Data.Interface
 
         public IEnumerable<MarketPriceModel> SelectedMonthMarketPrices(DateTime startDate, DateTime endDate, IEnumerable<MarketPriceModel> dataList)
         {
-            List<int> TempList = new();
+            List<decimal> TempList = new();
             List<MarketPriceModel> ListOfSingleDatePrices = new();
             for(DateTime tempDate = startDate; tempDate <= endDate; tempDate = tempDate.AddDays(1))
             {
                 TempList.AddRange(from item in dataList
                                   where item.Date == tempDate
                                   select item.Price);
-                MarketPriceModel SingleDayMarketPrice = new MarketPriceModel(Convert.ToInt32(TempList.Average()), tempDate);
+                MarketPriceModel SingleDayMarketPrice = new MarketPriceModel(TempList.Average(), tempDate);
                 ListOfSingleDatePrices.Add(SingleDayMarketPrice);
             }
             dataList = ListOfSingleDatePrices;
             return dataList;
         }
-        public int GetSingleDayMarketPrice(IEnumerable<MarketPriceModel> multipleMarketPrices, int specificDay)
+        public decimal GetSingleDayMarketPrice(IEnumerable<MarketPriceModel> multipleMarketPrices, int specificDay)
         {   
             //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
             if (new DateTime(Year, Month, specificDay, 23, 59, 59) >= ToDay &&
@@ -104,7 +104,7 @@ namespace HotelPriceScout.Data.Interface
             }
             throw new Exception("Fatal error: Method Called without WantedOutput parameter");
         }
-        public int SingleDayKompasPrice(IEnumerable<MarketPriceModel> calendarKompasPrices, int speceficDay)
+        public decimal SingleDayKompasPrice(IEnumerable<MarketPriceModel> calendarKompasPrices, int speceficDay)
         {
             //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
             if (new DateTime(Year, Month, speceficDay, 23, 59, 59) >= ToDay &&
@@ -161,9 +161,9 @@ namespace HotelPriceScout.Data.Interface
             if(NumDummyColumn == 0)
             {NumDummyColumn = 7;}
         }
-        public string ChangeTextColorBasedOnMargin(int marketprice, int kompasPrice)
+        public string ChangeTextColorBasedOnMargin(decimal marketprice, decimal kompasPrice)
         {
-            int result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
+            decimal result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
 
             if (marketprice > (kompasPrice + result))
             {
@@ -178,10 +178,10 @@ namespace HotelPriceScout.Data.Interface
                 return "";
             }
         }
-        public string ArrowDecider(int marketPrice, int kompasPrice)
+        public string ArrowDecider(decimal marketPrice, decimal kompasPrice)
         {
 
-            int result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
+            decimal result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
 
             if (marketPrice > (kompasPrice + result))
             {

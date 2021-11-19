@@ -74,15 +74,15 @@
                     @for (int i = 1; i + Dashboard.NumDummyColumn - 1 <= 7; i++)
                     {
                         int Day = i;
-                        int MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
-                        int KompasPrice = Dashboard.SingleDayKompasPrice(MonthKompasPrices, Day);
+                        decimal MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
+                        decimal KompasPrice = Dashboard.SingleDayKompasPrice(MonthKompasPrices, Day);
                         string dateConcatenated = (Dashboard.Year.ToString() + "-" + Dashboard.Month.ToString() + "-" + Day.ToString("00"));
                         <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Dashboard.ShowMoreInfo(Day))">
                             <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@i <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
                             <div class="@(MarketPrice == 0 ? "d-none" : "")">
-                                <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice,KompasPrice))">You: <span>@KompasPrice,-</span></div>
+                                <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice,KompasPrice))">You: <span>@((int)KompasPrice),-</span></div>
                                 <div style="font-weight: 700; text-align: right; font-size: small; opacity: 0.8;">
-                                    Market: <span>@MarketPrice,-</span>
+                                    Market: <span>@((int)MarketPrice),-</span>
                                 </div>
                             </div>
                         </td>
@@ -97,17 +97,17 @@
                             @if (i + j <= Dashboard.MonthEnd.Day)
                             {
                                 int Day = i + j;
-                                int MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
-                                int KompasPrice = Dashboard.SingleDayKompasPrice(MonthKompasPrices,Day);
+                                decimal MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
+                                decimal KompasPrice = Dashboard.SingleDayKompasPrice(MonthKompasPrices,Day);
                                 string dateConcatenated = (Dashboard.Year.ToString() + "-" + Dashboard.Month.ToString() + "-" + Day.ToString("00"));
                         <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="(() => Dashboard.ShowMoreInfo(Day))">
                             <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
                                     <div class="@(MarketPrice == 0 ? "d-none" : "")">
                                         <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice, KompasPrice))">
-                                            You: <span>@KompasPrice,-</span>
+                                            You: <span>@((int)KompasPrice),-</span>
                                         </div>
                                         <div style="font-weight: 700; text-align: right; font-size: small; opacity: 0.8;">
-                                            Market: <span>@MarketPrice,-</span>
+                                            Market: <span>@((int)MarketPrice),-</span>
                                         </div>
                                     </div>
                                 </td>
@@ -143,14 +143,14 @@
                             {
                                 <tr style="text-align:right">
                                     <td class="col">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td>
+                                    <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@((int)item.Price),-</td>
                                 </tr>
                             }
                             else if (item.Price < Dashboard.MarketPriceItem.Price)
                             {
                                 <tr>
                                     <td class="col text-right">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td>
+                                    <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@((int)item.Price),-</td>
                                 </tr>
                             }
                             else
@@ -216,8 +216,8 @@
 
 @code
 {
-    int MarketPrice;
-    int KompasPrice;
+    decimal MarketPrice;
+    decimal KompasPrice;
     public int AdultsPicked = 1;
     public List<string> SelectedHotels;
     
