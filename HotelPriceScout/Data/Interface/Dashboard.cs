@@ -121,7 +121,7 @@ namespace HotelPriceScout.Data.Interface
             }
             else
             {
-                DayClicked = 0;
+                CheckForAlternateClick = false;
             }
         }
         public void NextMonth()

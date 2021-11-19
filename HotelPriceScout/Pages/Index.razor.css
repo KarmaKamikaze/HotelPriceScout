@@ -71,7 +71,8 @@
 
     @keyframes animation {
         0% {
-            left: -460px;
+            left: -500px;
+            opacity: 0;
         }
 
         100% {
