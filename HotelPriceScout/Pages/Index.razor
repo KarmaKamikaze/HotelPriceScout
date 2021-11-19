@@ -80,9 +80,9 @@
                         <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Dashboard.ShowMoreInfo(Day))">
                             <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@i <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
                             <div class="@(MarketPrice == 0 ? "d-none" : "")">
-                                <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice,KompasPrice))">You: <span>@((int)KompasPrice),-</span></div>
+                                <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice,KompasPrice))">You: <span>@(decimal.ToInt32(KompasPrice)),-</span></div>
                                 <div style="font-weight: 700; text-align: right; font-size: small; opacity: 0.8;">
-                                    Market: <span>@((int)MarketPrice),-</span>
+                                    Market: <span>@(decimal.ToInt32(MarketPrice)),-</span>
                                 </div>
                             </div>
                         </td>
@@ -104,10 +104,10 @@
                             <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
                                     <div class="@(MarketPrice == 0 ? "d-none" : "")">
                                         <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice, KompasPrice))">
-                                            You: <span>@((int)KompasPrice),-</span>
+                                            You: <span>@(decimal.ToInt32(KompasPrice)),-</span>
                                         </div>
                                         <div style="font-weight: 700; text-align: right; font-size: small; opacity: 0.8;">
-                                            Market: <span>@((int)MarketPrice),-</span>
+                                            Market: <span>@(decimal.ToInt32(MarketPrice)),-</span>
                                         </div>
                                     </div>
                                 </td>
@@ -143,23 +143,25 @@
                             {
                                 <tr style="text-align:right">
                                     <td class="col">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@((int)item.Price),-</td>
+                                    <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
                             else if (item.Price < Dashboard.MarketPriceItem.Price)
                             {
                                 <tr>
                                     <td class="col text-right">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@((int)item.Price),-</td>
+                                    <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
-                            else
+                            else if (item.Price == Dashboard.MarketPriceItem.Price)
                             {
                                 <tr>
                                     <td class="col text-right"> @Dashboard.MarketPriceItem.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="table-info">@Dashboard.MarketPriceItem.Price,-</td>
+                                    <td class="table-info">@(decimal.ToInt32(Dashboard.MarketPriceItem.Price)),-</td>
                                 </tr>
                             }
+                            else
+                            {}
                         }
                     </table>
                     Dashboard.TempAniDate = Dashboard.DayClicked;
