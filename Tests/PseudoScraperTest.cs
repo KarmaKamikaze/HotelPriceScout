@@ -38,8 +38,8 @@ namespace Tests
 
             //Assert
             Assert.Equal(bookingSite, pseudoScraper.BookingSite);
-
-
         }
+
+
     }
 }

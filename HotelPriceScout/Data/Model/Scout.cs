@@ -50,9 +50,9 @@ namespace HotelPriceScout.Data.Model
             get => _marginValue;
             private set
             {
-                if (value > 100 || value < 0)
+                if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException($"{nameof(value)} must be between 0 and 100.");
+                    throw new ArgumentOutOfRangeException($"{nameof(value)} must be positive.");
                 }
                 _marginValue = value;
             }

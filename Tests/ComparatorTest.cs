@@ -48,7 +48,7 @@ namespace Tests
             BookingSite bookingSite2 = new BookingSite("booking2", "multi", "https://www.url.com", hotelStrings);
             IEnumerable<BookingSite> bookingSites = new List<BookingSite>() { bookingSite1, bookingSite2 };
 
-            int marginValue = 100;
+            int marginValue = 1000;
 
             bookingSite1.DataScraper.StartScraping(marginValue);
             bookingSite2.DataScraper.StartScraping(marginValue);
