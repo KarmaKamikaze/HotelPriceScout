@@ -1,4 +1,4 @@
-﻿.table td:hover {
+.table td:hover {
     background-color: #F2F2F2;
 }
 
@@ -69,13 +69,14 @@
     animation-direction: reverse;
 }
 
-    @keyframes animation {
-        0% {
-            left: -500px;
-            opacity: 0;
-        }
-
-        100% {
-            left: 0px;
-        }
+@keyframes animation {
+    0% 
+    {
+        left: -500px;
+        opacity: 0;
     }
+    100% 
+    {
+        left: 0px
+    } 
+}
