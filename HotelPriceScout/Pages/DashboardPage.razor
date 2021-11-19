@@ -138,7 +138,14 @@
                     <table class="table table-borderless noHover" style="max-width:90%">
                         @foreach (Prices item in Dashboard.priceList)
                         {
-                            if (item.Price > Dashboard.MarketPriceItem.Price)
+                            if (decimal.ToInt32(item.Price) == decimal.ToInt32(Dashboard.MarketPriceItem.Price))
+                            {
+                                <tr>
+                                    <td class="col text-right"> @item.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="table-info">@(decimal.ToInt32(item.Price)),-</td>
+                                </tr>
+                            }
+                            else if (item.Price > Dashboard.MarketPriceItem.Price)
                             {
                                 <tr style="text-align:right">
                                     <td class="col">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
@@ -152,15 +159,14 @@
                                     <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
-                            else if (item.Price == Dashboard.MarketPriceItem.Price)
+                           
+                            else
                             {
                                 <tr>
                                     <td class="col text-right"> @Dashboard.MarketPriceItem.Name <span class="oi oi-arrow-right text-center"></span></td>
                                     <td class="table-info">@(decimal.ToInt32(Dashboard.MarketPriceItem.Price)),-</td>
                                 </tr>
                             }
-                            else
-                            {}
                         }
                     </table>
                     Dashboard.TempAniDate = Dashboard.DayClicked;
