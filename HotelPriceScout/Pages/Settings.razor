@@ -1,4 +1,4 @@
-@page "/settings"
+@page "/Settings"
 @using HotelPriceScout.Data.Interface
 @using HotelPriceScout.Data.Model
 @inherits SettingsManager
@@ -140,6 +140,7 @@
     public void StopProgram()
     {
         isScoutStopped = true;
+        _scoutService.ScoutRunning = false;
         ShowStartButton();
         ShowStopButton();
         ShowUpdateButton();
@@ -177,6 +178,7 @@
 
     public async void StartProgram()
     {
+        _scoutService.ScoutRunning = true;
         marginPickedPass = marginPicked;
         notificationPickedPass = notificationAmountPicked;
         timeValuePass = timeValue;

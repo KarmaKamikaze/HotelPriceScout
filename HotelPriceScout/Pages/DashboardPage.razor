@@ -1,0 +1,304 @@
+@page "/Dashboard"
+@using HotelPriceScout.Data.Interface
+@using DataAccessLibrary
+@using HotelPriceScout.Data.Function
+@using HotelPriceScout.Data.Model
+@inject Dashboard Dashboard
+@inject SqliteDataAccess _db
+@inject ScoutSharedService _scoutService
+
+<div class="row col-md-7">
+    <h1 style="width:350px;">@Dashboard.MonthName @Dashboard.Year</h1>
+    @if (Dashboard.MonthsAway > 0)
+    {
+        <button type="button" class="btn btn-default btn-lg" @onclick='() =>{OnClickUpdate("Previous");}'>
+            <span class="oi oi-arrow-thick-left" style="font-size:30px"></span>
+        </button> 
+    }
+    else
+    {
+        <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+            <span class="oi oi-arrow-thick-left" style="font-size:30px"></span>
+        </button>
+    }
+    @if (Dashboard.MonthsAway < 3)
+    {
+        <button type="button" class="btn btn-default btn-lg" @onclick='() =>{OnClickUpdate("Next");}'>
+            <span class="oi oi-arrow-thick-right" style="font-size:30px"></span>
+        </button> 
+    }
+    else
+    {
+        <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+            <span class="oi oi-arrow-thick-right" style="font-size:30px"></span>
+        </button>
+    }
+</div>
+
+<div class="row col-md-7">
+    <div class="col-md-4">
+        <SfDropDownList Width="200px" TItem="numberOfAdults" TValue="int" @bind-value="AdultsPicked" DataSource="@Adults">
+            <DropDownListFieldSettings Text="Text" Value="Adults"></DropDownListFieldSettings>
+            <DropDownListEvents TValue="int" TItem="numberOfAdults" ValueChange='() => {OnClickUpdate("Update");}'></DropDownListEvents>
+        </SfDropDownList>
+    </div>
+    <div class="col-lg-6" style="padding:0;">
+        <SfMultiSelect TValue="List<string>" @bind-Value="SelectedHotels" AllowFiltering="true" TItem="string" Mode="@VisualMode.CheckBox" Placeholder="Select hotels" DataSource="listOfSelectedHotels" ShowSelectAll="true"
+                       EnableSelectionOrder="false" FilterBarPlaceholder="Search hotels" EnableGroupCheckBox="true" PopupHeight="350px">
+            <MultiSelectEvents TValue="List<string>" TItem="string" ValueChange='() => {OnClickUpdate("update Hotel");}'></MultiSelectEvents>
+        </SfMultiSelect>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 ">
+        <table class="table table-bordered col calendar">
+            <thead>
+                <tr>
+                    <th style="width:14%"> Monday</th>
+                    <th style="width:14%"> Tuesday</th>
+                    <th style="width:14%"> Wednesday</th>
+                    <th style="width:14%"> Thursday</th>
+                    <th style="width:14%"> Friday</th>
+                    <th style="width:14%"> Saturday</th>
+                    <th style="width:14%"> Sunday</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="rows">
+                    @for (int i = 0; i < Dashboard.NumDummyColumn - 1; i++)
+                    {
+                        <td></td>
+                    }
+                    @for (int i = 1; i + Dashboard.NumDummyColumn - 1 <= 7; i++)
+                    {
+                        int Day = i;
+                        decimal MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
+                        decimal KompasPrice = Dashboard.SingleDayKompasPrice(MonthKompasPrices, Day);
+                        string dateConcatenated = (Dashboard.Year.ToString() + "-" + Dashboard.Month.ToString() + "-" + Day.ToString("00"));
+                        <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Dashboard.ShowMoreInfo(Day))">
+                            <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@i <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
+                            <div class="@(MarketPrice == 0 ? "d-none" : "")">
+                                <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice,KompasPrice))">You: <span>@((int)KompasPrice),-</span></div>
+                                <div style="font-weight: 700; text-align: right; font-size: small; opacity: 0.8;">
+                                    Market: <span>@((int)MarketPrice),-</span>
+                                </div>
+                            </div>
+                        </td>
+                    }
+                </tr>
+
+                @for (int i = 8 - Dashboard.NumDummyColumn + 1; i <= Dashboard.MonthEnd.Day; i += 7)
+                {
+                    <tr class="clik rows">
+                        @for (int j = 0; j < 7; j++)
+                        {
+                            @if (i + j <= Dashboard.MonthEnd.Day)
+                            {
+                                int Day = i + j;
+                                decimal MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
+                                decimal KompasPrice = Dashboard.SingleDayKompasPrice(MonthKompasPrices,Day);
+                                string dateConcatenated = (Dashboard.Year.ToString() + "-" + Dashboard.Month.ToString() + "-" + Day.ToString("00"));
+                        <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="(() => Dashboard.ShowMoreInfo(Day))">
+                            <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
+                                    <div class="@(MarketPrice == 0 ? "d-none" : "")">
+                                        <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice, KompasPrice))">
+                                            You: <span>@((int)KompasPrice),-</span>
+                                        </div>
+                                        <div style="font-weight: 700; text-align: right; font-size: small; opacity: 0.8;">
+                                            Market: <span>@((int)MarketPrice),-</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+    @if (Dashboard.DayClicked != 0 && Dashboard.CheckForAlternateClick)
+    {Dashboard.GenerateThermometer(Dashboard.DayClicked,Dashboard.MonthsAway, MonthData);
+        <div class="animation1 col-md-4 table-borderless">
+            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
+            <div class="row col d-flex justify-content-center">
+                <!-- outer layer-->
+                @if (Dashboard.priceList == null)
+                {
+                    <div><p>Loading data</p></div>// <--- checks if thermometer is ready yet
+                }
+                else
+                {
+                    <table class="table table-borderless noHover" style="max-width:90%">
+                        @foreach (Prices item in Dashboard.priceList)
+                        {
+                            if (item.Price > Dashboard.MarketPriceItem.Price)
+                            {
+                                <tr style="text-align:right">
+                                    <td class="col">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@((int)item.Price),-</td>
+                                </tr>
+                            }
+                            else if (item.Price < Dashboard.MarketPriceItem.Price)
+                            {
+                                <tr>
+                                    <td class="col text-right">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@((int)item.Price),-</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="col text-right"> @Dashboard.MarketPriceItem.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="table-info">@Dashboard.MarketPriceItem.Price,-</td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                    Dashboard.TempAniDate = Dashboard.DayClicked;
+                }
+            </div>
+        </div>
+    }
+    else if (Dashboard.DayClicked != 0 && !Dashboard.CheckForAlternateClick && Dashboard.TempAniDate == Dashboard.DayClicked)
+    {
+       
+        <div class="animation2 col-md-4 table-borderless">
+            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
+            <div class="row col d-flex justify-content-center">
+                <!-- outer layer-->
+                @if (Dashboard.priceList == null)
+                {
+                    <div><p>Loading data</p></div>// <--- checks if thermometer is ready yet
+                }
+                else
+                {
+                    <table class="table table-borderless noHover" style="max-width:90%">
+                       @* @foreach (Prices item in Dashboard.priceList)
+                        {
+                            if (item.Price > Dashboard.MarketPriceItem.Price)
+                            {
+                                <tr style="text-align:right">
+                                    <td class="col">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td>
+                                </tr>
+                            }
+                            else if (item.Price < Dashboard.MarketPriceItem.Price)
+                            {
+                                <tr>
+                                    <td class="col text-right">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="col text-right"> @MarketPriceItem.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="table-info">@MarketPriceItem.Price,-</td>
+                                </tr>
+                            }
+                        }*@
+                    </table>
+                    Dashboard.DayClicked = 0;
+                }
+            </div>
+        </div>
+    }
+</div>
+
+
+@code
+{
+    decimal MarketPrice;
+    decimal KompasPrice;
+    public int AdultsPicked = 1;
+    public List<string> SelectedHotels;
+    
+    public class numberOfAdults
+    {
+        public int Adults { get; set; }
+        public string Text { get; set; }
+    }
+
+    public List<numberOfAdults> Adults = new List<numberOfAdults>()
+    {
+            new numberOfAdults(){ Adults= 1, Text= "1 adult" },
+            new numberOfAdults(){ Adults= 2, Text= "2 adults" },
+            new numberOfAdults(){ Adults= 4, Text= "4 adults" },
+    };
+
+    Dashboard Cal = new Dashboard();
+    IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
+    List<string> listOfSelectedHotels;
+
+    List<Prices> priceList;
+    Prices MarketPriceItem;
+    IEnumerable<MarketPriceModel> MonthData;
+    IEnumerable<MarketPriceModel> MonthMarketData;
+    IEnumerable<MarketPriceModel> MonthKompasPrices;
+
+    //Needs to be here, Can not be moved to Dashboard
+    // As we can not call variables made in this scope.
+    public async void OnClickUpdate(string s) 
+    {
+        if (s == "Next")
+        {
+            Dashboard.DayClicked = 0;
+            Dashboard.MonthsAway++;
+            Dashboard.CreateMonth();
+            Dashboard.NextMonth();
+        }
+        else if (s == "Previous")
+        {
+            Dashboard.DayClicked = 0;
+            Dashboard.MonthsAway--;
+            Dashboard.CreateMonth();
+            Dashboard.PreviousMonth();
+        }
+        else if (s == "update Hotel")
+        {
+            if (SelectedHotels != null)
+            {
+                MonthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
+                MonthMarketData = Dashboard.SelectedMonthMarketPrices((Dashboard.ToDay.Date), (Dashboard.LastDayOfMonth.Date),MonthData);
+            }
+        }
+        MonthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
+        MonthMarketData = Dashboard.SelectedMonthMarketPrices((Dashboard.ToDay.Date), (Dashboard.LastDayOfMonth.Date), MonthData);
+        MonthKompasPrices = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Kompas Prices");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        listOfHotels = await _db.LoadStaticHotelResources("total");//Loads list of hotels to the dropdown
+        listOfSelectedHotels = listOfHotels.ToList();
+        //Adds the 2 extra options
+        listOfSelectedHotels.Add("Local");
+        listOfSelectedHotels.Add("No budget");
+
+        _scoutService.Scout.RunComparator("dashboard");
+
+        foreach (BookingSite bookingSite in _scoutService.Scout.BookingSites)
+        {
+            bookingSite.DataScraper.SendMissingDataWarning += Dashboard.UpdateUiMissingDataWarning;
+        }
+
+        MonthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay).Date,(Dashboard.LastDayOfMonth).Date, AdultsPicked, "Select Prices", SelectedHotels);
+        MonthMarketData =  Dashboard.SelectedMonthMarketPrices((Dashboard.ToDay).Date, (Dashboard.LastDayOfMonth).Date,MonthData);
+        MonthKompasPrices = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay).Date, (Dashboard.LastDayOfMonth).Date, AdultsPicked, "Kompas Prices");
+
+        Dashboard.CreateMonth();
+    }
+
+
+    
+
+
+ }

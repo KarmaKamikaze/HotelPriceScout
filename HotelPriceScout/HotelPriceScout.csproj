@@ -14,6 +14,9 @@
 
     <ItemGroup>
       <None Remove="Data\Interface\" />
+      <None Update="Pages\DashboardPage.css">
+        <DependentUpon>DashboardPage.razor.razor</DependentUpon>
+      </None>
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Data\Interface\" />
