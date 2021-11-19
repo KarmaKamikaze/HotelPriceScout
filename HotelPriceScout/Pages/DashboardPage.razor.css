@@ -43,16 +43,11 @@
 }
 
 .table-borderless {
-    z-index: 1;
+    z-index: -1;
 }
 
 .calendar {
-    z-index:2 !important;
     background-color: white !important;
-}
-
-.table {
-    z-index: 2 !important;
 }
 
 .animation1 {
