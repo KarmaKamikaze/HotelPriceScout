@@ -104,13 +104,13 @@ namespace HotelPriceScout.Data.Interface
             }
             throw new Exception("Fatal error: Method Called without WantedOutput parameter");
         }
-        public decimal SingleDayKompasPrice(IEnumerable<MarketPriceModel> calendarKompasPrices, int speceficDay)
+        public decimal GetSingleDayKompasPrice(IEnumerable<MarketPriceModel> calendarKompasPrices, int specificDay)
         {
             //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
-            if (new DateTime(Year, Month, speceficDay, 23, 59, 59) >= ToDay &&
-                new DateTime(Year, Month, speceficDay) <= ToDay.AddMonths(3))
+            if (new DateTime(Year, Month, specificDay, 23, 59, 59) >= ToDay &&
+                new DateTime(Year, Month, specificDay) <= ToDay.AddMonths(3))
             {
-                return calendarKompasPrices.Single(mp => mp.Date == new DateTime(Year, Month, speceficDay) && mp.HotelName == "Kompas Hotel Aalborg").Price;
+                return calendarKompasPrices.Single(mp => mp.Date == new DateTime(Year, Month, specificDay) && mp.HotelName == "Kompas Hotel Aalborg").Price;
             }
             return DATAUNAVAILABLE;
         }

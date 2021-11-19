@@ -75,7 +75,7 @@
                     {
                         int Day = i;
                         decimal MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
-                        decimal KompasPrice = Dashboard.SingleDayKompasPrice(MonthKompasPrices, Day);
+                        decimal KompasPrice = Dashboard.GetSingleDayKompasPrice(MonthKompasPrices, Day);
                         string dateConcatenated = (Dashboard.Year.ToString() + "-" + Dashboard.Month.ToString() + "-" + Day.ToString("00"));
                         <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Dashboard.ShowMoreInfo(Day))">
                             <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@i <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
@@ -98,7 +98,7 @@
                             {
                                 int Day = i + j;
                                 decimal MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
-                                decimal KompasPrice = Dashboard.SingleDayKompasPrice(MonthKompasPrices,Day);
+                                decimal KompasPrice = Dashboard.GetSingleDayKompasPrice(MonthKompasPrices,Day);
                                 string dateConcatenated = (Dashboard.Year.ToString() + "-" + Dashboard.Month.ToString() + "-" + Day.ToString("00"));
                         <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="(() => Dashboard.ShowMoreInfo(Day))">
                             <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
