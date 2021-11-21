@@ -1,6 +1,6 @@
 # HPS (Hotel Price Scout)
 
-This program is designed to notify hotel price managers of competitor price changes and display the discrepencies in a calendar overview. Additionally, a price thermometer is available to suggest price regulartion with the average market in mind.
+This program is designed to notify hotel price managers of competitor price changes and display the discrepancies in a calendar overview. Additionally, a price thermometer is available to suggest price regulation with the average market in mind.
 
 The software is developed by the P3-Project CS-21-SW-3-12 team.
 
