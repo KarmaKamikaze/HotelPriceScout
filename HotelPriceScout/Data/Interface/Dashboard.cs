@@ -1,4 +1,4 @@
-﻿using DataAccessLibrary;
+using DataAccessLibrary;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -203,12 +203,12 @@ namespace HotelPriceScout.Data.Interface
             {
                 if (dayClicked == DayClicked)
                 {
-                    CheckForAlternateClick = false;
+                    CheckForAlternateClick = !CheckForAlternateClick;
                 }
                 else
                 {
-                    CheckForAlternateClick = true;
                     DayClicked = dayClicked;
+                    CheckForAlternateClick = true;
                 }
             }
             else
@@ -225,6 +225,18 @@ namespace HotelPriceScout.Data.Interface
         {
             StartOfMonth = StartOfMonth.AddMonths(-1);
             LastDayOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
+        }
+        public string DetermineAnimation(int DayClicked, bool CheckForAlternateClick, int TempAniDate)
+        {
+            if (DayClicked != 0 && CheckForAlternateClick)
+            {
+                return "animation1";
+            }
+            else if (DayClicked != 0 && !CheckForAlternateClick && TempAniDate == DayClicked)
+            {
+                return "animation2";
+            }
+            return "";
         }
     }
 }

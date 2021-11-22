@@ -125,9 +125,10 @@
     </div>
 
 
-    @if (Dashboard.DayClicked != 0 && Dashboard.CheckForAlternateClick)
-    {Dashboard.GenerateThermometer(Dashboard.DayClicked,Dashboard.MonthsAway, MonthData, MarketPriceList);
-        <div class="animation1 col-md-4 table-borderless">
+    @if (Dashboard.DayClicked != 0)
+    {
+        Dashboard.GenerateThermometer(Dashboard.DayClicked, Dashboard.MonthsAway, MonthData, MarketPriceList);
+        <div class="@(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 table-borderless">
             <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
             <div class="row col d-flex justify-content-center">
                 <!-- outer layer-->
@@ -149,8 +150,8 @@
                             }
                             else if (item.Price > Dashboard.MarketPriceItem.Price)
                             {
-                                <tr style="text-align:right">
-                                    <td class="col">@item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
+                                <tr>
+                                    <td class="col text-right">@item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
                                     <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
@@ -161,7 +162,6 @@
                                     <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
-                           
                             else
                             {
                                 <tr>
@@ -172,50 +172,6 @@
                         }
                     </table>
                     Dashboard.TempAniDate = Dashboard.DayClicked;
-                }
-            </div>
-        </div>
-    }
-    else if (Dashboard.DayClicked != 0 && !Dashboard.CheckForAlternateClick && Dashboard.TempAniDate == Dashboard.DayClicked)
-    {
-       
-        <div class="animation2 col-md-4 table-borderless">
-            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
-            <div class="row col d-flex justify-content-center">
-                <!-- outer layer-->
-                @if (Dashboard.priceList == null)
-                {
-                    <div><p>Loading data</p></div>// <--- checks if thermometer is ready yet
-                }
-                else
-                {
-                    <table class="table table-borderless noHover" style="max-width:90%">
-                       @* @foreach (Prices item in Dashboard.priceList)
-                        {
-                            if (item.Price > Dashboard.MarketPriceItem.Price)
-                            {
-                                <tr style="text-align:right">
-                                    <td class="col">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td>
-                                </tr>
-                            }
-                            else if (item.Price < Dashboard.MarketPriceItem.Price)
-                            {
-                                <tr>
-                                    <td class="col text-right">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td class="col text-right"> @MarketPriceItem.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="table-info">@MarketPriceItem.Price,-</td>
-                                </tr>
-                            }
-                        }*@
-                    </table>
-                    Dashboard.DayClicked = 0;
                 }
             </div>
         </div>
