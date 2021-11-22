@@ -14,10 +14,7 @@ namespace Tests
             //Arrange
             BookingSite bookingSite = null;
 
-            void Action()
-            {
-                new PseudoScraper(bookingSite);
-            }
+            void Action() => new PseudoScraper(bookingSite);
 
             //Act and Assert
             Assert.Throws<NullReferenceException>(Action);

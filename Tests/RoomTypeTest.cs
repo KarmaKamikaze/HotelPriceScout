@@ -14,10 +14,7 @@ namespace Tests
         public void Test_Capacity_For_Validity_Throws(int value)
         {
             //Arrange and act
-            void Action()
-            {
-                RoomType roomType = new RoomType(value);
-            }
+            void Action() => new RoomType(value);
 
             Assert.Throws<ArgumentOutOfRangeException>(Action);
         }

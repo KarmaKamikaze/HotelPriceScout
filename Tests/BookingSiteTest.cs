@@ -14,10 +14,7 @@ namespace Tests
             //Arrange
             string name = null;
 
-            void Action()
-            {
-                new BookingSite(name, "single", "https://www.url.com", new Dictionary<string, string>());
-            }
+            void Action() => new BookingSite(name, "single", "https://www.url.com", new Dictionary<string, string>());
 
             //Act and Assert
             Assert.Throws<ArgumentNullException>(Action);
@@ -43,10 +40,7 @@ namespace Tests
             //Arrange
             string url = null;
 
-            void Action()
-            {
-                new BookingSite("name", "single", url, new Dictionary<string, string>());
-            }
+            void Action() => new BookingSite("name", "single", url, new Dictionary<string, string>());
 
             //Act and Assert
             Assert.Throws<ArgumentNullException>(Action);
@@ -58,10 +52,7 @@ namespace Tests
         public void URLThrowsWhenWrongFormatTest(string url)
         {
             //Arrange
-            void Action()
-            {
-                new BookingSite("name", "single", url, new Dictionary<string, string>());
-            }
+            void Action() => new BookingSite("name", "single", url, new Dictionary<string, string>());
 
             //Act and Assert
             Assert.Throws<UriFormatException>(Action);
@@ -86,10 +77,7 @@ namespace Tests
             //Arrange
             string type = null;
 
-            void Action()
-            {
-                new BookingSite("name", type, "https://www.url.com", new Dictionary<string, string>());
-            }
+            void Action() => new BookingSite("name", type, "https://www.url.com", new Dictionary<string, string>());
 
             //Act and Assert
             Assert.Throws<ArgumentNullException>(Action);
@@ -101,10 +89,7 @@ namespace Tests
             //Arrange
             string type = "test";
 
-            void Action()
-            {
-                new BookingSite("name", type, "https://www.url.com", new Dictionary<string, string>());
-            }
+            void Action() => new BookingSite("name", type, "https://www.url.com", new Dictionary<string, string>());
 
             //Act and Assert
             Assert.Throws<ArgumentOutOfRangeException>(Action);

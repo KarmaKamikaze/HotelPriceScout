@@ -14,11 +14,8 @@ namespace Tests
         public async Task Check_If_MarginValue_Throws(int marginValue, DateTime[] value)
         {
             //Arrange and act
-            async Task ActionAsync()
-            {
-                Scout scout = await Scout.CreateScoutAsync(marginValue, value);
-            }
-
+            async Task ActionAsync() => await Scout.CreateScoutAsync(marginValue, value);
+            
             //Assert
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(ActionAsync);
         }
