@@ -77,18 +77,5 @@ namespace Tests
             //Assert
             Assert.DoesNotContain(null, roomType.Prices);
         }
-
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(4)]
-        public void Test_For_No_Zero_Prices(int value)
-        {
-            //Arrange and Act
-            RoomType roomType = new RoomType(value);
-
-            //Assert
-            Assert.All(roomType.Prices, price => Assert.True(price.Price != 0));
-        }
     }
 }
