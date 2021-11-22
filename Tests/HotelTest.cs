@@ -13,10 +13,8 @@ namespace Tests
         {
             //Arrange
             string name = null;
-            void Action()
-            {
-                new Hotel(name, "tag");
-            }
+
+            void Action() => new Hotel(name, "tag");
 
             //Act and Assert
             Assert.Throws<ArgumentNullException>(Action);
@@ -40,10 +38,8 @@ namespace Tests
         {
             //Arrange
             string tag = null;
-            void Action()
-            {
-                new Hotel("name", tag);
-            }
+
+            void Action() => new Hotel("name", tag);
 
             //Act and Assert
             Assert.Throws<ArgumentNullException>(Action);
@@ -85,7 +81,5 @@ namespace Tests
             //Assert
             Assert.Equal(1, hotel.RoomTypes.Count(r => r.Capacity == capacity));
         }
-
-
     }
 }

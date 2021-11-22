@@ -8,16 +8,13 @@ namespace Tests
 {
     public class PseudoScraperTest
     {
-
         [Fact]
         public void BookingsiteNullConstructorThrowsTest()
         {
             //Arrange
             BookingSite bookingSite = null;
-            void Action()
-            {
-                new PseudoScraper(bookingSite);
-            }
+
+            void Action() => new PseudoScraper(bookingSite);
 
             //Act and Assert
             Assert.Throws<NullReferenceException>(Action);
@@ -29,7 +26,7 @@ namespace Tests
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                { "hotel1", "tag1" }
+                {"hotel1", "tag1"}
             };
             BookingSite bookingSite = new BookingSite("bookingsite", "single", "https://url.com", hotelStrings);
 
@@ -50,7 +47,7 @@ namespace Tests
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                { "hotel1", "tag1" }
+                {"hotel1", "tag1"}
             };
             BookingSite bookingSite = new BookingSite("bookingsite", "single", "https://url.com", hotelStrings);
             PseudoScraper pseudoScraper = new PseudoScraper(bookingSite);
@@ -59,12 +56,10 @@ namespace Tests
             pseudoScraper.StartScraping(margin);
 
             //Assert
-            Assert.All(bookingSite.HotelsList, 
-                hotel => Assert.All(hotel.RoomTypes, 
-                    roomtype => Assert.All(roomtype.Prices, 
+            Assert.All(bookingSite.HotelsList,
+                hotel => Assert.All(hotel.RoomTypes,
+                    roomtype => Assert.All(roomtype.Prices,
                         price => Assert.NotEqual(0, price.Price))));
-
         }
-
     }
 }

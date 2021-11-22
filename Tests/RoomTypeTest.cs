@@ -14,13 +14,9 @@ namespace Tests
         public void Test_Capacity_For_Validity_Throws(int value)
         {
             //Arrange and act
-            void Action()
-            {
-                RoomType roomType = new RoomType(value);
-            }
+            void Action() => new RoomType(value);
 
             Assert.Throws<ArgumentOutOfRangeException>(Action);
-
         }
 
         [Theory]
@@ -44,9 +40,9 @@ namespace Tests
 
             //Makes sure that if there's a year change, it'll + the days to the total amount.
             // It says 366, as the days of the year range from 1-366 instead of 0-365.
-            if(value < 0)
+            if (value < 0)
             {
-                value = value + 366;
+                value += 366;
             }
 
             RoomType roomType = new RoomType(1);
@@ -58,7 +54,7 @@ namespace Tests
         public void Test_For_Minimum_Date()
         {
             //Arrange and Act
-            var value = DateTime.Now.Date;
+            DateTime value = DateTime.Now.Date;
             RoomType roomType = new RoomType(1);
 
             //Assert

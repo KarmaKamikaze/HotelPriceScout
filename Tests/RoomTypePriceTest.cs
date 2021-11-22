@@ -10,16 +10,13 @@ namespace Tests
 {
     public class RoomTypePriceTest
     {
-
         [Fact]
         public void DateSetterThrowsWhenValueIsBeforeCurrentDateTest()
         {
             //Arrange
             DateTime date = DateTime.Now.AddDays(-1);
-            void Action()
-            {
-                RoomTypePrice roomTypePrice = new RoomTypePrice(date);
-            }
+
+            void Action() => new RoomTypePrice(date);
 
             //Act and Assert
             Assert.Throws<ArgumentOutOfRangeException>(Action);
@@ -44,10 +41,8 @@ namespace Tests
             //Arrange
             DateTime date = DateTime.Now;
             decimal price = -1;
-            void Action()
-            {
-                RoomTypePrice roomTypePrice = new RoomTypePrice(date, price);
-            }
+
+            void Action() => new RoomTypePrice(date, price);
 
             //Act and Assert
             Assert.Throws<ArgumentOutOfRangeException>(Action);
@@ -67,6 +62,5 @@ namespace Tests
             //Assert
             Assert.Equal(price, roomTypePrice.Price);
         }
-
     }
 }
