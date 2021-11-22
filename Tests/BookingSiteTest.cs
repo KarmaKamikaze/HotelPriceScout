@@ -114,9 +114,9 @@ namespace Tests
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                {"hotel1", "tag1"},
-                {"hotel2", "tag2"},
-                {"hotel3", "tag3"}
+                { "hotel1", "tag1" },
+                { "hotel2", "tag2" },
+                { "hotel3", "tag3" }
             };
             int expected = 3;
 
@@ -147,9 +147,9 @@ namespace Tests
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                {"hotel1", "tag1"},
-                {"hotel2", "tag2"},
-                {"hotel3", "tag3"}
+                { "hotel1", "tag1" },
+                { "hotel2", "tag2" },
+                { "hotel3", "tag3" }
             };
 
             //Act
@@ -166,9 +166,9 @@ namespace Tests
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                {"hotel1", "tag1"},
-                {"hotel2", "tag2"},
-                {"hotel3", "tag3"}
+                { "hotel1", "tag1" },
+                { "hotel2", "tag2" },
+                { "hotel3", "tag3" }
             };
 
             //Act

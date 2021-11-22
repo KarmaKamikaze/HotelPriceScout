@@ -26,7 +26,7 @@ namespace Tests
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                {"hotel1", "tag1"}
+                { "hotel1", "tag1" }
             };
             BookingSite bookingSite = new BookingSite("bookingsite", "single", "https://url.com", hotelStrings);
 
@@ -47,7 +47,7 @@ namespace Tests
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                {"hotel1", "tag1"}
+                { "hotel1", "tag1" }
             };
             BookingSite bookingSite = new BookingSite("bookingsite", "single", "https://url.com", hotelStrings);
             PseudoScraper pseudoScraper = new PseudoScraper(bookingSite);

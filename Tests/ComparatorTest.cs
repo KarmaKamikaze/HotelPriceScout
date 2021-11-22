@@ -14,8 +14,8 @@ namespace Tests
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                {"Kompas Hotel Aalborg", "tag1"},
-                {"hotel2", "tag2"}
+                { "Kompas Hotel Aalborg", "tag1" },
+                { "hotel2", "tag2" }
             };
             BookingSite bookingSite1 = new BookingSite("booking1", "multi", "https://www.url.com", hotelStrings);
             BookingSite bookingSite2 = new BookingSite("booking2", "multi", "https://www.url.com", hotelStrings);
@@ -41,8 +41,8 @@ namespace Tests
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                {"Kompas Hotel Aalborg", "tag1"},
-                {"hotel2", "tag2"}
+                { "Kompas Hotel Aalborg", "tag1" },
+                { "hotel2", "tag2" }
             };
             BookingSite bookingSite1 = new BookingSite("booking1", "multi", "https://www.url.com", hotelStrings);
             BookingSite bookingSite2 = new BookingSite("booking2", "multi", "https://www.url.com", hotelStrings);
