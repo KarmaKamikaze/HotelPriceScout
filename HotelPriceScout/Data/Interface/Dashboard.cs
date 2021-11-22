@@ -1,4 +1,4 @@
-﻿using DataAccessLibrary;
+using DataAccessLibrary;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -114,12 +114,13 @@ namespace HotelPriceScout.Data.Interface
             }
             return DATAUNAVAILABLE;
         }
-       
-        public void GenerateThermometer(int day, int monthaway, IEnumerable<PriceModel> monthData)
+
+        public void GenerateThermometer(int day, int monthaway, IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice)
         {
-            DateTime todayDate = new DateTime(Year, Month, day);
+            DateTime todayDate = new(Year, Month, day);
             todayDate.AddMonths(monthaway);
-            priceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData);
+            decimal MarketPrice = (avgMarketPrice.Where(Date => Date.Date == todayDate)).Single().Price;
+            priceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData, MarketPrice);
             MarketPriceItem = PriceMeterGenerator.MarketFinder(priceList);
             priceList.Sort();
         }
@@ -202,12 +203,12 @@ namespace HotelPriceScout.Data.Interface
             {
                 if (dayClicked == DayClicked)
                 {
-                    CheckForAlternateClick = false;
+                    CheckForAlternateClick = !CheckForAlternateClick;
                 }
                 else
                 {
-                    CheckForAlternateClick = true;
                     DayClicked = dayClicked;
+                    CheckForAlternateClick = true;
                 }
             }
             else
@@ -224,6 +225,18 @@ namespace HotelPriceScout.Data.Interface
         {
             StartOfMonth = StartOfMonth.AddMonths(-1);
             LastDayOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
+        }
+        public string DetermineAnimation(int DayClicked, bool CheckForAlternateClick, int TempAniDate)
+        {
+            if (DayClicked != 0 && CheckForAlternateClick)
+            {
+                return "animation1";
+            }
+            else if (DayClicked != 0 && !CheckForAlternateClick && TempAniDate == DayClicked)
+            {
+                return "animation2";
+            }
+            return "";
         }
     }
 }
