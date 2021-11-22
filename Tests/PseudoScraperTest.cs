@@ -24,7 +24,7 @@ namespace Tests
         }
 
         [Fact]
-        public void BookingsiteAssignedConstructorTest()
+        public void ValidBookingSiteAssignedConstructorTest()
         {
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
