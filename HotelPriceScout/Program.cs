@@ -7,7 +7,7 @@ namespace HotelPriceScout
 {
     public class Program
     {
-        public static ScoutSharedService ScoutSharedService { get; set; }
+        public static ScoutSharedService ScoutSharedService { get; private set; }
         public static void Main(string[] args)
         {
             ScoutSharedService = new ScoutSharedService();
