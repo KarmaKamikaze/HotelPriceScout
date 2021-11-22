@@ -115,7 +115,7 @@ namespace HotelPriceScout.Data.Interface
             return DATAUNAVAILABLE;
         }
 
-        public void GenerateThermometer(int day, int monthaway, IEnumerable<MarketPriceModel> monthData, List<MarketPriceModel> avgMarketPrice)
+        public void GenerateThermometer(int day, int monthaway, IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice)
         {
             DateTime todayDate = new(Year, Month, day);
             todayDate.AddMonths(monthaway);

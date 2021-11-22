@@ -75,7 +75,7 @@
                             int Day = i;
                             DateTime dateConcatenated = new DateTime(Dashboard.Year, Dashboard.Month, Day);
                             MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
-                            MarketPriceList.Add(new MarketPriceModel(MarketPrice, dateConcatenated));
+                            MarketPriceList.Add(new PriceModel(MarketPrice, dateConcatenated));
                             KompasPrice = Dashboard.GetSingleDayKompasPrice(MonthKompasPrices, Day);
                         <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="@(() => { Dashboard.ShowMoreInfo(Day); MarketPriceList.Clear(); })">
                             <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@i <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
@@ -99,7 +99,7 @@
                                     int Day = i + j;
                                     DateTime dateConcatenated = new DateTime(Dashboard.Year, Dashboard.Month, Day);
                                     MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
-                                    MarketPriceList.Add(new MarketPriceModel(MarketPrice, dateConcatenated));
+                                    MarketPriceList.Add(new PriceModel(MarketPrice, dateConcatenated));
                                     KompasPrice = Dashboard.GetSingleDayKompasPrice(MonthKompasPrices, Day);
                         <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="@(() => { Dashboard.ShowMoreInfo(Day); MarketPriceList.Clear(); })">
                             <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
@@ -226,7 +226,7 @@
 @code
 {
     decimal MarketPrice;
-    List<MarketPriceModel> MarketPriceList = new();
+    List<PriceModel> MarketPriceList = new();
     decimal KompasPrice;
     public int AdultsPicked = 1;
     public List<string> SelectedHotels;
