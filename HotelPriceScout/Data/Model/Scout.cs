@@ -1,25 +1,24 @@
 using DataAccessLibrary;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using HotelPriceScout.Data.Function;
 
 
 namespace HotelPriceScout.Data.Model
 {
-    public class Scout : IDisposable
+    public class Scout
     {
         private int _marginValue;
-        private string _state;
 
         //This method is used to create scout objects instead of a typical constructor.
         //This is due to the fact that the static booking site data should be fetched from the database.
         //This therefore necessitates a asynchronous function.
-        public static async Task<Scout> CreateScoutAsync(string state, int marginValue, IEnumerable<DateTime> notificationTimes)
+        public static async Task<Scout> CreateScoutAsync(int marginValue, IEnumerable<DateTime> notificationTimes)
         {
             Scout scout = new Scout
             {
-                State = state,
                 MarginValue = marginValue,
                 NotificationTimes = notificationTimes
             };
@@ -53,19 +52,6 @@ namespace HotelPriceScout.Data.Model
             }
         }
 
-        public string State
-        {
-            get => _state;
-            set
-            {
-                if (value != "stopped" && value != "started" && value != "preparing")
-                {
-                    throw new ArgumentOutOfRangeException($"{nameof(value)} can not be anything other than \"stopped\", \"started\" or \"preparing\".");
-                }
-                _state = value;
-            }
-        }
-
         public IEnumerable<BookingSite> BookingSites { get; private set; }
 
 
@@ -94,9 +80,11 @@ namespace HotelPriceScout.Data.Model
             return bookingSites;
         }
 
-        public void Dispose()
+        public void StopScout()
         {
-            GC.SuppressFinalize(this);
+            MarginValue = 0;
+            NotificationTimes = null;
+            BookingSites = null;
         }
     }
 }
