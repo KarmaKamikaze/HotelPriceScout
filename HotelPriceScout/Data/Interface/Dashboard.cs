@@ -1,4 +1,4 @@
-﻿using DataAccessLibrary;
+using DataAccessLibrary;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -11,8 +11,8 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard
     {
-        public List<Prices> priceList { get; private set; }
-        public Prices MarketPriceItem { get; private set; }
+        public List<PriceModel> priceList { get; private set; }
+        public PriceModel MarketPriceItem { get; private set; }
         private const int DATAUNAVAILABLE = 0;
         public int TempAniDate { get; set; }
         public bool CheckForAlternateClick { get; set; } = true;
@@ -30,22 +30,22 @@ namespace HotelPriceScout.Data.Interface
         public DateTime LastDayOfMonth { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
         private readonly SqliteDataAccess _db = new();
 
-        public IEnumerable<MarketPriceModel> SelectedMonthMarketPrices(DateTime startDate, DateTime endDate, IEnumerable<MarketPriceModel> dataList)
+        public IEnumerable<PriceModel> SelectedMonthMarketPrices(DateTime startDate, DateTime endDate, IEnumerable<PriceModel> dataList)
         {
             List<decimal> TempList = new();
-            List<MarketPriceModel> ListOfSingleDatePrices = new();
+            List<PriceModel> ListOfSingleDatePrices = new();
             for(DateTime tempDate = startDate; tempDate <= endDate; tempDate = tempDate.AddDays(1))
             {
                 TempList.AddRange(from item in dataList
                                   where item.Date == tempDate
                                   select item.Price);
-                MarketPriceModel SingleDayMarketPrice = new MarketPriceModel(TempList.Average(), tempDate);
+                PriceModel SingleDayMarketPrice = new PriceModel(TempList.Average(), tempDate);
                 ListOfSingleDatePrices.Add(SingleDayMarketPrice);
             }
             dataList = ListOfSingleDatePrices;
             return dataList;
         }
-        public decimal GetSingleDayMarketPrice(IEnumerable<MarketPriceModel> multipleMarketPrices, int specificDay)
+        public decimal GetSingleDayMarketPrice(IEnumerable<PriceModel> multipleMarketPrices, int specificDay)
         {   
             //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
             if (new DateTime(Year, Month, specificDay, 23, 59, 59) >= ToDay &&
@@ -55,11 +55,11 @@ namespace HotelPriceScout.Data.Interface
             }
             return DATAUNAVAILABLE;
         }
-        public async Task<IEnumerable<MarketPriceModel>> RetrieveSelectDataFromDb(DateTime startDate, DateTime endDate, int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
+        public async Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(DateTime startDate, DateTime endDate, int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
         {              
-            IEnumerable<MarketPriceModel> dataList = await _db.RetrieveDataFromDb("*", $"RoomType{roomType}",
+            IEnumerable<PriceModel> dataList = await _db.RetrieveDataFromDb("*", $"RoomType{roomType}",
                                          $" Date >= '{startDate.ToString("yyyy-MM-dd")}' AND Date <= '{endDate.ToString("yyyy-MM-dd")}'");
-            List<MarketPriceModel> resultDataList = new();
+            List<PriceModel> resultDataList = new();
             if (wantedOutput == "Select Prices")
             {
                 if (selectedHotels != null) 
@@ -104,7 +104,7 @@ namespace HotelPriceScout.Data.Interface
             }
             throw new Exception("Fatal error: Method Called without WantedOutput parameter");
         }
-        public decimal GetSingleDayKompasPrice(IEnumerable<MarketPriceModel> calendarKompasPrices, int specificDay)
+        public decimal GetSingleDayKompasPrice(IEnumerable<PriceModel> calendarKompasPrices, int specificDay)
         {
             //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
             if (new DateTime(Year, Month, specificDay, 23, 59, 59) >= ToDay &&
@@ -114,12 +114,13 @@ namespace HotelPriceScout.Data.Interface
             }
             return DATAUNAVAILABLE;
         }
-       
-        public void GenerateThermometer(int day, int monthaway, IEnumerable<MarketPriceModel> monthData)
+
+        public void GenerateThermometer(int day, int monthaway, IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice)
         {
-            DateTime todayDate = new DateTime(Year, Month, day);
+            DateTime todayDate = new(Year, Month, day);
             todayDate.AddMonths(monthaway);
-            priceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData);
+            decimal MarketPrice = (avgMarketPrice.Where(Date => Date.Date == todayDate)).Single().Price;
+            priceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData, MarketPrice);
             MarketPriceItem = PriceMeterGenerator.MarketFinder(priceList);
             priceList.Sort();
         }
