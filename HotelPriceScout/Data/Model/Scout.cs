@@ -66,8 +66,6 @@ namespace HotelPriceScout.Data.Model
             IComparator comparator = new Comparator();
             comparator.ComparePrices(BookingSites, MarginValue);
 
-            /*comparator.SendNotification(); < ----ACTIVATE IF YOU WANT MAILS  */
-
             if (comparator.IsDiscrepancy && type == "email")
             {
                 comparator.SendNotification();   
