@@ -17,12 +17,13 @@ namespace HotelPriceScout.Pages
                 PriceDataList.Sort();
                 return PriceDataList;
             }
-            public static Prices MarketFinder(List<Prices> list)
+            public static PriceModel MarketFinder(List<PriceModel> list)
             // Finds the market price in the list of prices,
             // This shall not be used if market price comes from somewhere else.
             {
-                Prices MarketPriceItem = list.Find(list => list.Name == "Gns. Marked");
+            PriceModel MarketPriceItem = list.Find(list => list.HotelName == "Gns. Marked");
                 return MarketPriceItem;
             }
+       
     }
 }
