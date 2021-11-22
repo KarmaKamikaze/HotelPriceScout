@@ -1,8 +1,9 @@
+
 @page "/Settings"
 @using HotelPriceScout.Data.Interface
 @using HotelPriceScout.Data.Model
+@inject NavigationManager NavManager
 @inherits SettingsManager
-@inject ScoutSharedService _scoutService
 
 <div class="row">
   <div class="col-xl-4 offset-xl-4 col-sm-7 offset-sm-2 shadow p-3 mb-5 bg-white rounded">
@@ -60,6 +61,24 @@
                         </div>
                     </div>
                 }
+     @if (modalStart)
+    {
+        <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h4 class="modal-title" id="titleLabel">Settings have been set</h4>
+                        <h5 class="modal-title" id="titleLabel">Going to dashboard in @timer seconds</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <NavLink class="form-control border border-dark" @onclick="@ModalStart" href="/Dashboard">Go to dashboard </NavLink>
+                        <button type="button" class="form-control border border-dark" @onclick="@ModalStart"> Stay </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
             
         
             @if (showStop)
@@ -121,6 +140,25 @@
 
 
 @code {
+private int timer;
+    private async void Countdown()
+    {
+        for (timer = 10; timer >= 0; timer--)
+        {
+            await Task.Delay(1000);
+            StateHasChanged();
+            if (modalStart == false)
+            {
+                break;
+            }
+        }
+        if (timer <= 0)
+        {
+            ModalStart();
+            NavManager.NavigateTo("/Dashboard");
+        }
+    }
+
 
     public class NotificationAmount
     {
@@ -174,24 +212,23 @@
         StateHasChanged();
     }
 
-    public async void StartProgram()
+    private async void StartProgram()
     {
-        _scoutService.ScoutRunning = true;
+        Program.ScoutSharedService.ScoutRunning = true;
         marginPickedPass = marginPicked;
         notificationPickedPass = notificationAmountPicked;
         timeValuePass = timeValue;
         timeValuePass2 = timeValue2;
         timeValuePass3 = timeValue3;
         modalStart = true;
+        Countdown();
         isScoutStarted = true;
         ShowStopButton();
         ShowUpdateButton();
         ShowStartButton();
         isScoutStopped = false;
-        await Task.Delay(2000);
-        modalStart = false;
-        _scoutService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
-        _scoutService.Scout.StartScout();
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
+        Program.ScoutSharedService.Scout.StartScout();
         StateHasChanged();
     }
 

@@ -62,7 +62,6 @@ namespace HotelPriceScout.Data.Interface
             showUpdate = !showUpdate;
         }
 
-
         public bool popUp = false;
         public void PopUp()
         {
@@ -73,6 +72,10 @@ namespace HotelPriceScout.Data.Interface
         public void UpdatePopUp()
         {
             updatePopUp = !updatePopUp;
+        }
+        public void ModalStart()
+        {
+            modalStart = !modalStart;
         }
     }
 

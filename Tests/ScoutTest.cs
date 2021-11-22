@@ -11,12 +11,12 @@ namespace Tests
         [InlineData(-1000, null)]
         [InlineData(-500, null)]
         [InlineData(-1, null)]
-        public async Task Check_If_MarginValue_Throws(int marginvalue, DateTime[] value)
+        public async Task Check_If_MarginValue_Throws(int marginValue, DateTime[] value)
         {
             //Arrange and act
             async Task ActionAsync()
             {
-                Scout scout = await Scout.CreateScoutAsync(marginvalue, value);
+                Scout scout = await Scout.CreateScoutAsync(marginValue, value);
             }
             //Assert
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(ActionAsync);

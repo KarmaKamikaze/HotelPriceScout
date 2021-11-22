@@ -58,20 +58,29 @@
 
 .animation2 {
     animation-fill-mode: forwards;
-    animation-name: animation;
+    animation-name: animation2;
     animation-duration: 0.5s;
     position: relative;
-    animation-direction: reverse;
 }
 
 @keyframes animation {
     0% 
     {
-        left: -500px;
+        left: -40%;
         opacity: 0;
     }
     100% 
     {
-        left: 0px
+        left: 0%;
     } 
+}
+
+@keyframes animation2 {
+    0% {
+        left: 0%;
+    }
+    100% {
+        left: -40%;
+        opacity: 0;
+    }
 }
