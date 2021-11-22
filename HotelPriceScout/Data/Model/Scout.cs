@@ -1,9 +1,7 @@
 using DataAccessLibrary;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using HotelPriceScout.Data.Function;
 
 
 namespace HotelPriceScout.Data.Model
