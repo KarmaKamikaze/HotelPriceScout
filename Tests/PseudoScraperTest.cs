@@ -40,6 +40,31 @@ namespace Tests
             Assert.Equal(bookingSite, pseudoScraper.BookingSite);
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(10)]
+        [InlineData(100)]
+        [InlineData(1000)]
+        public void StartScrapingAssignsPricesTest(decimal margin)
+        {
+            //Arrange
+            Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
+            {
+                { "hotel1", "tag1" }
+            };
+            BookingSite bookingSite = new BookingSite("bookingsite", "single", "https://url.com", hotelStrings);
+            PseudoScraper pseudoScraper = new PseudoScraper(bookingSite);
+
+            //Act
+            pseudoScraper.StartScraping(margin);
+
+            //Assert
+            Assert.All(bookingSite.HotelsList, 
+                hotel => Assert.All(hotel.RoomTypes, 
+                    roomtype => Assert.All(roomtype.Prices, 
+                        price => Assert.NotEqual(0, price.Price))));
+
+        }
 
     }
 }
