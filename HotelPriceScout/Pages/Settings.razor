@@ -49,35 +49,24 @@
                 {
                     <div class=""><button type="button" class="shadow p-3 rounded btn btn-success col" disabled=@isScoutStarted @onclick="StartProgram"> Start program</button></div>
                 }
-                @if (modalStart)
+                
+                 @if (modalStart)
                 {
                     <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-body">
-                                    <h4 class="modal-title" id="titleLabel">Settings have been set and the program has started!</h4>
+                                    <h4 class="modal-title" id="titleLabel">Settings have been set</h4>
+                                    <h5 class="modal-title" id="titleLabel">Going to dashboard in @timer seconds</h5>
+                                </div>
+                                <div class="modal-footer">
+                                    <NavLink class="form-control border border-dark" @onclick="@ModalStart" href="/Dashboard">Go to dashboard </NavLink>
+                                    <button type="button" class="form-control border border-dark" @onclick="@ModalStart"> Stay </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 }
-     @if (modalStart)
-    {
-        <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4 class="modal-title" id="titleLabel">Settings have been set</h4>
-                        <h5 class="modal-title" id="titleLabel">Going to dashboard in @timer seconds</h5>
-                    </div>
-                    <div class="modal-footer">
-                        <NavLink class="form-control border border-dark" @onclick="@ModalStart" href="/Dashboard">Go to dashboard </NavLink>
-                        <button type="button" class="form-control border border-dark" @onclick="@ModalStart"> Stay </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
 
             
         
