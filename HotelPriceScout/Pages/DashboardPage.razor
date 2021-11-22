@@ -126,7 +126,7 @@
     @if (Dashboard.DayClicked != 0)
     {
         Dashboard.GenerateThermometer(Dashboard.DayClicked, Dashboard.MonthsAway, MonthData);
-        <div class="@(test(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 table-borderless">
+        <div class="@(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 table-borderless">
             <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
             <div class="row col d-flex justify-content-center">
                 <!-- outer layer-->
@@ -160,7 +160,6 @@
                                     <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
-                           
                             else
                             {
                                 <tr>
@@ -185,18 +184,6 @@
     public int AdultsPicked = 1;
     public List<string> SelectedHotels;
 
-    public string test(int DayClicked, bool CheckForAlternateClick, int TempAniDate)
-    {
-        if (DayClicked != 0 && CheckForAlternateClick)
-        {
-            return "animation1";
-        }
-        else if (DayClicked != 0 && !CheckForAlternateClick && TempAniDate == DayClicked)
-        {
-            return "animation2";
-        }
-        return "";
-    }
 
     public class numberOfAdults
     {
