@@ -11,11 +11,11 @@ namespace HotelPriceScout.Data.Model
     public class Scout : IScout
     {
         private int _marginValue;
-        
-        public int MarginValue
+
+        private int MarginValue
         {
             get => _marginValue;
-            private set
+            set
             {
                 if (value < 0)
                 {
@@ -24,10 +24,10 @@ namespace HotelPriceScout.Data.Model
                 _marginValue = value;
             }
         }
-        public IEnumerable<BookingSite> BookingSites { get; private set; }
-        public IEnumerable<DateTime> NotificationTimes { get; private set; }
+        private IEnumerable<DateTime> NotificationTimes { get; set; }
         private TimeMonitor Timers { get; set; }
-
+        public IEnumerable<BookingSite> BookingSites { get; private set; }
+        
         //This method is used to create scout objects instead of a typical constructor.
         //This is due to the fact that the static booking site data should be fetched from the database.
         //This therefore necessitates a asynchronous function.
