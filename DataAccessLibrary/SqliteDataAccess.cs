@@ -22,13 +22,13 @@ namespace DataAccessLibrary
             return resources;
         }
 
-        public async Task<IEnumerable<MarketPriceModel>> RetrieveDataFromDb(string column, string table, string value)
+        public async Task<IEnumerable<PriceModel>> RetrieveDataFromDb(string column, string table, string value)
         {
 
             using IDbConnection connection = new SQLiteConnection(connectionString);
-            IEnumerable<MarketPriceModel> output = await connection.QueryAsync<MarketPriceModel>($"Select {column} From {table} Where {value}", new DynamicParameters());
+            IEnumerable<PriceModel> output = await connection.QueryAsync<PriceModel>($"Select {column} From {table} Where {value}", new DynamicParameters());
 
-            List<MarketPriceModel> resources = output.ToList();
+            List<PriceModel> resources = output.ToList();
 
             return resources;
 

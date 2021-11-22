@@ -136,7 +136,7 @@
                 else
                 {
                     <table class="table table-borderless noHover" style="max-width:90%">
-                        @foreach (MarketPriceModel item in Dashboard.priceList)
+                        @foreach (PriceModel item in Dashboard.priceList)
                         {
                             if (decimal.ToInt32(item.Price) == decimal.ToInt32(Dashboard.MarketPriceItem.Price))
                             {
@@ -245,11 +245,11 @@
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
     List<string> listOfSelectedHotels;
 
-    List<MarketPriceModel> priceList;
-    MarketPriceModel MarketPriceItem;
-    IEnumerable<MarketPriceModel> MonthData;
-    IEnumerable<MarketPriceModel> MonthMarketData;
-    IEnumerable<MarketPriceModel> MonthKompasPrices;
+    List<PriceModel> priceList;
+    PriceModel MarketPriceItem;
+    IEnumerable<PriceModel> MonthData;
+    IEnumerable<PriceModel> MonthMarketData;
+    IEnumerable<PriceModel> MonthKompasPrices;
 
     //Needs to be here, Can not be moved to Dashboard
     // As we can not call variables made in this scope.

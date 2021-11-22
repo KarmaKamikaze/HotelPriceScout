@@ -17,7 +17,7 @@ namespace HotelPriceScout.Data.Model
             Roomtype1HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
             Roomtype2HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
             Roomtype4HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
-            AvgMarketPrices = new List<MarketPriceModel>();
+            AvgMarketPrices = new List<PriceModel>();
         }
 
         public bool IsDiscrepancy { get; private set; }
@@ -25,7 +25,7 @@ namespace HotelPriceScout.Data.Model
         private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype1HotelAvgPrices { get; set; }
         private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype2HotelAvgPrices { get; set; }
         private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype4HotelAvgPrices { get; set; }
-        private List<MarketPriceModel> AvgMarketPrices { get; set; }
+        private List<PriceModel> AvgMarketPrices { get; set; }
 
         public async void ComparePrices(IEnumerable<BookingSite> bookingSites, int marginValue)
         {
@@ -77,7 +77,7 @@ namespace HotelPriceScout.Data.Model
 
                 foreach ((Dictionary<string, decimal> dict, int capacity) in dictList)
                 {
-                    AvgMarketPrices.Add(new MarketPriceModel(dict.Values.Average(), date, capacity));
+                    AvgMarketPrices.Add(new PriceModel(dict.Values.Average(), date, capacity));
                 }
             }
 
@@ -117,7 +117,7 @@ namespace HotelPriceScout.Data.Model
 
         private void CheckDiscrepancy(DateTime date, Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, decimal marginValue, int capacity)
         {
-            MarketPriceModel avgMarketPrice = AvgMarketPrices.Where(price => price.Date == date).Single(price => price.RoomType == capacity);
+            PriceModel avgMarketPrice = AvgMarketPrices.Where(price => price.Date == date).Single(price => price.RoomType == capacity);
             if (hotelAvgPrices[date]["Kompas Hotel Aalborg"] < ((1 - marginValue / 100) * avgMarketPrice.Price) ||
                 hotelAvgPrices[date]["Kompas Hotel Aalborg"] > ((1 + marginValue / 100) * avgMarketPrice.Price))
             {
@@ -142,7 +142,7 @@ namespace HotelPriceScout.Data.Model
 
             string roomType1Mail = "", roomType2Mail = "", roomType4Mail = "";
 
-            foreach (MarketPriceModel price in AvgMarketPrices.Where(p => p.MarkedForDiscrepancy && p.Date < DateTime.Now.AddMonths(1)).ToList())
+            foreach (PriceModel price in AvgMarketPrices.Where(p => p.MarkedForDiscrepancy && p.Date < DateTime.Now.AddMonths(1)).ToList())
             {
                 if (price.RoomType == 1)
                 {
@@ -183,7 +183,7 @@ namespace HotelPriceScout.Data.Model
             smtpClient.Disconnect(true);
         }
 
-        private string MailDataBuilder(Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, string containerString, MarketPriceModel price)
+        private string MailDataBuilder(Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, string containerString, PriceModel price)
         {
             KeyValuePair<DateTime, Dictionary<string, decimal>> query;
             query = hotelAvgPrices.Single(hp => hp.Key == price.Date);
