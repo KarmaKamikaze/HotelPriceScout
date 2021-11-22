@@ -126,7 +126,8 @@
 
 
     @if (Dashboard.DayClicked != 0 && Dashboard.CheckForAlternateClick)
-    {Dashboard.GenerateThermometer(Dashboard.DayClicked,Dashboard.MonthsAway, MonthData, MarketPriceList);
+    {
+        Dashboard.GenerateThermometer(Dashboard.DayClicked, Dashboard.MonthsAway, MonthData, MarketPriceList); MarketPriceList.Clear();
         <div class="animation1 col-md-4 table-borderless">
             <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
             <div class="row col d-flex justify-content-center">
@@ -247,9 +248,6 @@
     Dashboard Cal = new Dashboard();
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
     List<string> listOfSelectedHotels;
-
-    List<PriceModel> priceList;
-    PriceModel MarketPriceItem;
     IEnumerable<PriceModel> MonthData;
     IEnumerable<PriceModel> MonthMarketData;
     IEnumerable<PriceModel> MonthKompasPrices;
@@ -273,16 +271,18 @@
             Dashboard.PreviousMonth();
         }
         else if (s == "update Hotel")
-        {
+        {MarketPriceList.Clear();
             if (SelectedHotels != null)
             {
                 MonthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
                 MonthMarketData = Dashboard.SelectedMonthMarketPrices((Dashboard.ToDay.Date), (Dashboard.LastDayOfMonth.Date),MonthData);
             }
+                   
         }
         MonthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
         MonthMarketData = Dashboard.SelectedMonthMarketPrices((Dashboard.ToDay.Date), (Dashboard.LastDayOfMonth.Date), MonthData);
         MonthKompasPrices = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Kompas Prices");
+
     }
 
     protected override async Task OnInitializedAsync()
