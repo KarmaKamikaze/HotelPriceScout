@@ -202,12 +202,13 @@ namespace HotelPriceScout.Data.Interface
             {
                 if (dayClicked == DayClicked)
                 {
-                    CheckForAlternateClick = false;
+                    CheckForAlternateClick = !CheckForAlternateClick;
+
                 }
                 else
                 {
-                    CheckForAlternateClick = true;
                     DayClicked = dayClicked;
+                    CheckForAlternateClick = true;
                 }
             }
             else

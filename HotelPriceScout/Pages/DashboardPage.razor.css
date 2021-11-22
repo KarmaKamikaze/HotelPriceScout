@@ -51,6 +51,7 @@
 }
 
 .animation1 {
+    animation-fill-mode: forwards;
     animation-name: animation;
     animation-duration: 0.5s;
     position: relative;
