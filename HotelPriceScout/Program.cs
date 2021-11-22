@@ -1,6 +1,4 @@
 using HotelPriceScout.Data.Interface;
-using HotelPriceScout.Data.Model;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
