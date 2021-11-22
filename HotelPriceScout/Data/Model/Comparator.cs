@@ -11,35 +11,36 @@ namespace HotelPriceScout.Data.Model
 {
     public class Comparator : IComparator
     {
-        private SqliteDataAccess _db = new SqliteDataAccess();
+        private readonly SqliteDataAccess _db = new SqliteDataAccess();
+
         public Comparator()
         {
-            Roomtype1HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
-            Roomtype2HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
-            Roomtype4HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
+            RoomType1HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
+            RoomType2HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
+            RoomType4HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
             AvgMarketPrices = new List<PriceModel>();
         }
 
         public bool IsDiscrepancy { get; private set; }
 
-        private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype1HotelAvgPrices { get; set; }
-        private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype2HotelAvgPrices { get; set; }
-        private Dictionary<DateTime, Dictionary<string, decimal>> Roomtype4HotelAvgPrices { get; set; }
+        private Dictionary<DateTime, Dictionary<string, decimal>> RoomType1HotelAvgPrices { get; set; }
+        private Dictionary<DateTime, Dictionary<string, decimal>> RoomType2HotelAvgPrices { get; set; }
+        private Dictionary<DateTime, Dictionary<string, decimal>> RoomType4HotelAvgPrices { get; set; }
         private List<PriceModel> AvgMarketPrices { get; set; }
 
         public async void ComparePrices(IEnumerable<BookingSite> bookingSites, int marginValue)
         {
-            DateTime LatestScrapedDate = bookingSites.First().HotelsList.First().RoomTypes.First().Prices.Last().Date;
+            DateTime latestScrapedDate = bookingSites.First().HotelsList.First().RoomTypes.First().Prices.Last().Date;
 
             //For loop that iterates through each date that have been scraped
-            for (DateTime date = DateTime.Now.Date; date <= LatestScrapedDate; date = date.AddDays(1))
+            for (DateTime date = DateTime.Now.Date; date <= latestScrapedDate; date = date.AddDays(1))
             {
-                //These dictionaries describe the values of the key-value-pairs of the RoomtypeXHotelAvgPrices dictionaries.
+                //These dictionaries describe the values of the key-value-pairs of the RoomTypeXHotelAvgPrices dictionaries.
                 Dictionary<string, decimal> dict1 = new();
                 Dictionary<string, decimal> dict2 = new();
                 Dictionary<string, decimal> dict4 = new();
 
-                //The integer describes the capacity of the roomtypes.
+                //The integer describes the capacity of the roomTypes.
                 List<(Dictionary<string, decimal>, int)> dictList = new();
                 dictList.Add((dict1, 1));
                 dictList.Add((dict2, 2));
@@ -49,12 +50,12 @@ namespace HotelPriceScout.Data.Model
                 {
                     foreach (Hotel hotel in bookingSite.HotelsList)
                     {
-                        //Foreach loop that iterates through the different dictionaries which each are coupled to a roomtype 
+                        //Foreach loop that iterates through the different dictionaries which each are coupled to a roomType 
                         foreach ((Dictionary<string, decimal> dict, int capacity) in dictList)
                         {
                             RoomType roomType = hotel.RoomTypes.Single(r => r.Capacity == capacity);
 
-                            RoomTypePrice roomTypePrice = roomType.Prices.Where(p => p.Date == date).FirstOrDefault();
+                            RoomTypePrice roomTypePrice = roomType.Prices.FirstOrDefault(p => p.Date == date);
 
                             if (roomTypePrice != null)
                             {
@@ -71,9 +72,9 @@ namespace HotelPriceScout.Data.Model
                     }
                 }
 
-                Roomtype1HotelAvgPrices.Add(date, dict1);
-                Roomtype2HotelAvgPrices.Add(date, dict2);
-                Roomtype4HotelAvgPrices.Add(date, dict4);
+                RoomType1HotelAvgPrices.Add(date, dict1);
+                RoomType2HotelAvgPrices.Add(date, dict2);
+                RoomType4HotelAvgPrices.Add(date, dict4);
 
                 foreach ((Dictionary<string, decimal> dict, int capacity) in dictList)
                 {
@@ -82,42 +83,47 @@ namespace HotelPriceScout.Data.Model
             }
 
             //Notification should only be sent for discrepancies in the next month
-            DateTime earliestNotifactionDate = AvgMarketPrices.Min(price => price.Date);
-            DateTime latestNotificationDate = earliestNotifactionDate.AddMonths(1);
-            for (DateTime date = earliestNotifactionDate; date < latestNotificationDate; date = date.AddDays(1))
+            DateTime earliestNotificationDate = AvgMarketPrices.Min(price => price.Date);
+            DateTime latestNotificationDate = earliestNotificationDate.AddMonths(1);
+            for (DateTime date = earliestNotificationDate; date < latestNotificationDate; date = date.AddDays(1))
             {
-                CheckDiscrepancy(date, Roomtype1HotelAvgPrices, marginValue, 1);
-                CheckDiscrepancy(date, Roomtype2HotelAvgPrices, marginValue, 2);
-                CheckDiscrepancy(date, Roomtype4HotelAvgPrices, marginValue, 4);
+                CheckDiscrepancy(date, RoomType1HotelAvgPrices, marginValue, 1);
+                CheckDiscrepancy(date, RoomType2HotelAvgPrices, marginValue, 2);
+                CheckDiscrepancy(date, RoomType4HotelAvgPrices, marginValue, 4);
             }
 
-            StoreAvgHotelPrices(Roomtype1HotelAvgPrices, "RoomType1");
-            StoreAvgHotelPrices(Roomtype2HotelAvgPrices, "RoomType2");
-            StoreAvgHotelPrices(Roomtype4HotelAvgPrices, "RoomType4");
-
+            StoreAvgHotelPrices(RoomType1HotelAvgPrices, "RoomType1");
+            StoreAvgHotelPrices(RoomType2HotelAvgPrices, "RoomType2");
+            StoreAvgHotelPrices(RoomType4HotelAvgPrices, "RoomType4");
         }
 
-        private async void StoreAvgHotelPrices(Dictionary<DateTime, Dictionary<string, decimal>> roomtypeHotelAvgPrices, string tableName)
+        private async void StoreAvgHotelPrices(Dictionary<DateTime, Dictionary<string, decimal>> roomTypeHotelAvgPrices,
+            string tableName)
         {
             string valueDB = $"INSERT INTO {tableName} (Date,HotelName,Price) VALUES ";
-            foreach (KeyValuePair<DateTime, Dictionary<string, decimal>> dateHotelsPair in roomtypeHotelAvgPrices)
+            foreach (KeyValuePair<DateTime, Dictionary<string, decimal>> dateHotelsPair in roomTypeHotelAvgPrices)
             {
                 foreach (KeyValuePair<string, decimal> hotelPricePair in dateHotelsPair.Value)
                 {
                     valueDB += $"('{dateHotelsPair.Key.ToString("yyyy-MM-dd")}','{hotelPricePair.Key}','{hotelPricePair.Value}'),";
                 }
             }
+
             valueDB = valueDB.TrimEnd(',');
             valueDB += ";";
 
             await _db.SaveToDB<dynamic>($"DROP TABLE IF EXISTS {tableName};", new { });
-            await _db.SaveToDB<dynamic>($"CREATE TABLE [{tableName}] ([HotelName] text NOT NULL, [Price] decimal NOT NULL, [Date] date NOT NULL);", new { });
+            await _db.SaveToDB<dynamic>(
+                $"CREATE TABLE [{tableName}] ([HotelName] text NOT NULL, [Price] decimal NOT NULL, [Date] date NOT NULL);",
+                new { });
             await _db.SaveToDB<dynamic>(valueDB, new { });
         }
 
-        private void CheckDiscrepancy(DateTime date, Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, decimal marginValue, int capacity)
+        private void CheckDiscrepancy(DateTime date, Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices,
+            decimal marginValue, int capacity)
         {
-            PriceModel avgMarketPrice = AvgMarketPrices.Where(price => price.Date == date).Single(price => price.RoomType == capacity);
+            PriceModel avgMarketPrice = AvgMarketPrices.Where(price => price.Date == date)
+                .Single(price => price.RoomType == capacity);
             if (hotelAvgPrices[date]["Kompas Hotel Aalborg"] < ((1 - marginValue / 100) * avgMarketPrice.Price) ||
                 hotelAvgPrices[date]["Kompas Hotel Aalborg"] > ((1 + marginValue / 100) * avgMarketPrice.Price))
             {
@@ -130,7 +136,8 @@ namespace HotelPriceScout.Data.Model
         {
             MimeMessage mail = new();
             mail.From.Add(new MailboxAddress("Hotel Price Scout", "hotelpricescout@gmail.com"));
-            mail.To.Add(new MailboxAddress("CS-21-SW-3-12", "croska19@student.aau.dk")); /*cs - 21 - sw - 3 - 12@student.aau.dk*/
+            mail.To.Add(new MailboxAddress("CS-21-SW-3-12",
+                "croska19@student.aau.dk")); /*cs - 21 - sw - 3 - 12@student.aau.dk*/
             mail.Subject = "Hotel Price Scout has noticed a price discrepancy!";
             mail.Importance = MessageImportance.High;
             mail.Priority = MessagePriority.Urgent;
@@ -142,19 +149,20 @@ namespace HotelPriceScout.Data.Model
 
             string roomType1Mail = "", roomType2Mail = "", roomType4Mail = "";
 
-            foreach (PriceModel price in AvgMarketPrices.Where(p => p.MarkedForDiscrepancy && p.Date < DateTime.Now.AddMonths(1)).ToList())
+            foreach (PriceModel price in AvgMarketPrices
+                .Where(p => p.MarkedForDiscrepancy && p.Date < DateTime.Now.AddMonths(1)).ToList())
             {
                 if (price.RoomType == 1)
                 {
-                    roomType1Mail = MailDataBuilder(Roomtype1HotelAvgPrices, roomType1Mail, price);
+                    roomType1Mail = MailDataBuilder(RoomType1HotelAvgPrices, roomType1Mail, price);
                 }
                 else if (price.RoomType == 2)
                 {
-                    roomType2Mail = MailDataBuilder(Roomtype2HotelAvgPrices, roomType2Mail, price);
+                    roomType2Mail = MailDataBuilder(RoomType2HotelAvgPrices, roomType2Mail, price);
                 }
                 else
                 {
-                    roomType4Mail = MailDataBuilder(Roomtype1HotelAvgPrices, roomType4Mail, price);
+                    roomType4Mail = MailDataBuilder(RoomType1HotelAvgPrices, roomType4Mail, price);
                 }
             }
 
@@ -162,14 +170,17 @@ namespace HotelPriceScout.Data.Model
             {
                 mailContent += MailHeadBuilder("Roomtype 1", roomType1Mail);
             }
+
             if (roomType2Mail != "")
             {
                 mailContent += MailHeadBuilder("Roomtype 2", roomType2Mail);
             }
+
             if (roomType4Mail != "")
             {
                 mailContent += MailHeadBuilder("Roomtype 4", roomType4Mail);
             }
+
             mailContent += endOfMail;
             mail.Body = new TextPart(TextFormat.Html)
             {
@@ -183,22 +194,31 @@ namespace HotelPriceScout.Data.Model
             smtpClient.Disconnect(true);
         }
 
-        private string MailDataBuilder(Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices, string containerString, PriceModel price)
+        private string MailDataBuilder(Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices,
+            string containerString, PriceModel price)
         {
             KeyValuePair<DateTime, Dictionary<string, decimal>> query;
             query = hotelAvgPrices.Single(hp => hp.Key == price.Date);
-            decimal hostprice = query.Value["Kompas Hotel Aalborg"];
-            containerString += $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>{price.Price},-</td>";
-            if (price.Price > hostprice)
-            { containerString += $"<td style='text-align:center; background-color: #39a459;'>{hostprice},-</td></tr>"; }
-            else { containerString += $"<td style='text-align:center; background-color: #fc4119;'>{hostprice},-</td></tr>"; }
+            decimal hostPrice = query.Value["Kompas Hotel Aalborg"];
+            containerString +=
+                $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>{price.Price},-</td>";
+            if (price.Price > hostPrice)
+            {
+                containerString += $"<td style='text-align:center; background-color: #39a459;'>{hostPrice},-</td></tr>";
+            }
+            else
+            {
+                containerString += $"<td style='text-align:center; background-color: #fc4119;'>{hostPrice},-</td></tr>";
+            }
+
             return containerString;
         }
-        private string MailHeadBuilder(string roomtype, string containerString)
+
+        private string MailHeadBuilder(string roomType, string containerString)
         {
-            string result = $"<p><b>{roomtype}</p></b>" +
-            "<table><thead><tr><th> Date </th><th> Market Price </th><th> Your Price </th></tr></thead>" +
-            containerString + "</table><br>";
+            string result = $"<p><b>{roomType}</p></b>" +
+                            "<table><thead><tr><th> Date </th><th> Market Price </th><th> Your Price </th></tr></thead>" +
+                            containerString + "</table><br>";
             return result;
         }
     }
