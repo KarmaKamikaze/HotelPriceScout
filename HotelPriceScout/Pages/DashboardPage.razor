@@ -4,7 +4,6 @@
 @using HotelPriceScout.Data.Model
 @inject Dashboard Dashboard
 @inject SqliteDataAccess _db
-@inject ScoutSharedService _scoutService
 
 <div class="row col-md-7">
     <h1 style="width:350px;">@Dashboard.MonthName @Dashboard.Year</h1>
@@ -290,9 +289,9 @@
         listOfSelectedHotels.Add("Local");
         listOfSelectedHotels.Add("No budget");
 
-        _scoutService.Scout.RunComparator("dashboard");
+        Program.ScoutSharedService.Scout.RunComparator("dashboard");
 
-        foreach (BookingSite bookingSite in _scoutService.Scout.BookingSites)
+        foreach (BookingSite bookingSite in Program.ScoutSharedService.Scout.BookingSites)
         {
             bookingSite.DataScraper.SendMissingDataWarning += Dashboard.UpdateUiMissingDataWarning;
         }

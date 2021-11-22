@@ -1,12 +1,10 @@
 @page "/"
-@using HotelPriceScout.Data.Interface
 @inject NavigationManager NavManager
-@inject ScoutSharedService _scoutService
 
 @code
 {
     protected override void OnInitialized()
     {
-        NavManager.NavigateTo(_scoutService.ScoutRunning ? "/Dashboard" : "/Settings");
+        NavManager.NavigateTo(Program.ScoutSharedService.ScoutRunning ? "/Dashboard" : "/Settings");
     }
 }
