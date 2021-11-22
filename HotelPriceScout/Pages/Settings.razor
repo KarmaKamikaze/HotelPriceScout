@@ -3,7 +3,6 @@
 @using HotelPriceScout.Data.Model
 @inject NavigationManager NavManager
 @inherits SettingsManager
-@inject ScoutSharedService _scoutService
 
 
 <h1>Settings</h1>
@@ -164,7 +163,7 @@
     private void StopProgram()
     {
         isScoutStopped = true;
-        _scoutService.ScoutRunning = false;
+        Program.ScoutSharedService.ScoutRunning = false;
         ShowStartButton();
         ShowStopButton();
         ShowUpdateButton();
@@ -177,7 +176,7 @@
         isScoutStarted = false;
         marginPicked = 1;
         notificationAmountPicked = 1;
-        _scoutService.Scout.StopScout();
+        Program.ScoutSharedService.Scout.StopScout();
         StateHasChanged();
     }
 
@@ -202,7 +201,7 @@
 
     private async void StartProgram()
     {
-        _scoutService.ScoutRunning = true;
+        Program.ScoutSharedService.ScoutRunning = true;
         marginPickedPass = marginPicked;
         notificationPickedPass = notificationAmountPicked;
         timeValuePass = timeValue;
@@ -215,8 +214,8 @@
         ShowUpdateButton();
         ShowStartButton();
         isScoutStopped = false;
-        _scoutService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
-        _scoutService.Scout.StartScout();
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
+        Program.ScoutSharedService.Scout.StartScout();
         StateHasChanged();
     }
 

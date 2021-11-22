@@ -4,7 +4,6 @@
 @using HotelPriceScout.Data.Model
 @inject Dashboard Dashboard
 @inject SqliteDataAccess _db
-@inject ScoutSharedService _scoutService
 
 <div class="row col-md-7">
     <h1 style="width:350px;">@Dashboard.MonthName @Dashboard.Year</h1>
@@ -71,12 +70,13 @@
                         <td></td>
                     }
                     @for (int i = 1; i + Dashboard.NumDummyColumn - 1 <= 7; i++)
-                    {
-                        int Day = i;
-                        decimal MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
-                        decimal KompasPrice = Dashboard.GetSingleDayKompasPrice(MonthKompasPrices, Day);
-                        string dateConcatenated = (Dashboard.Year.ToString() + "-" + Dashboard.Month.ToString() + "-" + Day.ToString("00"));
-                        <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="(()=>Dashboard.ShowMoreInfo(Day))">
+                     {
+                            int Day = i;
+                            DateTime dateConcatenated = new DateTime(Dashboard.Year, Dashboard.Month, Day);
+                            MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
+                            MarketPriceList.Add(new PriceModel(MarketPrice, dateConcatenated));
+                            KompasPrice = Dashboard.GetSingleDayKompasPrice(MonthKompasPrices, Day);
+                        <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "")" style="height:100px;" tabindex="0" @onclick="@(() => { Dashboard.ShowMoreInfo(Day); MarketPriceList.Clear(); })">
                             <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@i <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
                             <div class="@(MarketPrice == 0 ? "d-none" : "")">
                                 <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice,KompasPrice))">You: <span>@(decimal.ToInt32(KompasPrice)),-</span></div>
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                         </td>
-                    }
+                     }
                 </tr>
 
                 @for (int i = 8 - Dashboard.NumDummyColumn + 1; i <= Dashboard.MonthEnd.Day; i += 7)
@@ -94,12 +94,13 @@
                         @for (int j = 0; j < 7; j++)
                         {
                             @if (i + j <= Dashboard.MonthEnd.Day)
-                            {
-                                int Day = i + j;
-                                decimal MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
-                                decimal KompasPrice = Dashboard.GetSingleDayKompasPrice(MonthKompasPrices,Day);
-                                string dateConcatenated = (Dashboard.Year.ToString() + "-" + Dashboard.Month.ToString() + "-" + Day.ToString("00"));
-                        <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="(() => Dashboard.ShowMoreInfo(Day))">
+                                {
+                                    int Day = i + j;
+                                    DateTime dateConcatenated = new DateTime(Dashboard.Year, Dashboard.Month, Day);
+                                    MarketPrice = Dashboard.GetSingleDayMarketPrice(MonthMarketData, Day);
+                                    MarketPriceList.Add(new PriceModel(MarketPrice, dateConcatenated));
+                                    KompasPrice = Dashboard.GetSingleDayKompasPrice(MonthKompasPrices, Day);
+                        <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="@(() => { Dashboard.ShowMoreInfo(Day); MarketPriceList.Clear(); })">
                             <div style="font-weight: 700; font-size: 24px; @(MarketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(MarketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(MarketPrice, KompasPrice))"></span></div>
                                     <div class="@(MarketPrice == 0 ? "d-none" : "")">
                                         <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(MarketPrice, KompasPrice))">
@@ -123,9 +124,10 @@
     </div>
 
 
-    @if (Dashboard.DayClicked != 0 && Dashboard.CheckForAlternateClick)
-    {Dashboard.GenerateThermometer(Dashboard.DayClicked,Dashboard.MonthsAway, MonthData);
-        <div class="animation1 col-md-4 table-borderless">
+    @if (Dashboard.DayClicked != 0)
+    {
+        Dashboard.GenerateThermometer(Dashboard.DayClicked, Dashboard.MonthsAway, MonthData, MarketPriceList);
+        <div class="@(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 table-borderless">
             <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
             <div class="row col d-flex justify-content-center">
                 <!-- outer layer-->
@@ -136,34 +138,33 @@
                 else
                 {
                     <table class="table table-borderless noHover" style="max-width:90%">
-                        @foreach (Prices item in Dashboard.priceList)
+                        @foreach (PriceModel item in Dashboard.priceList)
                         {
                             if (decimal.ToInt32(item.Price) == decimal.ToInt32(Dashboard.MarketPriceItem.Price))
                             {
                                 <tr>
-                                    <td class="col text-right"> @item.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="col text-right"> @item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
                                     <td class="table-info">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
                             else if (item.Price > Dashboard.MarketPriceItem.Price)
                             {
-                                <tr style="text-align:right">
-                                    <td class="col">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                <tr>
+                                    <td class="col text-right">@item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
                                     <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
                             else if (item.Price < Dashboard.MarketPriceItem.Price)
                             {
                                 <tr>
-                                    <td class="col text-right">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="col text-right">@item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
                                     <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
-                           
                             else
                             {
                                 <tr>
-                                    <td class="col text-right"> @Dashboard.MarketPriceItem.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="col text-right"> @Dashboard.MarketPriceItem.HotelName <span class="oi oi-arrow-right text-center"></span></td>
                                     <td class="table-info">@(decimal.ToInt32(Dashboard.MarketPriceItem.Price)),-</td>
                                 </tr>
                             }
@@ -174,60 +175,17 @@
             </div>
         </div>
     }
-    else if (Dashboard.DayClicked != 0 && !Dashboard.CheckForAlternateClick && Dashboard.TempAniDate == Dashboard.DayClicked)
-    {
-       
-        <div class="animation2 col-md-4 table-borderless">
-            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
-            <div class="row col d-flex justify-content-center">
-                <!-- outer layer-->
-                @if (Dashboard.priceList == null)
-                {
-                    <div><p>Loading data</p></div>// <--- checks if thermometer is ready yet
-                }
-                else
-                {
-                    <table class="table table-borderless noHover" style="max-width:90%">
-                       @* @foreach (Prices item in Dashboard.priceList)
-                        {
-                            if (item.Price > Dashboard.MarketPriceItem.Price)
-                            {
-                                <tr style="text-align:right">
-                                    <td class="col">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@item.Price,-</td>
-                                </tr>
-                            }
-                            else if (item.Price < Dashboard.MarketPriceItem.Price)
-                            {
-                                <tr>
-                                    <td class="col text-right">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@item.Price,-</td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td class="col text-right"> @MarketPriceItem.Name <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="table-info">@MarketPriceItem.Price,-</td>
-                                </tr>
-                            }
-                        }*@
-                    </table>
-                    Dashboard.DayClicked = 0;
-                }
-            </div>
-        </div>
-    }
 </div>
 
 
 @code
 {
     decimal MarketPrice;
+    List<PriceModel> MarketPriceList = new();
     decimal KompasPrice;
     public int AdultsPicked = 1;
     public List<string> SelectedHotels;
-    
+
     public class numberOfAdults
     {
         public int Adults { get; set; }
@@ -245,15 +203,15 @@
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
     List<string> listOfSelectedHotels;
 
-    List<Prices> priceList;
-    Prices MarketPriceItem;
-    IEnumerable<MarketPriceModel> MonthData;
-    IEnumerable<MarketPriceModel> MonthMarketData;
-    IEnumerable<MarketPriceModel> MonthKompasPrices;
+    List<PriceModel> priceList;
+    PriceModel MarketPriceItem;
+    IEnumerable<PriceModel> MonthData;
+    IEnumerable<PriceModel> MonthMarketData;
+    IEnumerable<PriceModel> MonthKompasPrices;
 
     //Needs to be here, Can not be moved to Dashboard
     // As we can not call variables made in this scope.
-    public async void OnClickUpdate(string s) 
+    public async void OnClickUpdate(string s)
     {
         if (s == "Next")
         {
@@ -290,9 +248,9 @@
         listOfSelectedHotels.Add("Local");
         listOfSelectedHotels.Add("No budget");
 
-        _scoutService.Scout.RunComparator("dashboard");
+        Program.ScoutSharedService.Scout.RunComparator("dashboard");
 
-        foreach (BookingSite bookingSite in _scoutService.Scout.BookingSites)
+        foreach (BookingSite bookingSite in Program.ScoutSharedService.Scout.BookingSites)
         {
             bookingSite.DataScraper.SendMissingDataWarning += Dashboard.UpdateUiMissingDataWarning;
         }
@@ -303,9 +261,4 @@
 
         Dashboard.CreateMonth();
     }
-
-
-    
-
-
  }
