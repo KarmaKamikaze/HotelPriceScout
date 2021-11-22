@@ -1,31 +1,29 @@
 ﻿using System.Collections.Generic;
+using HotelPriceScout.Data.Model;
+using System.Linq;
+using System;
 
 namespace HotelPriceScout.Pages
 {
-        public class PriceMeterGenerator // the generator class
+        public class PriceMeterGenerator
         {
-            public static List<Prices> PriceListGenerator() // generates a test list of hotels and their prices.
+            public static List<Prices> PriceListGenerator(DateTime TodayDate, IEnumerable<MarketPriceModel> MonthData) // generates a test list of hotels and their prices.
             {
-                List<Prices> PriceDataList = new List<Prices>();
-                PriceDataList.Add(new Prices("Hotel Kompas", 599));
-                PriceDataList.Add(new Prices("Hotel Radison", 999));
-                PriceDataList.Add(new Prices("Hotel Phoenix", 499));
-                PriceDataList.Add(new Prices("Hotel Zleep", 799));
-                PriceDataList.Add(new Prices("Cabin Centrum", 499));
-                PriceDataList.Add(new Prices("Hotel Aalborg", 794));
-                PriceDataList.Add(new Prices("Cabin Øst", 499));
-                PriceDataList.Add(new Prices("Gns. Marked", 679));
+                List<Prices> PriceDataList = new();
+                PriceDataList.AddRange(from MarketPriceModel item in MonthData
+                                       where (item.Date) == TodayDate.Date
+                                       select new Prices(item.HotelName, item.Price));
+                decimal MarketPrice = PriceDataList.Average(x => x.Price);
+                PriceDataList.Add(new Prices("Gns. Marked", MarketPrice));
                 PriceDataList.Sort();
                 return PriceDataList;
             }
             public static Prices MarketFinder(List<Prices> list)
-            // finds the market price in the list of prices,
+            // Finds the market price in the list of prices,
             // This shall not be used if market price comes from somewhere else.
             {
                 Prices MarketPriceItem = list.Find(list => list.Name == "Gns. Marked");
                 return MarketPriceItem;
             }
-       
-        
     }
 }

@@ -3,12 +3,17 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using HotelPriceScout.Data.Model;
+using System.Runtime.InteropServices;
 using System.Linq;
+using HotelPriceScout.Pages;
 
 namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard
     {
+        public List<Prices> priceList { get; private set; }
+        public Prices MarketPriceItem { get; private set; }
+        private const int DATAUNAVAILABLE = 0;
         public int TempAniDate { get; set; }
         public bool CheckForAlternateClick { get; set; } = true;
         public string AllSelectedHotels { get; set; } = "";
@@ -25,55 +30,107 @@ namespace HotelPriceScout.Data.Interface
         public DateTime LastDayOfMonth { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
         private readonly SqliteDataAccess _db = new();
 
-        public async Task<IEnumerable<MarketPriceModel>> DisplaySelectedComparedPrices(List<string> SelectedHotels, string StartDate, string EndDate, int RoomType)
+        public IEnumerable<MarketPriceModel> SelectedMonthMarketPrices(DateTime startDate, DateTime endDate, IEnumerable<MarketPriceModel> dataList)
         {
-            if (SelectedHotels.Contains("Local"))
+            List<decimal> TempList = new();
+            List<MarketPriceModel> ListOfSingleDatePrices = new();
+            for(DateTime tempDate = startDate; tempDate <= endDate; tempDate = tempDate.AddDays(1))
             {
-                SelectedHotels.Add("Cabinn Aalborg");
-                SelectedHotels.Add("Slotshotellet Aalborg");
-                SelectedHotels.Add("Kompas Hotel Aalborg");
+                TempList.AddRange(from item in dataList
+                                  where item.Date == tempDate
+                                  select item.Price);
+                MarketPriceModel SingleDayMarketPrice = new MarketPriceModel(TempList.Average(), tempDate);
+                ListOfSingleDatePrices.Add(SingleDayMarketPrice);
             }
-            if (SelectedHotels.Contains("No budget"))
+            dataList = ListOfSingleDatePrices;
+            return dataList;
+        }
+        public decimal GetSingleDayMarketPrice(IEnumerable<MarketPriceModel> multipleMarketPrices, int specificDay)
+        {   
+            //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
+            if (new DateTime(Year, Month, specificDay, 23, 59, 59) >= ToDay &&
+                new DateTime(Year, Month, specificDay) <= ToDay.AddMonths(3))
             {
-                SelectedHotels.Add("Kompas Hotel Aalborg");
-                SelectedHotels.Add("Slotshotellet Aalborg");
-                SelectedHotels.Add("Milling Hotel Aalborg");
-                SelectedHotels.Add("Aalborg Airport Hotel");
-                SelectedHotels.Add("Helnan Phønix Hotel");
-                SelectedHotels.Add("Hotel Schellsminde");
-                SelectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
-                SelectedHotels.Add("Comwell Hvide Hus Aalborg");
-                SelectedHotels.Add("Scandic Aalborg Øst");
-                SelectedHotels.Add("Scandic Aalborg City");
+                    return multipleMarketPrices.Single(mp => mp.Date == new DateTime(Year, Month, specificDay).Date).Price;
             }
-            var last = SelectedHotels.LastOrDefault();
-            foreach (var item in SelectedHotels)
+            return DATAUNAVAILABLE;
+        }
+        public async Task<IEnumerable<MarketPriceModel>> RetrieveSelectDataFromDb(DateTime startDate, DateTime endDate, int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
+        {              
+            IEnumerable<MarketPriceModel> dataList = await _db.RetrieveDataFromDb("*", $"RoomType{roomType}",
+                                         $" Date >= '{startDate.ToString("yyyy-MM-dd")}' AND Date <= '{endDate.ToString("yyyy-MM-dd")}'");
+            List<MarketPriceModel> resultDataList = new();
+            if (wantedOutput == "Select Prices")
             {
-                AllSelectedHotels += "'" + item + "'";
-                if (!item.Equals(last))
+                if (selectedHotels != null) 
                 {
-                    AllSelectedHotels += " OR HotelName = ";
+                    if (selectedHotels.Contains("Local"))
+                    {
+                        selectedHotels.Add("Cabinn Aalborg");
+                        selectedHotels.Add("Slotshotellet Aalborg");
+                        selectedHotels.Add("Kompas Hotel Aalborg");
+                    }
+                    if (selectedHotels.Contains("No budget"))
+                    {
+                        selectedHotels.Add("Kompas Hotel Aalborg");
+                        selectedHotels.Add("Slotshotellet Aalborg");
+                        selectedHotels.Add("Milling Hotel Aalborg");
+                        selectedHotels.Add("Aalborg Airport Hotel");
+                        selectedHotels.Add("Helnan Phønix Hotel");
+                        selectedHotels.Add("Hotel Schellsminde");
+                        selectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
+                        selectedHotels.Add("Comwell Hvide Hus Aalborg");
+                        selectedHotels.Add("Scandic Aalborg Øst");
+                        selectedHotels.Add("Scandic Aalborg City");
+                    }
+                    resultDataList.AddRange(from item in dataList
+                                          where selectedHotels.Contains(item.HotelName)
+                                          select item);
+                   
+                    return resultDataList.Distinct();
+                }
+                else 
+                {
+                    return dataList; //if no hotels are selected all data is returned
                 }
             }
-            IEnumerable<MarketPriceModel> SelectedHotelsList = await _db.RetrieveDataFromDb("HotelName, Price, Date", $"RoomType{RoomType}",
-                                                                    $"HotelName = {AllSelectedHotels} AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
-            return SelectedHotelsList;
+            else if (wantedOutput == "Kompas Prices")
+            {
+                resultDataList.AddRange(from item in dataList
+                                      where item.HotelName == "Kompas Hotel Aalborg"// picks all Kompas Hotel prices
+                                      select item);
+                
+                return resultDataList;
+            }
+            throw new Exception("Fatal error: Method Called without WantedOutput parameter");
         }
-
-        public async Task<IEnumerable<MarketPriceModel>> DisplayComparedPrices(string StartDate, string EndDate, int RoomType)
+        public decimal GetSingleDayKompasPrice(IEnumerable<MarketPriceModel> calendarKompasPrices, int specificDay)
         {
-            IEnumerable<MarketPriceModel> ComparedPricesList = await _db.RetrieveDataFromDb("Price, Date", "MarketPrices",
-                                  $"Date >= '{StartDate}' AND Date <= '{EndDate}' AND RoomType = '{RoomType}'");
-            return ComparedPricesList;
-        }
-
-        public async Task<IEnumerable<MarketPriceModel>> DisplayKompasPrices(string StartDate, string EndDate, int RoomType)
-        {
-            IEnumerable<MarketPriceModel> KompasPriceList = await _db.RetrieveDataFromDb("HotelName, Price, Date", $"RoomType{RoomType}",
-                                         $"HotelName = 'Kompas Hotel Aalborg' AND Date >= '{StartDate}' AND Date <= '{EndDate}'");
-            return KompasPriceList;
+            //The time is set to 23:59:59 to ensure that no matter the time of loading the data, the current day will be correct
+            if (new DateTime(Year, Month, specificDay, 23, 59, 59) >= ToDay &&
+                new DateTime(Year, Month, specificDay) <= ToDay.AddMonths(3))
+            {
+                return calendarKompasPrices.Single(mp => mp.Date == new DateTime(Year, Month, specificDay) && mp.HotelName == "Kompas Hotel Aalborg").Price;
+            }
+            return DATAUNAVAILABLE;
         }
        
+        public void GenerateThermometer(int day, int monthaway, IEnumerable<MarketPriceModel> monthData)
+        {
+            DateTime todayDate = new DateTime(Year, Month, day);
+            todayDate.AddMonths(monthaway);
+            priceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData);
+            MarketPriceItem = PriceMeterGenerator.MarketFinder(priceList);
+            priceList.Sort();
+        }
+        public void UpdateUiMissingDataWarning(BookingSite bookingSite)
+        {
+            throw new NotImplementedException();
+        }
+        public string ShowCurrentDayAsString()
+        {
+            return DayClicked.ToString("") + ". " + MonthName + " " + Year.ToString("");
+        }
         public void CreateMonth()
         {
             TempDate = DateTime.Now.AddMonths(MonthsAway);
@@ -99,12 +156,46 @@ namespace HotelPriceScout.Data.Interface
                 _ => ""
             };
 
-            NumDummyColumn = (int)monthStart.DayOfWeek;
+            NumDummyColumn = Convert.ToInt32(monthStart.DayOfWeek);
 
             if(NumDummyColumn == 0)
             {NumDummyColumn = 7;}
         }
+        public string ChangeTextColorBasedOnMargin(decimal marketprice, decimal kompasPrice)
+        {
+            decimal result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
 
+            if (marketprice > (kompasPrice + result))
+            {
+                return "low";
+            }
+            else if (marketprice < (kompasPrice - result))
+            {
+                return "high";
+            }
+            else
+            {
+                return "";
+            }
+        }
+        public string ArrowDecider(decimal marketPrice, decimal kompasPrice)
+        {
+
+            decimal result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
+
+            if (marketPrice > (kompasPrice + result))
+            {
+                return "oi oi-caret-top";
+            }
+            else if (marketPrice < (kompasPrice - result))
+            {
+                return "oi oi-caret-bottom";
+            }
+            else
+            {
+                return "oi oi-minus";
+            }
+        }
         public void ShowMoreInfo(int dayClicked)
         {
             if (new DateTime(Year, Month, dayClicked, 23, 59, 59) >= DateTime.Now && new DateTime(Year, Month, dayClicked) <= ToDay.AddMonths(3))

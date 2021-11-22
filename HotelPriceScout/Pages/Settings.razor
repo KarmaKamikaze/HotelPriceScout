@@ -1,4 +1,4 @@
-@page "/settings"
+@page "/Settings"
 @using HotelPriceScout.Data.Interface
 @using HotelPriceScout.Data.Model
 @inherits SettingsManager
@@ -140,6 +140,7 @@
     public void StopProgram()
     {
         isScoutStopped = true;
+        _scoutService.ScoutRunning = false;
         ShowStartButton();
         ShowStopButton();
         ShowUpdateButton();
@@ -152,7 +153,7 @@
         isScoutStarted = false;
         marginPicked = 1;
         notificationAmountPicked = 1;
-        _scoutService.Scout.Dispose();
+        _scoutService.Scout.StopScout();
         StateHasChanged();
     }
 
@@ -177,6 +178,7 @@
 
     public async void StartProgram()
     {
+        _scoutService.ScoutRunning = true;
         marginPickedPass = marginPicked;
         notificationPickedPass = notificationAmountPicked;
         timeValuePass = timeValue;
@@ -190,7 +192,7 @@
         isScoutStopped = false;
         await Task.Delay(2000);
         modalStart = false;
-        _scoutService.Scout = await Scout.CreateScoutAsync("preparing", marginPickedPass, GetNotificationTimes());
+        _scoutService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
         _scoutService.Scout.StartScout();
         StateHasChanged();
     }

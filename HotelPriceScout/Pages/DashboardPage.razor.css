@@ -1,4 +1,4 @@
-﻿.table td:hover {
+.table td:hover {
     background-color: #F2F2F2;
 }
 
@@ -43,16 +43,11 @@
 }
 
 .table-borderless {
-    z-index: 1;
+    z-index: -1;
 }
 
 .calendar {
-    z-index:2 !important;
     background-color: white !important;
-}
-
-.table {
-    z-index: 2 !important;
 }
 
 .animation1 {
@@ -69,13 +64,14 @@
     animation-direction: reverse;
 }
 
-    @keyframes animation {
-        0% {
-            left: -500px;
-            opacity: 0;
-        }
-
-        100% {
-            left: 0px;
-        }
+@keyframes animation {
+    0% 
+    {
+        left: -500px;
+        opacity: 0;
     }
+    100% 
+    {
+        left: 0px
+    } 
+}
