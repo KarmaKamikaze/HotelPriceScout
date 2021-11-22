@@ -114,12 +114,13 @@ namespace HotelPriceScout.Data.Interface
             }
             return DATAUNAVAILABLE;
         }
-       
-        public void GenerateThermometer(int day, int monthaway, IEnumerable<PriceModel> monthData)
+
+        public void GenerateThermometer(int day, int monthaway, IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice)
         {
-            DateTime todayDate = new DateTime(Year, Month, day);
+            DateTime todayDate = new(Year, Month, day);
             todayDate.AddMonths(monthaway);
-            priceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData);
+            decimal MarketPrice = (avgMarketPrice.Where(Date => Date.Date == todayDate)).Single().Price;
+            priceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData, MarketPrice);
             MarketPriceItem = PriceMeterGenerator.MarketFinder(priceList);
             priceList.Sort();
         }
