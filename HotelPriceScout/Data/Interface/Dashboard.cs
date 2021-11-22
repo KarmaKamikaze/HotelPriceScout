@@ -226,6 +226,7 @@ namespace HotelPriceScout.Data.Interface
             StartOfMonth = StartOfMonth.AddMonths(-1);
             LastDayOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
         }
+
         public string DetermineAnimation(int DayClicked, bool CheckForAlternateClick, int TempAniDate)
         {
             if (DayClicked != 0 && CheckForAlternateClick)
