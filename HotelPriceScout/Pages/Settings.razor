@@ -154,7 +154,7 @@ private int timer;
         public int Notification { get; set; }
         public string Text { get; set; }
     }
-    public List<NotificationAmount> Notifications = new List<NotificationAmount>()
+    private List<NotificationAmount> Notifications = new List<NotificationAmount>()
     {
         new NotificationAmount(){ Notification= 0, Text= "0" },
         new NotificationAmount(){ Notification= 1, Text= "1" },
@@ -162,10 +162,10 @@ private int timer;
         new NotificationAmount(){ Notification= 3, Text= "3" },
     };
 
-    public void StopProgram()
+    private void StopProgram()
     {
         isScoutStopped = true;
-        _scoutService.ScoutRunning = false;
+        Program.ScoutSharedService.ScoutRunning = false;
         ShowStartButton();
         ShowStopButton();
         ShowUpdateButton();
@@ -178,12 +178,12 @@ private int timer;
         isScoutStarted = false;
         marginPicked = 1;
         notificationAmountPicked = 1;
-        _scoutService.Scout.StopScout();
+        Program.ScoutSharedService.Scout.StopScout();
         StateHasChanged();
     }
 
 
-    async void UpdateProgram()
+    private async void UpdateProgram()
     {
         isScoutUpdated = true;
         await OnButtonClick();
@@ -221,13 +221,13 @@ private int timer;
         StateHasChanged();
     }
 
-    Task OnButtonClick()
+    private Task OnButtonClick()
     {
         return Task.Delay(1000);
     }
 
 
-    public void EscapeUpdate(KeyboardEventArgs e)
+    private void EscapeUpdate(KeyboardEventArgs e)
     {
         if (e.Code == "Escape")
         {
@@ -235,7 +235,7 @@ private int timer;
         }
     }
 
-    public void EscapeStop(KeyboardEventArgs f)
+    private void EscapeStop(KeyboardEventArgs f)
     {
         if (f.Code == "Escape")
         {

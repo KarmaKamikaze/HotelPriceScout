@@ -126,7 +126,7 @@
 
     @if (Dashboard.DayClicked != 0)
     {
-        Dashboard.GenerateThermometer(Dashboard.DayClicked, Dashboard.MonthsAway, MonthData, MarketPriceList);
+        Dashboard.GenerateThermometer(Dashboard.DayClicked, Dashboard.MonthsAway, MonthData, MarketPriceList);MarketPriceList.Clear();
         <div class="@(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 table-borderless">
             <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
             <div class="row col d-flex justify-content-center">
@@ -203,7 +203,7 @@
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
     List<string> listOfSelectedHotels;
 
-  
+
     IEnumerable<PriceModel> MonthData;
     IEnumerable<PriceModel> MonthMarketData;
     IEnumerable<PriceModel> MonthKompasPrices;
@@ -228,6 +228,7 @@
         }
         else if (s == "update Hotel")
         {
+            MarketPriceList.Clear();
             if (SelectedHotels != null)
             {
                 MonthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
