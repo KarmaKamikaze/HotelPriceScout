@@ -18,6 +18,7 @@ namespace Tests
             {
                 Scout scout = await Scout.CreateScoutAsync(marginValue, value);
             }
+
             //Assert
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(ActionAsync);
         }

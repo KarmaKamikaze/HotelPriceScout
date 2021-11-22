@@ -14,25 +14,25 @@ namespace Tests
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                { "Kompas Hotel Aalborg", "tag1" },
-                { "hotel2", "tag2" }
+                {"Kompas Hotel Aalborg", "tag1"},
+                {"hotel2", "tag2"}
             };
             BookingSite bookingSite1 = new BookingSite("booking1", "multi", "https://www.url.com", hotelStrings);
             BookingSite bookingSite2 = new BookingSite("booking2", "multi", "https://www.url.com", hotelStrings);
-            IEnumerable<BookingSite> bookingSites = new List<BookingSite>() { bookingSite1, bookingSite2 };
+            IEnumerable<BookingSite> bookingSites = new List<BookingSite>() {bookingSite1, bookingSite2};
 
             int marginValue = 0;
 
             bookingSite1.DataScraper.StartScraping(marginValue);
             bookingSite2.DataScraper.StartScraping(marginValue);
-            
+
             IComparator comparator = new Comparator();
 
             //Act
             comparator.ComparePrices(bookingSites, marginValue);
 
             //Assert
-            Assert.True(comparator.IsDiscrepancy);            
+            Assert.True(comparator.IsDiscrepancy);
         }
 
         [Fact]
@@ -41,12 +41,12 @@ namespace Tests
             //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                { "Kompas Hotel Aalborg", "tag1" },
-                { "hotel2", "tag2" }
+                {"Kompas Hotel Aalborg", "tag1"},
+                {"hotel2", "tag2"}
             };
             BookingSite bookingSite1 = new BookingSite("booking1", "multi", "https://www.url.com", hotelStrings);
             BookingSite bookingSite2 = new BookingSite("booking2", "multi", "https://www.url.com", hotelStrings);
-            IEnumerable<BookingSite> bookingSites = new List<BookingSite>() { bookingSite1, bookingSite2 };
+            IEnumerable<BookingSite> bookingSites = new List<BookingSite>() {bookingSite1, bookingSite2};
 
             int marginValue = 1000;
 
@@ -61,6 +61,5 @@ namespace Tests
             //Assert
             Assert.False(comparator.IsDiscrepancy);
         }
-
     }
 }

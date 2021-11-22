@@ -10,12 +10,12 @@ namespace Tests
 {
     public class RoomTypePriceTest
     {
-
         [Fact]
         public void DateSetterThrowsWhenValueIsBeforeCurrentDateTest()
         {
             //Arrange
             DateTime date = DateTime.Now.AddDays(-1);
+
             void Action()
             {
                 RoomTypePrice roomTypePrice = new RoomTypePrice(date);
@@ -44,6 +44,7 @@ namespace Tests
             //Arrange
             DateTime date = DateTime.Now;
             decimal price = -1;
+
             void Action()
             {
                 RoomTypePrice roomTypePrice = new RoomTypePrice(date, price);
@@ -67,6 +68,5 @@ namespace Tests
             //Assert
             Assert.Equal(price, roomTypePrice.Price);
         }
-
     }
 }
