@@ -39,15 +39,5 @@ namespace Tests
             //Assert
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(ActionAsync);
         }
-
-        [Fact]
-        public void Check_If_Stop_Scout_Dispose_Returns_Null()
-        {
-            Scout scout = new Scout();
-
-            scout.Dispose();
-
-            Assert.Null(scout);
-        }
     }
 }

@@ -11,7 +11,6 @@ namespace HotelPriceScout.Data.Model
     {
         private int _marginValue;
         private string _state;
-        private bool _disposed = false;
 
         //This method is used to create scout objects instead of a typical constructor.
         //This is due to the fact that the static booking site data should be fetched from the database.
@@ -93,26 +92,6 @@ namespace HotelPriceScout.Data.Model
             }
 
             return bookingSites;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                _state = null;
-                // TODO: dispose managed state (managed objects).
-            }
-
-            _marginValue = null;
-            // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-            // TODO: set large fields to null.
-
-            _disposed = true;
         }
 
         public void Dispose()
