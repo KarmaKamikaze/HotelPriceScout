@@ -25,19 +25,5 @@ namespace Tests
             //Assert
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(ActionAsync);
         }
-
-        [Theory]
-        [InlineData("test", 0, null)]
-        [InlineData("false", 55, null)]
-        [InlineData("programming", 100, null)]
-        public async Task Check_If_State_Throws(string state, int marginvalue, DateTime[] value)
-        {
-            async Task ActionAsync()
-            {
-                Scout scout = await Scout.CreateScoutAsync(state, marginvalue, value);
-            }
-            //Assert
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(ActionAsync);
-        }
     }
 }
