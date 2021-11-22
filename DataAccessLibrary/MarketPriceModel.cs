@@ -2,7 +2,7 @@
 
 namespace HotelPriceScout.Data.Model
 {
-    public class MarketPriceModel
+    public class MarketPriceModel : IComparable<MarketPriceModel> 
     {
         public decimal Price { get; set; }
         public DateTime Date { get; set; }
@@ -28,7 +28,15 @@ namespace HotelPriceScout.Data.Model
             Date = date;
             RoomType = roomType;
         }
-
+        public MarketPriceModel(decimal price, string hotelName)
+        {
+            Price = price;
+            HotelName = hotelName;
+        }
+        public int CompareTo(MarketPriceModel other)
+        {
+            return (decimal.ToInt32(other.Price) - decimal.ToInt32(Price));
+        }
     }
 }
 
