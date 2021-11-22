@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace HotelPriceScout.Data.Model
 {
@@ -92,12 +93,12 @@ namespace HotelPriceScout.Data.Model
                 CheckDiscrepancy(date, RoomType4HotelAvgPrices, marginValue, 4);
             }
 
-            StoreAvgHotelPrices(RoomType1HotelAvgPrices, "RoomType1");
-            StoreAvgHotelPrices(RoomType2HotelAvgPrices, "RoomType2");
-            StoreAvgHotelPrices(RoomType4HotelAvgPrices, "RoomType4");
+            await StoreAvgHotelPrices(RoomType1HotelAvgPrices, "RoomType1");
+            await StoreAvgHotelPrices(RoomType2HotelAvgPrices, "RoomType2");
+            await StoreAvgHotelPrices(RoomType4HotelAvgPrices, "RoomType4");
         }
 
-        private async void StoreAvgHotelPrices(Dictionary<DateTime, Dictionary<string, decimal>> roomTypeHotelAvgPrices,
+        private async Task StoreAvgHotelPrices(Dictionary<DateTime, Dictionary<string, decimal>> roomTypeHotelAvgPrices,
             string tableName)
         {
             string valueDB = $"INSERT INTO {tableName} (Date,HotelName,Price) VALUES ";
