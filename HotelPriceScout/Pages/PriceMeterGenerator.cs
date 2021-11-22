@@ -7,14 +7,13 @@ namespace HotelPriceScout.Pages
 {
         public class PriceMeterGenerator
         {
-            public static List<Prices> PriceListGenerator(DateTime TodayDate, IEnumerable<MarketPriceModel> MonthData) // generates a test list of hotels and their prices.
+            public static List<Prices> PriceListGenerator(DateTime TodayDate, IEnumerable<MarketPriceModel> MonthData, decimal avgPrice) // generates a test list of hotels and their prices.
             {
                 List<Prices> PriceDataList = new();
-                PriceDataList.AddRange(from MarketPriceModel item in MonthData
-                                       where (item.Date) == TodayDate.Date
-                                       select new Prices(item.HotelName, item.Price));
-                decimal MarketPrice = PriceDataList.Average(x => x.Price);
-                PriceDataList.Add(new Prices("Gns. Marked", MarketPrice));
+            PriceDataList.AddRange(from MarketPriceModel item in MonthData
+                                   where (item.Date) == TodayDate.Date
+                                   select new Prices(item.HotelName, item.Price));
+                PriceDataList.Add(new Prices("Gns. Marked", avgPrice));
                 PriceDataList.Sort();
                 return PriceDataList;
             }
