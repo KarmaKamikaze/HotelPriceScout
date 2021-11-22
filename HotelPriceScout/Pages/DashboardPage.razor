@@ -136,26 +136,26 @@
                 else
                 {
                     <table class="table table-borderless noHover" style="max-width:90%">
-                        @foreach (Prices item in Dashboard.priceList)
+                        @foreach (MarketPriceModel item in Dashboard.priceList)
                         {
                             if (decimal.ToInt32(item.Price) == decimal.ToInt32(Dashboard.MarketPriceItem.Price))
                             {
                                 <tr>
-                                    <td class="col text-right"> @item.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="col text-right"> @item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
                                     <td class="table-info">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
                             else if (item.Price > Dashboard.MarketPriceItem.Price)
                             {
                                 <tr style="text-align:right">
-                                    <td class="col">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="col">@item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
                                     <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
                             else if (item.Price < Dashboard.MarketPriceItem.Price)
                             {
                                 <tr>
-                                    <td class="col text-right">@item.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="col text-right">@item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
                                     <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
@@ -163,7 +163,7 @@
                             else
                             {
                                 <tr>
-                                    <td class="col text-right"> @Dashboard.MarketPriceItem.Name <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="col text-right"> @Dashboard.MarketPriceItem.HotelName <span class="oi oi-arrow-right text-center"></span></td>
                                     <td class="table-info">@(decimal.ToInt32(Dashboard.MarketPriceItem.Price)),-</td>
                                 </tr>
                             }
@@ -245,8 +245,8 @@
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
     List<string> listOfSelectedHotels;
 
-    List<Prices> priceList;
-    Prices MarketPriceItem;
+    List<MarketPriceModel> priceList;
+    MarketPriceModel MarketPriceItem;
     IEnumerable<MarketPriceModel> MonthData;
     IEnumerable<MarketPriceModel> MonthMarketData;
     IEnumerable<MarketPriceModel> MonthKompasPrices;

@@ -11,8 +11,8 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard
     {
-        public List<Prices> priceList { get; private set; }
-        public Prices MarketPriceItem { get; private set; }
+        public List<MarketPriceModel> priceList { get; private set; }
+        public MarketPriceModel MarketPriceItem { get; private set; }
         private const int DATAUNAVAILABLE = 0;
         public int TempAniDate { get; set; }
         public bool CheckForAlternateClick { get; set; } = true;
