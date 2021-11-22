@@ -95,19 +95,6 @@ namespace HotelPriceScout.Data.Model
             StoreAvgHotelPrices(Roomtype2HotelAvgPrices, "RoomType2");
             StoreAvgHotelPrices(Roomtype4HotelAvgPrices, "RoomType4");
 
-            //Store AvgMarketPrices into the database
-            string valueDB = $"INSERT INTO MarketPrices (Date,Price,RoomType) VALUES ";
-            foreach (PriceModel marketPrice in AvgMarketPrices)
-            {
-                valueDB += $"('{marketPrice.Date.ToString("yyyy-MM-dd")}','{marketPrice.Price}','{marketPrice.RoomType}'),";
-            }
-
-            valueDB = valueDB.TrimEnd(',');
-            valueDB += ";";
-
-            await _db.SaveToDB<dynamic>($"DROP TABLE IF EXISTS MarketPrices;", new { });
-            await _db.SaveToDB<dynamic>($"CREATE TABLE [MarketPrices] ([Date] date NOT NULL, [Price] decimal NOT NULL, [RoomType] int NOT NULL);", new { });
-            await _db.SaveToDB<dynamic>(valueDB, new { });
         }
 
         private async void StoreAvgHotelPrices(Dictionary<DateTime, Dictionary<string, decimal>> roomtypeHotelAvgPrices, string tableName)
