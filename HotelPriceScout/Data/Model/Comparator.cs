@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration.Abstractions;
+using System.Globalization;
 using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
@@ -209,14 +210,17 @@ namespace HotelPriceScout.Data.Model
             query = hotelAvgPrices.Single(hp => hp.Key == price.Date);
             decimal hostPrice = query.Value["Kompas Hotel Aalborg"];
             containerString +=
-                $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>{price.Price.ToString("c0")}</td>";
+                $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>" +
+                $"{price.Price.ToString("c0", new CultureInfo("da-DK"))}</td>";
             if (price.Price > hostPrice)
             {
-                containerString += $"<td style='text-align:center; background-color: #39a459;'>{hostPrice.ToString("c0")}</td></tr>";
+                containerString += "<td style='text-align:center; background-color: #39a459;'>" +
+                                   $"{hostPrice.ToString("c0", new CultureInfo("da-DK"))}</td></tr>";
             }
             else
             {
-                containerString += $"<td style='text-align:center; background-color: #fc4119;'>{hostPrice.ToString("c0")}</td></tr>";
+                containerString += $"<td style='text-align:center; background-color: #fc4119;'>" +
+                                   $"{hostPrice.ToString("c0", new CultureInfo("da-DK"))}</td></tr>";
             }
 
             return containerString;
