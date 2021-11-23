@@ -196,9 +196,13 @@ namespace HotelPriceScout.Data.Model
         
         public IEnumerable<PriceModel> OneMonthSelectedHotelsMarketPrices(DateTime startDate, DateTime endDate, IEnumerable<PriceModel> dataList)
         {
+            if (endDate > startDate.AddMonths(3))
+            {
+                endDate = startDate.AddMonths(3);
+            }
             List<decimal> tempList = new();
             List<PriceModel> listOfSingleDatePrices = new();
-            for(DateTime tempDate = startDate; tempDate <= endDate; tempDate = tempDate.AddDays(1))
+            for (DateTime tempDate = startDate; tempDate <= endDate; tempDate = tempDate.AddDays(1))
             {
                 tempList.AddRange(from item in dataList
                     where item.Date == tempDate
@@ -208,6 +212,7 @@ namespace HotelPriceScout.Data.Model
                 listOfSingleDatePrices.Add(singleDayMarketPrice);
             }
             dataList = listOfSingleDatePrices;
+            
             return dataList;
         }
         
