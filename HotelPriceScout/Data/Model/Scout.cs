@@ -1,6 +1,7 @@
 using DataAccessLibrary;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using HotelPriceScout.Data.Function;
@@ -41,7 +42,7 @@ namespace HotelPriceScout.Data.Model
             SqliteDataAccess bookingSiteDB = new SqliteDataAccess();
             IEnumerable<(string, string, string, Dictionary<string, string>)> bookingSitesData = await bookingSiteDB.LoadStaticBookingSiteResources();
             scout.BookingSites = scout.CreateBookingSites(bookingSitesData);
-            scout.StartTimeDetermination();
+            scout.UpdateTimeDetermination();
             
             return scout;
         }
@@ -72,7 +73,7 @@ namespace HotelPriceScout.Data.Model
             }
         }
 
-        private void StartTimeDetermination()
+        private void UpdateTimeDetermination()
         {
             Timers = new TimeMonitor(NotificationTimes, OnTimeToNotify);
         }
@@ -80,6 +81,7 @@ namespace HotelPriceScout.Data.Model
         private void OnTimeToNotify(object sender, ElapsedEventArgs eventArgs)
         {
             RunComparator("email");
+            UpdateTimeDetermination();
         }
 
         private IEnumerable<BookingSite> CreateBookingSites(IEnumerable<(string, string, string, Dictionary<string, string>)> bookingSitesData)

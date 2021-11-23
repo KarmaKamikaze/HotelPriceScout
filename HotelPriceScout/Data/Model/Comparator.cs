@@ -209,14 +209,14 @@ namespace HotelPriceScout.Data.Model
             query = hotelAvgPrices.Single(hp => hp.Key == price.Date);
             decimal hostPrice = query.Value["Kompas Hotel Aalborg"];
             containerString +=
-                $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>{price.Price},-</td>";
+                $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>{price.Price.ToString("c0")}</td>";
             if (price.Price > hostPrice)
             {
-                containerString += $"<td style='text-align:center; background-color: #39a459;'>{hostPrice},-</td></tr>";
+                containerString += $"<td style='text-align:center; background-color: #39a459;'>{hostPrice.ToString("c0")}</td></tr>";
             }
             else
             {
-                containerString += $"<td style='text-align:center; background-color: #fc4119;'>{hostPrice},-</td></tr>";
+                containerString += $"<td style='text-align:center; background-color: #fc4119;'>{hostPrice.ToString("c0")}</td></tr>";
             }
 
             return containerString;
