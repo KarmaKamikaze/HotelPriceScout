@@ -9,9 +9,9 @@ namespace HotelPriceScout.Data.Interface
     {
         public static int marginPicked = 1;
         public static int notificationAmountPicked = 1;
-        public static DateTime timeValue { get; set; } = DateTime.Now;
-        public static DateTime timeValue2 { get; set; } = DateTime.Now;
-        public static DateTime timeValue3 { get; set; } = DateTime.Now;
+        public static DateTime timeValue { get; set; } = DateTime.Now.Date;
+        public static DateTime timeValue2 { get; set; } = DateTime.Now.Date;
+        public static DateTime timeValue3 { get; set; } = DateTime.Now.Date;
         public static int marginPickedPass { get; set; }
         public static int notificationPickedPass { get; set; }
         public static DateTime timeValuePass { get; set; }
