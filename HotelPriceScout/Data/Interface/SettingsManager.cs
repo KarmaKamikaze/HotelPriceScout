@@ -19,7 +19,6 @@ namespace HotelPriceScout.Data.Interface
         public static DateTime timeValuePass3 { get; set; }
         public bool modalStart = false;
         public bool updateYes = false;
-        public bool isScoutUpdated = true;
         public static bool showStop = false;
         public static bool showStart = true;
         public static bool showUpdate = false;
@@ -73,16 +72,16 @@ namespace HotelPriceScout.Data.Interface
             public string Text { get; set; }
         }
         public List<NotificationAmount> Notifications = new List<NotificationAmount>()
-    {
+        {
         new NotificationAmount(){ Notification= 0, Text= "0" },
         new NotificationAmount(){ Notification= 1, Text= "1" },
         new NotificationAmount(){ Notification= 2, Text= "2" },
         new NotificationAmount(){ Notification= 3, Text= "3" },
-    };
+        };
 
-        public void SetScoutSettings()
+        public void StartScoutSettings()
         {
-            ReverseBools(ref modalStart, ref showStop, ref showUpdate, ref showStart);
+            //ReverseMultipleBools(ref modalStart, ref showStop, ref showUpdate, ref showStart);
             marginPickedPass = marginPicked;
             notificationPickedPass = notificationAmountPicked;
             timeValuePass = timeValue;
@@ -90,9 +89,9 @@ namespace HotelPriceScout.Data.Interface
             timeValuePass3 = timeValue3;
         }
 
-        public void SetStopSettings()
+        public void SetStopScoutSettings()
         {
-            ReverseBools(ref showStart, ref showUpdate, ref showStop, ref popUp);
+            //ReverseMultipleBools(ref showStart, ref showUpdate, ref showStop, ref popUp);
             marginPickedPass = default;
             notificationPickedPass = default;
             timeValuePass = default;
@@ -102,7 +101,7 @@ namespace HotelPriceScout.Data.Interface
             notificationAmountPicked = 1;
         }
 
-        public void SetUpdateSettings()
+        public void SetUpdateScoutSettings()
         {
             marginPickedPass = marginPicked;
             notificationPickedPass = notificationAmountPicked;
@@ -113,7 +112,7 @@ namespace HotelPriceScout.Data.Interface
         }
 
         /*Reverse bools for StartProgram/StopProgram*/
-        public static void ReverseBools(ref bool a, ref bool b, ref bool c, ref bool d)
+        public static void ReverseMultipleBools(ref bool a, ref bool b, ref bool c, ref bool d)
         {
             a = !a;
             b = !b;

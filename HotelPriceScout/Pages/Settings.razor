@@ -164,7 +164,7 @@
     private void StopProgram()
     {
         Program.ScoutSharedService.ScoutRunning = false;
-        SetStopSettings();
+        SetStopScoutSettings();
         Program.ScoutSharedService.Scout.StopScout();
         StateHasChanged();
     }
@@ -172,7 +172,7 @@
 
     private async void UpdateProgram()
     {
-        SetUpdateSettings();
+        SetUpdateScoutSettings();
         ReverseBool(ref updateYes);
         StateHasChanged();
         await Task.Delay(1500);
@@ -183,7 +183,7 @@
     private async void StartProgram()
     {
         Program.ScoutSharedService.ScoutRunning = true;
-        SetScoutSettings();
+        StartScoutSettings();
         Countdown();
         Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();
