@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 
-
 namespace HotelPriceScout.Data.Interface
 {
     public class SettingsManager : ComponentBase
