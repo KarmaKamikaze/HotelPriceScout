@@ -92,7 +92,7 @@ namespace HotelPriceScout.Data.Interface
 
         public void SetStopScoutSettings()
         {
-            ReverseMultipleBools(ref showStart, ref showUpdate, ref showStop, ref poPup);
+            ReverseMultipleBools(ref showStart, ref showUpdate, ref showStop, ref popUp);
             marginPickedPass = default;
             notificationPickedPass = default;
             timeValuePass = default;
