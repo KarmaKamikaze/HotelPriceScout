@@ -15,56 +15,56 @@
             <label>Margin value percent</label>
         </div>
         <div class="text-center col p-3">
-            <SfNumericTextBox style="font-size: 20px;" TValue="int" Step="1" Max="100" Min="1" @bind-Value="marginPicked"></SfNumericTextBox>
+            <SfNumericTextBox style="font-size: 20px;" TValue="int" Step="1" Max="100" Min="1" @bind-Value="MarginDropdown"></SfNumericTextBox>
         </div>
         <div class="text-center col h4">
             <label>Amount of notifications</label>
         </div>
         <div class="text-center col p-3">
-            <SfDropDownList style="font-size: 20px;" TItem="NotificationAmount" TValue="int" @bind-value="notificationAmountPicked" DataSource="@Notifications">
+            <SfDropDownList style="font-size: 20px;" TItem="NotificationAmount" TValue="int" @bind-value="NotificationAmountDropdown" DataSource="@Notifications">
                 <DropDownListFieldSettings Text="Text" Value="Notification"></DropDownListFieldSettings>
             </SfDropDownList>
         </div>
-        @if (notificationAmountPicked == 1)
+        @if (NotificationAmountDropdown == 1)
         {
             <div class="text-center col h4">
                 <label>Notification time</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
         }
 
 
-        @if (notificationAmountPicked == 2)
+        @if (NotificationAmountDropdown == 2)
         {
             <div class="text-center col h4">
                 <label>Notification times</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@TimeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
         }
-        @if (notificationAmountPicked == 3)
+        @if (NotificationAmountDropdown == 3)
         {
             <div class="text-center col h4">
                 <label>Notification times</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker></div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@timeValue3" Step=60 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@TimeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@TimeValue3Dropdown" Step=60 Format="HH:mm"></SfTimePicker></div>
         }
 
 
-        @if (showStart)
+        @if (ShowStart)
         {
             <div class=""><button type="button" class="shadow p-3 rounded btn btn-success col" @onclick="StartProgram"> Start program</button></div>
         }
 
-        @if (modalStart)
+        @if (PopupStart)
         {
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -74,8 +74,8 @@
                             <h5 class="modal-title" id="titleLabel">Going to dashboard in @timer seconds</h5>
                         </div>
                         <div class="modal-footer">
-                            <NavLink class="form-control border border-dark" @onclick="@ModalStart" href="/Dashboard">Go to dashboard </NavLink>
-                            <button type="button" class="form-control border border-dark" @onclick="@ModalStart"> Stay </button>
+                            <NavLink class="form-control border border-dark" @onclick="@ModalStartPopUp" href="/Dashboard">Go to dashboard </NavLink>
+                            <button type="button" class="form-control border border-dark" @onclick="@ModalStartPopUp"> Stay </button>
                         </div>
                     </div>
                 </div>
@@ -84,14 +84,14 @@
 
 
 
-        @if (showStop)
+        @if (ShowStop)
         {
             <div class="d-flex">
-                <button type="button" class="shadow p-3 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="@EscapeStop" @onclick="PopUp"> Stop program</button>
-                <button type="button" class="shadow p-3  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="@EscapeUpdate" @onclick="UpdatePopUp">Update program</button>
+                <button type="button" class="shadow p-3 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="@EscapeStop" @onclick="ModalStopPopUp"> Stop program</button>
+                <button type="button" class="shadow p-3  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="@EscapeUpdate" @onclick="ModalUpdatePopUp">Update program</button>
             </div>
         }
-        @if (popUp)
+        @if (StopPopup)
         {
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -101,7 +101,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="form-control border border-dark" @onclick="StopProgram">Yes </button>
-                            <button type="button" class="form-control border border-dark" @onclick="PopUp"> No </button>
+                            <button type="button" class="form-control border border-dark" @onclick="ModalStopPopUp"> No </button>
                         </div>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
 
 
 
-        @if (updatePopUp)
+        @if (UpdatePopup)
         {
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -120,13 +120,13 @@
                         </div>
                         <div class=modal-footer>
                             <button type="button" class="form-control border border-dark" @onclick="UpdateProgram">Yes</button>
-                            <button type="button" class="form-control border border-dark" @onclick="UpdatePopUp">No</button>
+                            <button type="button" class="form-control border border-dark" @onclick="ModalUpdatePopUp">No</button>
                         </div>
                     </div>
                 </div>
             </div>
         }
-        @if (updateYes)
+        @if (UpdateYes)
         {
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -143,25 +143,25 @@
 
 @code {
     private int timer;
-    private async void Countdown()
+    private protected async void Countdown()
     {
         for (timer = 10; timer >= 0; timer--)
         {
             await Task.Delay(1000);
             StateHasChanged();
-            if (modalStart == false)
+            if (PopupStart == false)
             {
                 break;
             }
         }
         if (timer <= 0)
         {
-            ReverseBool(ref modalStart);
+            ReverseBool(ref PopupStart);
             NavManager.NavigateTo("/Dashboard");
         }
     }
 
-    private void StopProgram()
+    private protected void StopProgram()
     {
         Program.ScoutSharedService.ScoutRunning = false;
         SetStopScoutSettings();
@@ -170,40 +170,23 @@
     }
 
 
-    private async void UpdateProgram()
+    private protected async void UpdateProgram()
     {
         SetUpdateScoutSettings();
-        ReverseBool(ref updateYes);
+        ReverseBool(ref UpdateYes);
         StateHasChanged();
         await Task.Delay(1500);
-        ReverseBool(ref updateYes);
+        ReverseBool(ref UpdateYes);
         StateHasChanged();
     }
 
-    private async void StartProgram()
+    private protected async void StartProgram()
     {
         Program.ScoutSharedService.ScoutRunning = true;
         SetStartScoutSettings();
         Countdown();
-        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(MarginPicked, GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();
         StateHasChanged();
-    }
-
-
-    private void EscapeUpdate(KeyboardEventArgs e)
-    {
-        if (e.Code == "Escape")
-        {
-            ReverseBool(ref updatePopUp);
-        }
-    }
-
-    private void EscapeStop(KeyboardEventArgs f)
-    {
-        if (f.Code == "Escape")
-        {
-            ReverseBool(ref popUp);
-        }
     }
 }

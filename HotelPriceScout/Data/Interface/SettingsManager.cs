@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 
@@ -7,60 +8,67 @@ namespace HotelPriceScout.Data.Interface
 {
     public class SettingsManager : ComponentBase
     {
-        public static int marginPicked = 1;
-        public static int notificationAmountPicked = 1;
-        public static DateTime timeValue { get; set; } = DateTime.Now.Date;
-        public static DateTime timeValue2 { get; set; } = DateTime.Now.Date;
-        public static DateTime timeValue3 { get; set; } = DateTime.Now.Date;
-        public static int marginPickedPass { get; set; }
-        public static int notificationPickedPass { get; set; }
-        public static DateTime timeValuePass { get; set; }
-        public static DateTime timeValuePass2 { get; set; }
-        public static DateTime timeValuePass3 { get; set; }
-        public bool modalStart = false;
-        public bool updateYes = false;
-        public static bool showStop = false;
-        public static bool showStart = true;
-        public static bool showUpdate = false;
-        public bool popUp = false;
-        public bool updatePopUp = false;
+        public static int MarginDropdown = 1;
+        public static int NotificationAmountDropdown = 1;
+        public static DateTime TimeValueDropdown { get; set; } = DateTime.Now.Date;
+        public static DateTime TimeValue2Dropdown { get; set; } = DateTime.Now.Date;
+        public static DateTime TimeValue3Dropdown { get; set; } = DateTime.Now.Date;
+        public static int MarginPicked { get; set; }
+        public static int NotificationPicked { get; set; }
+        public static DateTime TimeValuePicked { get; set; }
+        public static DateTime TimeValue2Picked { get; set; }
+        public static DateTime TimeValue3Picked { get; set; }
+        public bool PopupStart = false;
+        public bool UpdateYes = false;
+        public static bool ShowStop = false;
+        public static bool ShowStart = true;
+        public static bool ShowUpdate = false;
+        public bool StopPopup = false;
+        public bool UpdatePopup = false;
 
-        public void PopUp()
+        public void ModalStopPopUp()
         {
-            popUp = !popUp;
+            StopPopup = !StopPopup;
         }
-        public void UpdatePopUp()
+        public void ModalUpdatePopUp()
         {
-            updatePopUp = !updatePopUp;
+            UpdatePopup = !UpdatePopup;
         }
-        public void ModalStart()
+        public void ModalStartPopUp()
         {
-            modalStart = !modalStart;
+            PopupStart = !PopupStart;
         }
 
         public void ReverseBool(ref bool i)
         {
             i = !i;
         }
+        public static void ReverseMultipleBools(ref bool a, ref bool b, ref bool c, ref bool d)
+        {
+            a = !a;
+            b = !b;
+            c = !c;
+            d = !d;
+        }
 
         public IEnumerable<DateTime> GetNotificationTimes()
         {
             List<DateTime> result = new List<DateTime>();
-            switch (notificationPickedPass)
+            switch (NotificationPicked)
             {
                 case 3:
-                    result.Add(timeValuePass3);
+                    result.Add(TimeValue3Picked);
                     goto case 2;
                 case 2:
-                    result.Add(timeValuePass2);
+                    result.Add(TimeValue2Picked);
                     goto case 1;
                 case 1:
-                    result.Add(timeValuePass);
+                    result.Add(TimeValue3Picked);
                     break;
                 case 0:
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(notificationPickedPass) + "must be 0, 1, 2, or 3.");
+                    throw new ArgumentOutOfRangeException(nameof(NotificationPicked) + "must be 0, 1, 2, or 3.");
             }
 
             return result;
@@ -81,44 +89,51 @@ namespace HotelPriceScout.Data.Interface
 
         public void SetStartScoutSettings()
         {
-            ReverseMultipleBools(ref modalStart, ref showStop, ref showUpdate, ref showStart);
+            ReverseMultipleBools(ref PopupStart, ref ShowStop, ref ShowUpdate, ref ShowStart);
 
-            marginPickedPass = marginPicked;
-            notificationPickedPass = notificationAmountPicked;
-            timeValuePass = timeValue;
-            timeValuePass2 = timeValue2;
-            timeValuePass3 = timeValue3;
+            MarginPicked = MarginDropdown;
+            NotificationPicked = NotificationAmountDropdown;
+            TimeValuePicked = TimeValueDropdown;
+            TimeValue2Picked = TimeValue2Dropdown;
+            TimeValue3Picked = TimeValue3Dropdown;
         }
 
         public void SetStopScoutSettings()
         {
-            ReverseMultipleBools(ref showStart, ref showUpdate, ref showStop, ref popUp);
-            marginPickedPass = default;
-            notificationPickedPass = default;
-            timeValuePass = default;
-            timeValuePass2 = default;
-            timeValuePass3 = default;
-            marginPicked = 1;
-            notificationAmountPicked = 1;
+            ReverseMultipleBools(ref ShowStart, ref ShowUpdate, ref ShowStop, ref StopPopup);
+            MarginPicked = default;
+            NotificationPicked = default;
+            TimeValuePicked = default;
+            TimeValue2Picked = default;
+            TimeValue3Picked = default;
+            MarginPicked = 1;
+            NotificationPicked = 1;
         }
 
         public void SetUpdateScoutSettings()
         {
-            marginPickedPass = marginPicked;
-            notificationPickedPass = notificationAmountPicked;
-            timeValuePass = timeValue;
-            timeValuePass2 = timeValue2;
-            timeValuePass3 = timeValue3;
-            ReverseBool(ref updatePopUp);
+            MarginPicked = MarginDropdown;
+            NotificationPicked = NotificationAmountDropdown;
+            TimeValuePicked = TimeValueDropdown;
+            TimeValue2Picked = TimeValue2Dropdown;
+            TimeValue3Picked = TimeValue3Dropdown;
+            ReverseBool(ref UpdatePopup);
         }
 
-        /*Reverse bools for StartProgram/StopProgram*/
-        public static void ReverseMultipleBools(ref bool a, ref bool b, ref bool c, ref bool d)
+        public void EscapeUpdate(KeyboardEventArgs e)
         {
-            a = !a;
-            b = !b;
-            c = !c;
-            d = !d;
+            if (e.Code == "Escape" && UpdatePopup)
+            {
+                ReverseBool(ref UpdatePopup);
+            }
+        }
+
+        public void EscapeStop(KeyboardEventArgs f)
+        {
+            if (f.Code == "Escape" && StopPopup)
+            {
+                ReverseBool(ref StopPopup);
+            }
         }
     }
 }

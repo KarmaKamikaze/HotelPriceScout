@@ -164,7 +164,7 @@ namespace HotelPriceScout.Data.Interface
         }
         public string ChangeTextColorBasedOnMargin(decimal marketprice, decimal kompasPrice)
         {
-            decimal result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
+            decimal result = (kompasPrice / 100) * SettingsManager.MarginPicked;
 
             if (marketprice > (kompasPrice + result))
             {
@@ -182,7 +182,7 @@ namespace HotelPriceScout.Data.Interface
         public string ArrowDecider(decimal marketPrice, decimal kompasPrice)
         {
 
-            decimal result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
+            decimal result = (kompasPrice / 100) * SettingsManager.MarginPicked;
 
             if (marketPrice > (kompasPrice + result))
             {
