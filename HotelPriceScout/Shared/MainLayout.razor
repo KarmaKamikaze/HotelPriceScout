@@ -42,11 +42,11 @@ else
 }
 
 @code {
-
     public bool settingsPageClicked = true;
     public void SettingsPageClicked()
     {
-        settingsPageClicked = !settingsPageClicked;
+        if (Program.ScoutSharedService.ScoutRunning)
+            settingsPageClicked = !settingsPageClicked;
     }
 
     public void HomeTitleClicked()

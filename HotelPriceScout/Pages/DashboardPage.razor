@@ -229,11 +229,7 @@
         else if (s == "update Hotel")
         {
             MarketPriceList.Clear();
-            if (SelectedHotels != null)
-            {
-                MonthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
-                MonthMarketData = Dashboard.SelectedMonthMarketPrices((Dashboard.ToDay.Date), (Dashboard.LastDayOfMonth.Date),MonthData);
-            }
+            
         }
         MonthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay.Date),(Dashboard.LastDayOfMonth.Date), AdultsPicked, "Select Prices", SelectedHotels);
         MonthMarketData = Dashboard.SelectedMonthMarketPrices((Dashboard.ToDay.Date), (Dashboard.LastDayOfMonth.Date), MonthData);
