@@ -14,14 +14,42 @@
     background-color: #dbefff !important;
 }
 
+.boldFont {
+    font-weight: 700;
+}
+
+::-webkit-scrollbar {
+    display: none !important;
+}
+
 .rightHandDate {
     font-weight: 500;
     font-size: 40px !important;
     font-family: Arial, Helvetica, sans-serif !important;
 }
 
+body {
+    overflow-y: hidden !important;
+}
+
 .noHover {
-    pointer-events: none !important;
+    pointer-events: none;
+}
+
+.table-danger {
+    background-color: rgba(255, 0, 0, .7);
+}
+
+.table-info {
+    background-color: rgba(150, 211, 255, .7);
+}
+
+.table-success {
+    background-color: rgba(0, 204, 54, .7);
+}
+
+.gnsColor {
+    background-color: lightblue;
 }
 
 .high {
@@ -42,7 +70,15 @@
     color: #00cc36 !important;
 }
 
-.table-borderless {
+.noMargin {
+    margin: 0 !important;
+}
+
+.table-borderless tr:nth-child(odd) {
+    background-color: #e0e0e0;
+}
+
+.buttomLayer {
     z-index: -1;
 }
 
@@ -51,6 +87,7 @@
 }
 
 .animation1 {
+    animation-fill-mode: forwards;
     animation-name: animation;
     animation-duration: 0.5s;
     position: relative;
@@ -64,23 +101,22 @@
 }
 
 @keyframes animation {
-    0% 
-    {
-        left: -40%;
+    0% {
+        left: -33%;
         opacity: 0;
     }
-    100% 
-    {
+    100% {
         left: 0%;
     } 
 }
+
 
 @keyframes animation2 {
     0% {
         left: 0%;
     }
     100% {
-        left: -40%;
+        left: -33%;
         opacity: 0;
     }
 }
