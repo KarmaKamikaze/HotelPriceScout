@@ -6,11 +6,11 @@
         <div class="main">
             <div class="navbar navbar-dark bg-dark">
                 <a class="navbar-brand" href="#">
-                    <img class="img-responsive" width="175" height="35" src="/Images/HPS_Logo.png"  @onclick="HomeTitleClicked">
+                    <img class="img-responsive" width="175" height="35" src="/Images/HPS_Logo.png" @onclick="HomeTitleClicked">
                 </a>
                 <NavLink class="nav-link text-white" @onclick="SettingsPageClicked" href="Settings">
-                    <span class="oi oi-cog flex" style="color:white;"></span> 
-                     Scout settings
+                    <span class="oi oi-cog flex" style="color:white;"></span>
+                    Scout settings
                 </NavLink>
             </div>
             <div class="content px-4">
@@ -21,21 +21,19 @@
 }
 else
 {
-     <div class="page">
-        <div class="main">
-            <div class="navbar navbar-dark bg-dark">
-                <a class="navbar-brand" href="#">
-                    <img class="img-responsive" width="175" height="35" src="/Images/HPS_Logo.png"  @onclick="HomeTitleClicked">
-                </a>
-                <NavLink class="nav-link text-white" @onclick="SettingsPageClicked" href="Settings">
-                    <span class="oi oi-cog flex" style="color:white;"></span> 
-                     Home
-                </NavLink>
-            </div>
-            <div class="content px-4">
-                @Body
-            </div>
+    <div class="top-row px-5 bg-dark border-bottom">
+        <a class="bg-dark col-sm-3"></a><a href="">
+            <img src="/Images/HPS_Logo.png"
+             asp-append-version="true" @onclick="SettingsPageClicked" width="250px">
+        </a>
+        <div class="col-sm-9">
         </div>
+        <NavLink class="nav-link text-white col-sm-1" @onclick="HomeTitleClicked" href="">
+            <span class="oi oi-home" style="color:white;"> </span> Home
+        </NavLink>
+    </div>
+    <div class="content px-4">
+        @Body
     </div>
 }
 
