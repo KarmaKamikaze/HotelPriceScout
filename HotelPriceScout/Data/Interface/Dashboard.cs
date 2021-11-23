@@ -162,17 +162,17 @@ namespace HotelPriceScout.Data.Interface
             if(NumDummyColumn == 0)
             {NumDummyColumn = 7;}
         }
-        public string ChangeTextColorBasedOnMargin(decimal marketprice, decimal kompasPrice)
+        public string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice)
         {
-            decimal result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
+            decimal result = (marketPrice / 100) * SettingsManager.marginPickedPass;
 
-            if (marketprice > (kompasPrice + result))
-            {
-                return "low";
-            }
-            else if (marketprice < (kompasPrice - result))
+            if (kompasPrice > (marketPrice + result))
             {
                 return "high";
+            }
+            else if (kompasPrice < (marketPrice - result))
+            {
+                return "low";
             }
             else
             {
@@ -182,20 +182,26 @@ namespace HotelPriceScout.Data.Interface
         public string ArrowDecider(decimal marketPrice, decimal kompasPrice)
         {
 
-            decimal result = (kompasPrice / 100) * SettingsManager.marginPickedPass;
+            decimal result = (marketPrice / 100) * SettingsManager.marginPickedPass;
 
-            if (marketPrice > (kompasPrice + result))
-            {
-                return "oi oi-caret-top";
-            }
-            else if (marketPrice < (kompasPrice - result))
+            if (kompasPrice > (marketPrice + result))
             {
                 return "oi oi-caret-bottom";
+            }
+            else if (kompasPrice < (marketPrice - result))
+            {
+                return "oi oi-caret-top";
             }
             else
             {
                 return "oi oi-minus";
             }
+        }
+        public decimal CurrentMargin(decimal marketPrice, decimal kompasPrice)
+        {
+            decimal result = (marketPrice / 100) * SettingsManager.marginPickedPass;
+
+            return result;
         }
         public void ShowMoreInfo(int dayClicked)
         {

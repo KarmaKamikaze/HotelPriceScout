@@ -5,13 +5,14 @@
 @inject Dashboard Dashboard
 @inject SqliteDataAccess _db
 
-<div class="row col-md-7">
+<div class="row">
+<div class="col-md-12 d-inline-flex">
     <h1 style="width:350px;">@Dashboard.MonthName @Dashboard.Year</h1>
     @if (Dashboard.MonthsAway > 0)
     {
         <button type="button" class="btn btn-default btn-lg" @onclick='() =>{OnClickUpdate("Previous");}'>
             <span class="oi oi-arrow-thick-left" style="font-size:30px"></span>
-        </button> 
+        </button>
     }
     else
     {
@@ -23,7 +24,7 @@
     {
         <button type="button" class="btn btn-default btn-lg" @onclick='() =>{OnClickUpdate("Next");}'>
             <span class="oi oi-arrow-thick-right" style="font-size:30px"></span>
-        </button> 
+        </button>
     }
     else
     {
@@ -31,9 +32,12 @@
             <span class="oi oi-arrow-thick-right" style="font-size:30px"></span>
         </button>
     }
+    <div class="col-md-8 @(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate))"><h1 style="height:fit-content; text-align: right">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1></div>
+</div>
 </div>
 
-<div class="row col-md-7">
+
+<div class="row col-md-7 d-inline-flex">
     <div class="col-md-4">
         <SfDropDownList Width="200px" TItem="numberOfAdults" TValue="int" @bind-value="AdultsPicked" DataSource="@Adults">
             <DropDownListFieldSettings Text="Text" Value="Adults"></DropDownListFieldSettings>
@@ -50,7 +54,7 @@
 
 <div class="row">
     <div class="col-md-8 ">
-        <table class="table table-bordered col calendar">
+        <table class="table table-bordered table-sm col calendar">
             <thead>
                 <tr>
                     <th style="width:14%"> Monday</th>
@@ -127,38 +131,37 @@
     @if (Dashboard.DayClicked != 0)
     {
         Dashboard.GenerateThermometer(Dashboard.DayClicked, Dashboard.MonthsAway, MonthData, MarketPriceList);
-        <div class="@(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 table-borderless">
-            <h1 style="height:fit-content; text-align: center; padding-bottom:25px">@Dashboard.ShowCurrentDayAsString()</h1>
+        <div class="@(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 buttomLayer fixed-top overflow-hidden">
             <div class="row col d-flex justify-content-center">
                 <!-- outer layer-->
-                @if (Dashboard.priceList == null)
+                @if (Dashboard.priceList == null) 
                 {
                     <div><p>Loading data</p></div>// <--- checks if thermometer is ready yet
                 }
                 else
                 {
-                    <table class="table table-borderless noHover" style="max-width:90%">
+                    <table class="table table-striped table-sm table-borderless noHover">
                         @foreach (PriceModel item in Dashboard.priceList)
                         {
-                            if (decimal.ToInt32(item.Price) == decimal.ToInt32(Dashboard.MarketPriceItem.Price))
+                            if (item.Price <= MarketPrice + Dashboard.CurrentMargin(MarketPrice, KompasPrice) && item.Price >= MarketPrice - Dashboard.CurrentMargin(MarketPrice, KompasPrice))
                             {
                                 <tr>
-                                    <td class="col text-right"> @item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="table-info">@(decimal.ToInt32(item.Price)),-</td>
+                                    <td class="col text-right @(item.HotelName == "Gns. Marked" || item.HotelName == "Kompas Hotel Aalborg" ? "boldFont" : "")"> @item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="table-info text-center">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
                             else if (item.Price > Dashboard.MarketPriceItem.Price)
                             {
                                 <tr>
-                                    <td class="col text-right">@item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="col @(Dashboard.priceList.First()==item ? "table-danger rounded-top":"table-danger")">@(decimal.ToInt32(item.Price)),-</td>
+                                    <td class="col text-right @(item.HotelName == "Kompas Hotel Aalborg" ? "boldFont" : "")">@item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="col table-danger text-center">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
                             else if (item.Price < Dashboard.MarketPriceItem.Price)
                             {
                                 <tr>
-                                    <td class="col text-right">@item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
-                                    <td class="@(Dashboard.priceList.Last()==item ? "table-success rounded-bottom":"table-success")">@(decimal.ToInt32(item.Price)),-</td>
+                                    <td class="col text-right @(item.HotelName == "Kompas Hotel Aalborg" ? "boldFont" : "")">@item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
+                                    <td class="table-success text-center">@(decimal.ToInt32(item.Price)),-</td>
                                 </tr>
                             }
                             else
