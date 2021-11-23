@@ -4,9 +4,12 @@ using MimeKit;
 using MimeKit.Text;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration.Abstractions;
 using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace HotelPriceScout.Data.Model
 {
@@ -136,9 +139,12 @@ namespace HotelPriceScout.Data.Model
         public void SendNotification()
         {
             MimeMessage mail = new();
-            mail.From.Add(new MailboxAddress("Hotel Price Scout", "hotelpricescout@gmail.com"));
-            mail.To.Add(new MailboxAddress("CS-21-SW-3-12",
-                "croska19@student.aau.dk")); /*cs - 21 - sw - 3 - 12@student.aau.dk*/
+            XDocument mailConfig = XDocument.Load("./mail_config.xml");
+
+            mail.From.Add(new MailboxAddress("Hotel Price Scout", 
+                mailConfig.Descendants("SenderEmailAddress").First().Value));
+            mail.To.Add(new MailboxAddress(mailConfig.Descendants("ReceiverName").First().Value, 
+                mailConfig.Descendants("ReceiverEmailAddress").First().Value));
             mail.Subject = "Hotel Price Scout has noticed a price discrepancy!";
             mail.Importance = MessageImportance.High;
             mail.Priority = MessagePriority.Urgent;
@@ -190,7 +196,8 @@ namespace HotelPriceScout.Data.Model
 
             SmtpClient smtpClient = new();
             smtpClient.Connect("smtp.gmail.com", 465, true);
-            smtpClient.Authenticate("hotelpricescout@gmail.com", "cs-21-sw-3-12");
+            smtpClient.Authenticate(mailConfig.Descendants("SenderEmailAddress").First().Value, 
+                mailConfig.Descendants("SenderPassword").First().Value);
             smtpClient.Send(mail);
             smtpClient.Disconnect(true);
         }
