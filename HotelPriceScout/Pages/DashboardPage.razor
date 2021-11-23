@@ -35,7 +35,7 @@
 
 <div class="row col-md-7">
     <div class="col-md-4">
-        <SfDropDownList Width="200px" TItem="numberOfAdults" TValue="int" @bind-value="adultsPicked" DataSource="@Adults">
+        <SfDropDownList Width="200px" TItem="NumberOfAdults" TValue="int" @bind-value="adultsPicked" DataSource="@Adults">
             <DropDownListFieldSettings Text="Text" Value="Adults"></DropDownListFieldSettings>
             <DropDownListEvents TValue="int" TItem="numberOfAdults" ValueChange='() => {OnClickUpdate("Update");}'></DropDownListEvents>
         </SfDropDownList>
