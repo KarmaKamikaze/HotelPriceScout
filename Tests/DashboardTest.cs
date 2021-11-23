@@ -19,9 +19,25 @@ namespace Tests
 
         }
 
-        public void Test_If_GetSingleDayMarketPrice_Returns_Zero()
+        public static readonly object[][] GetSingleDayMarketPriceInfo =
         {
+            new object[] {DateTime.Now.AddMonths(-1)},
+            new object[] {DateTime.Now.AddMonths(1)},
+            new object[] {DateTime.Now.AddMonths(3)},
+            new object[] {DateTime.Now}
+        };
+        [Theory, MemberData(nameof(GetSingleDayMarketPriceInfo))]
+        public async Task Test_If_GetSingleDayMarketPrice_Returns_Zero(DateTime specificDay)
+        {
+            //Arrange and Act
+            Dashboard dashboard = new Dashboard();
+            dashboard.CreateMonth();
+            await dashboard.RetrieveSelectDataFromDb(DateTime.Now, DateTime.Now.AddMonths(2), 1, "Select Prices");
+            var data2 = dashboard.priceList;
 
+            decimal Actual = dashboard.GetSingleDayMarketPrice(data2, specificDay.Day);
+            //Assert
+            Assert.Equal(0, Actual);
         }
 
         public void Test_If_GetSingleDayMarketPrice_Returns_Price()
@@ -105,14 +121,14 @@ namespace Tests
             Assert.Equal(expected, dash);
         }
 
-        public static readonly object[][] TheoryData =
+        public static readonly object[][] ShowMoreInfoData =
         {
             new object[] {false, 22, null},
             new object[] {true, DateTime.Now.Day, DateTime.Now.Day},
             new object[] {true, DateTime.Now.Day, (DateTime.Now.Day + 1)}
         };
 
-        [Theory, MemberData(nameof(TheoryData))]
+        [Theory, MemberData(nameof(ShowMoreInfoData))]
         public void Test_If_ShowMoreInfo_Returns_Correct_Value(bool expected, int dayClicked, int DayClicked)
         {
             //Arrange and Act
@@ -123,17 +139,6 @@ namespace Tests
 
             //Assert
             Assert.Equal(expected, dashboard.CheckForAlternateClick);
-        }
-
-
-        public void Test_If_NextMonth_Does_Correct_Sequence()
-        {
-
-        }
-
-        public void Test_If_PreviousMonth_Does_Correct_Sequence()
-        {
-
         }
 
         [Theory]
