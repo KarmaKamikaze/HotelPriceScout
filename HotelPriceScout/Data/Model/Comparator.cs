@@ -202,7 +202,6 @@ namespace HotelPriceScout.Data.Model
             }
             List<decimal> tempList = new();
             List<PriceModel> listOfSingleDatePrices = new();
-            listOfSingleDatePrices.Clear();
             for (DateTime tempDate = startDate; tempDate <= endDate; tempDate = tempDate.AddDays(1))
             {
                 tempList.AddRange(from item in dataList
