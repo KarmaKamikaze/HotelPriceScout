@@ -142,7 +142,7 @@
 </div>
 
 @code {
-    private int timer;
+    private protected int timer;
     private protected async void Countdown()
     {
         for (timer = 10; timer >= 0; timer--)
@@ -168,7 +168,6 @@
         Program.ScoutSharedService.Scout.StopScout();
         StateHasChanged();
     }
-
 
     private protected async void UpdateProgram()
     {
