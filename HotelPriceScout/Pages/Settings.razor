@@ -183,7 +183,7 @@
     private async void StartProgram()
     {
         Program.ScoutSharedService.ScoutRunning = true;
-        StartScoutSettings();
+        SetStartScoutSettings();
         Countdown();
         Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();

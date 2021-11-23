@@ -79,9 +79,10 @@ namespace HotelPriceScout.Data.Interface
         new NotificationAmount(){ Notification= 3, Text= "3" },
         };
 
-        public void StartScoutSettings()
+        public void SetStartScoutSettings()
         {
-            //ReverseMultipleBools(ref modalStart, ref showStop, ref showUpdate, ref showStart);
+            ReverseMultipleBools(ref modalStart, ref showStop, ref showUpdate, ref showStart);
+
             marginPickedPass = marginPicked;
             notificationPickedPass = notificationAmountPicked;
             timeValuePass = timeValue;
@@ -91,7 +92,7 @@ namespace HotelPriceScout.Data.Interface
 
         public void SetStopScoutSettings()
         {
-            //ReverseMultipleBools(ref showStart, ref showUpdate, ref showStop, ref popUp);
+            ReverseMultipleBools(ref showStart, ref showUpdate, ref showStop, ref poPup);
             marginPickedPass = default;
             notificationPickedPass = default;
             timeValuePass = default;
