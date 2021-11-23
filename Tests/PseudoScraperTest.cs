@@ -8,16 +8,13 @@ namespace Tests
 {
     public class PseudoScraperTest
     {
-
         [Fact]
         public void BookingsiteNullConstructorThrowsTest()
         {
             //Arrange
             BookingSite bookingSite = null;
-            void Action()
-            {
-                new PseudoScraper(bookingSite);
-            }
+
+            void Action() => new PseudoScraper(bookingSite);
 
             //Act and Assert
             Assert.Throws<NullReferenceException>(Action);
@@ -59,12 +56,10 @@ namespace Tests
             pseudoScraper.StartScraping(margin);
 
             //Assert
-            Assert.All(bookingSite.HotelsList, 
-                hotel => Assert.All(hotel.RoomTypes, 
-                    roomtype => Assert.All(roomtype.Prices, 
+            Assert.All(bookingSite.HotelsList,
+                hotel => Assert.All(hotel.RoomTypes,
+                    roomtype => Assert.All(roomtype.Prices,
                         price => Assert.NotEqual(0, price.Price))));
-
         }
-
     }
 }

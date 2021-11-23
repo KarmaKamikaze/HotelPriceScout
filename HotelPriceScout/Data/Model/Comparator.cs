@@ -6,20 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace HotelPriceScout.Data.Model
 {
     public class Comparator : IComparator
     {
         private readonly SqliteDataAccess _db = new SqliteDataAccess();
-
-        public Comparator()
-        {
-            RoomType1HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
-            RoomType2HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
-            RoomType4HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
-            AvgMarketPrices = new List<PriceModel>();
-        }
 
         public bool IsDiscrepancy { get; private set; }
 
@@ -30,6 +23,11 @@ namespace HotelPriceScout.Data.Model
 
         public async void ComparePrices(IEnumerable<BookingSite> bookingSites, int marginValue)
         {
+            RoomType1HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
+            RoomType2HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
+            RoomType4HotelAvgPrices = new Dictionary<DateTime, Dictionary<string, decimal>>();
+            AvgMarketPrices = new List<PriceModel>();
+            
             DateTime latestScrapedDate = bookingSites.First().HotelsList.First().RoomTypes.First().Prices.Last().Date;
 
             //For loop that iterates through each date that have been scraped
@@ -41,10 +39,12 @@ namespace HotelPriceScout.Data.Model
                 Dictionary<string, decimal> dict4 = new();
 
                 //The integer describes the capacity of the roomTypes.
-                List<(Dictionary<string, decimal>, int)> dictList = new();
-                dictList.Add((dict1, 1));
-                dictList.Add((dict2, 2));
-                dictList.Add((dict4, 4));
+                List<(Dictionary<string, decimal>, int)> dictList = new()
+                {
+                    (dict1, 1),
+                    (dict2, 2),
+                    (dict4, 4)
+                };
 
                 foreach (BookingSite bookingSite in bookingSites)
                 {
@@ -92,12 +92,12 @@ namespace HotelPriceScout.Data.Model
                 CheckDiscrepancy(date, RoomType4HotelAvgPrices, marginValue, 4);
             }
 
-            StoreAvgHotelPrices(RoomType1HotelAvgPrices, "RoomType1");
-            StoreAvgHotelPrices(RoomType2HotelAvgPrices, "RoomType2");
-            StoreAvgHotelPrices(RoomType4HotelAvgPrices, "RoomType4");
+            await StoreAvgHotelPrices(RoomType1HotelAvgPrices, "RoomType1");
+            await StoreAvgHotelPrices(RoomType2HotelAvgPrices, "RoomType2");
+            await StoreAvgHotelPrices(RoomType4HotelAvgPrices, "RoomType4");
         }
 
-        private async void StoreAvgHotelPrices(Dictionary<DateTime, Dictionary<string, decimal>> roomTypeHotelAvgPrices,
+        private async Task StoreAvgHotelPrices(Dictionary<DateTime, Dictionary<string, decimal>> roomTypeHotelAvgPrices,
             string tableName)
         {
             string valueDB = $"INSERT INTO {tableName} (Date,HotelName,Price) VALUES ";
@@ -193,6 +193,24 @@ namespace HotelPriceScout.Data.Model
             smtpClient.Send(mail);
             smtpClient.Disconnect(true);
         }
+        
+        public IEnumerable<PriceModel> OneMonthSelectedHotelsMarketPrices(DateTime startDate, DateTime endDate, IEnumerable<PriceModel> dataList)
+        {
+            List<decimal> tempList = new();
+            List<PriceModel> listOfSingleDatePrices = new();
+            for(DateTime tempDate = startDate; tempDate <= endDate; tempDate = tempDate.AddDays(1))
+            {
+                tempList.AddRange(from item in dataList
+                    where item.Date == tempDate
+                    select item.Price);
+                PriceModel singleDayMarketPrice = new PriceModel(tempList.Average(), tempDate);
+                tempList.Clear();
+                listOfSingleDatePrices.Add(singleDayMarketPrice);
+            }
+            dataList = listOfSingleDatePrices;
+            return dataList;
+        }
+        
 
         private string MailDataBuilder(Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices,
             string containerString, PriceModel price)

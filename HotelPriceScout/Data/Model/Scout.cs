@@ -71,6 +71,12 @@ namespace HotelPriceScout.Data.Model
                 comparator.SendNotification();   
             }
         }
+        
+        public IEnumerable<PriceModel> RunComparatorForSelectedHotels(DateTime startDate, DateTime endDate, IEnumerable<PriceModel> dataList)
+        {
+            IComparator comparator = new Comparator();
+            return comparator.OneMonthSelectedHotelsMarketPrices(startDate, endDate, dataList);
+        }
 
         private void StartTimeDetermination()
         {
