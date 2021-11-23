@@ -82,6 +82,7 @@ namespace HotelPriceScout.Data.Interface
         public void SetStartScoutSettings()
         {
             ReverseMultipleBools(ref modalStart, ref showStop, ref showUpdate, ref showStart);
+
             marginPickedPass = marginPicked;
             notificationPickedPass = notificationAmountPicked;
             timeValuePass = timeValue;
