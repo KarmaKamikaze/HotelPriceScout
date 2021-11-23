@@ -1,4 +1,3 @@
-
 @page "/Settings"
 @using HotelPriceScout.Data.Interface
 @using HotelPriceScout.Data.Model
@@ -6,130 +5,145 @@
 @inherits SettingsManager
 
 <div class="row">
-  <div class="col-xl-4 offset-xl-4 col-sm-7 offset-sm-2 shadow p-3 mb-5 bg-white rounded">
-            <div class="row">
-                <div class="text-center col">
-                    <h1 class="display-4">Settings</h1>
-                </div>
+    <div class="col-xl-4 offset-xl-4 col-sm-7 offset-sm-2 shadow p-3 mb-5 bg-white rounded">
+        <div class="row">
+            <div class="text-center col">
+                <h1 class="display-4">Settings</h1>
             </div>
+        </div>
+        <div class="text-center col h4">
+            <label>Margin value percent</label>
+        </div>
+        <div class="text-center col p-3">
+            <SfNumericTextBox style="font-size: 20px;" TValue="int" Step="1" Max="100" Min="1" @bind-Value="marginPicked"></SfNumericTextBox>
+        </div>
+        <div class="text-center col h4">
+            <label>Amount of notifications</label>
+        </div>
+        <div class="text-center col p-3">
+            <SfDropDownList style="font-size: 20px;" TItem="NotificationAmount" TValue="int" @bind-value="notificationAmountPicked" DataSource="@Notifications">
+                <DropDownListFieldSettings Text="Text" Value="Notification"></DropDownListFieldSettings>
+            </SfDropDownList>
+        </div>
+        @if (notificationAmountPicked == 1)
+        {
             <div class="text-center col h4">
-                <label>Margin value percent</label>
+                <label>Notification time</label>
             </div>
             <div class="text-center col p-3">
-                <SfNumericTextBox style="font-size: 20px;" TValue="int" Step="1" Max="100" Min="1" @bind-Value="marginPicked"></SfNumericTextBox>
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
-            <div class="text-center col h4">
-                <label>Amount of notifications</label>
-            </div>
-         <div class="text-center col p-3">
-             <SfDropDownList style="font-size: 20px;"  TItem="NotificationAmount" TValue="int" @bind-value="notificationAmountPicked" DataSource="@Notifications">
-                 <DropDownListFieldSettings Text="Text" Value="Notification"></DropDownListFieldSettings>
-             </SfDropDownList>
-         </div>
-         <div class="text-center col h4">
-             <label>Notification time(s)</label>
-         </div>
-         <div class="text-center col p-3">
-             <SfTimePicker style="font-size: 20px;"  TValue="DateTime "@bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
-         </div>
+        }
 
 
         @if (notificationAmountPicked == 2)
         {
-            <div class="text-center col p-3"><SfTimePicker  TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col h4">
+                <label>Notification times</label>
+            </div>
+            <div class="text-center col p-3">
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
+            </div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker></div>
         }
         @if (notificationAmountPicked == 3)
         {
-           <div class="text-center col p-3"><SfTimePicker  TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker></div>
-           <div class="text-center col p-3"><SfTimePicker  TValue="DateTime" @bind-Value="@timeValue3" Step=60 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col h4">
+                <label>Notification times</label>
+            </div>
+            <div class="text-center col p-3">
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
+            </div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@timeValue3" Step=60 Format="HH:mm"></SfTimePicker></div>
         }
 
-            
-                @if (showStart)
-                {
-                    <div class=""><button type="button" class="shadow p-3 rounded btn btn-success col" disabled=@isScoutStarted @onclick="StartProgram"> Start program</button></div>
-                }
-                
-                 @if (modalStart)
-                {
-                    <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <h4 class="modal-title" id="titleLabel">Settings have been set</h4>
-                                    <h5 class="modal-title" id="titleLabel">Going to dashboard in @timer seconds</h5>
-                                </div>
-                                <div class="modal-footer">
-                                    <NavLink class="form-control border border-dark" @onclick="@ModalStart" href="/Dashboard">Go to dashboard </NavLink>
-                                    <button type="button" class="form-control border border-dark" @onclick="@ModalStart"> Stay </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
 
-            
-        
-            @if (showStop)
-            {
-                <div class="d-flex">
-                    <button type="button" class="shadow p-3 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="@EscapeStop" @onclick="PopUp"> Stop program</button>
-                    <button type="button" class="shadow p-3  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="@EscapeUpdate" @onclick="UpdatePopUp">Update program</button>
-                </div>
-            }
-            @if (popUp)
-            {
-                <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="form-control border border-dark" disabled=@isScoutStopped @onclick="StopProgram">Yes </button>
-                                <button type="button" class="form-control border border-dark" disabled=@isScoutStopped @onclick="PopUp"> No </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
+        @if (showStart)
+        {
+            <div class=""><button type="button" class="shadow p-3 rounded btn btn-success col" disabled=@isScoutStarted @onclick="StartProgram"> Start program</button></div>
+        }
 
-        
-      
-            @if (updatePopUp)
-            {
-                <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="titleLabel">Are you sure you want to update the program?</h5>
-                            </div>
-                            <div class=modal-footer>
-                                <button type="button" class="form-control border border-dark" disabled=@isScoutUpdated @onclick="UpdateProgram">Yes</button>
-                                <button type="button" class="form-control border border-dark" disabled=@isScoutUpdated @onclick="UpdatePopUp">No</button>
-                            </div>
+        @if (modalStart)
+        {
+            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h4 class="modal-title" id="titleLabel">Settings have been set</h4>
+                            <h5 class="modal-title" id="titleLabel">Going to dashboard in @timer seconds</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <NavLink class="form-control border border-dark" @onclick="@ModalStart" href="/Dashboard">Go to dashboard </NavLink>
+                            <button type="button" class="form-control border border-dark" @onclick="@ModalStart"> Stay </button>
                         </div>
                     </div>
                 </div>
-            }
-            @if (updateYes)
-            {
-                <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <h2 class="modal-title" id="titleLabel">The program has been updated!</h2>
-                            </div>
+            </div>
+        }
+
+
+
+        @if (showStop)
+        {
+            <div class="d-flex">
+                <button type="button" class="shadow p-3 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="@EscapeStop" @onclick="PopUp"> Stop program</button>
+                <button type="button" class="shadow p-3  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="@EscapeUpdate" @onclick="UpdatePopUp">Update program</button>
+            </div>
+        }
+        @if (popUp)
+        {
+            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="form-control border border-dark" disabled=@isScoutStopped @onclick="StopProgram">Yes </button>
+                            <button type="button" class="form-control border border-dark" disabled=@isScoutStopped @onclick="PopUp"> No </button>
                         </div>
                     </div>
                 </div>
-            }
-  </div>
+            </div>
+        }
+
+
+
+        @if (updatePopUp)
+        {
+            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="titleLabel">Are you sure you want to update the program?</h5>
+                        </div>
+                        <div class=modal-footer>
+                            <button type="button" class="form-control border border-dark" disabled=@isScoutUpdated @onclick="UpdateProgram">Yes</button>
+                            <button type="button" class="form-control border border-dark" disabled=@isScoutUpdated @onclick="UpdatePopUp">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (updateYes)
+        {
+            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h2 class="modal-title" id="titleLabel">The program has been updated!</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
 
 @code {
-private int timer;
+    private int timer;
     private async void Countdown()
     {
         for (timer = 10; timer >= 0; timer--)
