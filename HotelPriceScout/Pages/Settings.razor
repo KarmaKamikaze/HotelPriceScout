@@ -5,10 +5,10 @@
 @inherits SettingsManager
 
 <div class="row">
-    <div class="col-xl-4 offset-xl-4 col-sm-7 offset-sm-2 shadow p-3 mb-5 bg-white rounded">
+    <div class="col-xl-4 offset-xl-4 col-sm-7 offset-sm-2 p-2 shadow bg-white rounded">
         <div class="row">
             <div class="text-center col">
-                <h1 class="display-4">Settings</h1>
+                <h1 class="display-5">Settings</h1>
             </div>
         </div>
         <div class="text-center col h4">
@@ -61,7 +61,7 @@
 
         @if (ShowStart)
         {
-            <div class=""><button type="button" class="shadow p-3 rounded btn btn-success col" @onclick="StartProgram"> Start program</button></div>
+            <div class=""><button type="button" class="shadow p-2 rounded btn btn-success col" @onclick="StartProgram"> Start program</button></div>
         }
 
         @if (PopupStart)
@@ -81,9 +81,6 @@
                 </div>
             </div>
         }
-
-
-
         @if (ShowStop)
         {
             <div class="d-flex">
@@ -107,8 +104,6 @@
                 </div>
             </div>
         }
-
-
 
         @if (UpdatePopup)
         {
