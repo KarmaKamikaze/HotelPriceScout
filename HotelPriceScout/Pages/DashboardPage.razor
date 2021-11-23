@@ -249,9 +249,9 @@
             bookingSite.DataScraper.SendMissingDataWarning += Dashboard.UpdateUiMissingDataWarning;
         }
 
-        monthData = await Dashboard.RetrieveSelectDataFromDb(Dashboard.ToDay.Date,Dashboard.LastDayOfMonth.Date, adultsPicked, "Select Prices", selectedHotels);
-        monthMarketData = Program.ScoutSharedService.Scout.RunComparatorForSelectedHotels(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, monthData);
-        monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, adultsPicked, "Kompas Prices");
+        monthData = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay).Date,(Dashboard.LastDayOfMonth).Date, adultsPicked, "Select Prices", selectedHotels);
+        monthMarketData = Program.ScoutSharedService.Scout.RunComparatorForSelectedHotels((Dashboard.ToDay).Date, (Dashboard.LastDayOfMonth).Date, monthData);
+        monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb((Dashboard.ToDay).Date, (Dashboard.LastDayOfMonth).Date, adultsPicked, "Kompas Prices");
 
         Dashboard.CreateMonth();
     }
