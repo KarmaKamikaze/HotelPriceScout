@@ -13,8 +13,7 @@ namespace HotelPriceScout.Pages
             PriceDataList.AddRange(from PriceModel item in MonthData
                                    where (item.Date) == TodayDate.Date
                                    select new PriceModel(item.Price, item.HotelName));
-                PriceDataList.Add(new PriceModel(avgPrice, "Gns. Marked"));
-                PriceDataList.Sort();
+            PriceDataList.Add(new PriceModel(avgPrice, "Gns. Marked"));
                 return PriceDataList;
             }
             public static PriceModel MarketFinder(List<PriceModel> list)

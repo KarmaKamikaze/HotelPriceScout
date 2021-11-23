@@ -40,6 +40,7 @@ namespace HotelPriceScout.Data.Interface
                                   where item.Date == tempDate
                                   select item.Price);
                 PriceModel SingleDayMarketPrice = new PriceModel(TempList.Average(), tempDate);
+                TempList.Clear();
                 ListOfSingleDatePrices.Add(SingleDayMarketPrice);
             }
             dataList = ListOfSingleDatePrices;
@@ -122,7 +123,7 @@ namespace HotelPriceScout.Data.Interface
             decimal MarketPrice = (avgMarketPrice.Where(Date => Date.Date == todayDate)).Single().Price;
             priceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData, MarketPrice);
             MarketPriceItem = PriceMeterGenerator.MarketFinder(priceList);
-            priceList.Sort();
+            priceList.Sort();   
         }
         public void UpdateUiMissingDataWarning(BookingSite bookingSite)
         {
