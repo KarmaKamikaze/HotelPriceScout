@@ -9,5 +9,7 @@ namespace HotelPriceScout.Data.Model
         void StartScout();
         void StopScout();
         void RunComparator(string type);
+        IEnumerable<PriceModel> RunComparatorForSelectedHotels(DateTime startDate, DateTime endDate,
+            IEnumerable<PriceModel> dataList);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace HotelPriceScout.Data.Model
 {
@@ -7,5 +8,7 @@ namespace HotelPriceScout.Data.Model
         bool IsDiscrepancy { get; }
         void ComparePrices(IEnumerable<BookingSite> bookingSites, int marginValue);
         void SendNotification();
+        IEnumerable<PriceModel> OneMonthSelectedHotelsMarketPrices(DateTime startDate, DateTime endDate,
+            IEnumerable<PriceModel> dataList);
     }
 }
