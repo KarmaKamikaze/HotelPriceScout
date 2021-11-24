@@ -29,6 +29,7 @@ namespace HotelPriceScout
             services.AddSyncfusionBlazor();
             services.AddBlazoredModal();
             services.AddTransient<Dashboard>();
+            services.AddTransient<ISqliteDataAccess, SqliteDataAccess>();
             services.AddTransient<SqliteDataAccess>();
             services.AddTransient<SettingsManager>();
         }
