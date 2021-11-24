@@ -10,17 +10,17 @@ namespace HotelPriceScout.Data.Function
     public class PseudoScraper : IDataScraper
     {
         public event MissingDataWarning SendMissingDataWarning;
-        private const int TYPE_ONE_MIN = 900;
-        private const int TYPE_ONE_MAX = 1400;
-        private const int TYPE_TWO_MIN = 900;
-        private const int TYPE_TWO_MAX = 1400;
-        private const int TYPE_FOUR_MIN = 1200;
-        private const int TYPE_FOUR_MAX = 1700;
-        private const int DISCREPANCY_PROBABILITY = 100 / 5;
-        private const int PRICE_CHANGE_PROBABILITY = 100 / 15;
-        private const int ABOVE_OR_BELOW_MARGIN_PROBABILITY = 100 / 50;
-        private const int VARIANCE = 200;
-        private const int RUN_SCRAPER_INTERVAL_IN_MINUTES = 30;
+        private const int TypeOneMin = 900;
+        private const int TypeOneMax = 1400;
+        private const int TypeTwoMin = 900;
+        private const int TypeTwoMax = 1400;
+        private const int TypeFourMin = 1200;
+        private const int TypeFourMax = 1700;
+        private const int DiscrepancyProbability = 100 / 5;
+        private const int PriceChangeProbability = 100 / 15;
+        private const int AboveOrBelowMarginProbability = 100 / 50;
+        private const int Variance = 200;
+        private const int RunScraperIntervalInMinutes = 30;
         private bool _firstTimeUpdate;
         private readonly Random _random = new();
         private decimal _margin;
@@ -44,7 +44,7 @@ namespace HotelPriceScout.Data.Function
             ValidatePriceData();
             _firstTimeUpdate = false;
 
-            _updater = new TimeKeeper(RUN_SCRAPER_INTERVAL_IN_MINUTES, UpdatePricesAtInterval);
+            _updater = new TimeKeeper(RunScraperIntervalInMinutes, UpdatePricesAtInterval);
         }
 
         private void ValidatePriceData()
@@ -85,19 +85,19 @@ namespace HotelPriceScout.Data.Function
                 case 1:
                     foreach (RoomTypePrice price in room.Prices)
                     {
-                        price.Price = _random.Next(TYPE_ONE_MIN, TYPE_ONE_MAX);
+                        price.Price = _random.Next(TypeOneMin, TypeOneMax);
                     }
                     break;
                 case 2:
                     foreach (RoomTypePrice price in room.Prices)
                     {
-                        price.Price = _random.Next(TYPE_TWO_MIN, TYPE_TWO_MAX);
+                        price.Price = _random.Next(TypeTwoMin, TypeTwoMax);
                     }
                     break;
                 case 4:
                     foreach (RoomTypePrice price in room.Prices)
                     {
-                        price.Price = _random.Next(TYPE_FOUR_MIN, TYPE_FOUR_MAX);
+                        price.Price = _random.Next(TypeFourMin, TypeFourMax);
                     }
                     break;
             }
@@ -108,13 +108,13 @@ namespace HotelPriceScout.Data.Function
             switch (room.Capacity)
             {
                 case 1:
-                    SetPrice(room, _random.Next(TYPE_ONE_MIN, TYPE_ONE_MAX));
+                    SetPrice(room, _random.Next(TypeOneMin, TypeOneMax));
                     break;
                 case 2:
-                    SetPrice(room, _random.Next(TYPE_TWO_MIN, TYPE_TWO_MAX));
+                    SetPrice(room, _random.Next(TypeTwoMin, TypeTwoMax));
                     break;
                 case 4:
-                    SetPrice(room, _random.Next(TYPE_FOUR_MIN, TYPE_FOUR_MAX));
+                    SetPrice(room, _random.Next(TypeFourMin, TypeFourMax));
                     break;
             }
         }
@@ -126,15 +126,15 @@ namespace HotelPriceScout.Data.Function
             
             foreach (RoomTypePrice price in room.Prices)
             {
-                if (_firstTimeUpdate || CheckOutcome(PRICE_CHANGE_PROBABILITY))
+                if (_firstTimeUpdate || CheckOutcome(PriceChangeProbability))
                 {
-                    if (CheckOutcome(DISCREPANCY_PROBABILITY))
+                    if (CheckOutcome(DiscrepancyProbability))
                     {
 
-                        price.Price = CheckOutcome(ABOVE_OR_BELOW_MARGIN_PROBABILITY)
-                            ? _random.Next((int) maxPrice, (int) (maxPrice + VARIANCE))
-                            : minPrice - VARIANCE > 0 
-                            ? _random.Next((int) (minPrice - VARIANCE), (int) minPrice)
+                        price.Price = CheckOutcome(AboveOrBelowMarginProbability)
+                            ? _random.Next((int) maxPrice, (int) (maxPrice + Variance))
+                            : minPrice - Variance > 0 
+                            ? _random.Next((int) (minPrice - Variance), (int) minPrice)
                             : 1;
                     }
                     else
