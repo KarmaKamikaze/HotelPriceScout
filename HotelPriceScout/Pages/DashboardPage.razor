@@ -104,9 +104,9 @@
                                 marketPrice = Dashboard.GetSingleDayMarketPrice(monthMarketData, day);
                                 marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
 
-                                kompasPrice = GetSingleDayKompasPrice(monthKompasPrices, day);
-                        <td class="@(ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "")" style="height: 100.5px;" tabindex="0" @onclick="@(() => { ShowMoreInfo(day); marketPriceList.Clear(); })">
-                            <div style="font-weight: 700; font-size: 24px; @(marketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(marketPrice == 0 ? "d-none" : "") @(ArrowDecider(marketPrice, kompasPrice))"></span></div>
+                                kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
+                        <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "")" style="height: 100.5px;" tabindex="0" @onclick="@(() => {Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
+                            <div style="font-weight: 700; font-size: 24px; @(marketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(marketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(marketPrice, kompasPrice))"></span></div>
 
                                     <div class="@(marketPrice == 0 ? "d-none" : "")">
                                         <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
@@ -133,11 +133,11 @@
     @if (Dashboard.DayClicked != 0)
     {
 
-        GenerateThermometer(DayClicked, monthData, marketPriceList); marketPriceList.Clear();
-        <div class="@(DetermineAnimation(DayClicked, CheckForAlternateClick, TempAniDate)) col-md-4 table-borderless">
+        Dashboard.GenerateThermometer(Dashboard.DayClicked, monthData, marketPriceList); marketPriceList.Clear();
+        <div class="@(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 table-borderless">
             <div class="coljustify-content-center">
 
-                @if (PriceList == null)
+                @if (Dashboard.PriceList == null)
 
                 {
                     <div><p>Loading data</p></div>// <--- checks if thermometer is ready yet
@@ -146,7 +146,7 @@
                 {
 
                     <table class="table table-sm table-borderless noHover shadow bg-white">
-                        @foreach (PriceModel item in PriceList)
+                        @foreach (PriceModel item in Dashboard.PriceList)
 
                         {
                             if (item.Price <= marketPrice + Dashboard.CurrentMargin(marketPrice, kompasPrice) && item.Price >= marketPrice - Dashboard.CurrentMargin(marketPrice, kompasPrice))
