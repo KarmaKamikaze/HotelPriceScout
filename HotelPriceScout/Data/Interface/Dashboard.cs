@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace HotelPriceScout.Data.Interface
 {
-    public class Dashboard : ComponentBase
+    public class Dashboard
     {
         public List<PriceModel> PriceList { get; private set; }
         public PriceModel MarketPriceItem { get; private set; }
