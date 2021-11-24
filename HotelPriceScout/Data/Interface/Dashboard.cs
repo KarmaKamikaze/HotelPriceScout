@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using HotelPriceScout.Data.Model;
 using System.Runtime.InteropServices;
 using System.Linq;
-using HotelPriceScout.Pages;
-using Microsoft.AspNetCore.Components;
 
 namespace HotelPriceScout.Data.Interface
 {
