@@ -132,24 +132,22 @@
 
     @if (Dashboard.DayClicked != 0)
     {
-
         Dashboard.GenerateThermometer(Dashboard.DayClicked, monthData, marketPriceList); marketPriceList.Clear();
-        <div class="@(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 table-borderless">
-            <div class="coljustify-content-center">
-
+        <div class="@(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 table-borderless bottomLayer">
+            <div class="row col d-flex justify-content-center">
+                <!-- outer layer-->
                 @if (Dashboard.PriceList == null)
-
                 {
                     <div><p>Loading data</p></div>// <--- checks if thermometer is ready yet
                 }
                 else
                 {
-
                     <table class="table table-sm table-borderless noHover shadow bg-white">
                         @foreach (PriceModel item in Dashboard.PriceList)
 
                         {
-                            if (item.Price <= marketPrice + Dashboard.CurrentMargin(marketPrice, kompasPrice) && item.Price >= marketPrice - Dashboard.CurrentMargin(marketPrice, kompasPrice))
+                            if (item.Price <= Dashboard.MarketPriceItem.Price + Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price, kompasPrice) && item.Price >= Dashboard.MarketPriceItem.Price - Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price, kompasPrice))
+
                             {
                                 <tr>
                                     <td class="col text-right @(item.HotelName == "Gns. Marked" || item.HotelName == "Kompas Hotel Aalborg" ? "boldFont" : "")"> @item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
