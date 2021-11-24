@@ -4,7 +4,7 @@ using System.Timers;
 
 namespace HotelPriceScout.Data.Function
 {
-    public class TimeKeeper
+    public class TimeKeeper : ITimeKeeper
     {
         public TimeKeeper(int minutes, ElapsedEventHandler receiver)
         {

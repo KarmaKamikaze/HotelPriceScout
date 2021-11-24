@@ -16,7 +16,7 @@ namespace HotelPriceScout.Data.Model
 {
     public class Comparator : IComparator
     {
-        private readonly SqliteDataAccess _db = new SqliteDataAccess();
+        private readonly ISqliteDataAccess _db = new SqliteDataAccess();
 
         public bool IsDiscrepancy { get; private set; }
 
@@ -116,11 +116,11 @@ namespace HotelPriceScout.Data.Model
             valueDB = valueDB.TrimEnd(',');
             valueDB += ";";
 
-            await _db.SaveToDB<dynamic>($"DROP TABLE IF EXISTS {tableName};", new { });
-            await _db.SaveToDB<dynamic>(
+            await _db.SaveToDb<dynamic>($"DROP TABLE IF EXISTS {tableName};", new { });
+            await _db.SaveToDb<dynamic>(
                 $"CREATE TABLE [{tableName}] ([HotelName] text NOT NULL, [Price] decimal NOT NULL, [Date] date NOT NULL);",
                 new { });
-            await _db.SaveToDB<dynamic>(valueDB, new { });
+            await _db.SaveToDb<dynamic>(valueDB, new { });
         }
 
         private void CheckDiscrepancy(DateTime date, Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices,
