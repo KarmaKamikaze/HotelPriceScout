@@ -9,7 +9,6 @@ namespace HotelPriceScout.Data.Interface
     {
         public static int marginDropdown = 15;
         public static int notificationAmountDropdown = 1;
-<<<<<<< HEAD
         public static DateTime TimeValueDropdown { get; set; } = DateTime.Now.Date;
         public static DateTime TimeValue2Dropdown { get; set; } = DateTime.Now.Date;
         public static DateTime TimeValue3Dropdown { get; set; } = DateTime.Now.Date;
@@ -18,16 +17,6 @@ namespace HotelPriceScout.Data.Interface
         public static DateTime TimeValuePicked { get; set; }
         public static DateTime TimeValue2Picked { get; set; }
         public static DateTime TimeValue3Picked { get; set; }
-=======
-        public static DateTime timeValueDropdown { get; set; } = DateTime.Parse("12:00");
-        public static DateTime timeValue2Dropdown { get; set; } = DateTime.Now.Date;
-        public static DateTime timeValue3Dropdown { get; set; } = DateTime.Now.Date;
-        public static int marginPicked { get; set; }
-        public static int notificationPicked { get; set; }
-        public static DateTime timeValuePicked { get; set; }
-        public static DateTime timeValue2Picked { get; set; }
-        public static DateTime timeValue3Picked { get; set; }
->>>>>>> d1bc72dd09a7716f0cc19d6d663212aa757c5612
         public bool startPopup = false;
         public bool updateYes = false;
         public static bool showStop = false;
@@ -120,7 +109,7 @@ namespace HotelPriceScout.Data.Interface
             TimeValue2Picked = TimeValue2Dropdown;
             TimeValue3Picked = TimeValue3Dropdown;
             ReverseBool(ref updatePopup);
-<<<<<<< HEAD
+
         }
         public void EscapeUpdate(KeyboardEventArgs e)
         {
@@ -135,24 +124,6 @@ namespace HotelPriceScout.Data.Interface
             {
                 ReverseBool(ref stopPopup);
             }
-=======
-        }
-
-        public void EscapeUpdate(KeyboardEventArgs e)
-        {
-            if (e.Code == "Escape" && updatePopup)
-            {
-                ReverseBool(ref updatePopup);
-            }
-        }
-
-        public void EscapeStop(KeyboardEventArgs f)
-        {
-            if (f.Code == "Escape" && stopPopup)
-            {
-                ReverseBool(ref stopPopup);
-            }
->>>>>>> d1bc72dd09a7716f0cc19d6d663212aa757c5612
         }
     }
 }
