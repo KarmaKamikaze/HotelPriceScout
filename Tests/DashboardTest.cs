@@ -14,35 +14,39 @@ namespace Tests
 {
     public class DashboardTest
     {
-        public void Test_If_SelectedMonthMarketPrices_Returns_Correct_DataList()
-        {
-
-        }
-
         public static readonly object[][] GetSingleDayMarketPriceInfo =
         {
-            new object[] {DateTime.Now.AddMonths(-1)},
-            new object[] {DateTime.Now.AddMonths(1)},
-            new object[] {DateTime.Now.AddMonths(3)},
-            new object[] {DateTime.Now}
+            //As the Year and Month attributes of
+            new object[] {DateTime.Now.AddDays(-1).Day},
+            new object[] {DateTime.Now.AddDays(100).Day}
         };
         [Theory, MemberData(nameof(GetSingleDayMarketPriceInfo))]
-        public async Task Test_If_GetSingleDayMarketPrice_Returns_Zero(DateTime specificDay)
+        public void Test_If_GetSingleDayMarketPrice_Returns_Zero(int specificDay)
+        {
+            Dashboard dashboard = new Dashboard();
+            dashboard.CreateMonth();
+
+            IEnumerable<PriceModel> multipleMarketPrices = Enumerable.Empty<PriceModel>();
+
+            var data = dashboard.GetSingleDayMarketPrice(multipleMarketPrices, specificDay);
+
+            Assert.Equal(0, data);
+        }
+
+        public static readonly object[][] GetSingleDayMarketPriceInfoData =
+        {
+            new object[] {DateTime.Now.Day, DateTime.Now.AddDays(1).Day}
+        };
+        [Theory, MemberData(nameof(GetSingleDayMarketPriceInfoData))]
+        public async Task Test_If_GetSingleDayMarketPrice_Returns_Price(DateTime startday, DateTime endday)
         {
             //Arrange and Act
             Dashboard dashboard = new Dashboard();
             dashboard.CreateMonth();
-            await dashboard.RetrieveSelectDataFromDb(DateTime.Now, DateTime.Now.AddMonths(2), 1, "Select Prices");
-            var data2 = dashboard.priceList;
+            var data = await dashboard.RetrieveSelectDataFromDb(startday, endday, 1, "Kompas Prices");
 
-            decimal Actual = dashboard.GetSingleDayMarketPrice(data2, specificDay.Day);
             //Assert
-            Assert.Equal(0, Actual);
-        }
-
-        public void Test_If_GetSingleDayMarketPrice_Returns_Price()
-        {
-
+            Assert.Equal(0, dashboard.GetSingleDayKompasPrice(data, 5));
         }
 
         public void Test_If_RetrieveSelectDataFromDB_Returns_Correct_Results()
@@ -65,7 +69,7 @@ namespace Tests
 
         }
 
-        public void Test_If_GenerateThermometer_Throws_Error()
+        public void Test_If_GenerateThermometer_Returns_Sorted_List()
         {
 
         }
