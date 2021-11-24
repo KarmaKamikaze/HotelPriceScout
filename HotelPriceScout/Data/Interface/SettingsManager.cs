@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿
 using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace HotelPriceScout.Data.Interface
 {
-    public class SettingsManager : ComponentBase
+    public class SettingsManager 
     {
         public static int MarginDropdown = 1;
         public static int NotificationAmountDropdown = 1;
@@ -90,7 +90,6 @@ namespace HotelPriceScout.Data.Interface
         public void SetStartScoutSettings()
         {
             ReverseMultipleBools(ref PopupStart, ref ShowStop, ref ShowUpdate, ref ShowStart);
-
             MarginPicked = MarginDropdown;
             NotificationPicked = NotificationAmountDropdown;
             TimeValuePicked = TimeValueDropdown;
