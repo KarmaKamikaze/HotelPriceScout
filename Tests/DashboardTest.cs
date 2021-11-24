@@ -32,6 +32,19 @@ namespace Tests
 
             Assert.Equal(0, data);
         }
+        [Theory, MemberData(nameof(GetSingleDayMarketPriceInfo))]
+        public void Test_If_GetSingleDayMarketPrice_Returns_Correct_Price(int specificDay)
+        {
+            Dashboard dashboard = new Dashboard();
+            dashboard.CreateMonth();
+
+            IEnumerable<PriceModel> multipleMarketPrices = Enumerable.Empty<PriceModel>();
+
+            var data = dashboard.GetSingleDayMarketPrice(multipleMarketPrices, specificDay);
+
+        }
+
+
 
         public static readonly object[][] GetSingleDayMarketPriceInfoData =
         {
