@@ -29,7 +29,7 @@ namespace HotelPriceScout
             services.AddSyncfusionBlazor();
             services.AddBlazoredModal();
             services.AddTransient<Dashboard>();
-            services.AddTransient<SqliteDataAccess>();
+            services.AddTransient<ISqliteDataAccess, SqliteDataAccess>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

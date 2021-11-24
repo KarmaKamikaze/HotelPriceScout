@@ -24,7 +24,7 @@ namespace HotelPriceScout.Data.Function
         private bool _firstTimeUpdate;
         private readonly Random _random = new();
         private decimal _margin;
-        private TimeKeeper _updater;
+        private ITimeKeeper _updater;
         
         
         
