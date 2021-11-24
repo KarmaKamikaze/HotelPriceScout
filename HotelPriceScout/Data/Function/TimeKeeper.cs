@@ -41,7 +41,7 @@ namespace HotelPriceScout.Data.Function
             Timer timer = new Timer();
             timer.Interval = triggerInterval.TotalMilliseconds;
             timer.Elapsed += receiver;
-            timer.AutoReset = true;
+            timer.AutoReset = false;
             timer.Enabled = true;
 
             return timer;

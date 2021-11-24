@@ -4,9 +4,13 @@ using MimeKit;
 using MimeKit.Text;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration.Abstractions;
+using System.Globalization;
 using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace HotelPriceScout.Data.Model
 {
@@ -135,9 +139,12 @@ namespace HotelPriceScout.Data.Model
         public void SendNotification()
         {
             MimeMessage mail = new();
-            mail.From.Add(new MailboxAddress("Hotel Price Scout", "hotelpricescout@gmail.com"));
-            mail.To.Add(new MailboxAddress("CS-21-SW-3-12",
-                "croska19@student.aau.dk")); /*cs - 21 - sw - 3 - 12@student.aau.dk*/
+            XDocument mailConfig = XDocument.Load("./mail_config.xml");
+
+            mail.From.Add(new MailboxAddress("Hotel Price Scout", 
+                mailConfig.Descendants("SenderEmailAddress").First().Value));
+            mail.To.Add(new MailboxAddress(mailConfig.Descendants("ReceiverName").First().Value, 
+                mailConfig.Descendants("ReceiverEmailAddress").First().Value));
             mail.Subject = "Hotel Price Scout has noticed a price discrepancy!";
             mail.Importance = MessageImportance.High;
             mail.Priority = MessagePriority.Urgent;
@@ -189,7 +196,8 @@ namespace HotelPriceScout.Data.Model
 
             SmtpClient smtpClient = new();
             smtpClient.Connect("smtp.gmail.com", 465, true);
-            smtpClient.Authenticate("hotelpricescout@gmail.com", "cs-21-sw-3-12");
+            smtpClient.Authenticate(mailConfig.Descendants("SenderEmailAddress").First().Value, 
+                mailConfig.Descendants("SenderPassword").First().Value);
             smtpClient.Send(mail);
             smtpClient.Disconnect(true);
         }
@@ -224,14 +232,17 @@ namespace HotelPriceScout.Data.Model
             query = hotelAvgPrices.Single(hp => hp.Key == price.Date);
             decimal hostPrice = query.Value["Kompas Hotel Aalborg"];
             containerString +=
-                $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>{price.Price},-</td>";
+                $"<tr><td style='text-align:center'>{price.Date.ToString("d")}</td><td style='text-align:center'>" +
+                $"{price.Price.ToString("c0", new CultureInfo("da-DK"))}</td>";
             if (price.Price > hostPrice)
             {
-                containerString += $"<td style='text-align:center; background-color: #39a459;'>{hostPrice},-</td></tr>";
+                containerString += "<td style='text-align:center; background-color: #39a459;'>" +
+                                   $"{hostPrice.ToString("c0", new CultureInfo("da-DK"))}</td></tr>";
             }
             else
             {
-                containerString += $"<td style='text-align:center; background-color: #fc4119;'>{hostPrice},-</td></tr>";
+                containerString += $"<td style='text-align:center; background-color: #fc4119;'>" +
+                                   $"{hostPrice.ToString("c0", new CultureInfo("da-DK"))}</td></tr>";
             }
 
             return containerString;

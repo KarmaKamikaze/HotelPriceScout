@@ -172,7 +172,12 @@
 
     private async void UpdateProgram()
     {
+        Program.ScoutSharedService.ScoutRunning = false;
+        Program.ScoutSharedService.Scout.StopScout();
         SetUpdateScoutSettings();
+        Program.ScoutSharedService.ScoutRunning = true;
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
+        Program.ScoutSharedService.Scout.StartScout();
         ReverseBool(ref updateYes);
         StateHasChanged();
         await Task.Delay(1500);
