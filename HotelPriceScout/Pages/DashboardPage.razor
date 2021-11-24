@@ -54,7 +54,7 @@
 
 <div class="row">
     <div class="col-md-8 ">
-        <table class="table table-bordered table-sm col calendar">
+        <table class="table table-bordered table-sm col calendar shadow bg-white">
             <thead>
                 <tr>
                     <th style="width:14%"> Monday</th>
@@ -104,7 +104,7 @@
                                 marketPrice = GetSingleDayMarketPrice(monthMarketData, day);
                                 marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                                 kompasPrice = GetSingleDayKompasPrice(monthKompasPrices, day);
-                        <td class="@(ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "")" style="height: 100px;" tabindex="0" @onclick="@(() => { ShowMoreInfo(day); marketPriceList.Clear(); })">
+                        <td class="@(ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "")" style="height: 100.5px;" tabindex="0" @onclick="@(() => { ShowMoreInfo(day); marketPriceList.Clear(); })">
                             <div style="font-weight: 700; font-size: 24px; @(marketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(marketPrice == 0 ? "d-none" : "") @(ArrowDecider(marketPrice, kompasPrice))"></span></div>
                                     <div class="@(marketPrice == 0 ? "d-none" : "")">
                                         <div style="text-align: right; font-size: small; font-weight: 700" class="@(ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
@@ -132,15 +132,15 @@
     {
         GenerateThermometer(DayClicked, monthData, marketPriceList); marketPriceList.Clear();
         <div class="@(DetermineAnimation(DayClicked, CheckForAlternateClick, TempAniDate)) col-md-4 table-borderless">
-            <div class="row col d-flex justify-content-center">
-                <!-- outer layer-->
+            <div class="coljustify-content-center">
+
                 @if (PriceList == null)
                 {
                     <div><p>Loading data</p></div>// <--- checks if thermometer is ready yet
                 }
                 else
                 {
-                    <table class="table table-sm table-borderless noHover">
+                    <table class="table table-sm table-borderless noHover shadow bg-white">
                         @foreach (PriceModel item in PriceList)
                         {
                             if (item.Price <= marketPrice + CurrentMargin(marketPrice, kompasPrice) && item.Price >= marketPrice - CurrentMargin(marketPrice, kompasPrice))
