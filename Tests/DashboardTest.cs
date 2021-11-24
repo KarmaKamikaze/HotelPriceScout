@@ -14,11 +14,6 @@ namespace Tests
 {
     public class DashboardTest
     {
-        public void Test_If_UpdateUiMissingDataWarning_Throws_Error()
-        {
-            //Hasn't been created yet
-        }
-
         [Fact]
         public void Test_If_CreateMonth_Creates_Correct_Month()
         {
