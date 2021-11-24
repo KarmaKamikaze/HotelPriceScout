@@ -169,7 +169,7 @@ namespace HotelPriceScout.Data.Model
                 }
                 else
                 {
-                    roomType4Mail = MailDataBuilder(RoomType1HotelAvgPrices, roomType4Mail, price);
+                    roomType4Mail = MailDataBuilder(RoomType4HotelAvgPrices, roomType4Mail, price);
                 }
             }
 
