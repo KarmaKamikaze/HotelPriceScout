@@ -159,17 +159,17 @@ namespace HotelPriceScout.Data.Model
             foreach (PriceModel price in AvgMarketPrices
                 .Where(p => p.MarkedForDiscrepancy && p.Date < DateTime.Now.AddMonths(1)).ToList())
             {
-                if (price.RoomType == 1)
+                switch (price.RoomType)
                 {
-                    roomType1Mail = MailDataBuilder(RoomType1HotelAvgPrices, roomType1Mail, price);
-                }
-                else if (price.RoomType == 2)
-                {
-                    roomType2Mail = MailDataBuilder(RoomType2HotelAvgPrices, roomType2Mail, price);
-                }
-                else
-                {
-                    roomType4Mail = MailDataBuilder(RoomType4HotelAvgPrices, roomType4Mail, price);
+                    case 1:
+                        roomType1Mail = MailDataBuilder(RoomType1HotelAvgPrices, roomType1Mail, price);
+                        break;
+                    case 2:
+                        roomType2Mail = MailDataBuilder(RoomType2HotelAvgPrices, roomType2Mail, price);
+                        break;
+                    default:
+                        roomType4Mail = MailDataBuilder(RoomType4HotelAvgPrices, roomType4Mail, price);
+                        break;
                 }
             }
 
@@ -224,7 +224,6 @@ namespace HotelPriceScout.Data.Model
             return dataList;
         }
         
-
         private string MailDataBuilder(Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices,
             string containerString, PriceModel price)
         {

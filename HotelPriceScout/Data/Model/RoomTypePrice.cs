@@ -20,7 +20,7 @@ namespace HotelPriceScout.Data.Model
     public DateTime Date
     {
       get => _date;
-      init
+      private init
       {
         if (value.Date < DateTime.Now.Date)
         {
