@@ -15,7 +15,7 @@ namespace Tests
         public static readonly object[][] ShowMoreInfoData =
         {
             new object[] {false, 22, null},
-            new object[] {true, DateTime.Now.Day, DateTime.Now.Day},
+            new object[] {false, DateTime.Now.Day, DateTime.Now.Day},
             new object[] {true, DateTime.Now.Day, (DateTime.Now.Day + 1)}
         };
 
@@ -23,8 +23,9 @@ namespace Tests
         [Fact]
         public void Test_If_CreateMonth_Creates_Correct_Month_Based_On_The_Current_Month()
         {
-            //Arrange and Act
+            //Arrange
             Dashboard dashboard = new Dashboard();
+            //Act
             dashboard.CreateMonth();
             //Assert
             Assert.Equal(DateTime.Now.Month, dashboard.Month);
@@ -36,11 +37,12 @@ namespace Tests
         [InlineData("", 0, 0)]
         public void Test_If_ChangeTextColorBasedOnMargin_Returns_Correct_Expected_Value(string expected, int marketprice, int kompasPrice)
         {
-            //Arrange and Act
+            //Arrange
             Dashboard dashboard = new Dashboard();
-            string dash = dashboard.ChangeTextColorBasedOnMargin(marketprice, kompasPrice);
+            //Act
+            string actual = dashboard.ChangeTextColorBasedOnMargin(marketprice, kompasPrice);
             //Assert
-            Assert.Equal(expected, dash);
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
@@ -49,21 +51,23 @@ namespace Tests
         [InlineData("oi oi-minus", 0, 0)]
         public void Test_If_ArrowDecider_Returns_Correct_Value(string expected, int marketprice, int kompasPrice)
         {
-            //Arrange and Act
+            //Arrange
             Dashboard dashboard = new Dashboard();
-            string dash = dashboard.ArrowDecider(marketprice, kompasPrice);
+            //Act
+            string actual = dashboard.ArrowDecider(marketprice, kompasPrice);
             //Assert
-            Assert.Equal(expected, dash);
+            Assert.Equal(expected, actual);
         }
 
         [Theory, MemberData(nameof(ShowMoreInfoData))]
-        public void Test_If_ShowMoreInfo_Returns_Correct_Value(bool expected, int dayClicked, int DayClicked)
+        public void Test_If_ShowMoreInfo_Returns_Correct_Value(bool expected, int currentday, int DayClicked)
         {
-            //Arrange and Act
+            //Arrange
             Dashboard dashboard = new Dashboard();
+            //Act
             dashboard.CreateMonth();
-            dashboard.ShowMoreInfo(dayClicked);
             dashboard.DayClicked = DayClicked;
+            dashboard.ShowMoreInfo(currentday);
             //Assert
             Assert.Equal(expected, dashboard.CheckForAlternateClick);
         }
@@ -75,11 +79,12 @@ namespace Tests
         [InlineData("", 0, false, 0)]
         public void Test_If_DetermineAnimation_Returns_Correct_Value(string expected, int DayClicked, bool CheckForAlternateClick, int TempAniDate)
         {
-            //Arrange and Act
+            //Arrange
             Dashboard dashboard = new Dashboard();
-            string dash = dashboard.DetermineAnimation(DayClicked, CheckForAlternateClick, TempAniDate);
+            //Act
+            string actual = dashboard.DetermineAnimation(DayClicked, CheckForAlternateClick, TempAniDate);
             //Assert
-            Assert.Equal(expected, dash);
+            Assert.Equal(expected, actual);
         }
     }
 }
