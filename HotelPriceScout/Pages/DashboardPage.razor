@@ -237,6 +237,7 @@
                 Dashboard.MonthsAway++;
                 Dashboard.CreateMonth();
                 Dashboard.NextMonth();
+                Dashboard.UpdateUiMissingDataWarning(Program.ScoutSharedService.Scout.BookingSites.First());
                 break;
             case "Previous":
                 Dashboard.DayClicked = 0;
