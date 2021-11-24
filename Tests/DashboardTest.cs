@@ -60,13 +60,13 @@ namespace Tests
         }
 
         [Theory, MemberData(nameof(ShowMoreInfoData))]
-        public void Test_If_ShowMoreInfo_Returns_Correct_Value(bool expected, int currentday, int DayClicked)
+        public void Test_If_ShowMoreInfo_Returns_Correct_Value(bool expected, int currentday, int previousDateClicked)
         {
             //Arrange
             Dashboard dashboard = new Dashboard();
             //Act
             dashboard.CreateMonth();
-            dashboard.DayClicked = DayClicked;
+            dashboard.DayClicked = previousDateClicked;
             dashboard.ShowMoreInfo(currentday);
             //Assert
             Assert.Equal(expected, dashboard.CheckForAlternateClick);
