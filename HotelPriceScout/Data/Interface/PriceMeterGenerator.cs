@@ -14,7 +14,6 @@ namespace HotelPriceScout.Data.Interface
                                    where (item.Date) == todayDate.Date
                                    select new PriceModel(item.Price, item.HotelName));
                 priceDataList.Add(new PriceModel(avgPrice, "Gns. Marked"));
-                priceDataList.Sort();
                 return priceDataList;
             }
             public static PriceModel MarketFinder(List<PriceModel> list)
@@ -24,6 +23,5 @@ namespace HotelPriceScout.Data.Interface
                 PriceModel marketPriceItem = list.Find(priceModel => priceModel.HotelName == "Gns. Marked");
                 return marketPriceItem;
             }
-       
-    }
+        }
 }
