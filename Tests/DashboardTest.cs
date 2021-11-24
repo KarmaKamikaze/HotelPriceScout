@@ -8,8 +8,6 @@ using HotelPriceScout.Data.Model;
 using HotelPriceScout.Pages;
 using HotelPriceScout.Data.Interface;
 
-
-
 namespace Tests
 {
     public class DashboardTest
@@ -19,12 +17,9 @@ namespace Tests
         {
             //Arrange and Act
             Dashboard dashboard = new Dashboard();
-
             dashboard.CreateMonth();
-            
             //Assert
             Assert.Equal(DateTime.Now.Month, dashboard.Month);
-
         }
 
         [Theory]
@@ -39,7 +34,6 @@ namespace Tests
             string dash = dashboard.ChangeTextColorBasedOnMargin(marketprice, kompasPrice);
             //Assert
             Assert.Equal(expected, dash);
-
         }
 
         [Theory]
@@ -70,7 +64,6 @@ namespace Tests
             dashboard.CreateMonth();
             dashboard.ShowMoreInfo(dayClicked);
             dashboard.DayClicked = DayClicked;
-
             //Assert
             Assert.Equal(expected, dashboard.CheckForAlternateClick);
         }
