@@ -8,6 +8,7 @@ namespace HotelPriceScout.Data.Interface
 {
     public interface IDashboard
     {
+        bool BoolExceptionPopup { get; }
         List<PriceModel> PriceList { get; }
         PriceModel MarketPriceItem { get; }
         int TempAniDate { get; set; }

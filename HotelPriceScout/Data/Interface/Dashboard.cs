@@ -10,6 +10,7 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard : IDashboard
     {
+        public bool BoolExceptionPopup { get; set; } = false;
         public List<PriceModel> PriceList { get; private set; }
         public PriceModel MarketPriceItem { get; private set; }
         private const int DataUnavailable = 0;
@@ -27,7 +28,6 @@ namespace HotelPriceScout.Data.Interface
         private DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
         public DateTime LastDayOfMonth { get; private set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
         private readonly ISqliteDataAccess _db = new SqliteDataAccess();
-        public bool boolExceptionPopup = false;
         
         public decimal GetSingleDayMarketPrice(IEnumerable<PriceModel> multipleMarketPrices, int specificDay)
         {   
@@ -108,7 +108,7 @@ namespace HotelPriceScout.Data.Interface
         }
         public void UpdateUiMissingDataWarning(BookingSite bookingSite)
         {
-            boolExceptionPopup = !boolExceptionPopup;
+            BoolExceptionPopup = !BoolExceptionPopup;
             //throw new NotImplementedException();
         }
         public string ShowCurrentDayAsString()
