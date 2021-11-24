@@ -12,8 +12,16 @@ namespace Tests
 {
     public class DashboardTest
     {
+        public static readonly object[][] ShowMoreInfoData =
+        {
+            new object[] {false, 22, null},
+            new object[] {true, DateTime.Now.Day, DateTime.Now.Day},
+            new object[] {true, DateTime.Now.Day, (DateTime.Now.Day + 1)}
+        };
+
+
         [Fact]
-        public void Test_If_CreateMonth_Creates_Correct_Month()
+        public void Test_If_CreateMonth_Creates_Correct_Month_Based_On_The_Current_Month()
         {
             //Arrange and Act
             Dashboard dashboard = new Dashboard();
@@ -26,7 +34,7 @@ namespace Tests
         [InlineData("low", 100, 1)]
         [InlineData("high", 1, 100)]
         [InlineData("", 0, 0)]
-        public void Test_If_ChangeTextColorBasedOnMargin_Returns_Correct_Value_Low(string expected, int marketprice, int kompasPrice)
+        public void Test_If_ChangeTextColorBasedOnMargin_Returns_Correct_Expected_Value(string expected, int marketprice, int kompasPrice)
         {
             //Arrange and Act
             Dashboard dashboard = new Dashboard();
@@ -47,13 +55,6 @@ namespace Tests
             //Assert
             Assert.Equal(expected, dash);
         }
-
-        public static readonly object[][] ShowMoreInfoData =
-        {
-            new object[] {false, 22, null},
-            new object[] {true, DateTime.Now.Day, DateTime.Now.Day},
-            new object[] {true, DateTime.Now.Day, (DateTime.Now.Day + 1)}
-        };
 
         [Theory, MemberData(nameof(ShowMoreInfoData))]
         public void Test_If_ShowMoreInfo_Returns_Correct_Value(bool expected, int dayClicked, int DayClicked)
