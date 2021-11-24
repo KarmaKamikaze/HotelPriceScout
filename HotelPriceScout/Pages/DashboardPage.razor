@@ -131,7 +131,7 @@
     @if (DayClicked != 0)
     {
         GenerateThermometer(DayClicked, monthData, marketPriceList); marketPriceList.Clear();
-        <div class="@(DetermineAnimation(DayClicked, CheckForAlternateClick, TempAniDate)) col-md-4 table-borderless">
+        <div class="@(DetermineAnimation(DayClicked, CheckForAlternateClick, TempAniDate)) col-md-4 table-borderless bottomLayer">
             <div class="row col d-flex justify-content-center">
                 <!-- outer layer-->
                 @if (PriceList == null)
