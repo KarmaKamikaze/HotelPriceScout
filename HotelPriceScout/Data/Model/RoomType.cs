@@ -6,7 +6,7 @@ namespace HotelPriceScout.Data.Model
 
     public class RoomType
     {
-        private int _capacity;
+        private readonly int _capacity;
 
         public RoomType(int capacity)
         {
@@ -17,7 +17,7 @@ namespace HotelPriceScout.Data.Model
         public int Capacity
         {
             get => _capacity;
-            set
+            private init
             {
                 if (value != 1 && value != 2 && value != 4)
                 {
@@ -33,9 +33,9 @@ namespace HotelPriceScout.Data.Model
         {
             List<RoomTypePrice> prices = new();
             int i = 0;
-            for (DateTime currentdate = DateTime.Now.Date; currentdate.AddDays(i) <= currentdate.AddMonths(3); i++)
+            for (DateTime currentDate = DateTime.Now.Date; currentDate.AddDays(i) <= currentDate.AddMonths(3); i++)
             {
-                prices.Add(new RoomTypePrice(currentdate.AddDays(i)));
+                prices.Add(new RoomTypePrice(currentDate.AddDays(i)));
             }
             return prices;
         }
