@@ -2,7 +2,7 @@
 @using HotelPriceScout.Data.Interface
 @using DataAccessLibrary
 @using HotelPriceScout.Data.Model
-@inject Dashboard Dashboard 
+@inject IDashboard Dashboard 
 @inject ISqliteDataAccess _db
 
 <div class="row topLayer">
@@ -146,7 +146,7 @@
                         @foreach (PriceModel item in Dashboard.PriceList)
 
                         {
-                            if (item.Price <= Dashboard.MarketPriceItem.Price + Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price, kompasPrice) && item.Price >= Dashboard.MarketPriceItem.Price - Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price, kompasPrice))
+                            if (item.Price <= Dashboard.MarketPriceItem.Price + Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price) && item.Price >= Dashboard.MarketPriceItem.Price - Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price))
                             {
                                 <tr>
                                     <td class="col text-right @(item.HotelName == "Gns. Marked" || item.HotelName == "Kompas Hotel Aalborg" ? "boldFont" : "")"> @item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
