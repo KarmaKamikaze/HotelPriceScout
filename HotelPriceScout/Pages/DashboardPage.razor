@@ -2,38 +2,38 @@
 @using HotelPriceScout.Data.Interface
 @using DataAccessLibrary
 @using HotelPriceScout.Data.Model
-@inject Dashboard Dashboard 
+@inject Dashboard Dashboard
 @inject ISqliteDataAccess _db
 
 <div class="row">
-<div class="col-md-12 d-inline-flex">
-    <h1 style="width:350px;">@Dashboard.MonthName @Dashboard.Year</h1>
-    @if (Dashboard.MonthsAway > 0)
-    {
-        <button type="button" class="btn btn-default btn-lg" @onclick='() => { OnClickUpdate("Previous"); }'>
-            <span class="oi oi-arrow-thick-left" style="font-size:30px"></span>
-        </button>
-    }
-    else
-    {
-        <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
-            <span class="oi oi-arrow-thick-left" style="font-size:30px"></span>
-        </button>
-    }
-    @if (Dashboard.MonthsAway < 3)
-    {
-        <button type="button" class="btn btn-default btn-lg" @onclick='() => { OnClickUpdate("Next"); }'>
-            <span class="oi oi-arrow-thick-right" style="font-size:30px"></span>
-        </button>
-    }
-    else
-    {
-        <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
-            <span class="oi oi-arrow-thick-right" style="font-size:30px"></span>
-        </button>
-    }
-    <div class="col-md-8 @(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate))"><h1 style="height:fit-content; text-align: right">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1></div>
-</div>
+    <div class="col-md-12 d-inline-flex">
+        <h1 style="width:350px;">@Dashboard.MonthName @Dashboard.Year</h1>
+        @if (Dashboard.MonthsAway > 0)
+        {
+            <button type="button" class="btn btn-default btn-lg" @onclick='() => { OnClickUpdate("Previous"); }'>
+                <span class="oi oi-arrow-thick-left" style="font-size:30px"></span>
+            </button>
+        }
+        else
+        {
+            <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+                <span class="oi oi-arrow-thick-left" style="font-size:30px"></span>
+            </button>
+        }
+        @if (Dashboard.MonthsAway < 3)
+        {
+            <button type="button" class="btn btn-default btn-lg" @onclick='() => { OnClickUpdate("Next"); }'>
+                <span class="oi oi-arrow-thick-right" style="font-size:30px"></span>
+            </button>
+        }
+        else
+        {
+            <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+                <span class="oi oi-arrow-thick-right" style="font-size:30px"></span>
+            </button>
+        }
+        <div class="col-md-8 @(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate))"><h1 style="height:fit-content; text-align: right">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1></div>
+    </div>
 </div>
 
 
@@ -105,8 +105,8 @@
                                 marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
 
                                 kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
-                        <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "")" style="height: 100.5px;" tabindex="0" @onclick="@(() => {Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
-                            <div style="font-weight: 700; font-size: 24px; @(marketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(marketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(marketPrice, kompasPrice))"></span></div>
+                                <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "")" style="height: 100.5px;" tabindex="0" @onclick="@(() => {Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
+                                    <div style="font-weight: 700; font-size: 24px; @(marketPrice == 0 ? "opacity: 0.3;" : "")">@(i + j) <span class="@(marketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(marketPrice, kompasPrice))"></span></div>
 
                                     <div class="@(marketPrice == 0 ? "d-none" : "")">
                                         <div style="text-align: right; font-size: small; font-weight: 700" class="@(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
@@ -184,12 +184,24 @@
     }
 </div>
 
+@if (Dashboard.boolExceptionPopup)
+{
+    <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h2 class="modal-title" id="titleLabel">u did fuck up</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @code
 {
-        decimal marketPrice;
-        List<PriceModel> marketPriceList = new();
-        decimal kompasPrice;
+    decimal marketPrice;
+    List<PriceModel> marketPriceList = new();
+    decimal kompasPrice;
     private int adultsPicked = 1;
     private List<string> selectedHotels;
 
@@ -200,7 +212,7 @@
     }
 
     private List<NumberOfAdults> Adults = new List<NumberOfAdults>()
-    {
+{
             new NumberOfAdults(){ Adults= 1, Text= "1 adult" },
             new NumberOfAdults(){ Adults= 2, Text= "2 adults" },
             new NumberOfAdults(){ Adults= 4, Text= "4 adults" },
