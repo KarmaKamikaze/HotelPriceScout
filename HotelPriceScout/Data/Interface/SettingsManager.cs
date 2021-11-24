@@ -7,9 +7,9 @@ namespace HotelPriceScout.Data.Interface
 {
     public class SettingsManager 
     {
-        public static int marginDropdown = 1;
+        public static int marginDropdown = 15;
         public static int notificationAmountDropdown = 1;
-        public static DateTime timeValueDropdown { get; set; } = DateTime.Now.Date;
+        public static DateTime timeValueDropdown { get; set; } = DateTime.Parse("12:00");
         public static DateTime timeValue2Dropdown { get; set; } = DateTime.Now.Date;
         public static DateTime timeValue3Dropdown { get; set; } = DateTime.Now.Date;
         public static int marginPicked { get; set; }
