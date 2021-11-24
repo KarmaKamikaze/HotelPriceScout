@@ -4,11 +4,6 @@ namespace HotelPriceScout.Data.Model
 {
     public class PriceModel : IComparable<PriceModel> 
     {
-        public decimal Price { get; set; }
-        public DateTime Date { get; set; }
-        public string HotelName { get; set;  }
-        public bool MarkedForDiscrepancy { get; set; } = false;
-        public int RoomType { get; private set; } 
         public PriceModel(decimal price, DateTime date)
         {
             Price = price;
@@ -28,11 +23,19 @@ namespace HotelPriceScout.Data.Model
             Date = date;
             RoomType = roomType;
         }
+        
         public PriceModel(decimal price, string hotelName)
         {
             Price = price;
             HotelName = hotelName;
         }
+        
+        public decimal Price { get; }
+        public DateTime Date { get; }
+        public string HotelName { get; }
+        public bool MarkedForDiscrepancy { get; set; }
+        public int RoomType { get; } 
+        
         public int CompareTo(PriceModel other)
         {
             return (decimal.ToInt32(other.Price) - decimal.ToInt32(Price));

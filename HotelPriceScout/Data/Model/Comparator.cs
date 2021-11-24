@@ -16,7 +16,7 @@ namespace HotelPriceScout.Data.Model
 {
     public class Comparator : IComparator
     {
-        private readonly SqliteDataAccess _db = new SqliteDataAccess();
+        private readonly ISqliteDataAccess _db = new SqliteDataAccess();
 
         public bool IsDiscrepancy { get; private set; }
 
@@ -116,11 +116,11 @@ namespace HotelPriceScout.Data.Model
             valueDB = valueDB.TrimEnd(',');
             valueDB += ";";
 
-            await _db.SaveToDB<dynamic>($"DROP TABLE IF EXISTS {tableName};", new { });
-            await _db.SaveToDB<dynamic>(
+            await _db.SaveToDb<dynamic>($"DROP TABLE IF EXISTS {tableName};", new { });
+            await _db.SaveToDb<dynamic>(
                 $"CREATE TABLE [{tableName}] ([HotelName] text NOT NULL, [Price] decimal NOT NULL, [Date] date NOT NULL);",
                 new { });
-            await _db.SaveToDB<dynamic>(valueDB, new { });
+            await _db.SaveToDb<dynamic>(valueDB, new { });
         }
 
         private void CheckDiscrepancy(DateTime date, Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices,
@@ -159,17 +159,17 @@ namespace HotelPriceScout.Data.Model
             foreach (PriceModel price in AvgMarketPrices
                 .Where(p => p.MarkedForDiscrepancy && p.Date < DateTime.Now.AddMonths(1)).ToList())
             {
-                if (price.RoomType == 1)
+                switch (price.RoomType)
                 {
-                    roomType1Mail = MailDataBuilder(RoomType1HotelAvgPrices, roomType1Mail, price);
-                }
-                else if (price.RoomType == 2)
-                {
-                    roomType2Mail = MailDataBuilder(RoomType2HotelAvgPrices, roomType2Mail, price);
-                }
-                else
-                {
-                    roomType4Mail = MailDataBuilder(RoomType1HotelAvgPrices, roomType4Mail, price);
+                    case 1:
+                        roomType1Mail = MailDataBuilder(RoomType1HotelAvgPrices, roomType1Mail, price);
+                        break;
+                    case 2:
+                        roomType2Mail = MailDataBuilder(RoomType2HotelAvgPrices, roomType2Mail, price);
+                        break;
+                    default:
+                        roomType4Mail = MailDataBuilder(RoomType4HotelAvgPrices, roomType4Mail, price);
+                        break;
                 }
             }
 
@@ -224,7 +224,6 @@ namespace HotelPriceScout.Data.Model
             return dataList;
         }
         
-
         private string MailDataBuilder(Dictionary<DateTime, Dictionary<string, decimal>> hotelAvgPrices,
             string containerString, PriceModel price)
         {

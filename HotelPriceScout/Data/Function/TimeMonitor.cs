@@ -4,18 +4,19 @@ using System.Timers;
 
 namespace HotelPriceScout.Data.Function
 {
-    public class TimeMonitor
+    public class TimeMonitor : ITimeMonitor
     {
         public TimeMonitor(IEnumerable<DateTime> notificationTimes, ElapsedEventHandler eventReceiver)
         {
             TimeKeepers = SetUpNotificationTimers(notificationTimes, eventReceiver);
         }
         
-        public IEnumerable<TimeKeeper> TimeKeepers { get; }
+        public IEnumerable<ITimeKeeper> TimeKeepers { get; }
 
-        private IEnumerable<TimeKeeper> SetUpNotificationTimers(IEnumerable<DateTime> notificationTimes, ElapsedEventHandler eventReceiver)
+        private IEnumerable<ITimeKeeper> SetUpNotificationTimers(IEnumerable<DateTime> notificationTimes, 
+            ElapsedEventHandler eventReceiver)
         {
-            List<TimeKeeper> result = new List<TimeKeeper>();
+            List<ITimeKeeper> result = new List<ITimeKeeper>();
             foreach (DateTime notificationTime in notificationTimes)
             {
                 result.Add(new TimeKeeper(notificationTime.Hour, notificationTime.Minute, eventReceiver));

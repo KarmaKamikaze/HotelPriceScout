@@ -1,7 +1,6 @@
 using DataAccessLibrary;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using HotelPriceScout.Data.Function;
@@ -26,7 +25,7 @@ namespace HotelPriceScout.Data.Model
             }
         }
         private IEnumerable<DateTime> NotificationTimes { get; set; }
-        private TimeMonitor Timers { get; set; }
+        private ITimeMonitor Timers { get; set; }
         public IEnumerable<BookingSite> BookingSites { get; private set; }
         
         //This method is used to create scout objects instead of a typical constructor.
@@ -39,7 +38,7 @@ namespace HotelPriceScout.Data.Model
                 MarginValue = marginValue,
                 NotificationTimes = notificationTimes
             };
-            SqliteDataAccess bookingSiteDB = new SqliteDataAccess();
+            ISqliteDataAccess bookingSiteDB = new SqliteDataAccess();
             IEnumerable<(string, string, string, Dictionary<string, string>)> bookingSitesData = await bookingSiteDB.LoadStaticBookingSiteResources();
             scout.BookingSites = scout.CreateBookingSites(bookingSitesData);
             scout.UpdateTimeDetermination(false);
@@ -83,7 +82,7 @@ namespace HotelPriceScout.Data.Model
         {
             if (resetTimers)
             {
-                foreach (TimeKeeper timeKeeper in Timers.TimeKeepers)
+                foreach (ITimeKeeper timeKeeper in Timers.TimeKeepers)
                 {
                     timeKeeper.Timer.Elapsed -= OnTimeToNotify;
                 }

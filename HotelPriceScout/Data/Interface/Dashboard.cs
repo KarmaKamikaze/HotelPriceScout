@@ -5,12 +5,10 @@ using System.Collections.Generic;
 using HotelPriceScout.Data.Model;
 using System.Runtime.InteropServices;
 using System.Linq;
-using HotelPriceScout.Pages;
-using Microsoft.AspNetCore.Components;
 
 namespace HotelPriceScout.Data.Interface
 {
-    public class Dashboard : ComponentBase
+    public class Dashboard
     {
         public List<PriceModel> PriceList { get; private set; }
         public PriceModel MarketPriceItem { get; private set; }
@@ -28,7 +26,7 @@ namespace HotelPriceScout.Data.Interface
         public DateTime ToDay { get;  set; } = DateTime.Now;
         private DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
         public DateTime LastDayOfMonth { get; private set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
-        private readonly SqliteDataAccess _db = new();
+        private readonly ISqliteDataAccess _db = new SqliteDataAccess();
         
         public decimal GetSingleDayMarketPrice(IEnumerable<PriceModel> multipleMarketPrices, int specificDay)
         {   
