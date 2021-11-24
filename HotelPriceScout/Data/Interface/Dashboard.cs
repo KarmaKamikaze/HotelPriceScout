@@ -142,7 +142,7 @@ namespace HotelPriceScout.Data.Interface
         }
         public string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice)
         {
-            decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
+            decimal result = (marketPrice / 100) * SettingsManager.marginPicked;
 
 
             if (kompasPrice > (marketPrice + result))
@@ -160,7 +160,7 @@ namespace HotelPriceScout.Data.Interface
         }
         public string ArrowDecider(decimal marketPrice, decimal kompasPrice)
         {
-            decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
+            decimal result = (marketPrice / 100) * SettingsManager.marginPicked;
             if (kompasPrice > (marketPrice + result))
             {
                 return "oi oi-caret-bottom";
@@ -176,7 +176,7 @@ namespace HotelPriceScout.Data.Interface
         }
         public decimal CurrentMargin(decimal marketPrice, decimal kompasPrice)
         {
-            decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
+            decimal result = (marketPrice / 100) * SettingsManager.marginPicked;
 
             return result;
         }

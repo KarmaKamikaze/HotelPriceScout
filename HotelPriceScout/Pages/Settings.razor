@@ -145,14 +145,14 @@
         {
             await Task.Delay(1000);
             StateHasChanged();
-            if (SettingsManager.PopupStart == false)
+            if (SettingsManager.startPopup == false)
             {
                 break;
             }
         }
         if (timer <= 0)
         {
-            SettingsManager.ReverseBool(ref SettingsManager.PopupStart);
+            SettingsManager.ReverseBool(ref SettingsManager.startPopup);
             NavManager.NavigateTo("/Dashboard");
         }
     }
@@ -168,10 +168,10 @@
     private async void UpdateProgram()
     {
         SettingsManager.SetUpdateScoutSettings();
-        SettingsManager.ReverseBool(ref SettingsManager.UpdateYes);
+        SettingsManager.ReverseBool(ref SettingsManager.updateYes);
         StateHasChanged();
         await Task.Delay(1500);
-        SettingsManager.ReverseBool(ref SettingsManager.UpdateYes);
+        SettingsManager.ReverseBool(ref SettingsManager.updateYes);
         StateHasChanged();
     }
 
@@ -180,7 +180,7 @@
         Program.ScoutSharedService.ScoutRunning = true;
         SettingsManager.SetStartScoutSettings();
         Countdown();
-        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.marginPicked, SettingsManager.GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();
         StateHasChanged();
     }
