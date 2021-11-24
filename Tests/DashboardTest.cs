@@ -26,7 +26,6 @@ namespace Tests
         [InlineData("low", 100, 1)]
         [InlineData("high", 1, 100)]
         [InlineData("", 0, 0)]
-
         public void Test_If_ChangeTextColorBasedOnMargin_Returns_Correct_Value_Low(string expected, int marketprice, int kompasPrice)
         {
             //Arrange and Act
