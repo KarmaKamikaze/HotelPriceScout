@@ -26,8 +26,6 @@ namespace HotelPriceScout.Data.Function
         private decimal _margin;
         private ITimeKeeper _updater;
         
-        
-        
         public PseudoScraper(BookingSite bookingSite)
         {
             BookingSite = bookingSite ?? throw new NullReferenceException();

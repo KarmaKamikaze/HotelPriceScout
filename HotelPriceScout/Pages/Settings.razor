@@ -2,7 +2,7 @@
 @using HotelPriceScout.Data.Interface
 @using HotelPriceScout.Data.Model
 @inject NavigationManager NavManager
-@inherits SettingsManager
+@inject SettingsManager SettingsManager
 
 <div class="row">
     <div class="col-xl-4 offset-xl-4 col-sm-7 offset-sm-2 p-2 shadow bg-white rounded">
@@ -15,56 +15,56 @@
             <label>Margin value percent</label>
         </div>
         <div class="text-center col p-3">
-            <SfNumericTextBox style="font-size: 20px;" TValue="int" Step="1" Max="100" Min="1" @bind-Value="marginPicked"></SfNumericTextBox>
+            <SfNumericTextBox style="font-size: 20px;" TValue="int" Step="1" Max="100" Min="1" @bind-Value="SettingsManager.marginDropdown"></SfNumericTextBox>
         </div>
         <div class="text-center col h4">
             <label>Amount of notifications</label>
         </div>
         <div class="text-center col p-3">
-            <SfDropDownList style="font-size: 20px;" TItem="NotificationAmount" TValue="int" @bind-value="notificationAmountPicked" DataSource="@Notifications">
+            <SfDropDownList style="font-size: 20px;" TItem="SettingsManager.NotificationAmount" TValue="int" @bind-value="SettingsManager.notificationAmountDropdown" DataSource="@SettingsManager.Notifications">
                 <DropDownListFieldSettings Text="Text" Value="Notification"></DropDownListFieldSettings>
             </SfDropDownList>
         </div>
-        @if (notificationAmountPicked == 1)
+        @if (SettingsManager.notificationAmountDropdown == 1)
         {
             <div class="text-center col h4">
                 <label>Notification time</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.timeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
         }
 
 
-        @if (notificationAmountPicked == 2)
+        @if (SettingsManager.notificationAmountDropdown == 2)
         {
             <div class="text-center col h4">
                 <label>Notification times</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.timeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.timeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
         }
-        @if (notificationAmountPicked == 3)
+        @if (SettingsManager.notificationAmountDropdown == 3)
         {
             <div class="text-center col h4">
                 <label>Notification times</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@timeValue" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.timeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@timeValue2" Step=30 Format="HH:mm"></SfTimePicker></div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@timeValue3" Step=60 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.timeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.timeValue3Dropdown" Step=60 Format="HH:mm"></SfTimePicker></div>
         }
 
 
-        @if (showStart)
+        @if (SettingsManager.showStart)
         {
             <div class=""><button type="button" class="shadow p-2 rounded btn btn-success col" @onclick="StartProgram"> Start program</button></div>
         }
 
-        @if (modalStart)
+        @if (SettingsManager.startPopup)
         {
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -74,24 +74,21 @@
                             <h5 class="modal-title" id="titleLabel">Going to dashboard in @timer seconds</h5>
                         </div>
                         <div class="modal-footer">
-                            <NavLink class="form-control border border-dark" @onclick="@ModalStart" href="/Dashboard">Go to dashboard </NavLink>
-                            <button type="button" class="form-control border border-dark" @onclick="@ModalStart"> Stay </button>
+                            <NavLink class="form-control border border-dark" @onclick="@SettingsManager.ModalStartPopUp" href="/Dashboard">Go to dashboard </NavLink>
+                            <button type="button" class="form-control border border-dark" @onclick="@SettingsManager.ModalStartPopUp"> Stay </button>
                         </div>
                     </div>
                 </div>
             </div>
         }
-
-
-
-        @if (showStop)
+        @if (SettingsManager.showStop)
         {
             <div class="d-flex">
-                <button type="button" class="shadow p-2 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="@EscapeStop" @onclick="PopUp"> Stop program</button>
-                <button type="button" class="shadow p-2  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="@EscapeUpdate" @onclick="UpdatePopUp">Update program</button>
+                <button type="button" class="shadow p-3 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="@SettingsManager.EscapeStop" @onclick="SettingsManager.ModalStopPopUp"> Stop program</button>
+                <button type="button" class="shadow p-3  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="@SettingsManager.EscapeUpdate" @onclick="SettingsManager.ModalUpdatePopUp">Update program</button>
             </div>
         }
-        @if (popUp)
+        @if (SettingsManager.stopPopup)
         {
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -101,16 +98,14 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="form-control border border-dark" @onclick="StopProgram">Yes </button>
-                            <button type="button" class="form-control border border-dark" @onclick="PopUp"> No </button>
+                            <button type="button" class="form-control border border-dark" @onclick="SettingsManager.ModalStopPopUp"> No </button>
                         </div>
                     </div>
                 </div>
             </div>
         }
 
-
-
-        @if (updatePopUp)
+        @if (SettingsManager.updatePopup)
         {
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -120,13 +115,13 @@
                         </div>
                         <div class=modal-footer>
                             <button type="button" class="form-control border border-dark" @onclick="UpdateProgram">Yes</button>
-                            <button type="button" class="form-control border border-dark" @onclick="UpdatePopUp">No</button>
+                            <button type="button" class="form-control border border-dark" @onclick="SettingsManager.ModalUpdatePopUp">No</button>
                         </div>
                     </div>
                 </div>
             </div>
         }
-        @if (updateYes)
+        @if (SettingsManager.updateYes)
         {
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -142,6 +137,7 @@
 </div>
 
 @code {
+
     private int timer;
     private async void Countdown()
     {
@@ -149,14 +145,14 @@
         {
             await Task.Delay(1000);
             StateHasChanged();
-            if (modalStart == false)
+            if (SettingsManager.startPopup == false)
             {
                 break;
             }
         }
         if (timer <= 0)
         {
-            ReverseBool(ref modalStart);
+            SettingsManager.ReverseBool(ref SettingsManager.startPopup);
             NavManager.NavigateTo("/Dashboard");
         }
     }
@@ -164,51 +160,28 @@
     private void StopProgram()
     {
         Program.ScoutSharedService.ScoutRunning = false;
-        SetStopScoutSettings();
+        SettingsManager.SetStopScoutSettings();
         Program.ScoutSharedService.Scout.StopScout();
         StateHasChanged();
     }
 
-
     private async void UpdateProgram()
     {
-        Program.ScoutSharedService.ScoutRunning = false;
-        Program.ScoutSharedService.Scout.StopScout();
-        SetUpdateScoutSettings();
-        Program.ScoutSharedService.ScoutRunning = true;
-        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
-        Program.ScoutSharedService.Scout.StartScout();
-        ReverseBool(ref updateYes);
+        SettingsManager.SetUpdateScoutSettings();
+        SettingsManager.ReverseBool(ref SettingsManager.updateYes);
         StateHasChanged();
         await Task.Delay(1500);
-        ReverseBool(ref updateYes);
+        SettingsManager.ReverseBool(ref SettingsManager.updateYes);
         StateHasChanged();
     }
 
     private async void StartProgram()
     {
         Program.ScoutSharedService.ScoutRunning = true;
-        SetStartScoutSettings();
+        SettingsManager.SetStartScoutSettings();
         Countdown();
-        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.marginPicked, SettingsManager.GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();
         StateHasChanged();
-    }
-
-
-    private void EscapeUpdate(KeyboardEventArgs e)
-    {
-        if (e.Code == "Escape")
-        {
-            ReverseBool(ref updatePopUp);
-        }
-    }
-
-    private void EscapeStop(KeyboardEventArgs f)
-    {
-        if (f.Code == "Escape")
-        {
-            ReverseBool(ref popUp);
-        }
     }
 }

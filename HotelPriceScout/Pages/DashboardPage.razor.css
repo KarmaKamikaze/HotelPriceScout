@@ -82,6 +82,10 @@ body {
     z-index: -1;
 }
 
+.topLayer {
+    z-index: 1;
+}
+
 .calendar {
     background-color: white !important;
 }

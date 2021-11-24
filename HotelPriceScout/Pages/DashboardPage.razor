@@ -2,33 +2,33 @@
 @using HotelPriceScout.Data.Interface
 @using DataAccessLibrary
 @using HotelPriceScout.Data.Model
-@inject Dashboard Dashboard
+@inject IDashboard Dashboard 
 @inject ISqliteDataAccess _db
 
-<div class="row">
-    <div class="col-md-12 d-inline-flex">
+<div class="row topLayer">
+    <div class="col-md-12 d-inline-flex topLayer">
         <h1 style="width:350px;">@Dashboard.MonthName @Dashboard.Year</h1>
         @if (Dashboard.MonthsAway > 0)
         {
-            <button type="button" class="btn btn-default btn-lg" @onclick='() => { OnClickUpdate("Previous"); }'>
+            <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Previous"); }'>
                 <span class="oi oi-arrow-thick-left" style="font-size:30px"></span>
             </button>
         }
         else
         {
-            <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+            <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
                 <span class="oi oi-arrow-thick-left" style="font-size:30px"></span>
             </button>
         }
         @if (Dashboard.MonthsAway < 3)
         {
-            <button type="button" class="btn btn-default btn-lg" @onclick='() => { OnClickUpdate("Next"); }'>
+            <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Next"); }'>
                 <span class="oi oi-arrow-thick-right" style="font-size:30px"></span>
             </button>
         }
         else
         {
-            <button id="BtnDisable" type="button" class="btn btn-default btn-lg" disabled>
+            <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
                 <span class="oi oi-arrow-thick-right" style="font-size:30px"></span>
             </button>
         }
@@ -37,7 +37,7 @@
 </div>
 
 
-<div class="row col-md-7 d-inline-flex">
+<div class="row col-md-7 d-inline-flex topLayer">
     <div class="col-md-4">
         <SfDropDownList Width="200px" TItem="NumberOfAdults" TValue="int" @bind-value="adultsPicked" DataSource="@Adults">
             <DropDownListFieldSettings Text="Text" Value="Adults"></DropDownListFieldSettings>
@@ -146,8 +146,7 @@
                         @foreach (PriceModel item in Dashboard.PriceList)
 
                         {
-                            if (item.Price <= Dashboard.MarketPriceItem.Price + Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price, kompasPrice) && item.Price >= Dashboard.MarketPriceItem.Price - Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price, kompasPrice))
-
+                            if (item.Price <= Dashboard.MarketPriceItem.Price + Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price) && item.Price >= Dashboard.MarketPriceItem.Price - Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price))
                             {
                                 <tr>
                                     <td class="col text-right @(item.HotelName == "Gns. Marked" || item.HotelName == "Kompas Hotel Aalborg" ? "boldFont" : "")"> @item.HotelName <span class="oi oi-arrow-right text-center"></span></td>
@@ -184,7 +183,7 @@
     }
 </div>
 
-@if (Dashboard.boolExceptionPopup)
+@if (Dashboard.BoolExceptionPopup)
 {
     <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">

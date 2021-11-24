@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace HotelPriceScout.Data.Interface
 {
-    public class Dashboard
+    public class Dashboard : IDashboard
     {
         public List<PriceModel> PriceList { get; private set; }
         public PriceModel MarketPriceItem { get; private set; }
-        private const int DATAUNAVAILABLE = 0;
+        private const int DataUnavailable = 0;
         public int TempAniDate { get; set; }
         public bool CheckForAlternateClick { get; private set; } = true;
         public string MonthName { get; private set; } = "";
@@ -23,7 +23,7 @@ namespace HotelPriceScout.Data.Interface
         public int Month { get; private set; }
         public int DayClicked { get; set; }
         private DateTime TempDate { get; set; }
-        public DateTime ToDay { get;  set; } = DateTime.Now;
+        public DateTime ToDay { get; } = DateTime.Now;
         private DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
         public DateTime LastDayOfMonth { get; private set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
         private readonly ISqliteDataAccess _db = new SqliteDataAccess();
@@ -37,12 +37,14 @@ namespace HotelPriceScout.Data.Interface
             {
                     return multipleMarketPrices.Single(mp => mp.Date == new DateTime(Year, Month, specificDay).Date).Price;
             }
-            return DATAUNAVAILABLE;
+            return DataUnavailable;
         }
-        public async Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(DateTime startDate, DateTime endDate, int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
+        public async Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(DateTime startDate, DateTime endDate, 
+            int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
         {              
             IEnumerable<PriceModel> dataList = await _db.RetrieveDataFromDb("*", $"RoomType{roomType}",
-                                         $" Date >= '{startDate.ToString("yyyy-MM-dd")}' AND Date <= '{endDate.ToString("yyyy-MM-dd")}'");
+                                         $" Date >= '{startDate.ToString("yyyy-MM-dd")}' AND " +
+                                         $"Date <= '{endDate.ToString("yyyy-MM-dd")}'");
             List<PriceModel> resultDataList = new();
             switch (wantedOutput)
             {
@@ -90,9 +92,10 @@ namespace HotelPriceScout.Data.Interface
             if (new DateTime(Year, Month, specificDay, 23, 59, 59) >= ToDay &&
                 new DateTime(Year, Month, specificDay) <= ToDay.AddMonths(3))
             {
-                return calendarKompasPrices.Single(mp => mp.Date == new DateTime(Year, Month, specificDay) && mp.HotelName == "Kompas Hotel Aalborg").Price;
+                return calendarKompasPrices.Single(mp => mp.Date == new DateTime(Year, Month, specificDay) && 
+                                                         mp.HotelName == "Kompas Hotel Aalborg").Price;
             }
-            return DATAUNAVAILABLE;
+            return DataUnavailable;
         }
 
         public void GenerateThermometer(int day, IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice)
@@ -144,48 +147,46 @@ namespace HotelPriceScout.Data.Interface
         }
         public string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice)
         {
-            decimal result = (marketPrice / 100) * SettingsManager.marginPickedPass;
+            decimal result = (marketPrice / 100) * SettingsManager.marginPicked;
+
 
             if (kompasPrice > (marketPrice + result))
             {
                 return "high";
             }
-            else if (kompasPrice < (marketPrice - result))
+
+            if (kompasPrice < (marketPrice - result))
             {
                 return "low";
             }
-            else
-            {
-                return "";
-            }
+
+            return "";
         }
         public string ArrowDecider(decimal marketPrice, decimal kompasPrice)
         {
-
-            decimal result = (marketPrice / 100) * SettingsManager.marginPickedPass;
-
+            decimal result = (marketPrice / 100) * SettingsManager.marginPicked;
             if (kompasPrice > (marketPrice + result))
             {
                 return "oi oi-caret-bottom";
             }
-            else if (kompasPrice < (marketPrice - result))
+
+            if (kompasPrice < (marketPrice - result))
             {
                 return "oi oi-caret-top";
             }
-            else
-            {
-                return "oi oi-minus";
-            }
+
+            return "oi oi-minus";
         }
-        public decimal CurrentMargin(decimal marketPrice, decimal kompasPrice)
+        public decimal CurrentMargin(decimal marketPrice)
         {
-            decimal result = (marketPrice / 100) * SettingsManager.marginPickedPass;
+            decimal result = (marketPrice / 100) * SettingsManager.marginPicked;
 
             return result;
         }
         public void ShowMoreInfo(int dayClicked)
         {
-            if (new DateTime(Year, Month, dayClicked, 23, 59, 59) >= DateTime.Now && new DateTime(Year, Month, dayClicked) <= ToDay.AddMonths(3))
+            if (new DateTime(Year, Month, dayClicked, 23, 59, 59) >= DateTime.Now && 
+                new DateTime(Year, Month, dayClicked) <= ToDay.AddMonths(3))
             {
                 if (dayClicked == DayClicked)
                 {
@@ -213,13 +214,14 @@ namespace HotelPriceScout.Data.Interface
             LastDayOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
         }
 
-        public string DetermineAnimation(int dayClicked, bool checkForAlternateClick, int TempAniDate)
+        public string DetermineAnimation(int dayClicked, bool checkForAlternateClick, int tempAniDate)
         {
             if (dayClicked != 0 && checkForAlternateClick)
             {
                 return "animation1";
             }
-            else if (dayClicked != 0 && !checkForAlternateClick && TempAniDate == dayClicked)
+            
+            if (dayClicked != 0 && !checkForAlternateClick && tempAniDate == dayClicked)
             {
                 return "animation2";
             }
