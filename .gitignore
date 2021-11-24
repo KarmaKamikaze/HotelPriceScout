@@ -223,6 +223,9 @@ project.lock.json
 # Database files
 database.sqlite
 
+# Mail Configuration File
+mail_config.xml
+
 #####
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
 #####

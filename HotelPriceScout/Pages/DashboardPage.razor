@@ -2,7 +2,7 @@
 @using HotelPriceScout.Data.Interface
 @using DataAccessLibrary
 @using HotelPriceScout.Data.Model
-@inject Dashboard Dashboard
+@inject Dashboard Dashboard 
 @inject SqliteDataAccess _db
 
 <div class="row">
@@ -211,7 +211,7 @@
     IEnumerable<PriceModel> monthKompasPrices;
 
     //Needs to be here, Can not be moved to Dashboard
-    // As we can not call variables made in this scope.
+    //As we can not call variables made in this scope.
     private async void OnClickUpdate(string s)
     {
         switch (s)

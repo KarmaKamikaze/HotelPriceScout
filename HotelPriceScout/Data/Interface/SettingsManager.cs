@@ -8,6 +8,7 @@ namespace HotelPriceScout.Data.Interface
 {
     public class SettingsManager 
     {
+<<<<<<< HEAD
         public static int MarginDropdown = 1;
         public static int NotificationAmountDropdown = 1;
         public static DateTime TimeValueDropdown { get; set; } = DateTime.Now.Date;
@@ -25,6 +26,25 @@ namespace HotelPriceScout.Data.Interface
         public static bool ShowUpdate = false;
         public bool StopPopup = false;
         public bool UpdatePopup = false;
+=======
+        public static int marginPicked = 15;
+        public static int notificationAmountPicked = 1;
+        public static DateTime timeValue { get; set; } = DateTime.Parse("12:00");
+        public static DateTime timeValue2 { get; set; } = DateTime.Now.Date;
+        public static DateTime timeValue3 { get; set; } = DateTime.Now.Date;
+        public static int marginPickedPass { get; set; }
+        public static int notificationPickedPass { get; set; }
+        public static DateTime timeValuePass { get; set; }
+        public static DateTime timeValuePass2 { get; set; }
+        public static DateTime timeValuePass3 { get; set; }
+        public bool modalStart = false;
+        public bool updateYes = false;
+        public static bool showStop = false;
+        public static bool showStart = true;
+        public static bool showUpdate = false;
+        public bool popUp = false;
+        public bool updatePopUp = false;
+>>>>>>> 7d5e61018678a11e8425c8174c0e99b48694ef5a
 
         public void ModalStopPopUp()
         {

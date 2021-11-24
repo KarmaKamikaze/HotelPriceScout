@@ -137,6 +137,7 @@
 </div>
 
 @code {
+<<<<<<< HEAD
     private int timer;
     private async void Countdown()
     {
@@ -182,5 +183,75 @@
         Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();
         StateHasChanged();
+=======
+    private int timer;
+    private async void Countdown()
+    {
+        for (timer = 10; timer >= 0; timer--)
+        {
+            await Task.Delay(1000);
+            StateHasChanged();
+            if (modalStart == false)
+            {
+                break;
+            }
+        }
+        if (timer <= 0)
+        {
+            ReverseBool(ref modalStart);
+            NavManager.NavigateTo("/Dashboard");
+        }
+    }
+
+    private void StopProgram()
+    {
+        Program.ScoutSharedService.ScoutRunning = false;
+        SetStopScoutSettings();
+        Program.ScoutSharedService.Scout.StopScout();
+        StateHasChanged();
+    }
+
+
+    private async void UpdateProgram()
+    {
+        Program.ScoutSharedService.ScoutRunning = false;
+        Program.ScoutSharedService.Scout.StopScout();
+        SetUpdateScoutSettings();
+        Program.ScoutSharedService.ScoutRunning = true;
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
+        Program.ScoutSharedService.Scout.StartScout();
+        ReverseBool(ref updateYes);
+        StateHasChanged();
+        await Task.Delay(1500);
+        ReverseBool(ref updateYes);
+        StateHasChanged();
+    }
+
+    private async void StartProgram()
+    {
+        Program.ScoutSharedService.ScoutRunning = true;
+        SetStartScoutSettings();
+        Countdown();
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(marginPickedPass, GetNotificationTimes());
+        Program.ScoutSharedService.Scout.StartScout();
+        StateHasChanged();
+    }
+
+
+    private void EscapeUpdate(KeyboardEventArgs e)
+    {
+        if (e.Code == "Escape")
+        {
+            ReverseBool(ref updatePopUp);
+        }
+    }
+
+    private void EscapeStop(KeyboardEventArgs f)
+    {
+        if (f.Code == "Escape")
+        {
+            ReverseBool(ref popUp);
+        }
+>>>>>>> 7d5e61018678a11e8425c8174c0e99b48694ef5a
     }
 }

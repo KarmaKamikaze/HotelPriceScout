@@ -39,7 +39,7 @@ namespace HotelPriceScout.Data.Model
         public string Url
         {
             get => _url;
-            init
+            private init
             {
                 if (!Uri.IsWellFormedUriString(value, UriKind.Absolute))
                 {
@@ -60,7 +60,6 @@ namespace HotelPriceScout.Data.Model
             {
                 hotels.Add(new Hotel(hotel.Key, hotel.Value));
             }
-
             return hotels;
         }
     }

@@ -26,12 +26,25 @@ git clone https://github.com/KarmaKamikaze/HotelPriceScout.git
 cd HotelPriceScout/HotelPriceScout && dotnet restore
 ```
 
- 3. While in the root folder, start the server by running `dotnet run`
+ 3. Create an .xml file called `mail_config.xml` and fill in the nessecary information in the following way:
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <MailConfig>
+        <SenderEmailAddress>SOFTWARE_EMAIL</SenderEmailAddress>
+        <SenderPassword>SOFTWARE_PASSWORD</SenderPassword>
+        <ReceiverEmailAddress>RECEIVER_ADDRESS</ReceiverEmailAddress>
+        <ReceiverName>RECEIVER_NAME</ReceiverName>
+    </MailConfig>
+</configuration>
+```
+
+ 4. While in the root folder, start the server by running `dotnet run`
 ```sh
 dotnet run
 ```
 
- 4. The site can be visited in a browser at the address `localhost:5001`
+ 5. The site can be visited in a browser at the address `localhost:5001`
 
 ```sh
 https://localhost:5001
