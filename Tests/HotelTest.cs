@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using HotelPriceScout.Data.Model;
 using Xunit;
 using System.Linq;
