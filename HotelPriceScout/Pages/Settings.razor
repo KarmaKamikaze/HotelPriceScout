@@ -31,7 +31,7 @@
                 <label>Notification time</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.timeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
         }
 
@@ -42,9 +42,9 @@
                 <label>Notification times</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.timeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.timeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.TimeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
         }
         @if (SettingsManager.notificationAmountDropdown == 3)
         {
@@ -52,10 +52,10 @@
                 <label>Notification times</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.timeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.timeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.timeValue3Dropdown" Step=60 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.TimeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.TimeValue3Dropdown" Step=60 Format="HH:mm"></SfTimePicker></div>
         }
 
 
@@ -180,7 +180,7 @@
         Program.ScoutSharedService.ScoutRunning = true;
         SettingsManager.SetStartScoutSettings();
         Countdown();
-        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.marginPicked, SettingsManager.GetNotificationTimes());
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();
         StateHasChanged();
     }

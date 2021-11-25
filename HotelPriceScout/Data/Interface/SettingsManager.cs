@@ -5,18 +5,18 @@ using System.Collections.Generic;
 
 namespace HotelPriceScout.Data.Interface
 {
-    public class SettingsManager 
+    public class SettingsManager
     {
-        public static int marginDropdown = 1;
+        public static int marginDropdown = 15;
         public static int notificationAmountDropdown = 1;
-        public static DateTime timeValueDropdown { get; set; } = DateTime.Now.Date;
-        public static DateTime timeValue2Dropdown { get; set; } = DateTime.Now.Date;
-        public static DateTime timeValue3Dropdown { get; set; } = DateTime.Now.Date;
-        public static int marginPicked { get; set; }
-        public static int notificationPicked { get; set; }
-        public static DateTime timeValuePicked { get; set; }
-        public static DateTime timeValue2Picked { get; set; }
-        public static DateTime timeValue3Picked { get; set; }
+        public static DateTime TimeValueDropdown { get; set; } = DateTime.Now.Date;
+        public static DateTime TimeValue2Dropdown { get; set; } = DateTime.Now.Date;
+        public static DateTime TimeValue3Dropdown { get; set; } = DateTime.Now.Date;
+        public static int MarginPicked { get; set; }
+        public static int NotificationPicked { get; set; }
+        public static DateTime TimeValuePicked { get; set; }
+        public static DateTime TimeValue2Picked { get; set; }
+        public static DateTime TimeValue3Picked { get; set; }
         public bool startPopup = false;
         public bool updateYes = false;
         public static bool showStop = false;
@@ -48,30 +48,27 @@ namespace HotelPriceScout.Data.Interface
             c = !c;
             d = !d;
         }
-
         public IEnumerable<DateTime> GetNotificationTimes()
         {
             List<DateTime> result = new List<DateTime>();
-            switch (notificationPicked)
+            switch (NotificationPicked)
             {
                 case 3:
-                    result.Add(timeValue3Picked);
+                    result.Add(TimeValue3Picked);
                     goto case 2;
                 case 2:
-                    result.Add(timeValue2Picked);
+                    result.Add(TimeValue2Picked);
                     goto case 1;
                 case 1:
-                    result.Add(timeValue3Picked);
+                    result.Add(TimeValue3Picked);
                     break;
                 case 0:
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(notificationPicked) + "must be 0, 1, 2, or 3.");
+                    throw new ArgumentOutOfRangeException(nameof(NotificationPicked) + "must be 0, 1, 2, or 3.");
             }
-
             return result;
         }
-
         public class NotificationAmount
         {
             public int Notification { get; set; }
@@ -84,39 +81,36 @@ namespace HotelPriceScout.Data.Interface
         new NotificationAmount(){ Notification= 2, Text= "2" },
         new NotificationAmount(){ Notification= 3, Text= "3" },
         };
-
         public void SetStartScoutSettings()
         {
             ReverseMultipleBools(ref startPopup, ref showStop, ref showUpdate, ref showStart);
-            marginPicked = marginDropdown;
-            notificationPicked = notificationAmountDropdown;
-            timeValuePicked = timeValueDropdown;
-            timeValue2Picked = timeValue2Dropdown;
-            timeValue3Picked = timeValue3Dropdown;
+            MarginPicked = marginDropdown;
+            NotificationPicked = notificationAmountDropdown;
+            TimeValuePicked = TimeValueDropdown;
+            TimeValue2Picked = TimeValue2Dropdown;
+            TimeValue3Picked = TimeValue3Dropdown;
         }
-
         public void SetStopScoutSettings()
         {
             ReverseMultipleBools(ref showStart, ref showUpdate, ref showStop, ref stopPopup);
-            marginPicked = default;
-            notificationPicked = default;
-            timeValuePicked = default;
-            timeValue2Picked = default;
-            timeValue3Picked = default;
-            marginPicked = 1;
-            notificationPicked = 1;
+            MarginPicked = default;
+            NotificationPicked = default;
+            TimeValuePicked = default;
+            TimeValue2Picked = default;
+            TimeValue3Picked = default;
+            MarginPicked = 1;
+            NotificationPicked = 1;
         }
-
         public void SetUpdateScoutSettings()
         {
-            marginPicked = marginDropdown;
-            notificationPicked = notificationAmountDropdown;
-            timeValuePicked = timeValueDropdown;
-            timeValue2Picked = timeValue2Dropdown;
-            timeValue3Picked = timeValue3Dropdown;
+            MarginPicked = marginDropdown;
+            NotificationPicked = notificationAmountDropdown;
+            TimeValuePicked = TimeValueDropdown;
+            TimeValue2Picked = TimeValue2Dropdown;
+            TimeValue3Picked = TimeValue3Dropdown;
             ReverseBool(ref updatePopup);
-        }
 
+        }
         public void EscapeUpdate(KeyboardEventArgs e)
         {
             if (e.Code == "Escape" && updatePopup)
@@ -124,7 +118,6 @@ namespace HotelPriceScout.Data.Interface
                 ReverseBool(ref updatePopup);
             }
         }
-
         public void EscapeStop(KeyboardEventArgs f)
         {
             if (f.Code == "Escape" && stopPopup)
