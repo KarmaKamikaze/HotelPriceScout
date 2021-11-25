@@ -45,7 +45,7 @@
             <DropDownListEvents TValue="int" TItem="NumberOfAdults" ValueChange='() => { OnClickUpdate("Update"); }'></DropDownListEvents>
         </SfDropDownList>
     </div>
-    <div id="Paffing-0" class="col-lg-6">
+    <div class="col-lg-6">
         <SfMultiSelect TValue="List<string>" @bind-Value="selectedHotels" AllowFiltering="true" TItem="string"
                        Mode="@VisualMode.CheckBox" Placeholder="Select hotels" DataSource="listOfSelectedHotels"
                        ShowSelectAll="true" EnableSelectionOrder="false" FilterBarPlaceholder="Search hotels"
@@ -60,13 +60,13 @@
         <table class="table table-bordered table-sm col calendar shadow bg-white">
             <thead>
                 <tr>
-                    <th id="Width-14"> Monday</th>
-                    <th id="Width-14"> Tuesday</th>
-                    <th id="Width-14"> Wednesday</th>
-                    <th id="Width-14"> Thursday</th>
-                    <th id="Width-14"> Friday</th>
-                    <th id="Width-14"> Saturday</th>
-                    <th id="Width-14"> Sunday</th>
+                    <th id="Weekdays"> Monday</th>
+                    <th id="Weekdays"> Tuesday</th>
+                    <th id="Weekdays"> Wednesday</th>
+                    <th id="Weekdays"> Thursday</th>
+                    <th id="Weekdays"> Friday</th>
+                    <th id="Weekdays"> Saturday</th>
+                    <th id="Weekdays"> Sunday</th>
                 </tr>
             </thead>
             <tbody>
@@ -83,7 +83,7 @@
                         marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                         kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
                         <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ?
-                                     "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="Height-100"
+                                     "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTd"
                                     @onclick="@(() => { Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
                             <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                                 @i
@@ -114,7 +114,7 @@
                                 marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                                 kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
                                 <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ?
-                                             "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="Height-100Dot5"
+                                             "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTD"
                                              @onclick="@(() => {Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
                                     <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                                         @(i + j)
@@ -195,18 +195,18 @@
                 }
             </div>
         </div>
-            termometerIsOpen = true;
+            thermometerIsOpen = true;
         }
         else
         {
-            termometerIsOpen = false;
+            thermometerIsOpen = false;
         }
 </div>
 
 
 @code
 {
-    public bool termometerIsOpen = false;
+    public bool thermometerIsOpen = false;
     decimal marketPrice;
     List<PriceModel> marketPriceList = new();
     decimal kompasPrice;

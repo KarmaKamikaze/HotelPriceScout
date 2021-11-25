@@ -160,18 +160,14 @@ body {
     text-align: right;
 }
 
-#Padding0 {
-    padding: 0;
-}
-
-#Width-14 {
+#Weekdays {
     width: 14%
 }
 
-#Height-100 {
+#HeightOfTd {
     Height: 100px;
 }
 
-#Height-100Dot5 {
+#HeightOfTD {
     Height: 100.5px;
 }
