@@ -120,7 +120,7 @@ namespace HotelPriceScout.Data.Function
         private void SetPrice(RoomType room, decimal hostPriceType)
         {
             decimal maxPrice = (1 + _margin / 100) * hostPriceType;
-            decimal minPrice = _margin > 100 ? 1 : (1 - _margin / 100) * hostPriceType;
+            decimal minPrice = _margin >= 100 ? 1 : (1 - _margin / 100) * hostPriceType;
             
             foreach (RoomTypePrice price in room.Prices)
             {
