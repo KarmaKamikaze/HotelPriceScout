@@ -83,7 +83,7 @@
                         marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                         kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
                         <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ?
-                                     "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTd"
+                                     "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTdFirstRow"
                                     @onclick="@(() => { Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
                             <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                                 @i
@@ -114,7 +114,7 @@
                                 marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                                 kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
                                 <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ?
-                                             "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTD"
+                                             "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTd"
                                              @onclick="@(() => {Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
                                     <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                                         @(i + j)
