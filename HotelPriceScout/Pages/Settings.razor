@@ -152,7 +152,7 @@
         }
         if (timer <= 0)
         {
-            SettingsManager.ReverseBool(ref SettingsManager.startPopup);
+            SettingsManager.startPopup = !SettingsManager.startPopup;
             NavManager.NavigateTo("/Dashboard");
         }
     }
@@ -168,10 +168,10 @@
     private async void UpdateProgram()
     {
         SettingsManager.SetUpdateScoutSettings();
-        SettingsManager.ReverseBool(ref SettingsManager.updateYes);
+        SettingsManager.updateYes = !SettingsManager.updateYes;
         StateHasChanged();
         await Task.Delay(1500);
-        SettingsManager.ReverseBool(ref SettingsManager.updateYes);
+        SettingsManager.updateYes = !SettingsManager.updateYes;
         StateHasChanged();
     }
 
