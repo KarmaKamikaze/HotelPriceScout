@@ -21,9 +21,9 @@ namespace HotelPriceScout.Data.Interface
         public bool updateYes = false;
         public static bool showStop = false;
         public static bool showStart = true;
-        public static bool showUpdate = false;
         public bool stopPopup = false;
         public bool updatePopup = false;
+        
         public void ModalStopPopUp()
         {
             stopPopup = !stopPopup;
@@ -34,19 +34,18 @@ namespace HotelPriceScout.Data.Interface
         }
         public void ModalStartPopUp()
         {
-            startPopup = !startPopup;
+            startPopup = !startPopup;      
         }
-
         public void ReverseBool(ref bool i)
         {
             i = !i;
         }
-        public static void ReverseMultipleBools(ref bool a, ref bool b, ref bool c, ref bool d)
+        public static void ReverseMultipleBools(ref bool a, ref bool b, ref bool c)
         {
             a = !a;
             b = !b;
             c = !c;
-            d = !d;
+            
         }
         public IEnumerable<DateTime> GetNotificationTimes()
         {
@@ -83,7 +82,7 @@ namespace HotelPriceScout.Data.Interface
         };
         public void SetStartScoutSettings()
         {
-            ReverseMultipleBools(ref startPopup, ref showStop, ref showUpdate, ref showStart);
+            ReverseMultipleBools(ref startPopup, ref showStop, ref showStart);
             MarginPicked = marginDropdown;
             NotificationPicked = notificationAmountDropdown;
             TimeValuePicked = TimeValueDropdown;
@@ -92,7 +91,7 @@ namespace HotelPriceScout.Data.Interface
         }
         public void SetStopScoutSettings()
         {
-            ReverseMultipleBools(ref showStart, ref showUpdate, ref showStop, ref stopPopup);
+            ReverseMultipleBools(ref showStart, ref showStop, ref stopPopup);
             MarginPicked = default;
             NotificationPicked = default;
             TimeValuePicked = default;
