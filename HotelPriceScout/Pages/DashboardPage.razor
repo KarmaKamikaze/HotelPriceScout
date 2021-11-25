@@ -32,7 +32,7 @@
                 <span class="oi oi-arrow-thick-right" id="ArrowSize"></span>
             </button>
         }
-        <div class="col-md-8 @(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate))">
+        <div class="col-md-8 @(Dashboard.DetermineAnimation())">
             <h1 id="H1Date">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1>
         </div>
     </div>
@@ -83,7 +83,7 @@
                         marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                         kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
                         <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ?
-                                     "bg-warning" : "") @(Dashboard.DetermineFocus(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate, day))" id="Height-100"
+                                     "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="Height-100"
                                     @onclick="@(() => { Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
                             <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                                 @i
@@ -114,7 +114,7 @@
                                 marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                                 kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
                                 <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ?
-                                             "bg-warning" : "") @(Dashboard.DetermineFocus(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate, day))" id="Height-100Dot5"
+                                             "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="Height-100Dot5"
                                              @onclick="@(() => {Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
                                     <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                                         @(i + j)
@@ -145,8 +145,8 @@
 
     @if (Dashboard.DayClicked != 0)
     {
-        Dashboard.GenerateThermometer(Dashboard.DayClicked, monthData, marketPriceList); marketPriceList.Clear();
-        <div class="@(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 table-borderless bottomLayer">
+        Dashboard.GenerateThermometer(monthData, marketPriceList); marketPriceList.Clear();
+        <div class="@(Dashboard.DetermineAnimation()) col-md-4 table-borderless bottomLayer">
             <div class="row col d-flex justify-content-center">
                 @if (Dashboard.PriceList == null)
                 {
@@ -256,9 +256,9 @@
                 marketPriceList.Clear();
                 break;
         }
-        monthData = await Dashboard.RetrieveSelectDataFromDb(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, adultsPicked, "Select Prices", selectedHotels);
+        monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", selectedHotels);
         monthMarketData = Program.ScoutSharedService.Scout.RunComparatorForSelectedHotels(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, monthData);
-        monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, adultsPicked, "Kompas Prices");
+        monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
     }
 
     protected override async Task OnInitializedAsync()
@@ -276,9 +276,9 @@
             bookingSite.DataScraper.SendMissingDataWarning += Dashboard.UpdateUiMissingDataWarning;
         }
 
-        monthData = await Dashboard.RetrieveSelectDataFromDb(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, adultsPicked, "Select Prices", selectedHotels);
+        monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", selectedHotels);
         monthMarketData = Program.ScoutSharedService.Scout.RunComparatorForSelectedHotels(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, monthData);
-        monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, adultsPicked, "Kompas Prices");
+        monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
 
         Dashboard.CreateMonth();
     }
