@@ -30,14 +30,14 @@ namespace Tests
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
-        public void Test_If_GetNotificationTimes_Is_Correct_Length(int NotificationAmount)
+        public void Test_If_GetNotificationTimes_Is_Correct_Length(int notificationAmount)
         {
             //Arrange and Act
             SettingsManager settingsManager = new SettingsManager();
-            SettingsManager.NotificationPicked = NotificationAmount;
+            SettingsManager.NotificationPicked = notificationAmount;
 
             //Assert
-            Assert.Equal(NotificationAmount, settingsManager.GetNotificationTimes().Count());
+            Assert.Equal(notificationAmount, settingsManager.GetNotificationTimes().Count());
         }
     }
 }
