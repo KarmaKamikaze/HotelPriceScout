@@ -12,11 +12,11 @@ namespace HotelPriceScout.Data.Interface
         public static DateTime TimeValueDropdown { get; set; } = DateTime.Now.Date;
         public static DateTime TimeValue2Dropdown { get; set; } = DateTime.Now.Date;
         public static DateTime TimeValue3Dropdown { get; set; } = DateTime.Now.Date;
-        public static int MarginPicked { get; set; }
+        public static int MarginPicked { get; private set; }
         public static int NotificationPicked { get; set; }
-        public static DateTime TimeValuePicked { get; set; }
-        public static DateTime TimeValue2Picked { get; set; }
-        public static DateTime TimeValue3Picked { get; set; }
+        private static DateTime TimeValuePicked { get; set; }
+        private static DateTime TimeValue2Picked { get; set; }
+        private static DateTime TimeValue3Picked { get; set; }
         public bool startPopup = false;
         public bool updateYes = false;
         public static bool showStop = false;
@@ -41,7 +41,8 @@ namespace HotelPriceScout.Data.Interface
         {
             i = !i;
         }
-        public static void ReverseMultipleBools(ref bool a, ref bool b, ref bool c, ref bool d)
+
+        private static void ReverseMultipleBools(ref bool a, ref bool b, ref bool c, ref bool d)
         {
             a = !a;
             b = !b;
@@ -74,7 +75,7 @@ namespace HotelPriceScout.Data.Interface
             public int Notification { get; set; }
             public string Text { get; set; }
         }
-        public List<NotificationAmount> Notifications = new List<NotificationAmount>()
+        public readonly List<NotificationAmount> notifications = new List<NotificationAmount>()
         {
         new NotificationAmount(){ Notification= 0, Text= "0" },
         new NotificationAmount(){ Notification= 1, Text= "1" },

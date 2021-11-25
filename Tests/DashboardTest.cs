@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
-using HotelPriceScout.Data.Model;
-using HotelPriceScout.Pages;
 using HotelPriceScout.Data.Interface;
 
 namespace Tests
@@ -35,12 +29,12 @@ namespace Tests
         [InlineData("low", 100, 1)]
         [InlineData("high", 1, 100)]
         [InlineData("", 0, 0)]
-        public void Test_If_ChangeTextColorBasedOnMargin_Returns_Correct_Expected_Value(string expected, int marketprice, int kompasPrice)
+        public void Test_If_ChangeTextColorBasedOnMargin_Returns_Correct_Expected_Value(string expected, int marketPrice, int kompasPrice)
         {
             //Arrange
             Dashboard dashboard = new Dashboard();
             //Act
-            string actual = dashboard.ChangeTextColorBasedOnMargin(marketprice, kompasPrice);
+            string actual = dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice);
             //Assert
             Assert.Equal(expected, actual);
         }
@@ -49,25 +43,25 @@ namespace Tests
         [InlineData("oi oi-caret-top", 100, 1)]
         [InlineData("oi oi-caret-bottom", 1, 100)]
         [InlineData("oi oi-minus", 0, 0)]
-        public void Test_If_ArrowDecider_Returns_Correct_Value(string expected, int marketprice, int kompasPrice)
+        public void Test_If_ArrowDecider_Returns_Correct_Value(string expected, int marketPrice, int kompasPrice)
         {
             //Arrange
             Dashboard dashboard = new Dashboard();
             //Act
-            string actual = dashboard.ArrowDecider(marketprice, kompasPrice);
+            string actual = dashboard.ArrowDecider(marketPrice, kompasPrice);
             //Assert
             Assert.Equal(expected, actual);
         }
 
         [Theory, MemberData(nameof(ShowMoreInfoData))]
-        public void Test_If_ShowMoreInfo_Returns_Correct_Value(bool expected, int currentday, int previousDateClicked)
+        public void Test_If_ShowMoreInfo_Returns_Correct_Value(bool expected, int currentDay, int previousDateClicked)
         {
             //Arrange
             Dashboard dashboard = new Dashboard();
             //Act
             dashboard.CreateMonth();
             dashboard.DayClicked = previousDateClicked;
-            dashboard.ShowMoreInfo(currentday);
+            dashboard.ShowMoreInfo(currentDay);
             //Assert
             Assert.Equal(expected, dashboard.CheckForAlternateClick);
         }
@@ -77,12 +71,12 @@ namespace Tests
         [InlineData("animation2", 5, false, 5)]
         [InlineData("", 5, false, 4)]
         [InlineData("", 0, false, 0)]
-        public void Test_If_DetermineAnimation_Returns_Correct_Value(string expected, int DayClicked, bool CheckForAlternateClick, int TempAniDate)
+        public void Test_If_DetermineAnimation_Returns_Correct_Value(string expected, int dayClicked, bool checkForAlternateClick, int tempAniDate)
         {
             //Arrange
             Dashboard dashboard = new Dashboard();
             //Act
-            string actual = dashboard.DetermineAnimation(DayClicked, CheckForAlternateClick, TempAniDate);
+            string actual = dashboard.DetermineAnimation(dayClicked, checkForAlternateClick, tempAniDate);
             //Assert
             Assert.Equal(expected, actual);
         }

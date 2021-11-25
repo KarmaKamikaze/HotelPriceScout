@@ -21,7 +21,7 @@
             <label>Amount of notifications</label>
         </div>
         <div class="text-center col p-3">
-            <SfDropDownList style="font-size: 20px;" TItem="SettingsManager.NotificationAmount" TValue="int" @bind-value="SettingsManager.notificationAmountDropdown" DataSource="@SettingsManager.Notifications">
+            <SfDropDownList style="font-size: 20px;" TItem="SettingsManager.NotificationAmount" TValue="int" @bind-value="SettingsManager.notificationAmountDropdown" DataSource="@SettingsManager.notifications">
                 <DropDownListFieldSettings Text="Text" Value="Notification"></DropDownListFieldSettings>
             </SfDropDownList>
         </div>
