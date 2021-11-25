@@ -10,6 +10,7 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard : IDashboard
     {
+        public List<WarningMessagde> WarningMessagde { get; set; } = new List<WarningMessagde>();
         public bool BoolExceptionPopup { get; set; } = false;
         public List<PriceModel> PriceList { get; private set; }
         public PriceModel MarketPriceItem { get; private set; }
@@ -104,12 +105,37 @@ namespace HotelPriceScout.Data.Interface
             decimal marketPrice = (avgMarketPrice.Where(date => date.Date == todayDate)).Single().Price;
             PriceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData, marketPrice);
             MarketPriceItem = PriceMeterGenerator.MarketFinder(PriceList);
-            PriceList.Sort();   
+            PriceList.Sort();
+            
         }
         public void UpdateUiMissingDataWarning(BookingSite bookingSite)
         {
-            BoolExceptionPopup = !BoolExceptionPopup;
-            //throw new NotImplementedException();
+            string warnings = "";
+            string bookingSitename = bookingSite.Name; 
+
+            foreach (var hotel in bookingSite.HotelsList)
+            {
+                string hotelName = hotel.Name;
+                foreach (var roomtype in hotel.RoomTypes)
+                { 
+                    string type = roomtype.Capacity.ToString();
+                    foreach(var price in roomtype.Prices)
+                    {
+                        if(price.Price == 0)
+                        {
+                            warnings += $"On date: {price.Date} hotel: {hotelName}, with roomtype: {roomtype}|";
+                        }
+                    }
+                }
+            }
+            
+            //BoolExceptionPopup = !BoolExceptionPopup; THis bool should be flicked when we are done generating Warnings.
+
+            //WarningMessagde.Add(new WarningMessagde("Date: 21/02/2021 hotel: Phønix, with roomtype: 1|Date: 21/02/2021 hotel:Cabin, with roomtype: 4|Date: 21/02/2021 hotel:Sarmilan, with roomtype: 1", "Expedia.com"));
+            //WarningMessagde.Add(new WarningMessagde("Date: 21/02/2021 hotel: Phønix, with roomtype: 2|Date: 21/02/2021 hotel:Cabin, with roomtype: 2|Date: 21/02/2021 hotel:Sarmilan, with roomtype: 4", "Hotels.com"));
+            //WarningMessagde.Add(new WarningMessagde("Date: 21/02/2021 hotel: Phønix, with roomtype: 4|Date: 21/02/2021 hotel:Cabin, with roomtype: 1|Date: 21/02/2021hotel:Sarmilan, with roomtype: 2", "Trivago.dk"));
+
+
         }
         public string ShowCurrentDayAsString()
         {
@@ -148,6 +174,7 @@ namespace HotelPriceScout.Data.Interface
         public string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice)
         {
             decimal result = (marketPrice / 100) * SettingsManager.marginPicked;
+            
 
 
             if (kompasPrice > (marketPrice + result))
@@ -172,6 +199,7 @@ namespace HotelPriceScout.Data.Interface
 
             if (kompasPrice < (marketPrice - result))
             {
+                
                 return "oi oi-caret-top";
             }
 

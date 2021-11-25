@@ -16,9 +16,6 @@
       <None Remove="Data\Interface\" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Data\Interface\" />
-    </ItemGroup>
-    <ItemGroup>
       <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
     </ItemGroup>
 </Project>
