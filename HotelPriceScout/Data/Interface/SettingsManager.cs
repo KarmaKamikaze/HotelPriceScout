@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
+using IronWebScraper;
+using Request = Org.BouncyCastle.Asn1.Ocsp.Request;
 
 
 namespace HotelPriceScout.Data.Interface
@@ -85,6 +87,7 @@ namespace HotelPriceScout.Data.Interface
             ReverseMultipleBools(ref startPopup, ref showStop, ref showStart);
             MarginPicked = MarginDropdown;
             NotificationPicked = NotificationAmountDropdown;
+           
             TimeValuePicked = TimeValueDropdown;
             TimeValue2Picked = TimeValue2Dropdown;
             TimeValue3Picked = TimeValue3Dropdown;

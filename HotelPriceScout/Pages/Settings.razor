@@ -21,9 +21,13 @@
             <label>Amount of notifications</label>
         </div>
         <div class="text-center col p-3">
-            <SfDropDownList style="font-size: 20px;" TItem="SettingsManager.NotificationAmount" TValue="int" @bind-value="SettingsManager.NotificationAmountDropdown" DataSource="@SettingsManager.notifications">
-                <DropDownListFieldSettings Text="Text" Value="Notification"></DropDownListFieldSettings>
-            </SfDropDownList>
+            <select id="notification-amount" class="form-control selectpicker" @bind="SettingsManager.NotificationAmountDropdown">
+            <option>--select--</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
         </div>
         @if (SettingsManager.NotificationAmountDropdown == 1)
         {
@@ -31,7 +35,7 @@
                 <label>Notification time</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker ID="notification-time-1"style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
         }
 
@@ -42,9 +46,9 @@
                 <label>Notification times</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker ID="notification-time-1"style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.TimeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker ID="notification-time-2" style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.TimeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
         }
         @if (SettingsManager.NotificationAmountDropdown == 3)
         {
@@ -52,10 +56,10 @@
                 <label>Notification times</label>
             </div>
             <div class="text-center col p-3">
-                <SfTimePicker style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
+                <SfTimePicker ID="notification-time-1"style="font-size: 20px;" TValue="DateTime " @bind-Value="@SettingsManager.TimeValueDropdown" Step=30 Format="HH:mm"></SfTimePicker>
             </div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.TimeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
-            <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.TimeValue3Dropdown" Step=60 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker ID="notification-time-2" style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.TimeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
+            <div class="text-center col p-3"><SfTimePicker ID="notification-time-3" style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.TimeValue3Dropdown" Step=60 Format="HH:mm"></SfTimePicker></div>
         }
 
 
