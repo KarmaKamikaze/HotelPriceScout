@@ -58,7 +58,7 @@ namespace Tests
             //Assert
             Assert.All(bookingSite.HotelsList,
                 hotel => Assert.All(hotel.RoomTypes,
-                    roomtype => Assert.All(roomtype.Prices,
+                    roomType => Assert.All(roomType.Prices,
                         price => Assert.NotEqual(0, price.Price))));
         }
     }

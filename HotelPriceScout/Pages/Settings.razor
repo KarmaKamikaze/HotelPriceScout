@@ -15,17 +15,17 @@
             <label>Margin value percent</label>
         </div>
         <div class="text-center col p-3">
-            <SfNumericTextBox style="font-size: 20px;" TValue="int" Step="1" Max="100" Min="1" @bind-Value="SettingsManager.marginDropdown"></SfNumericTextBox>
+            <SfNumericTextBox style="font-size: 20px;" TValue="int" Step="1" Max="100" Min="1" @bind-Value="SettingsManager.MarginDropdown"></SfNumericTextBox>
         </div>
         <div class="text-center col h4">
             <label>Amount of notifications</label>
         </div>
         <div class="text-center col p-3">
-            <SfDropDownList style="font-size: 20px;" TItem="SettingsManager.NotificationAmount" TValue="int" @bind-value="SettingsManager.notificationAmountDropdown" DataSource="@SettingsManager.Notifications">
+            <SfDropDownList style="font-size: 20px;" TItem="SettingsManager.NotificationAmount" TValue="int" @bind-value="SettingsManager.NotificationAmountDropdown" DataSource="@SettingsManager.notifications">
                 <DropDownListFieldSettings Text="Text" Value="Notification"></DropDownListFieldSettings>
             </SfDropDownList>
         </div>
-        @if (SettingsManager.notificationAmountDropdown == 1)
+        @if (SettingsManager.NotificationAmountDropdown == 1)
         {
             <div class="text-center col h4">
                 <label>Notification time</label>
@@ -36,7 +36,7 @@
         }
 
 
-        @if (SettingsManager.notificationAmountDropdown == 2)
+        @if (SettingsManager.NotificationAmountDropdown == 2)
         {
             <div class="text-center col h4">
                 <label>Notification times</label>
@@ -46,7 +46,7 @@
             </div>
             <div class="text-center col p-3"><SfTimePicker style="font-size: 20px;" TValue="DateTime" @bind-Value="@SettingsManager.TimeValue2Dropdown" Step=30 Format="HH:mm"></SfTimePicker></div>
         }
-        @if (SettingsManager.notificationAmountDropdown == 3)
+        @if (SettingsManager.NotificationAmountDropdown == 3)
         {
             <div class="text-center col h4">
                 <label>Notification times</label>
