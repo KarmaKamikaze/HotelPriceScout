@@ -24,5 +24,21 @@ namespace Tests
             //Assert
             Assert.Throws<ArgumentOutOfRangeException>(settingsManager.GetNotificationTimes);
         }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void Test_If_GetNotificationTimes_Is_Correct_Length(int NotificationAmount)
+        {
+            //Arrange and Act
+            SettingsManager settingsManager = new SettingsManager();
+            SettingsManager.NotificationPicked = NotificationAmount;
+
+            //Assert
+            Assert.Equal(NotificationAmount, settingsManager.GetNotificationTimes().Count());
+
+        }
     }
 }
