@@ -46,7 +46,6 @@ namespace Tests
             }
         };
         
-        
         [Fact]
         public void TimeKeeperMinuteTriggerConstructorCreatesTimerTest()
         {
