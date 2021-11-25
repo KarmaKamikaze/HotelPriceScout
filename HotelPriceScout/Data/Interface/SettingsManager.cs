@@ -59,7 +59,7 @@ namespace HotelPriceScout.Data.Interface
                     result.Add(TimeValue2Picked);
                     goto case 1;
                 case 1:
-                    result.Add(TimeValue3Picked);
+                    result.Add(TimeValuePicked);
                     break;
                 case 0:
                     break;
