@@ -218,10 +218,22 @@ namespace HotelPriceScout.Data.Interface
             {
                 return "animation1";
             }
-            
             if (dayClicked != 0 && !checkForAlternateClick && tempAniDate == dayClicked)
             {
                 return "animation2";
+            }
+            return "";
+        }
+
+        public string DetermineFocus(int dayClicked, bool checkForAlternateClick, int tempAniDate, int day)
+        {
+            if (dayClicked != 0 && checkForAlternateClick && dayClicked == day)
+            {
+                return "Background-Lightblue";
+            }
+            if (dayClicked != 0 && !checkForAlternateClick && tempAniDate == dayClicked)
+            {
+                return "Background-none";
             }
             return "";
         }

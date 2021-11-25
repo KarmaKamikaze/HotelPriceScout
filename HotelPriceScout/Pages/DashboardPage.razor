@@ -83,12 +83,12 @@
                         marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                         kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
                         <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ?
-                                     "bg-warning" : "")" id="Height-100" tabindex="0"
+                                     "bg-warning" : "") @(Dashboard.DetermineFocus(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate, day))" id="Height-100"
                                     @onclick="@(() => { Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
                             <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                                 @i
-                            <span class="@(marketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(marketPrice, kompasPrice))"></span>
-                        </div>
+                                <span class="@(marketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(marketPrice, kompasPrice))"></span>
+                            </div>
                         <div class="@(marketPrice == 0 ? "d-none" : "")">
                             <div id="YouPrice" class="@(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
                                 You: <span>@(decimal.ToInt32(kompasPrice)),-</span>
@@ -114,7 +114,7 @@
                                 marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                                 kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
                                 <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ?
-                                             "bg-warning" : "")" id="Height-100Dot5" tabindex="0"
+                                             "bg-warning" : "") @(Dashboard.DetermineFocus(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate, day))" id="Height-100Dot5"
                                              @onclick="@(() => {Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
                                     <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                                         @(i + j)
@@ -148,7 +148,6 @@
         Dashboard.GenerateThermometer(Dashboard.DayClicked, monthData, marketPriceList); marketPriceList.Clear();
         <div class="@(Dashboard.DetermineAnimation(Dashboard.DayClicked, Dashboard.CheckForAlternateClick, Dashboard.TempAniDate)) col-md-4 table-borderless bottomLayer">
             <div class="row col d-flex justify-content-center">
-                <!-- outer layer-->
                 @if (Dashboard.PriceList == null)
                 {
                     <div><p>Loading data</p></div>// <--- checks if thermometer is ready yet
@@ -196,12 +195,18 @@
                 }
             </div>
         </div>
-    }
+            termometerIsOpen = true;
+        }
+        else
+        {
+            termometerIsOpen = false;
+        }
 </div>
 
 
 @code
 {
+    public bool termometerIsOpen = false;
     decimal marketPrice;
     List<PriceModel> marketPriceList = new();
     decimal kompasPrice;

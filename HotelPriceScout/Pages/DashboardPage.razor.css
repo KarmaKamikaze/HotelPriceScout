@@ -2,16 +2,20 @@
     background-color: #F2F2F2;
 }
 
+.Background-Lightblue {
+    background-color: #dbefff !important;
+}
+
+.Background-none {
+    background-color: none;
+}
+
 #BtnDisable {
     opacity: 0.1;
 }
 
 .bg-warning {
     background-color: #fffee0 !important;
-}
-
-.table td:focus {
-    background-color: #dbefff !important;
 }
 
 .boldFont {

@@ -38,5 +38,6 @@ namespace HotelPriceScout.Data.Interface
         void NextMonth();
         void PreviousMonth();
         string DetermineAnimation(int dayClicked, bool checkForAlternateClick, int tempAniDate);
+        string DetermineFocus(int dayClicked, bool checkForAlternateClick, int tempAniDate, int day);
     }
 }
