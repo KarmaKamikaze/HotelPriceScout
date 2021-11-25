@@ -38,7 +38,6 @@ namespace Tests
 
             //Assert
             Assert.Equal(NotificationAmount, settingsManager.GetNotificationTimes().Count());
-
         }
     }
 }
