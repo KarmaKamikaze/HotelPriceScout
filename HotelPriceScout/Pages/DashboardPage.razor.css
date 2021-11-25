@@ -124,3 +124,50 @@ body {
         opacity: 0;
     }
 }
+
+#DateAndArrow {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+#MarketPrice {
+    font-weight: 700;
+    text-align: right;
+    font-size: small;
+    opacity: 0.8;
+}
+
+#YouPrice {
+    text-align: right;
+    font-size: small;
+    font-weight: 700;
+}
+
+#ArrowSize {
+    font-size: 30px;
+}
+
+#H1MonthAndYear {
+    width: 350px;
+}
+
+#H1Date {
+    height: fit-content;
+    text-align: right;
+}
+
+#Padding0 {
+    padding: 0;
+}
+
+#Width-14 {
+    width: 14%
+}
+
+#Height-100 {
+    Height: 100px;
+}
+
+#Height-100Dot5 {
+    Height: 100.5px;
+}
