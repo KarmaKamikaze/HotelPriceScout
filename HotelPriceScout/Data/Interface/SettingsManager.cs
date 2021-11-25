@@ -36,10 +36,6 @@ namespace HotelPriceScout.Data.Interface
         {
             startPopup = !startPopup;      
         }
-        public void ReverseBool(ref bool i)
-        {
-            i = !i;
-        }
 
         private static void ReverseMultipleBools(ref bool a, ref bool b, ref bool c)
         {
@@ -59,7 +55,7 @@ namespace HotelPriceScout.Data.Interface
                     result.Add(TimeValue2Picked);
                     goto case 1;
                 case 1:
-                    result.Add(TimeValue3Picked);
+                    result.Add(TimeValuePicked);
                     break;
                 case 0:
                     break;
@@ -107,21 +103,21 @@ namespace HotelPriceScout.Data.Interface
             TimeValuePicked = TimeValueDropdown;
             TimeValue2Picked = TimeValue2Dropdown;
             TimeValue3Picked = TimeValue3Dropdown;
-            ReverseBool(ref updatePopup);
+            updatePopup = !updatePopup;
 
         }
         public void EscapeUpdate(KeyboardEventArgs e)
         {
             if (e.Code == "Escape" && updatePopup)
             {
-                ReverseBool(ref updatePopup);
+                updatePopup = !updatePopup;
             }
         }
         public void EscapeStop(KeyboardEventArgs f)
         {
             if (f.Code == "Escape" && stopPopup)
             {
-                ReverseBool(ref stopPopup);
+                stopPopup = !stopPopup;
             }
         }
     }
