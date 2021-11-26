@@ -22,11 +22,10 @@
         </div>
         <div class="text-center col p-3">
             <select id="notification-amount" class="form-control selectpicker" @bind="SettingsManager.NotificationAmountDropdown">
-            <option>--select--</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                @foreach (NotificationAmount notificationAmount in notifications)
+                {
+                    <option value="@notificationAmount.Notification">@notificationAmount.Text</option>
+                }
             </select>
         </div>
         @if (SettingsManager.NotificationAmountDropdown > 0)
@@ -149,6 +148,19 @@
             NavManager.NavigateTo("/Dashboard");
         }
     }
+
+    public class NotificationAmount
+    {
+        public int Notification { get; set; }
+        public string Text { get; set; }
+    }
+    public readonly List<NotificationAmount> notifications = new List<NotificationAmount>()
+    {
+        new NotificationAmount(){ Notification= 0, Text= "0" },
+        new NotificationAmount(){ Notification= 1, Text= "1" },
+        new NotificationAmount(){ Notification= 2, Text= "2" },
+        new NotificationAmount(){ Notification= 3, Text= "3" },
+    };
 
     private void StopProgram()
     {

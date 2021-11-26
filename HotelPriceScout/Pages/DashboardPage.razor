@@ -41,9 +41,10 @@
 <div class="row col-md-7 d-inline-flex topLayer">
     <div class="col-md-4">
         <select id="number-of-adults" class="form-control selectpicker" value="adultsPicked" @onchange='(ChangeEventArgs e) => { adultsPicked = int.Parse(e.Value.ToString()); OnClickUpdate("Update");}'>
-            <option value="1">1 adult</option>
-            <option value="2">2 adults</option>
-            <option value="4">4 adults</option>
+            @foreach (NumberOfAdults numberOfAdults in Adults)
+            {
+                <option value="@numberOfAdults.Adults">@numberOfAdults.Text</option>
+            }
         </select>
     </div>
     <div class="col-lg-6">

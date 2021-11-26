@@ -71,6 +71,7 @@ namespace HotelPriceScout.Data.Interface
             return result;
         }
         
+        
         public void SetStartScoutSettings()
         {
             ReverseMultipleBools(ref startPopup, ref showStop, ref showStart);
