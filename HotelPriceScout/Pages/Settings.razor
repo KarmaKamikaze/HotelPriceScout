@@ -15,7 +15,8 @@
             <label>Margin value percent</label>
         </div>
         <div class="text-center col p-3">
-            <SfNumericTextBox style="font-size: 20px;" TValue="int" Step="1" Max="100" Min="1" @bind-Value="SettingsManager.MarginDropdown"></SfNumericTextBox>
+            <input type="number" id="margin" class="form-control numericpicker" @bind="SettingsManager.MarginDropdown">
+            <!--<SfNumericTextBox style="font-size: 20px;" TValue="int" Step="1" Max="100" Min="1" @bind-Value="SettingsManager.MarginDropdown"></SfNumericTextBox>-->
         </div>
         <div class="text-center col h4">
             <label>Amount of notifications</label>

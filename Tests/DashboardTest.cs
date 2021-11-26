@@ -76,7 +76,7 @@ namespace Tests
             //Arrange
             Dashboard dashboard = new Dashboard();
             //Act
-            string actual = dashboard.DetermineAnimation(dayClicked, checkForAlternateClick, tempAniDate);
+            string actual = dashboard.DetermineAnimation();
             //Assert
             Assert.Equal(expected, actual);
         }
