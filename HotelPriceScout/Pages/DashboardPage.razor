@@ -40,7 +40,7 @@
 
 <div class="row col-md-7 d-inline-flex topLayer">
     <div class="col-md-4">
-        <select id="number-of-adults" class="form-control selectpicker" @bind="adultsPicked" @onclick='()=>OnClickUpdate("Update")'>
+        <select id="number-of-adults" class="form-control selectpicker" @bind="adultsPicked" placeholder="1 adult" @onclick='()=>OnClickUpdate("Update")'>
             @foreach (NumberOfAdults numberOfAdults in Adults)
             {
                 <option value="@numberOfAdults.Adults">@numberOfAdults.Text</option>
@@ -48,13 +48,21 @@
         </select>
     </div>
     <div class="col-lg-6">
-        <SfMultiSelect TValue="List<string>" @bind-Value="selectedHotels" AllowFiltering="true" TItem="string"
-                       Mode="@VisualMode.CheckBox" Placeholder="Select hotels" DataSource="listOfSelectedHotels"
-                       ShowSelectAll="true" EnableSelectionOrder="false" FilterBarPlaceholder="Search hotels"
-                       EnableGroupCheckBox="true" PopupHeight="350px">
+        <select id="selected-hotels" class="form-control multipleselectpicker" @onchange="SelectedHotelsChanged" AllowFiltering="true" multiple>
+            @foreach (string hotel in listOfSelectedHotels)
+            {
+                <option value="@hotel">@hotel</option>
+            }
+        </select>
+
+        <!--<SfMultiSelect TValue="List<string>" @bind-Value="selectedHotels" AllowFiltering="true" TItem="string"
+                           Mode="@VisualMode.CheckBox" Placeholder="Select hotels" DataSource="listOfSelectedHotels"
+                           ShowSelectAll="true" EnableSelectionOrder="false" FilterBarPlaceholder="Search hotels"
+                           EnableGroupCheckBox="true" PopupHeight="350px">
             <MultiSelectEvents TValue="List<string>" TItem="string" ValueChange='() => { OnClickUpdate("update Hotel"); }'></MultiSelectEvents>
-        </SfMultiSelect>
+        </SfMultiSelect> -->
     </div>
+    
 </div>
 
 <div class="row">
@@ -231,7 +239,14 @@
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
     List<string> listOfSelectedHotels;
 
-
+    void SelectedHotelsChanged(ChangeEventArgs e)
+    {
+        Console.WriteLine(e.Value);
+        
+        
+        //selectedHotels = (string[]) e.Value;
+    }
+    
     IEnumerable<PriceModel> monthData;
     IEnumerable<PriceModel> monthMarketData;
     IEnumerable<PriceModel> monthKompasPrices;
@@ -266,6 +281,7 @@
     protected override async Task OnInitializedAsync()
     {
         listOfHotels = await _db.LoadStaticHotelResources("total");//Loads list of hotels to the dropdown
+        
         listOfSelectedHotels = listOfHotels.ToList();
         //Adds the 2 extra options
         listOfSelectedHotels.Add("Local");
