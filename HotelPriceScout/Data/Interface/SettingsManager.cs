@@ -70,18 +70,7 @@ namespace HotelPriceScout.Data.Interface
             }
             return result;
         }
-        public class NotificationAmount
-        {
-            public int Notification { get; set; }
-            public string Text { get; set; }
-        }
-        public readonly List<NotificationAmount> notifications = new List<NotificationAmount>()
-        {
-        new NotificationAmount(){ Notification= 0, Text= "0" },
-        new NotificationAmount(){ Notification= 1, Text= "1" },
-        new NotificationAmount(){ Notification= 2, Text= "2" },
-        new NotificationAmount(){ Notification= 3, Text= "3" },
-        };
+        
         public void SetStartScoutSettings()
         {
             ReverseMultipleBools(ref startPopup, ref showStop, ref showStart);

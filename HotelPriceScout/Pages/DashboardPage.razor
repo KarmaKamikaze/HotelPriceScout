@@ -40,10 +40,11 @@
 
 <div class="row col-md-7 d-inline-flex topLayer">
     <div class="col-md-4">
-        <SfDropDownList Width="200px" TItem="NumberOfAdults" TValue="int" @bind-value="adultsPicked" DataSource="@Adults">
-            <DropDownListFieldSettings Text="Text" Value="Adults"></DropDownListFieldSettings>
-            <DropDownListEvents TValue="int" TItem="NumberOfAdults" ValueChange='() => { OnClickUpdate("Update"); }'></DropDownListEvents>
-        </SfDropDownList>
+        <select id="number-of-adults" class="form-control selectpicker" value="adultsPicked" @onchange='(ChangeEventArgs e) => { adultsPicked = int.Parse(e.Value.ToString()); OnClickUpdate("Update");}'>
+            <option value="1">1 adult</option>
+            <option value="2">2 adults</option>
+            <option value="4">4 adults</option>
+        </select>
     </div>
     <div class="col-lg-6">
         <SfMultiSelect TValue="List<string>" @bind-Value="selectedHotels" AllowFiltering="true" TItem="string"
