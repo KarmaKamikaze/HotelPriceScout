@@ -48,13 +48,15 @@
         </select>
     </div>
     <div class="col-lg-6">
-       <select id="selected-hotels" class="form-control selectpicker" multiple>
+        <select id="selected-hotels" class="form-control selectpicker" multiple>
             @foreach (string hotel in listOfSelectedHotels)
             {
-                <option value="@hotel" @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel"); }'>@hotel</option>
+                <option @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</option>
             }
         </select>
         
+        
+
         <!--<SfMultiSelect TValue="List<string>" @bind-Value="selectedHotels" AllowFiltering="true" TItem="string"
                            Mode="@VisualMode.CheckBox" Placeholder="Select hotels" DataSource="listOfSelectedHotels"
                            ShowSelectAll="true" EnableSelectionOrder="false" FilterBarPlaceholder="Search hotels"
