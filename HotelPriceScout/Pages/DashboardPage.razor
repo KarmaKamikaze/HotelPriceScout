@@ -48,7 +48,7 @@
         </select>
     </div>
     <div class="col-lg-6">
-       <select id="selected-hotels" class="form-control selectpicker" AllowFiltering="true" multiple>
+       <select id="selected-hotels" class="form-control selectpicker" multiple>
             @foreach (string hotel in listOfSelectedHotels)
             {
                 <option value="@hotel" @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel"); }'>@hotel</option>
@@ -216,6 +216,7 @@
 
 @code
 {
+    
     public bool thermometerIsOpen = false;
     decimal marketPrice;
     List<PriceModel> marketPriceList = new();
