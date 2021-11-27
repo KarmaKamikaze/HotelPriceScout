@@ -46,27 +46,8 @@ namespace HotelPriceScout.Data.Interface
             List<PriceModel> resultDataList = new();
             switch (wantedOutput)
             {
-                case "Select Prices" when selectedHotels != null:
+                case "Select Prices" when selectedHotels != null && selectedHotels.Any():
                 {
-                    if (selectedHotels.Contains("Local"))
-                    {
-                        selectedHotels.Add("Cabinn Aalborg");
-                        selectedHotels.Add("Slotshotellet Aalborg");
-                        selectedHotels.Add("Kompas Hotel Aalborg");
-                    }
-                    if (selectedHotels.Contains("No budget"))
-                    {
-                        selectedHotels.Add("Kompas Hotel Aalborg");
-                        selectedHotels.Add("Slotshotellet Aalborg");
-                        selectedHotels.Add("Milling Hotel Aalborg");
-                        selectedHotels.Add("Aalborg Airport Hotel");
-                        selectedHotels.Add("Helnan Phønix Hotel");
-                        selectedHotels.Add("Hotel Schellsminde");
-                        selectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
-                        selectedHotels.Add("Comwell Hvide Hus Aalborg");
-                        selectedHotels.Add("Scandic Aalborg Øst");
-                        selectedHotels.Add("Scandic Aalborg City");
-                    }
                     resultDataList.AddRange(from item in dataList
                         where selectedHotels.Contains(item.HotelName)
                         select item);

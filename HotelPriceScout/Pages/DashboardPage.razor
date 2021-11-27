@@ -48,13 +48,13 @@
         </select>
     </div>
     <div class="col-lg-6">
-        <select id="selected-hotels" class="form-control multipleselectpicker" @onchange="SelectedHotelsChanged" AllowFiltering="true" multiple>
+       <select id="selected-hotels" class="form-control selectpicker" AllowFiltering="true" multiple>
             @foreach (string hotel in listOfSelectedHotels)
             {
-                <option value="@hotel">@hotel</option>
+                <option value="@hotel" @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel"); }'>@hotel</option>
             }
         </select>
-
+        
         <!--<SfMultiSelect TValue="List<string>" @bind-Value="selectedHotels" AllowFiltering="true" TItem="string"
                            Mode="@VisualMode.CheckBox" Placeholder="Select hotels" DataSource="listOfSelectedHotels"
                            ShowSelectAll="true" EnableSelectionOrder="false" FilterBarPlaceholder="Search hotels"
@@ -221,7 +221,7 @@
     List<PriceModel> marketPriceList = new();
     decimal kompasPrice;
     private int adultsPicked = 1;
-    private List<string> selectedHotels;
+    private List<string> selectedHotels = new List<string>();
 
     public class NumberOfAdults
     {
@@ -239,12 +239,59 @@
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
     List<string> listOfSelectedHotels;
 
-    void SelectedHotelsChanged(ChangeEventArgs e)
+    void SelectedHotelsChanged(string hotel)
     {
-        Console.WriteLine(e.Value);
-        
-        
-        //selectedHotels = (string[]) e.Value;
+        if (selectedHotels.Contains(hotel))
+        {
+            selectedHotels.Remove(hotel);
+            switch (hotel)
+            {
+                case "Local":
+                    selectedHotels.Remove("Cabinn Aalborg");
+                    selectedHotels.Remove("Slotshotellet Aalborg");
+                    selectedHotels.Remove("Kompas Hotel Aalborg");
+                    break;
+                case "No budget":
+                    selectedHotels.Remove("Kompas Hotel Aalborg");
+                    selectedHotels.Remove("Slotshotellet Aalborg");
+                    selectedHotels.Remove("Milling Hotel Aalborg");
+                    selectedHotels.Remove("Aalborg Airport Hotel");
+                    selectedHotels.Remove("Helnan Phønix Hotel");
+                    selectedHotels.Remove("Hotel Schellsminde");
+                    selectedHotels.Remove("Radisson Blu Limfjord Hotel Aalborg");
+                    selectedHotels.Remove("Comwell Hvide Hus Aalborg");
+                    selectedHotels.Remove("Scandic Aalborg Øst");
+                    selectedHotels.Remove("Scandic Aalborg City");
+                    break;
+            }
+        }
+        else
+        {
+            selectedHotels.Add(hotel);
+            switch (hotel)
+            {
+                case "Local":
+                    selectedHotels.Add("Cabinn Aalborg");
+                    selectedHotels.Add("Slotshotellet Aalborg");
+                    selectedHotels.Add("Kompas Hotel Aalborg");
+                    break;
+                case "No budget":
+                    selectedHotels.Add("Kompas Hotel Aalborg");
+                    selectedHotels.Add("Slotshotellet Aalborg");
+                    selectedHotels.Add("Milling Hotel Aalborg");
+                    selectedHotels.Add("Aalborg Airport Hotel");
+                    selectedHotels.Add("Helnan Phønix Hotel");
+                    selectedHotels.Add("Hotel Schellsminde");
+                    selectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
+                    selectedHotels.Add("Comwell Hvide Hus Aalborg");
+                    selectedHotels.Add("Scandic Aalborg Øst");
+                    selectedHotels.Add("Scandic Aalborg City");
+                    break;
+            }
+        }
+        selectedHotels = selectedHotels.Distinct().ToList();
+
+    //selectedHotels = (string[]) e.Value;
     }
     
     IEnumerable<PriceModel> monthData;
