@@ -42,9 +42,9 @@
 <div class="row col-md-7 d-inline-flex topLayer">
     <div class="col-md-4">
         <select id="number-of-adults" class="form-control selectpicker" @bind="adultsPicked" placeholder="1 adult" @onclick='() => OnClickUpdate("Update")'>
-            @foreach (NumberOfAdults numberOfAdults in Adults)
+            @for (int i=1; i<=3; i++)
             {
-                <option value="@numberOfAdults.Adults">@numberOfAdults.Text</option>
+                <option value="@i">@i.ToString() adult@(i!=1?"s":"")</option>
             }
         </select>
     </div>
@@ -246,20 +246,7 @@
     decimal kompasPrice;
     private int adultsPicked = 1;
     private List<string> selectedHotels = new List<string>();
-
-    public class NumberOfAdults
-    {
-        public int Adults { get; set; }
-        public string Text { get; set; }
-    }
     
-    private List<NumberOfAdults> Adults = new List<NumberOfAdults>()
-    {
-        new NumberOfAdults() {Adults = 1, Text = "1 adult"},
-        new NumberOfAdults() {Adults = 2, Text = "2 adults"},
-        new NumberOfAdults() {Adults = 4, Text = "4 adults"},
-    };
-
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
     List<string> listOfSelectedHotels;
 
