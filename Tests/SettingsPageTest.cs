@@ -4,6 +4,7 @@ using Blazored.Modal;
 using Bunit;
 using HotelPriceScout.Data.Interface;
 using HotelPriceScout.Pages;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Syncfusion.Blazor;
 using Xunit;
@@ -95,5 +96,21 @@ namespace Tests
         //
         //     Assert.True(thereAreTwoSelectors);
         // }
+
+        [Fact]
+        public void SettingsPageShouldNotContainStartButtonIfScoutIsStartedWhenFirstOpened()
+        {
+            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
+            IElement startButton = cut.Find("#start-button");
+            startButton.Click();
+            Console.WriteLine(cut.Markup);
+            // IElement stayButton = cut.WaitForElement("#stay-button", TimeSpan.Parse("00:00:03"));
+            // stayButton.Click();
+            
+
+            void Action() => cut.Find("#start-button");
+
+            Assert.Throws<ElementNotFoundException>(Action);
+        }
     }
 }

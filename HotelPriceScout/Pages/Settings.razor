@@ -75,8 +75,8 @@
                             <h5 class="modal-title" id="titleLabel">Going to dashboard in @timer seconds</h5>
                         </div>
                         <div class="modal-footer">
-                            <NavLink class="form-control border border-dark" @onclick="@SettingsManager.ModalStartPopUp" href="/Dashboard">Go to dashboard </NavLink>
-                            <button type="button" class="form-control border border-dark" @onclick="@SettingsManager.ModalStartPopUp"> Stay </button>
+                            <NavLink id="go-to-dashboard-button" class="form-control border border-dark" @onclick="SettingsManager.ModalStartPopUp" href="/Dashboard">Go to dashboard </NavLink>
+                            <button type="button" id="stay-button" class="form-control border border-dark" @onclick="SettingsManager.ModalStartPopUp"> Stay </button>
                         </div>
                     </div>
                 </div>
