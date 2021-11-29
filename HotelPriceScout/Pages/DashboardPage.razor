@@ -52,7 +52,7 @@
     <div class="col-lg-6">
 
         <select id="selected-hotels" class="form-control">
-            @foreach (string hotel in listOfSelectedHotels)
+            @foreach (string hotel in listOfHotels)
 
             {
                <option class="@(selectedHotels.Contains(@hotel) ? "selected" : "")" @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</option>
