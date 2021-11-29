@@ -10,6 +10,8 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard : IDashboard
     {
+        public List<WarningMessage> WarningMessage { get; set; } = new List<WarningMessage>();
+        public bool BoolExceptionPopup { get; set; } = false;
         public List<PriceModel> PriceList { get; private set; }
         public PriceModel MarketPriceItem { get; private set; }
         private const int DataUnavailable = 0;
@@ -38,36 +40,16 @@ namespace HotelPriceScout.Data.Interface
             }
             return DataUnavailable;
         }
-        public async Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(DateTime startDate, DateTime endDate, 
-            int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
+        public async Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
         {              
             IEnumerable<PriceModel> dataList = await _db.RetrieveDataFromDb("*", $"RoomType{roomType}",
-                                         $" Date >= '{startDate.ToString("yyyy-MM-dd")}' AND " +
-                                         $"Date <= '{endDate.ToString("yyyy-MM-dd")}'");
+                                         $" Date >= '{(ToDay.Date).ToString("yyyy-MM-dd")}' AND " +
+                                         $"Date <= '{(LastDayOfMonth.Date).ToString("yyyy-MM-dd")}'");
             List<PriceModel> resultDataList = new();
             switch (wantedOutput)
             {
-                case "Select Prices" when selectedHotels != null:
+                case "Select Prices" when selectedHotels != null && selectedHotels.Any():
                 {
-                    if (selectedHotels.Contains("Local"))
-                    {
-                        selectedHotels.Add("Cabinn Aalborg");
-                        selectedHotels.Add("Slotshotellet Aalborg");
-                        selectedHotels.Add("Kompas Hotel Aalborg");
-                    }
-                    if (selectedHotels.Contains("No budget"))
-                    {
-                        selectedHotels.Add("Kompas Hotel Aalborg");
-                        selectedHotels.Add("Slotshotellet Aalborg");
-                        selectedHotels.Add("Milling Hotel Aalborg");
-                        selectedHotels.Add("Aalborg Airport Hotel");
-                        selectedHotels.Add("Helnan Phønix Hotel");
-                        selectedHotels.Add("Hotel Schellsminde");
-                        selectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
-                        selectedHotels.Add("Comwell Hvide Hus Aalborg");
-                        selectedHotels.Add("Scandic Aalborg Øst");
-                        selectedHotels.Add("Scandic Aalborg City");
-                    }
                     resultDataList.AddRange(from item in dataList
                         where selectedHotels.Contains(item.HotelName)
                         select item);
@@ -97,17 +79,34 @@ namespace HotelPriceScout.Data.Interface
             return DataUnavailable;
         }
 
-        public void GenerateThermometer(int day, IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice)
+        public void GenerateThermometer(IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice)
         {
-            DateTime todayDate = new(Year, Month, day);
+            DateTime todayDate = new(Year, Month, DayClicked);
             decimal marketPrice = (avgMarketPrice.Where(date => date.Date == todayDate)).Single().Price;
             PriceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData, marketPrice);
             MarketPriceItem = PriceMeterGenerator.MarketFinder(PriceList);
-            PriceList.Sort();   
+            PriceList.Sort();
+            
         }
         public void UpdateUiMissingDataWarning(BookingSite bookingSite)
         {
-            throw new NotImplementedException();
+            string warnings = "";
+
+            foreach (var hotel in bookingSite.HotelsList)
+            {
+                string hotelName = hotel.Name;
+                foreach (var roomtype in hotel.RoomTypes)
+                { 
+                    string type = roomtype.Capacity.ToString();
+                    foreach(var price in roomtype.Prices)
+                    {
+                        if(price.Price == 0)
+                        {
+                            warnings += $"On date: {price.Date} hotel: {hotelName}, with roomtype: {roomtype}|";
+                        }
+                    }
+                }
+            }
         }
         public string ShowCurrentDayAsString()
         {
@@ -145,8 +144,8 @@ namespace HotelPriceScout.Data.Interface
         }
         public string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice)
         {
-            decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
 
+            decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
 
             if (kompasPrice > (marketPrice + result))
             {
@@ -170,6 +169,7 @@ namespace HotelPriceScout.Data.Interface
 
             if (kompasPrice < (marketPrice - result))
             {
+                
                 return "oi oi-caret-top";
             }
 
@@ -212,16 +212,28 @@ namespace HotelPriceScout.Data.Interface
             LastDayOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
         }
 
-        public string DetermineAnimation(int dayClicked, bool checkForAlternateClick, int tempAniDate)
+        public string DetermineAnimation()
         {
-            if (dayClicked != 0 && checkForAlternateClick)
+            if (DayClicked != 0 && CheckForAlternateClick)
             {
                 return "animation1";
             }
-            
-            if (dayClicked != 0 && !checkForAlternateClick && tempAniDate == dayClicked)
+            if (DayClicked != 0 && !CheckForAlternateClick && TempAniDate == DayClicked)
             {
                 return "animation2";
+            }
+            return "";
+        }
+
+        public string DetermineFocus(int day)
+        {
+            if (DayClicked != 0 && CheckForAlternateClick && DayClicked == day)
+            {
+                return "Background-Lightblue";
+            }
+            if (DayClicked != 0 && !CheckForAlternateClick && TempAniDate == DayClicked)
+            {
+                return "Background-none";
             }
             return "";
         }
