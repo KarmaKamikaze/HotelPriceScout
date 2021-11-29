@@ -39,18 +39,21 @@
     </div>
 </div>
 
+
 <div class="row col-md-7 d-inline-flex topLayer">
     <div class="col-md-4">
-        <select id="number-of-adults" class="form-control selectpicker" @bind="adultsPicked" placeholder="1 adult" @onclick='() => OnClickUpdate("Update")'>
-            @for (int i=1; i<=3; i++)
-            {
-                <option value="@i">@i.ToString() adult@(i!=1?"s":"")</option>
-            }
+        <select id="number-of-adults" class="form-control" @bind="adultsPicked" placeholder="1 adult" @onclick='() => OnClickUpdate("Update")'>
+            <option value="1">1 adult</option>
+            <option value="2">2 adults</option>
+            <option value="4">4 adults</option>
+            
         </select>
     </div>
     <div class="col-lg-6">
+
         <select id="selected-hotels" class="form-control">
             @foreach (string hotel in listOfSelectedHotels)
+
             {
                <option class="@(selectedHotels.Contains(@hotel) ? "selected" : "")" @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</option>
             }
@@ -246,9 +249,7 @@
     decimal kompasPrice;
     private int adultsPicked = 1;
     private List<string> selectedHotels = new List<string>();
-    
-    IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
-    List<string> listOfSelectedHotels;
+    private List<string> listOfHotels = new List<string>();
 
     void SelectedHotelsChanged(string hotel)
     {
@@ -324,7 +325,6 @@
         }
         selectedHotels = selectedHotels.Distinct().ToList();
 
-    //selectedHotels = (string[]) e.Value;
     }
 
     IEnumerable<PriceModel> monthData;
@@ -360,12 +360,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        listOfHotels = await _db.LoadStaticHotelResources("total"); //Loads list of hotels to the dropdown
+        listOfHotels = (await _db.LoadStaticHotelResources("total")).ToList(); //Loads list of hotels to the dropdown
 
-        listOfSelectedHotels = listOfHotels.ToList();
     //Adds the 2 extra options
-        listOfSelectedHotels.Add("Local");
-        listOfSelectedHotels.Add("No budget");
+        listOfHotels.Add("Local");
+        listOfHotels.Add("No budget");
 
         Program.ScoutSharedService.Scout.RunComparator("dashboard");
 
