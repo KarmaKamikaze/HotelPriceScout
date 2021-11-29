@@ -50,7 +50,7 @@
     </div>
     <div class="col-lg-6">
         <select id="selected-hotels" class="form-control selectpicker" multiple>
-            @foreach (string hotel in listOfSelectedHotels)
+            @foreach (string hotel in listOfHotels)
             {
                 <option @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</option>
             }
@@ -246,9 +246,7 @@
     decimal kompasPrice;
     private int adultsPicked = 1;
     private List<string> selectedHotels = new List<string>();
-    
-    IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
-    List<string> listOfSelectedHotels;
+    private List<string> listOfHotels = new List<string>();
 
     void SelectedHotelsChanged(string hotel)
     {
@@ -360,12 +358,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        listOfHotels = await _db.LoadStaticHotelResources("total"); //Loads list of hotels to the dropdown
+        listOfHotels = (await _db.LoadStaticHotelResources("total")).ToList(); //Loads list of hotels to the dropdown
 
-        listOfSelectedHotels = listOfHotels.ToList();
     //Adds the 2 extra options
-        listOfSelectedHotels.Add("Local");
-        listOfSelectedHotels.Add("No budget");
+        listOfHotels.Add("Local");
+        listOfHotels.Add("No budget");
 
         Program.ScoutSharedService.Scout.RunComparator("dashboard");
 
