@@ -5,6 +5,7 @@
 @inject IDashboard Dashboard
 @inject ISqliteDataAccess _db
 
+
 <div class="row topLayer">
     <div class="col-md-12 d-inline-flex topLayer">
         <h1 id="H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
@@ -221,9 +222,32 @@
 </div>
 
 
+
+@if (Dashboard.BoolExceptionPopup)
+{
+    @foreach (var item in Dashboard.WarningMessage)
+    {
+        string[] ArrayOfWarnings = item.ListofWarnings.Split("|");
+        <div @key="item" class="modal fade show d-block " id="@item"  role="dialog">
+            <div class="modal-dialog modal-dialog-centered " role="document">
+                <div class="modal-content shadow-lg">
+                    <div class="modal-body"> <pre><span class="e-icons e-circle-info"></span>   <b>Warning!</b></pre>
+                        <h6 class="modal-title boldFont" id="titleLabel">Data for the following hotels could not be collected from <b>@item.BookingSite</b>, please contact the system admin:</h6> 
+                            @foreach( var s in ArrayOfWarnings ){<p>@s </p>}
+                            <button @key="1" class="btn-remove col-6 offset-3" @onclick="() => RemoveCard(item)">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
 @code
 {
-
+    private void RemoveCard(WarningMessage popup)
+    {
+        Dashboard.WarningMessage.Remove(popup);
+    }
     public bool thermometerIsOpen = false;
     decimal marketPrice;
     List<PriceModel> marketPriceList = new();
@@ -236,7 +260,7 @@
         public int Adults { get; set; }
         public string Text { get; set; }
     }
-
+    
     private List<NumberOfAdults> Adults = new List<NumberOfAdults>()
     {
         new NumberOfAdults() {Adults = 1, Text = "1 adult"},
@@ -339,6 +363,7 @@
                 Dashboard.MonthsAway++;
                 Dashboard.CreateMonth();
                 Dashboard.NextMonth();
+                //Dashboard.UpdateUiMissingDataWarning(Program.ScoutSharedService.Scout.BookingSites.First());
                 break;
             case "Previous":
                 Dashboard.DayClicked = 0;

@@ -10,6 +10,8 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard : IDashboard
     {
+        public List<WarningMessage> WarningMessage { get; set; } = new List<WarningMessage>();
+        public bool BoolExceptionPopup { get; set; } = false;
         public List<PriceModel> PriceList { get; private set; }
         public PriceModel MarketPriceItem { get; private set; }
         private const int DataUnavailable = 0;
@@ -83,11 +85,28 @@ namespace HotelPriceScout.Data.Interface
             decimal marketPrice = (avgMarketPrice.Where(date => date.Date == todayDate)).Single().Price;
             PriceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData, marketPrice);
             MarketPriceItem = PriceMeterGenerator.MarketFinder(PriceList);
-            PriceList.Sort();   
+            PriceList.Sort();
+            
         }
         public void UpdateUiMissingDataWarning(BookingSite bookingSite)
         {
-            throw new NotImplementedException();
+            string warnings = "";
+
+            foreach (var hotel in bookingSite.HotelsList)
+            {
+                string hotelName = hotel.Name;
+                foreach (var roomtype in hotel.RoomTypes)
+                { 
+                    string type = roomtype.Capacity.ToString();
+                    foreach(var price in roomtype.Prices)
+                    {
+                        if(price.Price == 0)
+                        {
+                            warnings += $"On date: {price.Date} hotel: {hotelName}, with roomtype: {roomtype}|";
+                        }
+                    }
+                }
+            }
         }
         public string ShowCurrentDayAsString()
         {
@@ -125,8 +144,8 @@ namespace HotelPriceScout.Data.Interface
         }
         public string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice)
         {
-            decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
 
+            decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
 
             if (kompasPrice > (marketPrice + result))
             {
@@ -150,6 +169,7 @@ namespace HotelPriceScout.Data.Interface
 
             if (kompasPrice < (marketPrice - result))
             {
+                
                 return "oi oi-caret-top";
             }
 

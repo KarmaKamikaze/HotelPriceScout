@@ -65,20 +65,5 @@ namespace Tests
             //Assert
             Assert.Equal(expected, dashboard.CheckForAlternateClick);
         }
-
-        [Theory]
-        [InlineData("animation1", 5, true, 0)]
-        [InlineData("animation2", 5, false, 5)]
-        [InlineData("", 5, false, 4)]
-        [InlineData("", 0, false, 0)]
-        public void Test_If_DetermineAnimation_Returns_Correct_Value(string expected, int dayClicked, bool checkForAlternateClick, int tempAniDate)
-        {
-            //Arrange
-            Dashboard dashboard = new Dashboard();
-            //Act
-            string actual = dashboard.DetermineAnimation();
-            //Assert
-            Assert.Equal(expected, actual);
-        }
     }
 }

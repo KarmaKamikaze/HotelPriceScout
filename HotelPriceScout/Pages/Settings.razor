@@ -28,7 +28,9 @@
                 }
             </select>
         </div>
+      
         @if (SettingsManager.NotificationAmountDropdown > 0)
+
         {
             <div class="text-center col h4">
                 <label>Notification time</label>
@@ -37,14 +39,17 @@
                 <input type="time" id="notification-time-1" class="form-control timepicker" @bind="SettingsManager.TimeValueDropdown">
             </div>
         }
-
+      
         @if (SettingsManager.NotificationAmountDropdown > 1)
+
         {
             <div class="text-center col p-3">
                 <input type="time" id="notification-time-2" class="form-control timepicker" @bind="SettingsManager.TimeValue2Dropdown">
             </div>
         }
+      
         @if (SettingsManager.NotificationAmountDropdown > 2)
+
         {
             <div class="text-center col p-3">
                 <input type="time" id="notification-time-3" class="form-control timepicker" @bind="SettingsManager.TimeValue3Dropdown">
@@ -52,6 +57,7 @@
         }
 
         @if (SettingsManager.showStart)
+
         {
             <div class=""><button type="button" class="shadow p-2 rounded btn btn-success col" @onclick="StartProgram"> Start program</button></div>
         }
@@ -144,7 +150,7 @@
         }
         if (timer <= 0)
         {
-            SettingsManager.ReverseBool(ref SettingsManager.startPopup);
+            SettingsManager.startPopup = !SettingsManager.startPopup;
             NavManager.NavigateTo("/Dashboard");
         }
     }
@@ -161,7 +167,7 @@
         new NotificationAmount(){ Notification= 2, Text= "2" },
         new NotificationAmount(){ Notification= 3, Text= "3" },
     };
-
+                      
     private void StopProgram()
     {
         Program.ScoutSharedService.ScoutRunning = false;
@@ -173,10 +179,10 @@
     private async void UpdateProgram()
     {
         SettingsManager.SetUpdateScoutSettings();
-        SettingsManager.ReverseBool(ref SettingsManager.updateYes);
+        SettingsManager.updateYes = !SettingsManager.updateYes;
         StateHasChanged();
         await Task.Delay(1500);
-        SettingsManager.ReverseBool(ref SettingsManager.updateYes);
+        SettingsManager.updateYes = !SettingsManager.updateYes;
         StateHasChanged();
     }
 
