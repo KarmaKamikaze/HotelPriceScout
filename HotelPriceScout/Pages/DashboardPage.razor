@@ -42,10 +42,10 @@
 <div class="row col-md-7 d-inline-flex topLayer">
     <div class="col-md-4">
         <select id="number-of-adults" class="form-control selectpicker" @bind="adultsPicked" placeholder="1 adult" @onclick='() => OnClickUpdate("Update")'>
-            @for (int i=1; i<=3; i++)
-            {
-                <option value="@i">@i.ToString() adult@(i!=1?"s":"")</option>
-            }
+            <option value="1">1 adult</option>
+            <option value="2">2 adults</option>
+            <option value="4">4 adults</option>
+            
         </select>
     </div>
     <div class="col-lg-6">
