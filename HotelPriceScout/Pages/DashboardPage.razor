@@ -206,13 +206,10 @@
 
 @code
 {
-    private void RemoveCard(WarningMessage t)
+    private void RemoveCard(WarningMessage popup)
     {
-        Dashboard.WarningMessage.Remove(t);
+        Dashboard.WarningMessage.Remove(popup);
     }
-
-    ElementReference MyElementReference;
-    int number=0;
     decimal marketPrice;
     List<PriceModel> marketPriceList = new();
     decimal kompasPrice;
