@@ -104,10 +104,11 @@ namespace HotelPriceScout.Data.Interface
                         {
                             warnings += $"On date: {price.Date} hotel: {hotelName}, with roomtype: {roomtype}|";
                         }
-                        WarningMessage.Add(new WarningMessage(warnings, bookingSite.Name));
+                        
                         }
                 }
             }
+            WarningMessage.Add(new WarningMessage(warnings, bookingSite.Name));
         }
         public string ShowCurrentDayAsString()
         {

@@ -88,19 +88,19 @@ namespace Tests
 
             //Arrange
             Dashboard dashboard = new Dashboard();
-            //Arrange
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
                 { "hotel1", "tag1" }
             };
             //Act
-            BookingSite bookingSite = new BookingSite("name", "multi", "https://www.url.com", hotelStrings);
+            BookingSite bookingSite = new BookingSite("name", "single", "https://www.url.com", hotelStrings);
 
             bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Price = 0;
 
             dashboard.UpdateUiMissingDataWarning(bookingSite);
+
             List<WarningMessage> test = new List<WarningMessage>();
-            test.Add(new WarningMessage("0", "0"));
+            test.Add(new WarningMessage("0", bookingSite.Name));
 
             Assert.Equal(test, dashboard.WarningMessage);
         }
