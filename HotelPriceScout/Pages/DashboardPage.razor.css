@@ -171,3 +171,7 @@ body {
 #HeightOfTd {
     Height: 100.5px;
 }
+.selected {
+    background-color: dodgerblue;
+    color: white;
+}
