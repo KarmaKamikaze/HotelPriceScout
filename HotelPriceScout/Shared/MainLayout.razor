@@ -9,7 +9,7 @@
                 <a class="navbar-brand" href="#">
                     <img class="img-responsive" width="175" height="35" src="/Images/HPS_Logo.png">
                 </a>
-                <NavLink class="nav-link text-white" @onclick="SettingsPageClicked" href="Settings">
+                <NavLink class="nav-link text-white" href="Settings">
                     <span class="oi oi-cog flex" style="color:white;"></span>
                     Scout settings
                 </NavLink>
@@ -38,12 +38,4 @@ else
             </div>
         </div>
     </div>
-}
-
-@code {
-    public void SettingsPageClicked()
-    {
-        if (Program.ScoutSharedService.ScoutRunning == true)
-            NavManager.NavigateTo("Settings");
-    }
 }
