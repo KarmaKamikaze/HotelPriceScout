@@ -1,6 +1,9 @@
 ﻿using System;
 using Xunit;
 using HotelPriceScout.Data.Interface;
+using HotelPriceScout.Data.Model;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Tests
 {
@@ -64,6 +67,42 @@ namespace Tests
             dashboard.ShowMoreInfo(currentDay);
             //Assert
             Assert.Equal(expected, dashboard.CheckForAlternateClick);
+        }
+
+        [Fact]
+        public void Test_If_UpdateUiMissingDataWarning_Returns_Warning()
+        {
+            ////Arrange
+            //Dashboard dashboard = new Dashboard();
+            //BookingSite bookingSite = new BookingSite("Kompas Hotel", "single", "https://www.url.com", new Dictionary<string, string>());
+            //RoomTypePrice roomTypePrice = new RoomTypePrice(DateTime.Now, 0);
+            //roomTypePrice.Price = 0;
+            ////Act
+            //dashboard.UpdateUiMissingDataWarning(bookingSite);
+            //List<WarningMessage> test = new List<WarningMessage>();
+            //test.Add(new WarningMessage("0", "0"));
+
+            ////Assert
+            //Assert.Equal(test, dashboard.WarningMessage);
+
+
+            //Arrange
+            Dashboard dashboard = new Dashboard();
+            //Arrange
+            Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
+            {
+                { "hotel1", "tag1" }
+            };
+            //Act
+            BookingSite bookingSite = new BookingSite("name", "multi", "https://www.url.com", hotelStrings);
+
+            bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Price = 0;
+
+            dashboard.UpdateUiMissingDataWarning(bookingSite);
+            List<WarningMessage> test = new List<WarningMessage>();
+            test.Add(new WarningMessage("0", "0"));
+
+            Assert.Equal(test, dashboard.WarningMessage);
         }
     }
 }
