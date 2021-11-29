@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using AngleSharp.Dom;
 using Blazored.Modal;
 using Bunit;
@@ -6,7 +8,6 @@ using HotelPriceScout.Data.Interface;
 using HotelPriceScout.Pages;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
-using Syncfusion.Blazor;
 using Xunit;
 
 namespace Tests
@@ -16,12 +17,10 @@ namespace Tests
         public SettingsPageTest()
         {
             // Inject test services
-            JSInterop.SetupVoid("import", _ => true);
-            Services.AddSyncfusionBlazor();
             Services.AddBlazoredModal();
-            Services.AddSingleton<SettingsManager>();
+            Services.AddTransient<SettingsManager>();
         }
-        
+
         [Fact]
         public void SettingsPageShouldNotContainStopButtonIfScoutIsNotStartedWhenFirstOpened()
         {
@@ -58,58 +57,160 @@ namespace Tests
             IRenderedComponent<Settings> cut = RenderComponent<Settings>();
             string expectedMarginValue = "15";
             
-            string actualDefaultMargin = cut.Find("#margin-value").Attributes["aria-valuenow"]?.Value;
+            string actualDefaultMargin = cut.Find("#margin").Attributes["value"]?.Value;
 
             Assert.Equal(expectedMarginValue, actualDefaultMargin);
         }
         
-        // [Fact]
-        // public void SettingsPageShouldContainDefaultNotificationAmountOne()
-        // {
-        //     IRenderedComponent<Settings> cut = RenderComponent<Settings>();
-        //     string expectedNotificationAmountValue = "1";
-        //     
-        //     string actualNotificationAmountValue = cut.Find("#notification-amount").NodeValue;
-        //
-        //     Assert.Equal(expectedNotificationAmountValue, actualNotificationAmountValue);
-        // }
+        [Fact]
+        public void SettingsPageShouldContainDefaultNotificationAmountOne()
+        {
+            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
+            string expectedNotificationAmountValue = "1";
+            
+            string actualNotificationAmountValue = cut.Find("#notification-amount").Attributes["value"]?.Value;
+        
+            Assert.Equal(expectedNotificationAmountValue, actualNotificationAmountValue);
+        }
         
         [Fact]
         public void SettingsPageShouldContainDefaultNotificationTimeTwelveZeroZero()
         {
             IRenderedComponent<Settings> cut = RenderComponent<Settings>();
-            string expectedNotificationTimeValue = DateTime.Parse("12:00").ToString("HH:mm");
+            string expectedNotificationTimeValue = "12:00:00";
             
             string actualNotificationTimeValue = cut.Find("#notification-time-1").Attributes["value"]?.Value;
 
             Assert.Equal(expectedNotificationTimeValue, actualNotificationTimeValue);
         }
         
-        // [Fact]
-        // public void SettingsPageShouldContainTwoNotificationTimeSelectorsWhenNotificationAmountIsTwo()
-        // {
-        //     IRenderedComponent<Settings> cut = RenderComponent<Settings>();
-        //
-        //     cut.Find("#notification-amount").Change(2);
-        //     bool thereAreTwoSelectors = cut.Nodes.Contains(cut.Find("#notification-time-1")) && 
-        //                                 cut.Nodes.Contains(cut.Find("#notification-time-2"));
-        //
-        //     Assert.True(thereAreTwoSelectors);
-        // }
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void SettingsPageShouldContainChosenNotificationTimeSelectors(int expectedTimeSelectors)
+        {
+            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
+            cut.Find("#notification-amount").Change(expectedTimeSelectors);
+
+            IHtmlCollection<IElement> elements = cut.Find("#notification-amount").ParentElement?.ParentElement
+                ?.QuerySelectorAll("input.timepicker");
+            int actualTimeSelectors = elements.Length;
+        
+            Assert.Equal(expectedTimeSelectors, actualTimeSelectors);
+        }
 
         [Fact]
-        public void SettingsPageShouldNotContainStartButtonIfScoutIsStartedWhenFirstOpened()
+        public void SettingsPageShouldContainNotificationTimeOneWhenNotificationAmountIsOne()
+        {
+            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
+            cut.Find("#notification-amount").Change(1);
+            
+            IElement element = cut.Find("#notification-time-1");
+
+            Assert.NotNull(element);
+        }
+        
+        [Fact]
+        public void SettingsPageShouldContainNotificationTimeOneAndTwoWhenNotificationAmountIsTwo()
+        {
+            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
+            cut.Find("#notification-amount").Change(2);
+
+            IRefreshableElementCollection<IElement> elements = cut.FindAll(".timepicker");
+            bool twoTimeSelectorsExists =
+                elements.All(ele => ele.Id is "notification-time-1" or "notification-time-2") && elements.Count == 2;
+
+            Assert.True(twoTimeSelectorsExists);
+        }
+        
+        [Fact]
+        public void SettingsPageShouldContainNotificationTimeOneTwoThreeWhenNotificationAmountIsThree()
+        {
+            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
+            cut.Find("#notification-amount").Change(3);
+            
+            IRefreshableElementCollection<IElement> elements = cut.FindAll(".timepicker");
+            bool threeTimeSelectors =
+                elements.All(ele =>
+                    ele.Id is "notification-time-1" or "notification-time-2" or "notification-time-3") &&
+                elements.Count == 3;
+
+            Assert.True(threeTimeSelectors);
+        }
+        
+        [Fact]
+        public void SettingsPageShouldNotContainNotificationTimesWhenNotificationAmountIsZero()
+        {
+            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
+            cut.Find("#notification-amount").Change(0);
+            
+            IRefreshableElementCollection<IElement> elements = cut.FindAll(".timepicker");
+            bool noTimeSelectors = elements.Count == 0;
+
+            Assert.True(noTimeSelectors);
+        }
+        
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void SettingsPageShouldNotContainNotificationTimeTwoWhenNotificationAmountIsZeroOrOne(int notificationAmount)
+        {
+            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
+            cut.Find("#notification-amount").Change(notificationAmount);
+            
+            IRefreshableElementCollection<IElement> elements = cut.FindAll(".timepicker");
+            bool noSecondTimeSelector =
+                elements.All(ele => ele.Id is "notification-time-1") && elements.Count == notificationAmount;
+
+            Assert.True(noSecondTimeSelector);
+        }
+        
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void SettingsPageShouldNotContainNotificationTimeThreeWhenNotificationAmountIsZeroOrOneOrTwo(int notificationAmount)
+        {
+            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
+            cut.Find("#notification-amount").Change(notificationAmount);
+            
+            IRefreshableElementCollection<IElement> elements = cut.FindAll(".timepicker");
+            bool noThirdTimeSelector =
+                elements.All(ele => ele.Id is "notification-time-1" or "notification-time-2") && elements.Count == notificationAmount;
+
+            Assert.True(noThirdTimeSelector);
+        }
+
+        [Fact]
+        public void SettingsPageShouldNotContainStartButtonIfScoutIsStarted()
         {
             IRenderedComponent<Settings> cut = RenderComponent<Settings>();
             IElement startButton = cut.Find("#start-button");
             startButton.Click();
+            IElement stayButton = cut.WaitForElement("#stay-button", TimeSpan.Parse("00:00:10"));
+            stayButton.Click();
             Console.WriteLine(cut.Markup);
-            // IElement stayButton = cut.WaitForElement("#stay-button", TimeSpan.Parse("00:00:03"));
-            // stayButton.Click();
             
-
             void Action() => cut.Find("#start-button");
-
+        
+            Assert.Throws<ElementNotFoundException>(Action);
+        }
+        
+        [Fact]
+        public void TestTest()
+        {
+            bool called = false;
+            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
+            IElement startButton = cut.Find("#start-button");
+            startButton.Click();
+            IElement stayButton = cut.WaitForElement("#stay-button", TimeSpan.Parse("00:00:10"));
+            stayButton.Click();
+            Console.WriteLine(cut.Markup);
+            
+            void Action() => cut.Find("#start-button");
+        
             Assert.Throws<ElementNotFoundException>(Action);
         }
     }
