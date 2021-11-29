@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Syncfusion.Blazor;
 using Blazored.Modal;
 using DataAccessLibrary;
 using HotelPriceScout.Data.Interface;
@@ -26,7 +25,6 @@ namespace HotelPriceScout
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSyncfusionBlazor();
             services.AddBlazoredModal();
             services.AddTransient<IDashboard, Dashboard>();
             services.AddTransient<ISqliteDataAccess, SqliteDataAccess>();
@@ -36,7 +34,6 @@ namespace HotelPriceScout
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTM5NjEwQDMxMzkyZTMzMmUzMFBLMTNMRDVhRWovM2ZyckJRbTZxUk9sUklWS3J0MG02YTQvSmhXUzFXUXc9");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
