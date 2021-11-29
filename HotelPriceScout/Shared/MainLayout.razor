@@ -20,7 +20,7 @@
         </div>
     </div>
 }
-else 
+else
 {
     <div class="page">
         <div class="main">
@@ -28,7 +28,7 @@ else
                 <a class="navbar-brand" href="#">
                     <img class="img-responsive" width="175" height="35" src="/Images/HPS_Logo.png">
                 </a>
-                <NavLink class="nav-link text-white"  href="">
+                <NavLink class="nav-link text-white" href="">
                     <span class="oi oi-home flex" style="color:white;"></span>
                     Home
                 </NavLink>
@@ -44,8 +44,6 @@ else
     public void SettingsPageClicked()
     {
         if (Program.ScoutSharedService.ScoutRunning == true)
-            NavManager.NavigateTo("Settings");  
+            NavManager.NavigateTo("Settings");
     }
-
-
 }
