@@ -187,35 +187,28 @@
 
 @if (Dashboard.BoolExceptionPopup)
 {
-    
-    
-    @foreach (var item in Dashboard.WarningMessagde)
+    @foreach (var item in Dashboard.WarningMessage)
     {
-        string[] hest = item.ListofWarnings.Split("|");
+        string[] ArrayOfWarnings = item.ListofWarnings.Split("|");
         <div @key="item" class="modal fade show d-block " id="@item"  role="dialog">
             <div class="modal-dialog modal-dialog-centered " role="document">
                 <div class="modal-content shadow-lg">
                     <div class="modal-body"> <pre><span class="e-icons e-circle-info"></span>   <b>Warning!</b></pre>
                         <h6 class="modal-title boldFont" id="titleLabel">Data for the following hotels could not be collected from <b>@item.BookingSite</b>, please contact the system admin:</h6> 
-                            @foreach( var s in hest ){<p>@s </p>}
+                            @foreach( var s in ArrayOfWarnings ){<p>@s </p>}
                             <button @key="1" class="btn-remove col-6 offset-3" @onclick="() => RemoveCard(item)">Dismiss</button>
                     </div>
                 </div>
             </div>
         </div>
     }
-   
 }
 
 @code
 {
-
-
-
-    private void RemoveCard(WarningMessagde t)
+    private void RemoveCard(WarningMessage t)
     {
-        Dashboard.WarningMessagde.Remove(t);
-        // Also tried _cards.RemoveAll(i => i.TitleElementId == card.TitleElementId);
+        Dashboard.WarningMessage.Remove(t);
     }
 
     ElementReference MyElementReference;
@@ -241,7 +234,6 @@
 
     IEnumerable<string> listOfHotels = Enumerable.Empty<string>();
     List<string> listOfSelectedHotels;
-
 
     IEnumerable<PriceModel> monthData;
     IEnumerable<PriceModel> monthMarketData;
@@ -277,9 +269,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
-
-
         listOfHotels = await _db.LoadStaticHotelResources("total");//Loads list of hotels to the dropdown
         listOfSelectedHotels = listOfHotels.ToList();
         //Adds the 2 extra options
