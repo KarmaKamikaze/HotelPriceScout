@@ -25,11 +25,10 @@ namespace HotelPriceScout.Data.Interface
         DateTime LastDayOfMonth { get; }
         decimal GetSingleDayMarketPrice(IEnumerable<PriceModel> multipleMarketPrices, int specificDay);
 
-        Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(DateTime startDate, DateTime endDate, 
-            int roomType, string wantedOutput, [Optional] List<string>  selectedHotels);
+        Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(int roomType, string wantedOutput, [Optional] List<string>  selectedHotels);
 
         decimal GetSingleDayKompasPrice(IEnumerable<PriceModel> calendarKompasPrices, int specificDay);
-        void GenerateThermometer(int day, IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice);
+        void GenerateThermometer(IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice);
         void UpdateUiMissingDataWarning(BookingSite bookingSite);
         string ShowCurrentDayAsString();
         void CreateMonth();
@@ -39,6 +38,7 @@ namespace HotelPriceScout.Data.Interface
         void ShowMoreInfo(int dayClicked);
         void NextMonth();
         void PreviousMonth();
-        string DetermineAnimation(int dayClicked, bool checkForAlternateClick, int tempAniDate);
+        string DetermineAnimation();
+        string DetermineFocus(int day);
     }
 }

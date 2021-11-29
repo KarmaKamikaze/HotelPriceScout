@@ -2,16 +2,20 @@
     background-color: #F2F2F2;
 }
 
+.Background-Lightblue {
+    background-color: #dbefff !important;
+}
+
+.Background-none {
+    background-color: none;
+}
+
 #BtnDisable {
     opacity: 0.1;
 }
 
 .bg-warning {
     background-color: #fffee0 !important;
-}
-
-.table td:focus {
-    background-color: #dbefff !important;
 }
 
 .boldFont {
@@ -123,4 +127,47 @@ body {
         left: -33%;
         opacity: 0;
     }
+}
+
+#DateAndArrow {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+#MarketPrice {
+    font-weight: 700;
+    text-align: right;
+    font-size: small;
+    opacity: 0.8;
+}
+
+#YouPrice {
+    text-align: right;
+    font-size: small;
+    font-weight: 700;
+}
+
+#ArrowSize {
+    font-size: 30px;
+}
+
+#H1MonthAndYear {
+    width: 350px;
+}
+
+#H1Date {
+    height: fit-content;
+    text-align: right;
+}
+
+#Weekdays {
+    width: 14%
+}
+
+#HeightOfTdFirstRow {
+    Height: 100px;
+}
+
+#HeightOfTd {
+    Height: 100.5px;
 }

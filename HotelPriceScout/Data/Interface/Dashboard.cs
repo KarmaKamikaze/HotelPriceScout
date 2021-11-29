@@ -40,12 +40,11 @@ namespace HotelPriceScout.Data.Interface
             }
             return DataUnavailable;
         }
-        public async Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(DateTime startDate, DateTime endDate, 
-            int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
+        public async Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
         {              
             IEnumerable<PriceModel> dataList = await _db.RetrieveDataFromDb("*", $"RoomType{roomType}",
-                                         $" Date >= '{startDate.ToString("yyyy-MM-dd")}' AND " +
-                                         $"Date <= '{endDate.ToString("yyyy-MM-dd")}'");
+                                         $" Date >= '{(ToDay.Date).ToString("yyyy-MM-dd")}' AND " +
+                                         $"Date <= '{(LastDayOfMonth.Date).ToString("yyyy-MM-dd")}'");
             List<PriceModel> resultDataList = new();
             switch (wantedOutput)
             {
@@ -99,9 +98,9 @@ namespace HotelPriceScout.Data.Interface
             return DataUnavailable;
         }
 
-        public void GenerateThermometer(int day, IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice)
+        public void GenerateThermometer(IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice)
         {
-            DateTime todayDate = new(Year, Month, day);
+            DateTime todayDate = new(Year, Month, DayClicked);
             decimal marketPrice = (avgMarketPrice.Where(date => date.Date == todayDate)).Single().Price;
             PriceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData, marketPrice);
             MarketPriceItem = PriceMeterGenerator.MarketFinder(PriceList);
@@ -164,9 +163,8 @@ namespace HotelPriceScout.Data.Interface
         }
         public string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice)
         {
-            decimal result = (marketPrice / 100) * SettingsManager.marginPicked;
-            
 
+            decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
 
             if (kompasPrice > (marketPrice + result))
             {
@@ -182,7 +180,7 @@ namespace HotelPriceScout.Data.Interface
         }
         public string ArrowDecider(decimal marketPrice, decimal kompasPrice)
         {
-            decimal result = (marketPrice / 100) * SettingsManager.marginPicked;
+            decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
             if (kompasPrice > (marketPrice + result))
             {
                 return "oi oi-caret-bottom";
@@ -198,7 +196,7 @@ namespace HotelPriceScout.Data.Interface
         }
         public decimal CurrentMargin(decimal marketPrice)
         {
-            decimal result = (marketPrice / 100) * SettingsManager.marginPicked;
+            decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
 
             return result;
         }
@@ -233,16 +231,28 @@ namespace HotelPriceScout.Data.Interface
             LastDayOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
         }
 
-        public string DetermineAnimation(int dayClicked, bool checkForAlternateClick, int tempAniDate)
+        public string DetermineAnimation()
         {
-            if (dayClicked != 0 && checkForAlternateClick)
+            if (DayClicked != 0 && CheckForAlternateClick)
             {
                 return "animation1";
             }
-            
-            if (dayClicked != 0 && !checkForAlternateClick && tempAniDate == dayClicked)
+            if (DayClicked != 0 && !CheckForAlternateClick && TempAniDate == DayClicked)
             {
                 return "animation2";
+            }
+            return "";
+        }
+
+        public string DetermineFocus(int day)
+        {
+            if (DayClicked != 0 && CheckForAlternateClick && DayClicked == day)
+            {
+                return "Background-Lightblue";
+            }
+            if (DayClicked != 0 && !CheckForAlternateClick && TempAniDate == DayClicked)
+            {
+                return "Background-none";
             }
             return "";
         }

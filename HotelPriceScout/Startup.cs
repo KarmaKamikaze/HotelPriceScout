@@ -36,7 +36,7 @@ namespace HotelPriceScout
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTI1MTM2QDMxMzkyZTMzMmUzMENCdGlsczBSc2IrTndEL0xmUk9sV0ppcUxya1ZLVjRtVnlBZXJ6Z0l5LzQ9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTM5NjEwQDMxMzkyZTMzMmUzMFBLMTNMRDVhRWovM2ZyckJRbTZxUk9sUklWS3J0MG02YTQvSmhXUzFXUXc9");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
