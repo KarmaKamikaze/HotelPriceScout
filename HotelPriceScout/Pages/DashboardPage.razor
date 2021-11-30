@@ -54,9 +54,12 @@
         <div class="dropdown">
             <button class="btn dropbtn" @onclick="()=>DropdownBool()">Select hotels <span id="arrow" class="@(DropdownArrow == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
             <div class="dropdown-content @(Hej == true ? "ontop" : "d-none")">
+                <div id="Boold" class="HotelOptions @(selectedHotels.Contains("All") ? "selected" : "")" @onclick='() => { SelectedHotelsChanged("All"); OnClickUpdate("update Hotel");}'>All</div>
+                <div id="Boold" class="HotelOptions @(selectedHotels.Contains("Local") ? "selected" : "")" @onclick='() => { SelectedHotelsChanged("Local"); OnClickUpdate("update Hotel");}'>Local</div>
+                <div id="Boold" class="HotelOptions @(selectedHotels.Contains("No budget") ? "selected" : "")" @onclick='() => { SelectedHotelsChanged("No budget"); OnClickUpdate("update Hotel");}' style="border-bottom: 1px solid #808080;">No budget</div>
                 @foreach (string hotel in listOfHotels)
                 {
-                    <div class="@(selectedHotels.Contains(@hotel) ? "selected" : "")" @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</div>
+                    <div class="HotelOptions @(selectedHotels.Contains(@hotel) ? "selected" : "")" @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</div>
                 }
             </div>
         </div>
@@ -352,12 +355,16 @@
                 Dashboard.MonthsAway++;
                 Dashboard.CreateMonth();
                 Dashboard.NextMonth();
+                Hej = false;
+                DropdownArrow = false;
                 break;
             case "Previous":
                 Dashboard.DayClicked = 0;
                 Dashboard.MonthsAway--;
                 Dashboard.CreateMonth();
                 Dashboard.PreviousMonth();
+                Hej = false;
+                DropdownArrow = false;
                 break;
             case "update Hotel":
                 marketPriceList.Clear();
@@ -366,15 +373,12 @@
         monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", selectedHotels);
         monthMarketData = Program.ScoutSharedService.Scout.RunComparatorForSelectedHotels(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, monthData);
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
+
     }
 
     protected override async Task OnInitializedAsync()
     {
-        listOfHotels = (await _db.LoadStaticHotelResources("total")).ToList(); //Loads list of hotels to the dropdown
-
-        //Adds the 2 extra options
-        listOfHotels.Add("Local");
-        listOfHotels.Add("No budget");
+        listOfHotels = (await _db.LoadStaticHotelResources("total")).ToList(); //Loads list of hotels to the 
 
         Program.ScoutSharedService.Scout.RunComparator("dashboard");
 
