@@ -51,13 +51,15 @@
     </div>
     <div class="col-lg-6">
 
-        <select id="selected-hotels" class="form-control">
-            @foreach (string hotel in listOfHotels)
-
-            {
-               <option class="@(selectedHotels.Contains(@hotel) ? "selected" : "")" @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</option>
-            }
-        </select>
+        <div class="dropdown">
+            <button class="btn dropbtn" @onclick="()=>DropdownBool()">Select hotels <span id="arrow" class="@(DropdownArrow == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
+            <div class="dropdown-content @(Hej == true ? "ontop" : "d-none")">
+                @foreach (string hotel in listOfHotels)
+                {
+                    <div class="@(selectedHotels.Contains(@hotel) ? "selected" : "")" @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</div>
+                }
+            </div>
+        </div>
     </div>
 </div>
 
@@ -238,11 +240,13 @@
 
 @code
 {
-    
+
     private void RemoveCard(WarningMessage popup)
     {
         Dashboard.WarningMessage.Remove(popup);
     }
+    public bool DropdownArrow = false;
+    public bool Hej = false;
     public bool thermometerIsOpen = false;
     decimal marketPrice;
     List<PriceModel> marketPriceList = new();
@@ -250,6 +254,12 @@
     private int adultsPicked = 1;
     private List<string> selectedHotels = new List<string>();
     private List<string> listOfHotels = new List<string>();
+
+    public void DropdownBool()
+    {
+        DropdownArrow = !DropdownArrow;
+        Hej = !Hej;
+    }
 
     void SelectedHotelsChanged(string hotel)
     {
@@ -277,23 +287,23 @@
                     selectedHotels.Remove(hotel);
                     break;
                 case "Cabinn Aalborg" or "Slotshotellet Aalborg" or "Kompas Hotel Aalborg":
-                {
-                    if (!selectedHotels.Contains("Local"))
                     {
-                        selectedHotels.Remove(hotel);
+                        if (!selectedHotels.Contains("Local"))
+                        {
+                            selectedHotels.Remove(hotel);
+                        }
+                        break;
                     }
-                    break;
-                }
                 case "Kompas Hotel Aalborg" or "Slotshotellet Aalborg" or "Milling Hotel Aalborg"
                     or "Aalborg Airport Hotel" or "Helnan Phønix Hotel" or "Hotel Schellsminde" or "Radisson Blu Limfjord Hotel Aalborg"
                     or "Comwell Hvide Hus Aalborg" or "Scandic Aalborg Øst" or "Scandic Aalborg City":
-                {
-                    if (!selectedHotels.Contains("No budget"))
                     {
-                        selectedHotels.Remove(hotel);
+                        if (!selectedHotels.Contains("No budget"))
+                        {
+                            selectedHotels.Remove(hotel);
+                        }
+                        break;
                     }
-                    break;
-                }
                 default:
                     selectedHotels.Remove(hotel);
                     break;
@@ -323,7 +333,7 @@
                     break;
             }
         }
-        selectedHotels = selectedHotels.Distinct().ToList();
+        selectedHotels = selectedHotels.ToList();
 
     }
 
@@ -362,7 +372,7 @@
     {
         listOfHotels = (await _db.LoadStaticHotelResources("total")).ToList(); //Loads list of hotels to the dropdown
 
-    //Adds the 2 extra options
+        //Adds the 2 extra options
         listOfHotels.Add("Local");
         listOfHotels.Add("No budget");
 
