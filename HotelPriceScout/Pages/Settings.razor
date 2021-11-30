@@ -35,21 +35,21 @@
                 <label>Notification time</label>
             </div>
             <div class="text-center col p-3">
-                <input type="time" id="notification-time-1" class="form-control" @bind="SettingsManager.TimeValueDropdown">
+                <input type="time" id="notification-time-1" class="form-control timepicker" @bind="SettingsManager.TimeValueDropdown">
             </div>
         }
       
         @if (SettingsManager.NotificationAmountDropdown > 1)
         {
             <div class="text-center col p-3">
-                <input type="time" id="notification-time-2" class="form-control" @bind="SettingsManager.TimeValue2Dropdown">
+                <input type="time" id="notification-time-2" class="form-control timepicker" @bind="SettingsManager.TimeValue2Dropdown">
             </div>
         }
       
         @if (SettingsManager.NotificationAmountDropdown > 2)
         {
             <div class="text-center col p-3">
-                <input type="time" id="notification-time-3" class="form-control" @bind="SettingsManager.TimeValue3Dropdown">
+                <input type="time" id="notification-time-3" class="form-control timepicker" @bind="SettingsManager.TimeValue3Dropdown">
             </div>
         }
 

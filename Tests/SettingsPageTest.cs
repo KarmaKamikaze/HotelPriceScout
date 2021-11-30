@@ -9,6 +9,7 @@ using Xunit;
 
 namespace Tests
 {
+    [Collection("Integration")]
     public class SettingsPageTest : TestContext
     {
         public SettingsPageTest()
