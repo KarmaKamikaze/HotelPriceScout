@@ -30,7 +30,6 @@
         </div>
       
         @if (SettingsManager.NotificationAmountDropdown > 0)
-
         {
             <div class="text-center col h4">
                 <label>Notification time</label>
@@ -41,7 +40,6 @@
         }
       
         @if (SettingsManager.NotificationAmountDropdown > 1)
-
         {
             <div class="text-center col p-3">
                 <input type="time" id="notification-time-2" class="form-control" @bind="SettingsManager.TimeValue2Dropdown">
@@ -49,7 +47,6 @@
         }
       
         @if (SettingsManager.NotificationAmountDropdown > 2)
-
         {
             <div class="text-center col p-3">
                 <input type="time" id="notification-time-3" class="form-control" @bind="SettingsManager.TimeValue3Dropdown">
@@ -57,9 +54,8 @@
         }
 
         @if (SettingsManager.showStart)
-
         {
-            <div class=""><button type="button" class="shadow p-2 rounded btn btn-success col" @onclick="StartProgram"> Start program</button></div>
+            <div class=""><button type="button" id="start-button" class="shadow p-2 rounded btn btn-success col" @onclick="StartProgram"> Start program</button></div>
         }
 
         @if (SettingsManager.startPopup)
@@ -74,8 +70,8 @@
                             <h5 class="modal-title text-center" id="titleLabel">Going to dashboard in @timer seconds</h5>
                         </div>
                         <div class="modal-footer">
-                            <NavLink class="form-control border border-dark" @onclick="@SettingsManager.ModalStartPopUp" href="/Dashboard">Go to dashboard </NavLink>
-                            <button type="button" class="form-control border border-dark" @onclick="@SettingsManager.ModalStartPopUp"> Stay </button>
+                            <NavLink id="go-to-dashboard-button" class="form-control border border-dark" @onclick="SettingsManager.ModalStartPopUp" href="/Dashboard">Go to dashboard </NavLink>
+                            <button type="button" id="stay-button" class="form-control border border-dark" @onclick="SettingsManager.ModalStartPopUp"> Stay </button>
                         </div>
                     </div>
                 </div>
@@ -84,8 +80,8 @@
         @if (SettingsManager.showStop)
         {
             <div class="d-flex">
-                <button type="button" class="shadow p-3 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="@SettingsManager.EscapeStop" @onclick="SettingsManager.ModalStopPopUp"> Stop program</button>
-                <button type="button" class="shadow p-3  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="@SettingsManager.EscapeUpdate" @onclick="SettingsManager.ModalUpdatePopUp">Update program</button>
+                <button type="button" id="stop-button" class="shadow p-3 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="@SettingsManager.EscapeStop" @onclick="SettingsManager.ModalStopPopUp">Stop program</button>
+                <button type="button" id="update-button" class="shadow p-3  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="@SettingsManager.EscapeUpdate" @onclick="SettingsManager.ModalUpdatePopUp">Update program</button>
             </div>
         }
         @if (SettingsManager.stopPopup)
@@ -99,8 +95,8 @@
                             <h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="form-control border border-dark" @onclick="StopProgram">Yes </button>
-                            <button type="button" class="form-control border border-dark" @onclick="SettingsManager.ModalStopPopUp"> No </button>
+                            <button type="button" id="confirm-stop-button" class="form-control border border-dark" @onclick="StopProgram">Yes </button>
+                            <button type="button"  id="decline-stop-button" class="form-control border border-dark" @onclick="SettingsManager.ModalStopPopUp"> No </button>
                         </div>
                     </div>
                 </div>

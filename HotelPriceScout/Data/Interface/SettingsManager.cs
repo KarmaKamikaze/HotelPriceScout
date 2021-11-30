@@ -6,11 +6,20 @@ namespace HotelPriceScout.Data.Interface
 {
     public class SettingsManager
     {
-        public static int MarginDropdown { get; set; } = 15;
-        public static int NotificationAmountDropdown { get; set; } = 1;
-        public static DateTime TimeValueDropdown { get; set; } = DateTime.Now.Date;
-        public static DateTime TimeValue2Dropdown { get; set; } = DateTime.Now.Date;
-        public static DateTime TimeValue3Dropdown { get; set; } = DateTime.Now.Date;
+        public SettingsManager()
+        {
+            MarginDropdown = 15;
+            NotificationAmountDropdown = 1;
+            TimeValueDropdown = DateTime.Parse("12:00");
+            TimeValue2Dropdown = DateTime.Now.Date;
+            TimeValue3Dropdown = DateTime.Now.Date;
+        }
+        
+        public static int MarginDropdown { get; set; }
+        public static int NotificationAmountDropdown { get; set; }
+        public static DateTime TimeValueDropdown { get; set; }
+        public static DateTime TimeValue2Dropdown { get; set; }
+        public static DateTime TimeValue3Dropdown { get; set; }
         public static int MarginPicked { get; private set; }
         public static int NotificationPicked { get; set; }
         private static DateTime TimeValuePicked { get; set; }
