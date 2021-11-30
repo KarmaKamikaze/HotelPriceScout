@@ -1,6 +1,8 @@
+using System;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using Xunit;
 
 namespace Tests
@@ -15,21 +17,19 @@ namespace Tests
             chromeOptions.AddArgument("--ignore-certificate-errors");
             using IWebDriver driver = new ChromeDriver(chromeOptions);
             driver.Navigate().GoToUrl("https://localhost:5001/Settings");
-            Thread.Sleep(1000);
-            
-            IWebElement startButton = driver.FindElement(By.Id("start-button"));
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+
+            IWebElement startButton = wait.Until(element => element.FindElement(By.Id("start-button")));
             startButton.Click();
-            Thread.Sleep(1000);
-            IWebElement stayButton = driver.FindElement(By.Id("stay-button"));
+            IWebElement stayButton = wait.Until(element => element.FindElement(By.Id("stay-button")));
             stayButton.Click();
             
             void Action() => driver.FindElement(By.Id("start-button"));
             
             Assert.Throws<NoSuchElementException>(Action);
             
-            driver.FindElement(By.Id("stop-button")).Click();
-            Thread.Sleep(1000);
-            driver.FindElement(By.Id("confirm-stop-button")).Click();
+            wait.Until(element => element.FindElement(By.Id("stop-button"))).Click();
+            wait.Until(element => element.FindElement(By.Id("confirm-stop-button"))).Click();
         }
     }
 }
