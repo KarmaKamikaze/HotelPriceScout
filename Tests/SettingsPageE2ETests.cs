@@ -28,6 +28,7 @@ namespace Tests
             
             Assert.Throws<NoSuchElementException>(Action);
             
+            // Reset shared E2E test state
             wait.Until(element => element.FindElement(By.Id("stop-button"))).Click();
             wait.Until(element => element.FindElement(By.Id("confirm-stop-button"))).Click();
         }
