@@ -1,12 +1,9 @@
-using System;
 using System.Linq;
-using System.Threading.Tasks;
 using AngleSharp.Dom;
 using Blazored.Modal;
 using Bunit;
 using HotelPriceScout.Data.Interface;
 using HotelPriceScout.Pages;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -181,37 +178,6 @@ namespace Tests
                 elements.All(ele => ele.Id is "notification-time-1" or "notification-time-2") && elements.Count == notificationAmount;
 
             Assert.True(noThirdTimeSelector);
-        }
-
-        [Fact]
-        public void SettingsPageShouldNotContainStartButtonIfScoutIsStarted()
-        {
-            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
-            IElement startButton = cut.Find("#start-button");
-            startButton.Click();
-            IElement stayButton = cut.WaitForElement("#stay-button", TimeSpan.Parse("00:00:10"));
-            stayButton.Click();
-            Console.WriteLine(cut.Markup);
-            
-            void Action() => cut.Find("#start-button");
-        
-            Assert.Throws<ElementNotFoundException>(Action);
-        }
-        
-        [Fact]
-        public void TestTest()
-        {
-            bool called = false;
-            IRenderedComponent<Settings> cut = RenderComponent<Settings>();
-            IElement startButton = cut.Find("#start-button");
-            startButton.Click();
-            IElement stayButton = cut.WaitForElement("#stay-button", TimeSpan.Parse("00:00:10"));
-            stayButton.Click();
-            Console.WriteLine(cut.Markup);
-            
-            void Action() => cut.Find("#start-button");
-        
-            Assert.Throws<ElementNotFoundException>(Action);
         }
     }
 }
