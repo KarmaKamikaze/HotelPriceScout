@@ -64,12 +64,14 @@
 
         @if (SettingsManager.startPopup)
         {
+            <div class="modal-backdrop">
+            </div>
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <h4 class="modal-title" id="titleLabel">Settings have been set</h4>
-                            <h5 class="modal-title" id="titleLabel">Going to dashboard in @timer seconds</h5>
+                            <h4 class="modal-title text-center" id="titleLabel">Settings have been set</h4>
+                            <h5 class="modal-title text-center" id="titleLabel">Going to dashboard in @timer seconds</h5>
                         </div>
                         <div class="modal-footer">
                             <NavLink class="form-control border border-dark" @onclick="@SettingsManager.ModalStartPopUp" href="/Dashboard">Go to dashboard </NavLink>
@@ -88,8 +90,10 @@
         }
         @if (SettingsManager.stopPopup)
         {
+            <div class="modal-backdrop">
+            </div>
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
@@ -105,8 +109,10 @@
 
         @if (SettingsManager.updatePopup)
         {
+            <div class="modal-backdrop">
+            </div>
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="titleLabel">Are you sure you want to update the program?</h5>
@@ -121,11 +127,13 @@
         }
         @if (SettingsManager.updateYes)
         {
-            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+            <div class="modal-backdrop">
+            </div>
+            <div class="modal show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <h2 class="modal-title" id="titleLabel">The program has been updated!</h2>
+                            <h2 class="modal-title text-center" id="titleLabel">The program has been updated!</h2>
                         </div>
                     </div>
                 </div>
