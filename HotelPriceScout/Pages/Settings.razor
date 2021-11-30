@@ -70,8 +70,9 @@
                             <h5 class="modal-title text-center" id="titleLabel">Going to dashboard in @timer seconds</h5>
                         </div>
                         <div class="modal-footer">
-                            <NavLink id="go-to-dashboard-button" class="form-control border border-dark" @onclick="SettingsManager.ModalStartPopUp" href="/Dashboard">Go to dashboard </NavLink>
-                            <button type="button" id="stay-button" class="form-control border border-dark" @onclick="SettingsManager.ModalStartPopUp"> Stay </button>
+                            <NavLink id="go-to-dashboard-button" class="form-control border border-dark" @onclick="()=>SettingsManager.startPopup=false" href="/Dashboard">Go to dashboard </NavLink>
+                            <button type="button" id="stay-button" class="form-control border border-dark" @onclick="()=>SettingsManager.startPopup=false"> Stay </button>
+
                         </div>
                     </div>
                 </div>
@@ -80,8 +81,9 @@
         @if (SettingsManager.showStop)
         {
             <div class="d-flex">
-                <button type="button" id="stop-button" class="shadow p-3 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="@SettingsManager.EscapeStop" @onclick="SettingsManager.ModalStopPopUp">Stop program</button>
-                <button type="button" id="update-button" class="shadow p-3  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="@SettingsManager.EscapeUpdate" @onclick="SettingsManager.ModalUpdatePopUp">Update program</button>
+                <button type="button" id="stop-button" class="shadow p-3 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="(args)=>SettingsManager.EscapePopUp(args, ref SettingsManager.stopPopup)" @onclick="()=>SettingsManager.stopPopup = true"> Stop program</button>
+                <button type="button" id="update-button" class="shadow p-3  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="(args)=>SettingsManager.EscapePopUp(args, ref SettingsManager.updatePopup)" @onclick="()=>SettingsManager.updatePopup = true">Update program</button>
+
             </div>
         }
         @if (SettingsManager.stopPopup)
@@ -96,7 +98,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" id="confirm-stop-button" class="form-control border border-dark" @onclick="StopProgram">Yes </button>
-                            <button type="button"  id="decline-stop-button" class="form-control border border-dark" @onclick="SettingsManager.ModalStopPopUp"> No </button>
+                            <button type="button"  id="decline-stop-button" class="form-control border border-dark" @onclick="()=>SettingsManager.stopPopup = false"> No </button>
+
                         </div>
                     </div>
                 </div>
@@ -115,7 +118,7 @@
                         </div>
                         <div class=modal-footer>
                             <button type="button" class="form-control border border-dark" @onclick="UpdateProgram">Yes</button>
-                            <button type="button" class="form-control border border-dark" @onclick="SettingsManager.ModalUpdatePopUp">No</button>
+                            <button type="button" class="form-control border border-dark" @onclick="()=>SettingsManager.updatePopup = false">No</button>
                         </div>
                     </div>
                 </div>
