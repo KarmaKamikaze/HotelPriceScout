@@ -264,80 +264,147 @@
         Hej = !Hej;
     }
 
+    List<string> localList = new List<string>()
+    {
+        "Cabinn Aalborg",
+        "Slotshotellet Aalborg",
+        "Kompas Hotel Aalborg"
+    };
+
+    List<string> noBudgetList = new List<string>()
+    {
+        "Slotshotellet Aalborg",
+        "Kompas Hotel Aalborg",
+        "Milling Hotel Aalborg",
+        "Aalborg Airport Hotel",
+        "Helnan Phønix Hotel",
+        "Hotel Schellsminde",
+        "Radisson Blu Limfjord Hotel Aalborg",
+        "Comwell Hvide Hus Aalborg",
+        "Scandic Aalborg Øst",
+        "Scandic Aalborg City"
+    };
+
     void SelectedHotelsChanged(string hotel)
     {
         if (selectedHotels.Contains(hotel))
         {
             switch (hotel)
             {
+                case "All":
+                    selectedHotels.Clear();
+                    break;
                 case "Local":
-                    selectedHotels.Remove("Cabinn Aalborg");
-                    selectedHotels.Remove("Slotshotellet Aalborg");
-                    selectedHotels.Remove("Kompas Hotel Aalborg");
+                    foreach (string hotelString in localList)
+                    {
+                        if (!selectedHotels.Contains("No budget") || hotelString == "Cabinn Aalborg")
+                        {
+                            selectedHotels.Remove(hotelString);
+                        }
+                    }
                     selectedHotels.Remove(hotel);
                     break;
                 case "No budget":
-                    selectedHotels.Remove("Kompas Hotel Aalborg");
-                    selectedHotels.Remove("Slotshotellet Aalborg");
-                    selectedHotels.Remove("Milling Hotel Aalborg");
-                    selectedHotels.Remove("Aalborg Airport Hotel");
-                    selectedHotels.Remove("Helnan Phønix Hotel");
-                    selectedHotels.Remove("Hotel Schellsminde");
-                    selectedHotels.Remove("Radisson Blu Limfjord Hotel Aalborg");
-                    selectedHotels.Remove("Comwell Hvide Hus Aalborg");
-                    selectedHotels.Remove("Scandic Aalborg Øst");
-                    selectedHotels.Remove("Scandic Aalborg City");
+                    foreach (string hotelString in noBudgetList)
+                    {
+                        if (!selectedHotels.Contains("Local") || (hotelString != "Slotshotellet Aalborg" && hotelString != "Kompas Hotel Aalborg"))
+                        {
+                            selectedHotels.Remove(hotelString);
+                        }
+                    }
                     selectedHotels.Remove(hotel);
                     break;
-                case "Cabinn Aalborg" or "Slotshotellet Aalborg" or "Kompas Hotel Aalborg":
+                case "Cabinn Aalborg":
                     {
-                        if (!selectedHotels.Contains("Local"))
+                        if (!selectedHotels.Contains("Local") && !selectedHotels.Contains("All"))
                         {
                             selectedHotels.Remove(hotel);
                         }
                         break;
                     }
-                case "Kompas Hotel Aalborg" or "Slotshotellet Aalborg" or "Milling Hotel Aalborg"
-                    or "Aalborg Airport Hotel" or "Helnan Phønix Hotel" or "Hotel Schellsminde" or "Radisson Blu Limfjord Hotel Aalborg"
-                    or "Comwell Hvide Hus Aalborg" or "Scandic Aalborg Øst" or "Scandic Aalborg City":
+                case "Milling Hotel Aalborg" or "Aalborg Airport Hotel" or "Helnan Phønix Hotel" or "Hotel Schellsminde"
+                    or "Radisson Blu Limfjord Hotel Aalborg" or "Comwell Hvide Hus Aalborg" 
+                    or "Scandic Aalborg Øst" or "Scandic Aalborg City":
                     {
-                        if (!selectedHotels.Contains("No budget"))
+                        if (!selectedHotels.Contains("No budget") && !selectedHotels.Contains("All"))
+                        {
+                            selectedHotels.Remove(hotel);
+                        }
+                        break;
+                    }
+                case "Slotshotellet Aalborg" or "Kompas Hotel Aalborg":
+                    {
+                        if (!selectedHotels.Contains("No budget") && !selectedHotels.Contains("Local") && !selectedHotels.Contains("All"))
                         {
                             selectedHotels.Remove(hotel);
                         }
                         break;
                     }
                 default:
-                    selectedHotels.Remove(hotel);
+                    if (!selectedHotels.Contains("All"))
+                    {
+                        selectedHotels.Remove(hotel);
+                    }
                     break;
             }
         }
         else
         {
-            selectedHotels.Add(hotel);
             switch (hotel)
             {
+                case "All":
+                    selectedHotels.Add(hotel);
+                    foreach (string hotelString in listOfHotels)
+                    {
+                        selectedHotels.Add(hotelString);
+                    }
+                    break;
                 case "Local":
-                    selectedHotels.Add("Cabinn Aalborg");
-                    selectedHotels.Add("Slotshotellet Aalborg");
-                    selectedHotels.Add("Kompas Hotel Aalborg");
+                    if (!selectedHotels.Contains("All"))
+                    {
+                        selectedHotels.Add(hotel);
+                        selectedHotels.Add("Cabinn Aalborg");
+                        selectedHotels.Add("Slotshotellet Aalborg");
+                        selectedHotels.Add("Kompas Hotel Aalborg");
+                    }
                     break;
                 case "No budget":
-                    selectedHotels.Add("Kompas Hotel Aalborg");
-                    selectedHotels.Add("Slotshotellet Aalborg");
-                    selectedHotels.Add("Milling Hotel Aalborg");
-                    selectedHotels.Add("Aalborg Airport Hotel");
-                    selectedHotels.Add("Helnan Phønix Hotel");
-                    selectedHotels.Add("Hotel Schellsminde");
-                    selectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
-                    selectedHotels.Add("Comwell Hvide Hus Aalborg");
-                    selectedHotels.Add("Scandic Aalborg Øst");
-                    selectedHotels.Add("Scandic Aalborg City");
+                    if (!selectedHotels.Contains("All"))
+                    {
+                        selectedHotels.Add(hotel);
+                        selectedHotels.Add("Kompas Hotel Aalborg");
+                        selectedHotels.Add("Slotshotellet Aalborg");
+                        selectedHotels.Add("Milling Hotel Aalborg");
+                        selectedHotels.Add("Aalborg Airport Hotel");
+                        selectedHotels.Add("Helnan Phønix Hotel");
+                        selectedHotels.Add("Hotel Schellsminde");
+                        selectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
+                        selectedHotels.Add("Comwell Hvide Hus Aalborg");
+                        selectedHotels.Add("Scandic Aalborg Øst");
+                        selectedHotels.Add("Scandic Aalborg City");
+                    }
+                    break;
+                default:
+                    selectedHotels.Add(hotel);
                     break;
             }
         }
-        selectedHotels = selectedHotels.ToList();
 
+        int count = listOfHotels.Count(hotelString => selectedHotels.Contains(hotelString));
+        if (count == listOfHotels.Count)
+        {
+            selectedHotels.Add("All");
+        }
+
+        //Change to list
+        if (selectedHotels.Contains("Cabinn Aalborg") && selectedHotels.Contains("Slotshotellet Aalborg") && selectedHotels.Contains("Kompas Hotel Aalborg"))
+        {
+            selectedHotels.Add("Local");
+        }
+        
+        //Add automatic nobudget add
+        
+        selectedHotels = selectedHotels.Distinct().ToList();
     }
 
     IEnumerable<PriceModel> monthData;
