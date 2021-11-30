@@ -50,14 +50,15 @@
         </select>
     </div>
     <div class="col-lg-6">
-        <select id="selected-hotels" class="form-control" multiple>
+
+        <select id="selected-hotels" class="form-control">
             @foreach (string hotel in listOfHotels)
+
             {
-                <option @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</option>
+               <option class="@(selectedHotels.Contains(@hotel) ? "selected" : "")" @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</option>
             }
         </select>
     </div>
-
 </div>
 
 <div class="row">
@@ -237,6 +238,7 @@
 
 @code
 {
+    
     private void RemoveCard(WarningMessage popup)
     {
         Dashboard.WarningMessage.Remove(popup);
@@ -340,7 +342,6 @@
                 Dashboard.MonthsAway++;
                 Dashboard.CreateMonth();
                 Dashboard.NextMonth();
-                //Dashboard.UpdateUiMissingDataWarning(Program.ScoutSharedService.Scout.BookingSites.First());
                 break;
             case "Previous":
                 Dashboard.DayClicked = 0;
@@ -377,5 +378,6 @@
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
 
         Dashboard.CreateMonth();
+
     }
 }
