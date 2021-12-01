@@ -129,33 +129,33 @@ body {
     }
 }
 
-#DateAndArrow {
+.DateAndArrow {
     font-weight: 700;
     font-size: 24px;
 }
 
-#MarketPrice {
+.MarketPrice {
     font-weight: 700;
     text-align: right;
     font-size: small;
     opacity: 0.8;
 }
 
-#YouPrice {
+.YouPrice {
     text-align: right;
     font-size: small;
     font-weight: 700;
 }
 
-#ArrowSize {
+.ArrowSize {
     font-size: 30px;
 }
 
-#H1MonthAndYear {
+.H1MonthAndYear {
     width: 350px;
 }
 
-#H1Date {
+.H1Date {
     height: fit-content;
     text-align: right;
 }
@@ -164,11 +164,11 @@ body {
     width: 14%
 }
 
-#HeightOfTdFirstRow {
+.HeightOfTdFirstRow {
     Height: 100px;
 }
 
-#HeightOfTd {
+.HeightOfTd {
     Height: 100.5px;
 }
 .selected {

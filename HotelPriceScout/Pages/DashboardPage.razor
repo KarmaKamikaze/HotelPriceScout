@@ -8,33 +8,33 @@
 
 <div class="row topLayer">
     <div class="col-md-12 d-inline-flex topLayer">
-        <h1 id="H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
+        <h1 class="H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
         @if (Dashboard.MonthsAway > 0)
         {
             <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Previous"); }'>
-                <span class="oi oi-arrow-thick-left" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-left"></span>
             </button>
         }
         else
         {
             <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
-                <span class="oi oi-arrow-thick-left" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-left"></span>
             </button>
         }
         @if (Dashboard.MonthsAway < 3)
         {
             <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Next"); }'>
-                <span class="oi oi-arrow-thick-right" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-right"></span>
             </button>
         }
         else
         {
             <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
-                <span class="oi oi-arrow-thick-right" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-right"></span>
             </button>
         }
         <div class="col-md-8 @(Dashboard.DetermineAnimation())">
-            <h1 id="H1Date">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1>
+            <h1 class="H1Date">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1>
         </div>
     </div>
 </div>
@@ -93,17 +93,17 @@
                     marketPrice = Dashboard.GetSingleDayMarketPrice(monthMarketData, day);
                     marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                     kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
-                    <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTdFirstRow"
+                    <td class="HeightOfTdFirstRow @(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))"
                         @onclick="@(() => { Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
-                        <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
+                        <div class="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                             @i
                             <span class="@(marketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(marketPrice, kompasPrice))"></span>
                         </div>
                         <div class="@(marketPrice == 0 ? "d-none" : "")">
-                            <div id="YouPrice" class="@(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
+                            <div class="YouPrice @(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
                                 You: <span>@(decimal.ToInt32(kompasPrice)),-</span>
                             </div>
-                            <div id="MarketPrice">
+                            <div class="MarketPrice">
                                 Market: <span>@(decimal.ToInt32(marketPrice)),-</span>
                             </div>
                         </div>
@@ -123,18 +123,18 @@
                             marketPrice = Dashboard.GetSingleDayMarketPrice(monthMarketData, day);
                             marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                             kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
-                            <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTd"
+                            <td class="HeightOfTd @(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))"
                                 @onclick="@(() => {Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
-                                <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
+                                <div class="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                                     @(i + j)
                                     <span class="@(marketPrice == 0 ? "d-none" : "")
                                               @(Dashboard.ArrowDecider(marketPrice, kompasPrice))"></span>
                                 </div>
                                 <div class="@(marketPrice == 0 ? "d-none" : "")">
-                                    <div id="YouPrice" class="@(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
+                                    <div class="YouPrice @(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
                                         You: <span>@(decimal.ToInt32(kompasPrice)),-</span>
                                     </div>
-                                    <div id="MarketPrice">
+                                    <div class="MarketPrice">
                                         Market: <span>@(decimal.ToInt32(marketPrice)),-</span>
                                     </div>
                                 </div>
