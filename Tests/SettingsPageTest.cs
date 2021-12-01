@@ -16,7 +16,7 @@ namespace Tests
         {
             // Inject test services
             Services.AddBlazoredModal();
-            Services.AddTransient<SettingsManager>();
+            Services.AddSingleton<SettingsManager>();
         }
 
         [Fact]
