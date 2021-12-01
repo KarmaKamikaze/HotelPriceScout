@@ -32,7 +32,7 @@ namespace HotelPriceScout.Data.Interface
         public bool stopPopup = false;
         public bool updatePopup = false;
 
-        private static void ReverseMultipleBools(ref bool a, ref bool b, ref bool c)
+        private static void ReverseMultipleBooleans(ref bool a, ref bool b, ref bool c)
         {
             a = !a;
             b = !b;
@@ -60,9 +60,13 @@ namespace HotelPriceScout.Data.Interface
             return result;
         }
         
-        public void SetStartScoutSettings()
+        public void SetScoutSettings(bool check)
         {
-            ReverseMultipleBools(ref startPopup, ref showStop, ref showStart);
+            if (check)
+            {
+                ReverseMultipleBooleans(ref startPopup, ref showStop, ref showStart);
+            }
+
             MarginPicked = MarginDropdown;
             NotificationPicked = NotificationAmountDropdown;
            
@@ -72,24 +76,12 @@ namespace HotelPriceScout.Data.Interface
         }
         public void SetStopScoutSettings()
         {
-            ReverseMultipleBools(ref showStart, ref showStop, ref stopPopup);
-            MarginPicked = default;
-            NotificationPicked = default;
+            ReverseMultipleBooleans(ref showStart, ref showStop, ref stopPopup);
             TimeValuePicked = default;
             TimeValue2Picked = default;
             TimeValue3Picked = default;
             MarginPicked = 1;
             NotificationPicked = 1;
-        }
-        public void SetUpdateScoutSettings()
-        {
-            MarginPicked = MarginDropdown;
-            NotificationPicked = NotificationAmountDropdown;
-            TimeValuePicked = TimeValueDropdown;
-            TimeValue2Picked = TimeValue2Dropdown;
-            TimeValue3Picked = TimeValue3Dropdown;
-            updatePopup = !updatePopup;
-
         }
 
         public void EscapePopUp(KeyboardEventArgs e, ref bool valueCheck)

@@ -18,7 +18,7 @@
             <input type="number" id="margin" class="form-control" min="1" @bind="SettingsManager.MarginDropdown">
         </div>
         <div class="text-center col h4">
-            <label>Amount of notifications</label>
+            <label>Amount of notifications per day</label>
         </div>
         <div class="text-center col p-3">
             <select id="notification-amount" class="form-control" @bind="SettingsManager.NotificationAmountDropdown">
@@ -70,7 +70,7 @@
                             <h5 class="modal-title text-center" id="titleLabel">Going to dashboard in @timer seconds</h5>
                         </div>
                         <div class="modal-footer">
-                            <NavLink id="go-to-dashboard-button" class="form-control border border-dark" @onclick="()=>SettingsManager.startPopup=false" href="/Dashboard">Go to dashboard </NavLink>
+                            <NavLink id="go-to-dashboard-button" class="form-control border border-dark" @onclick="()=>SettingsManager.startPopup=false" href="/Dashboard" style="text-decoration: none; color: #495057; text-align: center;">Go to dashboard</NavLink>
                             <button type="button" id="stay-button" class="form-control border border-dark" @onclick="()=>SettingsManager.startPopup=false"> Stay </button>
 
                         </div>
@@ -81,8 +81,8 @@
         @if (SettingsManager.showStop)
         {
             <div class="d-flex">
-                <button type="button" id="stop-button" class="shadow p-3 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="(args)=>SettingsManager.EscapePopUp(args, ref SettingsManager.stopPopup)" @onclick="()=>SettingsManager.stopPopup = true"> Stop program</button>
-                <button type="button" id="update-button" class="shadow p-3  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="(args)=>SettingsManager.EscapePopUp(args, ref SettingsManager.updatePopup)" @onclick="()=>SettingsManager.updatePopup = true">Update program</button>
+                <button type="button" id="stop-button" class="shadow p-2 rounded btn btn-danger col p-2" data-bs-toggle="modal" @onkeydown="(args)=>SettingsManager.EscapePopUp(args, ref SettingsManager.stopPopup)" @onclick="()=>SettingsManager.stopPopup = true"> Stop program</button>
+                <button type="button" id="update-button" class="shadow p-2 rounded btn btn-primary col p-2" data-bs-toggle="modal" @onkeydown="(args)=>SettingsManager.EscapePopUp(args, ref SettingsManager.updatePopup)" @onclick="()=>SettingsManager.updatePopup = true">Update program</button>
 
             </div>
         }
@@ -167,12 +167,19 @@
         Program.ScoutSharedService.ScoutRunning = false;
         SettingsManager.SetStopScoutSettings();
         Program.ScoutSharedService.Scout.StopScout();
+        Program.ScoutSharedService.Scout = null;
         StateHasChanged();
     }
 
     private async void UpdateProgram()
     {
-        SettingsManager.SetUpdateScoutSettings();
+        Program.ScoutSharedService.Scout.StopScout();
+        Program.ScoutSharedService.Scout = null;
+        SettingsManager.SetScoutSettings(false);
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
+        Program.ScoutSharedService.Scout.StartScout();
+        
+        SettingsManager.updatePopup = !SettingsManager.updatePopup;
         SettingsManager.updateYes = !SettingsManager.updateYes;
         StateHasChanged();
         await Task.Delay(1500);
@@ -183,7 +190,7 @@
     private async void StartProgram()
     {
         Program.ScoutSharedService.ScoutRunning = true;
-        SettingsManager.SetStartScoutSettings();
+        SettingsManager.SetScoutSettings(true);
         Countdown();
         Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();
