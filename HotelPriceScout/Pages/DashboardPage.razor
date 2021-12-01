@@ -212,11 +212,9 @@
                 }
             </div>
         </div>
-        thermometerIsOpen = true;
     }
     else
     {
-        thermometerIsOpen = false;
     }
 </div>
 
@@ -286,6 +284,7 @@
         monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", Dashboard.SelectedHotels);
         monthMarketData = Program.ScoutSharedService.Scout.RunComparatorForSelectedHotels(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, monthData);
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
+
     }
 
     protected override async Task OnInitializedAsync()
@@ -304,5 +303,6 @@
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
 
         Dashboard.CreateMonth();
+
     }
 }
