@@ -118,9 +118,7 @@ namespace Tests
 
             dashboard.UpdateUiMissingDataWarning(bookingSite);
 
-            string dash = string.Join(", ", warningMessage);
-
-            Console.WriteLine(dash);
+            string dash = string.Join(", ", warningMessage.ListofWarnings);
 
             Assert.Equal("deez", dash);
 
