@@ -8,39 +8,39 @@
 
 <div class="row topLayer">
     <div class="col-md-12 d-inline-flex topLayer">
-        <h1 id="H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
+        <h1 class="noneselect H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
         @if (Dashboard.MonthsAway > 0)
         {
             <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Previous"); }'>
-                <span class="oi oi-arrow-thick-left" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-left"></span>
             </button>
         }
         else
         {
             <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
-                <span class="oi oi-arrow-thick-left" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-left"></span>
             </button>
         }
         @if (Dashboard.MonthsAway < 3)
         {
             <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Next"); }'>
-                <span class="oi oi-arrow-thick-right" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-right"></span>
             </button>
         }
         else
         {
             <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
-                <span class="oi oi-arrow-thick-right" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-right"></span>
             </button>
         }
         <div class="col-md-8 @(Dashboard.DetermineAnimation())">
-            <h1 id="H1Date">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1>
+            <h1 class="noneselect H1Date">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1>
         </div>
     </div>
 </div>
 
 
-<div class="row col-md-7 d-inline-flex topLayer">
+<div class="noneselect row col-md-7 d-inline-flex topLayer">
     <div class="col-md-4">
         <select id="number-of-adults" class="form-control" @bind="adultsPicked" placeholder="1 adult" @onclick='() => OnClickUpdate("Update")'>
             <option value="1">1 adult</option>
@@ -66,7 +66,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="noneselect row">
     <div class="col-md-8 ">
         <table class="table table-bordered table-sm col calendar shadow bg-white">
             <thead>
@@ -93,17 +93,17 @@
                     marketPrice = Dashboard.GetSingleDayMarketPrice(monthMarketData, day);
                     marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                     kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
-                    <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTdFirstRow"
+                    <td class="HeightOfTdFirstRow @(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))"
                         @onclick="@(() => { Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
-                        <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
+                        <div class="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                             @i
                             <span class="@(marketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(marketPrice, kompasPrice))"></span>
                         </div>
                         <div class="@(marketPrice == 0 ? "d-none" : "")">
-                            <div id="YouPrice" class="@(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
+                            <div class="YouPrice @(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
                                 You: <span>@(decimal.ToInt32(kompasPrice)),-</span>
                             </div>
-                            <div id="MarketPrice">
+                            <div class="MarketPrice">
                                 Market: <span>@(decimal.ToInt32(marketPrice)),-</span>
                             </div>
                         </div>
@@ -123,18 +123,18 @@
                             marketPrice = Dashboard.GetSingleDayMarketPrice(monthMarketData, day);
                             marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                             kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
-                            <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTd"
+                            <td class="HeightOfTd @(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))"
                                 @onclick="@(() => {Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
-                                <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
+                                <div class="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                                     @(i + j)
                                     <span class="@(marketPrice == 0 ? "d-none" : "")
                                               @(Dashboard.ArrowDecider(marketPrice, kompasPrice))"></span>
                                 </div>
                                 <div class="@(marketPrice == 0 ? "d-none" : "")">
-                                    <div id="YouPrice" class="@(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
+                                    <div class="YouPrice @(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
                                         You: <span>@(decimal.ToInt32(kompasPrice)),-</span>
                                     </div>
-                                    <div id="MarketPrice">
+                                    <div class="MarketPrice">
                                         Market: <span>@(decimal.ToInt32(marketPrice)),-</span>
                                     </div>
                                 </div>
@@ -227,7 +227,7 @@
     @foreach (var item in Dashboard.WarningMessage)
     {
         string[] ArrayOfWarnings = item.ListofWarnings.Split("|");
-        <div @key="item" class="modal fade show d-block " id="@item"  role="dialog">
+        <div @key="item" class="noneselect modal fade show d-block " id="@item"  role="dialog">
             <div class="modal-dialog modal-dialog-centered " role="document">
                 <div class="modal-content shadow-lg">
                     <div class="modal-body"> <pre><span class="e-icons e-circle-info"></span>   <b>Warning!</b></pre>
