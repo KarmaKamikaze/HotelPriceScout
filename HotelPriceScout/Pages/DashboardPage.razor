@@ -276,7 +276,7 @@
         "Milling Hotel Aalborg",
         "Aalborg Airport Hotel",
         "Helnan Phønix Hotel",
-        "Hotel Schellsminde",
+        "Hotel Scheelsminde",
         "Radisson Blu Limfjord Hotel Aalborg",
         "Comwell Hvide Hus Aalborg",
         "Scandic Aalborg Øst",
@@ -287,6 +287,7 @@
     {
         if (selectedHotels.Contains(hotel))
         {
+            selectedHotels.Remove(hotel);
             switch (hotel)
             {
                 case "All":
@@ -300,7 +301,6 @@
                             selectedHotels.Remove(hotelString);
                         }
                     }
-                    selectedHotels.Remove(hotel);
                     break;
                 case "No budget":
                     foreach (string hotelString in noBudgetList)
@@ -310,98 +310,65 @@
                             selectedHotels.Remove(hotelString);
                         }
                     }
-                    selectedHotels.Remove(hotel);
-                    break;
-                case "Cabinn Aalborg":
-                    {
-                        if (!selectedHotels.Contains("Local") && !selectedHotels.Contains("All"))
-                        {
-                            selectedHotels.Remove(hotel);
-                        }
-                        break;
-                    }
-                case "Milling Hotel Aalborg" or "Aalborg Airport Hotel" or "Helnan Phønix Hotel" or "Hotel Schellsminde"
-                    or "Radisson Blu Limfjord Hotel Aalborg" or "Comwell Hvide Hus Aalborg" 
-                    or "Scandic Aalborg Øst" or "Scandic Aalborg City":
-                    {
-                        if (!selectedHotels.Contains("No budget") && !selectedHotels.Contains("All"))
-                        {
-                            selectedHotels.Remove(hotel);
-                        }
-                        break;
-                    }
-                case "Slotshotellet Aalborg" or "Kompas Hotel Aalborg":
-                    {
-                        if (!selectedHotels.Contains("No budget") && !selectedHotels.Contains("Local") && !selectedHotels.Contains("All"))
-                        {
-                            selectedHotels.Remove(hotel);
-                        }
-                        break;
-                    }
-                default:
-                    if (!selectedHotels.Contains("All"))
-                    {
-                        selectedHotels.Remove(hotel);
-                    }
                     break;
             }
         }
         else
         {
+            selectedHotels.Add(hotel);
             switch (hotel)
             {
                 case "All":
-                    selectedHotels.Add(hotel);
                     foreach (string hotelString in listOfHotels)
                     {
                         selectedHotels.Add(hotelString);
                     }
                     break;
                 case "Local":
-                    if (!selectedHotels.Contains("All"))
-                    {
-                        selectedHotels.Add(hotel);
-                        selectedHotels.Add("Cabinn Aalborg");
-                        selectedHotels.Add("Slotshotellet Aalborg");
-                        selectedHotels.Add("Kompas Hotel Aalborg");
-                    }
+                        foreach (string hotelString in localList)
+                        {
+                            selectedHotels.Add(hotelString);
+                        }
                     break;
                 case "No budget":
-                    if (!selectedHotels.Contains("All"))
-                    {
-                        selectedHotels.Add(hotel);
-                        selectedHotels.Add("Kompas Hotel Aalborg");
-                        selectedHotels.Add("Slotshotellet Aalborg");
-                        selectedHotels.Add("Milling Hotel Aalborg");
-                        selectedHotels.Add("Aalborg Airport Hotel");
-                        selectedHotels.Add("Helnan Phønix Hotel");
-                        selectedHotels.Add("Hotel Schellsminde");
-                        selectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
-                        selectedHotels.Add("Comwell Hvide Hus Aalborg");
-                        selectedHotels.Add("Scandic Aalborg Øst");
-                        selectedHotels.Add("Scandic Aalborg City");
-                    }
-                    break;
-                default:
-                    selectedHotels.Add(hotel);
+                        foreach (string hotelString in noBudgetList)
+                        {
+                            selectedHotels.Add(hotelString);
+                        }
                     break;
             }
         }
 
-        int count = listOfHotels.Count(hotelString => selectedHotels.Contains(hotelString));
-        if (count == listOfHotels.Count)
+        int allCount = listOfHotels.Count(hotelString => selectedHotels.Contains(hotelString));
+        if (allCount == listOfHotels.Count)
         {
             selectedHotels.Add("All");
         }
+        else
+        {
+            selectedHotels.Remove("All");
+        }
 
-        //Change to list
-        if (selectedHotels.Contains("Cabinn Aalborg") && selectedHotels.Contains("Slotshotellet Aalborg") && selectedHotels.Contains("Kompas Hotel Aalborg"))
+        int noBudgetCount = noBudgetList.Count(hotelString => selectedHotels.Contains(hotelString));
+        if (noBudgetCount == noBudgetList.Count)
+        {
+            selectedHotels.Add("No budget");
+        }
+        else
+        {
+            selectedHotels.Remove("No budget");
+        }
+        
+        int localCount = localList.Count(hotelString => selectedHotels.Contains(hotelString));
+        if (localCount == localList.Count)
         {
             selectedHotels.Add("Local");
         }
-        
-        //Add automatic nobudget add
-        
+        else
+        {
+            selectedHotels.Remove("Local");
+        }
+
         selectedHotels = selectedHotels.Distinct().ToList();
     }
 
