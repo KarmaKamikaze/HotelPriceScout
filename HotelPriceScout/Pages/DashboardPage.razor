@@ -8,7 +8,7 @@
 
 <div class="row topLayer">
     <div class="col-md-12 d-inline-flex topLayer">
-        <h1 class="H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
+        <h1 class="noneselect H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
         @if (Dashboard.MonthsAway > 0)
         {
             <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Previous"); }'>
@@ -34,13 +34,13 @@
             </button>
         }
         <div class="col-md-8 @(Dashboard.DetermineAnimation())">
-            <h1 class="H1Date">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1>
+            <h1 class="noneselect H1Date">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1>
         </div>
     </div>
 </div>
 
 
-<div class="row col-md-7 d-inline-flex topLayer">
+<div class="noneselect row col-md-7 d-inline-flex topLayer">
     <div class="col-md-4">
         <select id="number-of-adults" class="form-control" @bind="adultsPicked" placeholder="1 adult" @onclick='() => OnClickUpdate("Update")'>
             <option value="1">1 adult</option>
@@ -66,7 +66,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="noneselect row">
     <div class="col-md-8 ">
         <table class="table table-bordered table-sm col calendar shadow bg-white">
             <thead>
@@ -227,7 +227,7 @@
     @foreach (var item in Dashboard.WarningMessage)
     {
         string[] ArrayOfWarnings = item.ListofWarnings.Split("|");
-        <div @key="item" class="modal fade show d-block " id="@item"  role="dialog">
+        <div @key="item" class="noneselect modal fade show d-block " id="@item"  role="dialog">
             <div class="modal-dialog modal-dialog-centered " role="document">
                 <div class="modal-content shadow-lg">
                     <div class="modal-body"> <pre><span class="e-icons e-circle-info"></span>   <b>Warning!</b></pre>
