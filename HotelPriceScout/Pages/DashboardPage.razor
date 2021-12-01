@@ -5,7 +5,6 @@
 @inject IDashboard Dashboard
 @inject ISqliteDataAccess _db
 
-
 <div class="row topLayer">
     <div class="col-md-12 d-inline-flex topLayer">
         <h1 class="noneselect H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
@@ -46,11 +45,9 @@
             <option value="1">1 adult</option>
             <option value="2">2 adults</option>
             <option value="4">4 adults</option>
-            
         </select>
     </div>
     <div class="col-lg-6">
-
         <div class="dropdown" id="selected-hotels">
             <button class="btn dropbtn" @onclick="()=>dropdown=!dropdown">Select hotels <span id="arrow" class="@(dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
             <div class="dropdown-content @(dropdown == true ? "ontop" : "d-none")">
@@ -151,7 +148,6 @@
         </table>
     </div>
 
-
     @if (Dashboard.DayClicked != 0)
     {
         Dashboard.GenerateThermometer(monthData, marketPriceList);
@@ -213,12 +209,7 @@
             </div>
         </div>
     }
-    else
-    {
-    }
 </div>
-
-
 
 @if (Dashboard.BoolExceptionPopup)
 {
@@ -241,14 +232,12 @@
 
 @code
 {
-
     private void RemoveCard(WarningMessage popup)
     {
         Dashboard.WarningMessages.Remove(popup);
     }
     private bool dropdown = false;
     decimal marketPrice;
-    private bool thermometerIsOpen = false;
     List<PriceModel> marketPriceList = new List<PriceModel>();
     decimal kompasPrice;
     private int adultsPicked = 1;
@@ -303,6 +292,5 @@
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
 
         Dashboard.CreateMonth();
-
     }
 }
