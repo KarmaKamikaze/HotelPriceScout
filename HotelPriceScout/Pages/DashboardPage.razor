@@ -52,14 +52,14 @@
     <div class="col-lg-6">
 
         <div class="dropdown" id="selected-hotels">
-            <button class="btn dropbtn" @onclick="()=>DropdownBool()">Select hotels <span id="arrow" class="@(Dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
+            <button class="btn dropbtn" @onclick="()=>Dropdown=!Dropdown">Select hotels <span id="arrow" class="@(Dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
             <div class="dropdown-content @(Dropdown == true ? "ontop" : "d-none")">
-                <div id="Boold" class="HotelOptions @(selectedHotels.Contains("All") ? "selected" : "")" @onclick='() => { SelectedHotelsChanged("All"); OnClickUpdate("update Hotel");}'>All</div>
-                <div id="Boold" class="HotelOptions @(selectedHotels.Contains("Local") ? "selected" : "")" @onclick='() => { SelectedHotelsChanged("Local"); OnClickUpdate("update Hotel");}'>Local</div>
-                <div id="Boold" class="HotelOptions @(selectedHotels.Contains("No budget") ? "selected" : "")" @onclick='() => { SelectedHotelsChanged("No budget"); OnClickUpdate("update Hotel");}'>No budget</div>
-                @foreach (string hotel in listOfHotels)
+                <div id="Boold" class="HotelOptions @(Dashboard.SelectedHotels.Contains("All") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("All"); OnClickUpdate("update Hotel");}'>All</div>
+                <div id="Boold" class="HotelOptions @(Dashboard.SelectedHotels.Contains("Local") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("Local"); OnClickUpdate("update Hotel");}'>Local</div>
+                <div id="Boold" class="HotelOptions @(Dashboard.SelectedHotels.Contains("No budget") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("No budget"); OnClickUpdate("update Hotel");}'>No budget</div>
+                @foreach (string hotel in Dashboard.ListOfHotels)
                 {
-                    <div class="HotelOptions @(selectedHotels.Contains(hotel) ? "selected" : "")" @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</div>
+                    <div class="HotelOptions @(Dashboard.SelectedHotels.Contains(hotel) ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</div>
                 }
             </div>
         </div>
@@ -248,129 +248,12 @@
     {
         Dashboard.WarningMessage.Remove(popup);
     }
-    public bool Dropdown = false;
-    public bool thermometerIsOpen = false;
+    private bool Dropdown = false;
     decimal marketPrice;
-    List<PriceModel> marketPriceList = new();
+    private bool thermometerIsOpen = false;
+    List<PriceModel> marketPriceList = new List<PriceModel>();
     decimal kompasPrice;
     private int adultsPicked = 1;
-    private List<string> selectedHotels = new List<string>();
-    private List<string> listOfHotels = new List<string>();
-
-    public void DropdownBool()
-    {
-        Dropdown = !Dropdown;
-    }
-
-    List<string> localList = new List<string>()
-    {
-        "Cabinn Aalborg",
-        "Slotshotellet Aalborg",
-        "Kompas Hotel Aalborg"
-    };
-
-    List<string> noBudgetList = new List<string>()
-    {
-        "Slotshotellet Aalborg",
-        "Kompas Hotel Aalborg",
-        "Milling Hotel Aalborg",
-        "Aalborg Airport Hotel",
-        "Helnan Phønix Hotel",
-        "Hotel Scheelsminde",
-        "Radisson Blu Limfjord Hotel Aalborg",
-        "Comwell Hvide Hus Aalborg",
-        "Scandic Aalborg Øst",
-        "Scandic Aalborg City"
-    };
-
-    void SelectedHotelsChanged(string hotel)
-    {
-        if (selectedHotels.Contains(hotel))
-        {
-            selectedHotels.Remove(hotel);
-            switch (hotel)
-            {
-                case "All":
-                    selectedHotels.Clear();
-                    break;
-                case "Local":
-                    foreach (string hotelString in localList)
-                    {
-                        if (!selectedHotels.Contains("No budget") || hotelString == "Cabinn Aalborg")
-                        {
-                            selectedHotels.Remove(hotelString);
-                        }
-                    }
-                    break;
-                case "No budget":
-                    foreach (string hotelString in noBudgetList)
-                    {
-                        if (!selectedHotels.Contains("Local") || (hotelString != "Slotshotellet Aalborg" && hotelString != "Kompas Hotel Aalborg"))
-                        {
-                            selectedHotels.Remove(hotelString);
-                        }
-                    }
-                    break;
-            }
-        }
-        else
-        {
-            selectedHotels.Add(hotel);
-            switch (hotel)
-            {
-                case "All":
-                    foreach (string hotelString in listOfHotels)
-                    {
-                        selectedHotels.Add(hotelString);
-                    }
-                    break;
-                case "Local":
-                        foreach (string hotelString in localList)
-                        {
-                            selectedHotels.Add(hotelString);
-                        }
-                    break;
-                case "No budget":
-                        foreach (string hotelString in noBudgetList)
-                        {
-                            selectedHotels.Add(hotelString);
-                        }
-                    break;
-            }
-        }
-
-        int allCount = listOfHotels.Count(hotelString => selectedHotels.Contains(hotelString));
-        if (allCount == listOfHotels.Count)
-        {
-            selectedHotels.Add("All");
-        }
-        else
-        {
-            selectedHotels.Remove("All");
-        }
-
-        int noBudgetCount = noBudgetList.Count(hotelString => selectedHotels.Contains(hotelString));
-        if (noBudgetCount == noBudgetList.Count)
-        {
-            selectedHotels.Add("No budget");
-        }
-        else
-        {
-            selectedHotels.Remove("No budget");
-        }
-        
-        int localCount = localList.Count(hotelString => selectedHotels.Contains(hotelString));
-        if (localCount == localList.Count)
-        {
-            selectedHotels.Add("Local");
-        }
-        else
-        {
-            selectedHotels.Remove("Local");
-        }
-
-        selectedHotels = selectedHotels.Distinct().ToList();
-    }
 
     IEnumerable<PriceModel> monthData;
     IEnumerable<PriceModel> monthMarketData;
@@ -400,7 +283,7 @@
                 marketPriceList.Clear();
                 break;
         }
-        monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", selectedHotels);
+        monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", Dashboard.SelectedHotels);
         monthMarketData = Program.ScoutSharedService.Scout.RunComparatorForSelectedHotels(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, monthData);
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
 
@@ -408,8 +291,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        listOfHotels = (await _db.LoadStaticHotelResources("total")).ToList(); //Loads list of hotels to the 
-
+        Dashboard.ListOfHotels = (await _db.LoadStaticHotelResources("total")).ToList(); 
+        
         Program.ScoutSharedService.Scout.RunComparator("dashboard");
 
         foreach (BookingSite bookingSite in Program.ScoutSharedService.Scout.BookingSites)
@@ -417,7 +300,7 @@
             bookingSite.DataScraper.SendMissingDataWarning += Dashboard.UpdateUiMissingDataWarning;
         }
 
-        monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", selectedHotels);
+        monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", Dashboard.SelectedHotels);
         monthMarketData = Program.ScoutSharedService.Scout.RunComparatorForSelectedHotels(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, monthData);
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
 
