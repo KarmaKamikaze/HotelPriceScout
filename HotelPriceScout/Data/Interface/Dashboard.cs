@@ -221,8 +221,7 @@ namespace HotelPriceScout.Data.Interface
 
             SelectedHotels = SelectedHotels.Distinct().ToList();
     }
-        
-        
+
         public string ShowCurrentDayAsString()
         {
             return DayClicked.ToString("") + ". " + MonthName + " " + Year.ToString("");
@@ -352,6 +351,5 @@ namespace HotelPriceScout.Data.Interface
             }
             return "";
         }
-
     }
 }
