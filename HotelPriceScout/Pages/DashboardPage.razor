@@ -224,9 +224,9 @@
 
 @if (Dashboard.BoolExceptionPopup)
 {
-    @foreach (var item in Dashboard.WarningMessage)
+    @foreach (var item in Dashboard.WarningMessages)
     {
-        string[] ArrayOfWarnings = item.ListofWarnings.Split("|");
+        string[] ArrayOfWarnings = item.ConcatenatedWarningString.Split("|");
         <div @key="item" class="noneselect modal fade show d-block " id="@item"  role="dialog">
             <div class="modal-dialog modal-dialog-centered " role="document">
                 <div class="modal-content shadow-lg">
@@ -246,7 +246,7 @@
 
     private void RemoveCard(WarningMessage popup)
     {
-        Dashboard.WarningMessage.Remove(popup);
+        Dashboard.WarningMessages.Remove(popup);
     }
     private bool dropdown = false;
     decimal marketPrice;
@@ -286,7 +286,6 @@
         monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", Dashboard.SelectedHotels);
         monthMarketData = Program.ScoutSharedService.Scout.RunComparatorForSelectedHotels(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, monthData);
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
-
     }
 
     protected override async Task OnInitializedAsync()
@@ -305,6 +304,5 @@
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
 
         Dashboard.CreateMonth();
-
     }
 }
