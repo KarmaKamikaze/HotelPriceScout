@@ -52,12 +52,21 @@
     <div class="col-lg-6">
 
         <div class="dropdown" id="selected-hotels">
+<<<<<<< HEAD
+            <button class="btn dropbtn" @onclick="()=>DropdownBool()">Select hotels <span id="arrow" class="@(Dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
+            <div class="dropdown-content @(Dropdown == true ? "ontop" : "d-none")">
+                <div class="bold HotelOptions @(selectedHotels.Contains("All") ? "selected" : "")" @onclick='() => { SelectedHotelsChanged("All"); OnClickUpdate("update Hotel");}'>All</div>
+                <div class="bold HotelOptions @(selectedHotels.Contains("Local") ? "selected" : "")" @onclick='() => { SelectedHotelsChanged("Local"); OnClickUpdate("update Hotel");}'>Local</div>
+                <div class="bold HotelOptions @(selectedHotels.Contains("No budget") ? "selected" : "")" @onclick='() => { SelectedHotelsChanged("No budget"); OnClickUpdate("update Hotel");}'>No budget</div>
+                @foreach (string hotel in listOfHotels)
+=======
             <button class="btn dropbtn" @onclick="()=>dropdown=!dropdown">Select hotels <span id="arrow" class="@(dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
             <div class="dropdown-content @(dropdown == true ? "ontop" : "d-none")">
                 <div id="Boold" class="HotelOptions @(Dashboard.SelectedHotels.Contains("All") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("All"); OnClickUpdate("update Hotel");}'>All</div>
                 <div id="Boold" class="HotelOptions @(Dashboard.SelectedHotels.Contains("Local") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("Local"); OnClickUpdate("update Hotel");}'>Local</div>
                 <div id="Boold" class="HotelOptions @(Dashboard.SelectedHotels.Contains("No budget") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("No budget"); OnClickUpdate("update Hotel");}'>No budget</div>
                 @foreach (string hotel in Dashboard.ListOfHotels)
+>>>>>>> 7e836bb033504a7bdf30637f844114a7376f1ba9
                 {
                     <div class="HotelOptions @(Dashboard.SelectedHotels.Contains(hotel) ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</div>
                 }
