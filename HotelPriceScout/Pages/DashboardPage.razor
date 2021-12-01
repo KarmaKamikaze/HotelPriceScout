@@ -52,8 +52,8 @@
     <div class="col-lg-6">
 
         <div class="dropdown" id="selected-hotels">
-            <button class="btn dropbtn" @onclick="()=>Dropdown=!Dropdown">Select hotels <span id="arrow" class="@(Dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
-            <div class="dropdown-content @(Dropdown == true ? "ontop" : "d-none")">
+            <button class="btn dropbtn" @onclick="()=>dropdown=!dropdown">Select hotels <span id="arrow" class="@(dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
+            <div class="dropdown-content @(dropdown == true ? "ontop" : "d-none")">
                 <div id="Boold" class="HotelOptions @(Dashboard.SelectedHotels.Contains("All") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("All"); OnClickUpdate("update Hotel");}'>All</div>
                 <div id="Boold" class="HotelOptions @(Dashboard.SelectedHotels.Contains("Local") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("Local"); OnClickUpdate("update Hotel");}'>Local</div>
                 <div id="Boold" class="HotelOptions @(Dashboard.SelectedHotels.Contains("No budget") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("No budget"); OnClickUpdate("update Hotel");}'>No budget</div>
@@ -248,7 +248,7 @@
     {
         Dashboard.WarningMessage.Remove(popup);
     }
-    private bool Dropdown = false;
+    private bool dropdown = false;
     decimal marketPrice;
     private bool thermometerIsOpen = false;
     List<PriceModel> marketPriceList = new List<PriceModel>();
@@ -270,14 +270,14 @@
                 Dashboard.MonthsAway++;
                 Dashboard.CreateMonth();
                 Dashboard.NextMonth();
-                Dropdown = false;
+                dropdown = false;
                 break;
             case "Previous":
                 Dashboard.DayClicked = 0;
                 Dashboard.MonthsAway--;
                 Dashboard.CreateMonth();
                 Dashboard.PreviousMonth();
-                Dropdown = false;
+                dropdown = false;
                 break;
             case "update Hotel":
                 marketPriceList.Clear();
