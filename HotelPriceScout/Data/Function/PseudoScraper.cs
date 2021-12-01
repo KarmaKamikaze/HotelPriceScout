@@ -18,7 +18,7 @@ namespace HotelPriceScout.Data.Function
         private const int TypeFourMax = 1700;
         private const int DiscrepancyProbability = 100 / 5;
         private const int PriceChangeProbability = 100 / 15;
-        private const int AboveOrBelowMarginProbability = 100 / 50;
+        private const int AboveOrBelowMarginProbability = 50;
         private const int Variance = 200;
         private const int RunScraperIntervalInMinutes = 30;
         private bool _firstTimeUpdate;
