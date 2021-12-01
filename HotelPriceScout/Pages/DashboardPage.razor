@@ -51,7 +51,7 @@
     </div>
     <div class="col-lg-6">
 
-        <div class="dropdown">
+        <div class="dropdown" id="selected-hotels">
             <button class="btn dropbtn" @onclick="()=>DropdownBool()">Select hotels <span id="arrow" class="@(Dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
             <div class="dropdown-content @(Dropdown == true ? "ontop" : "d-none")">
                 <div id="Boold" class="HotelOptions @(selectedHotels.Contains("All") ? "selected" : "")" @onclick='() => { SelectedHotelsChanged("All"); OnClickUpdate("update Hotel");}'>All</div>

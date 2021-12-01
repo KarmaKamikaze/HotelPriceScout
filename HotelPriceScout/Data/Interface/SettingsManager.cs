@@ -6,11 +6,20 @@ namespace HotelPriceScout.Data.Interface
 {
     public class SettingsManager
     {
-        public static int MarginDropdown { get; set; } = 15;
-        public static int NotificationAmountDropdown { get; set; } = 1;
-        public static DateTime TimeValueDropdown { get; set; } = DateTime.Now.Date;
-        public static DateTime TimeValue2Dropdown { get; set; } = DateTime.Now.Date;
-        public static DateTime TimeValue3Dropdown { get; set; } = DateTime.Now.Date;
+        public SettingsManager()
+        {
+            MarginDropdown = 15;
+            NotificationAmountDropdown = 1;
+            TimeValueDropdown = DateTime.Parse("12:00");
+            TimeValue2Dropdown = DateTime.Now.Date;
+            TimeValue3Dropdown = DateTime.Now.Date;
+        }
+        
+        public static int MarginDropdown { get; set; }
+        public static int NotificationAmountDropdown { get; set; }
+        public static DateTime TimeValueDropdown { get; set; }
+        public static DateTime TimeValue2Dropdown { get; set; }
+        public static DateTime TimeValue3Dropdown { get; set; }
         public static int MarginPicked { get; private set; }
         public static int NotificationPicked { get; set; }
         private static DateTime TimeValuePicked { get; set; }
@@ -22,19 +31,6 @@ namespace HotelPriceScout.Data.Interface
         public static bool showStart = true;
         public bool stopPopup = false;
         public bool updatePopup = false;
-        
-        public void ModalStopPopUp()
-        {
-            stopPopup = !stopPopup;
-        }
-        public void ModalUpdatePopUp()
-        {
-            updatePopup = !updatePopup;
-        }
-        public void ModalStartPopUp()
-        {
-            startPopup = !startPopup;      
-        }
 
         private static void ReverseMultipleBools(ref bool a, ref bool b, ref bool c)
         {
@@ -95,19 +91,14 @@ namespace HotelPriceScout.Data.Interface
             updatePopup = !updatePopup;
 
         }
-        public void EscapeUpdate(KeyboardEventArgs e)
+
+        public void EscapePopUp(KeyboardEventArgs e, ref bool valueCheck)
         {
-            if (e.Code == "Escape" && updatePopup)
+            if (e.Code == "Escape" && valueCheck)
             {
-                updatePopup = !updatePopup;
+                valueCheck = false;
             }
         }
-        public void EscapeStop(KeyboardEventArgs f)
-        {
-            if (f.Code == "Escape" && stopPopup)
-            {
-                stopPopup = !stopPopup;
-            }
-        }
+        
     }
 }
