@@ -104,7 +104,6 @@ namespace HotelPriceScout.Data.Interface
                         {
                             warnings += $"On date: {price.Date} hotel: {hotelName}, with roomtype: {roomtype}|";
                         }
-                        
                         }
                 }
             }

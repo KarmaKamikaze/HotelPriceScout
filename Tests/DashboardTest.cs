@@ -4,18 +4,27 @@ using HotelPriceScout.Data.Interface;
 using HotelPriceScout.Data.Model;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit.Abstractions;
+using Dapper;
 
 namespace Tests
 {
     public class DashboardTest
     {
+        private ITestOutputHelper _testOutputHelper;
+        public void XUnitTestClass(ITestOutputHelper testOutputHelper)
+        {
+            _testOutputHelper = testOutputHelper;
+        }
+
+
         public static readonly object[][] ShowMoreInfoData =
         {
             new object[] {false, 22, null},
             new object[] {false, DateTime.Now.Day, DateTime.Now.Day},
             new object[] {true, DateTime.Now.Day, (DateTime.Now.Day + 1)}
         };
-
+    
 
         [Fact]
         public void Test_If_CreateMonth_Creates_Correct_Month_Based_On_The_Current_Month()
@@ -69,40 +78,55 @@ namespace Tests
             Assert.Equal(expected, dashboard.CheckForAlternateClick);
         }
 
+        //[Fact]
+        //public void Test_If_UpdateUiMissingDataWarning_Returns_Warning()
+        //{
+        //    //Arrange
+        //    Dashboard dashboard = new Dashboard();
+        //    Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
+        //    {
+        //        { "hotel1", "tag1" }
+        //    };
+        //    RoomType roomType = new RoomType(1);
+        //    //Act
+        //    BookingSite bookingSite = new BookingSite("hotel1", "single", "https://www.url.com", hotelStrings);
+
+        //    bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Price = 0;
+
+        //    dashboard.UpdateUiMissingDataWarning(bookingSite);
+
+        //    List<WarningMessage> test = new List<WarningMessage>();
+        //    test.Add(new WarningMessage($"On date: {DateTime.Now.Date} hotel: {bookingSite.Name}, with roomtype: {bookingSite.Type}|", bookingSite.Name));
+
+        //    //Assert.Equal(test, dashboard.WarningMessage);
+
+        //    Assert.Equal(test)
+        //}
+
         [Fact]
-        public void Test_If_UpdateUiMissingDataWarning_Returns_Warning()
+        public void Test_If_UpdateUiMissingData_Returns_Correct_Values_In_WarningMessage()
         {
-            ////Arrange
-            //Dashboard dashboard = new Dashboard();
-            //BookingSite bookingSite = new BookingSite("Kompas Hotel", "single", "https://www.url.com", new Dictionary<string, string>());
-            //RoomTypePrice roomTypePrice = new RoomTypePrice(DateTime.Now, 0);
-            //roomTypePrice.Price = 0;
-            ////Act
-            //dashboard.UpdateUiMissingDataWarning(bookingSite);
-            //List<WarningMessage> test = new List<WarningMessage>();
-            //test.Add(new WarningMessage("0", "0"));
-
-            ////Assert
-            //Assert.Equal(test, dashboard.WarningMessage);
-
-
-            //Arrange
             Dashboard dashboard = new Dashboard();
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
                 { "hotel1", "tag1" }
             };
-            //Act
-            BookingSite bookingSite = new BookingSite("name", "single", "https://www.url.com", hotelStrings);
+            BookingSite bookingSite = new BookingSite("hotel1", "single", "https://www.url.com", hotelStrings);
 
             bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Price = 0;
+            WarningMessage warningMessage = new WarningMessage("", "");
 
             dashboard.UpdateUiMissingDataWarning(bookingSite);
 
-            List<WarningMessage> test = new List<WarningMessage>();
-            test.Add(new WarningMessage("0", bookingSite.Name));
+            string dash = string.Join(", ", warningMessage);
 
-            Assert.Equal(test, dashboard.WarningMessage);
+            Console.WriteLine(dash);
+
+            Assert.Equal("deez", dash);
+
+            //Assert.All(dashboard.WarningMessage,
+              //  ListofWarnings => Assert.Contains($"{DateTime.Now.Date}", ListofWarnings.ToString())
+                //); ;
         }
     }
 }
