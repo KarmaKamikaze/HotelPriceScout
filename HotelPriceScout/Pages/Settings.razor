@@ -167,12 +167,19 @@
         Program.ScoutSharedService.ScoutRunning = false;
         SettingsManager.SetStopScoutSettings();
         Program.ScoutSharedService.Scout.StopScout();
+        Program.ScoutSharedService.Scout = null;
         StateHasChanged();
     }
 
     private async void UpdateProgram()
     {
-        SettingsManager.SetUpdateScoutSettings();
+        Program.ScoutSharedService.Scout.StopScout();
+        Program.ScoutSharedService.Scout = null;
+        SettingsManager.SetScoutSettings(false);
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
+        Program.ScoutSharedService.Scout.StartScout();
+        
+        SettingsManager.updatePopup = !SettingsManager.updatePopup;
         SettingsManager.updateYes = !SettingsManager.updateYes;
         StateHasChanged();
         await Task.Delay(1500);
@@ -183,7 +190,7 @@
     private async void StartProgram()
     {
         Program.ScoutSharedService.ScoutRunning = true;
-        SettingsManager.SetStartScoutSettings();
+        SettingsManager.SetScoutSettings(true);
         Countdown();
         Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();

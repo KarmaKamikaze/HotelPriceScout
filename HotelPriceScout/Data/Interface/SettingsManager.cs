@@ -60,9 +60,13 @@ namespace HotelPriceScout.Data.Interface
             return result;
         }
         
-        public void SetStartScoutSettings()
+        public void SetScoutSettings(bool check)
         {
-            ReverseMultipleBools(ref startPopup, ref showStop, ref showStart);
+            if (check)
+            {
+                ReverseMultipleBools(ref startPopup, ref showStop, ref showStart);
+            }
+
             MarginPicked = MarginDropdown;
             NotificationPicked = NotificationAmountDropdown;
            
@@ -73,23 +77,11 @@ namespace HotelPriceScout.Data.Interface
         public void SetStopScoutSettings()
         {
             ReverseMultipleBools(ref showStart, ref showStop, ref stopPopup);
-            MarginPicked = default;
-            NotificationPicked = default;
             TimeValuePicked = default;
             TimeValue2Picked = default;
             TimeValue3Picked = default;
             MarginPicked = 1;
             NotificationPicked = 1;
-        }
-        public void SetUpdateScoutSettings()
-        {
-            MarginPicked = MarginDropdown;
-            NotificationPicked = NotificationAmountDropdown;
-            TimeValuePicked = TimeValueDropdown;
-            TimeValue2Picked = TimeValue2Dropdown;
-            TimeValue3Picked = TimeValue3Dropdown;
-            updatePopup = !updatePopup;
-
         }
 
         public void EscapePopUp(KeyboardEventArgs e, ref bool valueCheck)
