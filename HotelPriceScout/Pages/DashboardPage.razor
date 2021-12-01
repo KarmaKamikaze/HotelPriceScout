@@ -168,7 +168,7 @@
                                 item.Price >= Dashboard.MarketPriceItem.Price - Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price))
                             {
                                 <tr>
-                                    <td class="col text-right @(item.HotelName == "Gns. Marked" || item.HotelName == "Kompas Hotel Aalborg" ? "boldFont" : "")">
+                                    <td class="col text-right @(item.HotelName == "Average Market Price" || item.HotelName == "Kompas Hotel Aalborg" ? "boldFont" : "")">
                                         @item.HotelName <span class="oi oi-arrow-right text-center"></span>
                                     </td>
                                     <td class="table-info text-center">@(decimal.ToInt32(item.Price)),-</td>
