@@ -10,13 +10,13 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard : IDashboard
     {
-        public List<WarningMessage> WarningMessage { get; set; } = new List<WarningMessage>();
+        public List<WarningMessage> WarningMessages { get; set; } = new List<WarningMessage>();
         public bool BoolExceptionPopup { get; set; } = false;
         public List<PriceModel> PriceList { get; private set; }
         public PriceModel MarketPriceItem { get; private set; }
         private const int DataUnavailable = 0;
         public int TempAniDate { get; set; }
-        public bool CheckForAlternateClick { get; private set; } = true;
+        private bool CheckForAlternateClick { get; set; } = true;
         public string MonthName { get; private set; } = "";
         public DateTime MonthEnd { get; private set; }
         public int MonthsAway { get; set; }
@@ -112,6 +112,7 @@ namespace HotelPriceScout.Data.Interface
             PriceList.Sort();
             
         }
+        
         public void UpdateUiMissingDataWarning(BookingSite bookingSite)
         {
             string warnings = "";
@@ -220,12 +221,13 @@ namespace HotelPriceScout.Data.Interface
             }
 
             SelectedHotels = SelectedHotels.Distinct().ToList();
-    }
+        }
 
         public string ShowCurrentDayAsString()
         {
             return DayClicked.ToString("") + ". " + MonthName + " " + Year.ToString("");
         }
+        
         public void CreateMonth()
         {
             TempDate = DateTime.Now.AddMonths(MonthsAway);
@@ -256,6 +258,7 @@ namespace HotelPriceScout.Data.Interface
             if(NumDummyColumn == 0)
             {NumDummyColumn = 7;}
         }
+        
         public string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice)
         {
 
@@ -273,6 +276,7 @@ namespace HotelPriceScout.Data.Interface
 
             return "";
         }
+        
         public string ArrowDecider(decimal marketPrice, decimal kompasPrice)
         {
             decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
@@ -289,12 +293,14 @@ namespace HotelPriceScout.Data.Interface
 
             return "oi oi-minus";
         }
+        
         public decimal CurrentMargin(decimal marketPrice)
         {
             decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
 
             return result;
         }
+        
         public void ShowMoreInfo(int dayClicked)
         {
             if (new DateTime(Year, Month, dayClicked, 23, 59, 59) >= DateTime.Now && 
@@ -315,11 +321,13 @@ namespace HotelPriceScout.Data.Interface
                 CheckForAlternateClick = false;
             }
         }
+        
         public void NextMonth()
         { 
             StartOfMonth = StartOfMonth.AddMonths(1);
             LastDayOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
         }
+        
         public void PreviousMonth()
         {
             StartOfMonth = StartOfMonth.AddMonths(-1);

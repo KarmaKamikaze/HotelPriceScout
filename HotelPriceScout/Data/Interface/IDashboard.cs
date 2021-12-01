@@ -8,12 +8,11 @@ namespace HotelPriceScout.Data.Interface
 {
     public interface IDashboard
     {
-        List<WarningMessage> WarningMessage { get; set; }
+        List<WarningMessage> WarningMessages { get; set; }
         bool BoolExceptionPopup { get; set; }
         List<PriceModel> PriceList { get; }
         PriceModel MarketPriceItem { get; }
         int TempAniDate { get; set; }
-        bool CheckForAlternateClick { get; }
         string MonthName { get; }
         DateTime MonthEnd { get; }
         int MonthsAway { get; set; }
