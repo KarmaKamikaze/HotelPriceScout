@@ -27,7 +27,9 @@ namespace HotelPriceScout.Data.Interface
         private DateTime TempDate { get; set; }
         public DateTime ToDay { get; } = DateTime.Now;
         private DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
-        public DateTime LastDayOfMonth { get; private set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
+
+        public DateTime LastDayOfMonth { get; private set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
+            DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
         private readonly ISqliteDataAccess _db = new SqliteDataAccess();
         
         public decimal GetSingleDayMarketPrice(IEnumerable<PriceModel> multipleMarketPrices, int specificDay)
@@ -43,8 +45,8 @@ namespace HotelPriceScout.Data.Interface
         public async Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
         {              
             IEnumerable<PriceModel> dataList = await _db.RetrieveDataFromDb("*", $"RoomType{roomType}",
-                                         $" Date >= '{(ToDay.Date).ToString("yyyy-MM-dd")}' AND " +
-                                         $"Date <= '{(LastDayOfMonth.Date).ToString("yyyy-MM-dd")}'");
+                                         $" Date >= '{ToDay.ToString("yyyy-MM-dd")}' AND " +
+                                         $"Date <= '{LastDayOfMonth.ToString("yyyy-MM-dd")}'");
             List<PriceModel> resultDataList = new();
             switch (wantedOutput)
             {
