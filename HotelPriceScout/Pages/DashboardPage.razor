@@ -12,25 +12,25 @@
         @if (Dashboard.MonthsAway > 0)
         {
             <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Previous"); }'>
-                <span class="oi oi-arrow-thick-left" id="ArrowSize"></span>
+                <span class="oi oi-arrow-thick-left ArrowSize" ></span>
             </button>
         }
         else
         {
             <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
-                <span class="oi oi-arrow-thick-left" id="ArrowSize"></span>
+                <span class="oi oi-arrow-thick-left ArrowSize"></span>
             </button>
         }
         @if (Dashboard.MonthsAway < 3)
         {
             <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Next"); }'>
-                <span class="oi oi-arrow-thick-right" id="ArrowSize"></span>
+                <span class="oi oi-arrow-thick-right ArrowSize"></span>
             </button>
         }
         else
         {
             <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
-                <span class="oi oi-arrow-thick-right" id="ArrowSize"></span>
+                <span class="oi oi-arrow-thick-right ArrowSize"></span>
             </button>
         }
         <div class="col-md-8 @(Dashboard.DetermineAnimation())">
