@@ -119,19 +119,18 @@ namespace HotelPriceScout.Data.Interface
 
             foreach (var hotel in bookingSite.HotelsList)
             {
-                string hotelName = hotel.Name;
                 foreach (var roomtype in hotel.RoomTypes)
                 { 
-                    string type = roomtype.Capacity.ToString();
                     foreach(var price in roomtype.Prices)
                     {
                         if(price.Price == 0)
                         {
-                            warnings += $"On date: {price.Date} hotel: {hotelName}, with roomtype: {roomtype}|";
+                            warnings += $"On date: {price.Date} hotel: {hotel.Name}, with roomtype: {roomtype.Capacity}|";
                         }
-                    }
+                        }
                 }
             }
+            WarningMessages.Add(new WarningMessage(warnings, bookingSite.Name));
         }
         
         public void SelectedHotelsChanged(string hotel)
