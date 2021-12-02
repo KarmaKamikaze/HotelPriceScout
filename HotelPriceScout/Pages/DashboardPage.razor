@@ -52,7 +52,7 @@
     <div class="col-lg-6">
 
         <div class="dropdown" id="selected-hotels">
-            <button class="btn dropbtn" @onclick="()=>dropdown=!dropdown">Select hotels <span id="arrow" class="@(dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
+            <button class="btn dropbtn" id="selected-hotels-button" @onclick="()=>dropdown=!dropdown">Select hotels <span id="arrow" class="@(dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
             <div class="dropdown-content @(dropdown == true ? "ontop" : "d-none")">
                 <div class="bold HotelOptions @(Dashboard.SelectedHotels.Contains("All") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("All"); OnClickUpdate("update Hotel");}'>All</div>
                 <div class="bold HotelOptions @(Dashboard.SelectedHotels.Contains("Local") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("Local"); OnClickUpdate("update Hotel");}'>Local</div>
