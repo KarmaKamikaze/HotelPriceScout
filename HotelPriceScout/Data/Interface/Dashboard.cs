@@ -102,7 +102,7 @@ namespace HotelPriceScout.Data.Interface
                     {
                         if(price.Price == 0)
                         {
-                            warnings = $"On date: {price.Date} hotel: {hotelName}, with roomtype: {roomtype}|";
+                            warnings = $"On date: {price.Date} hotel: {hotelName}, with roomtype: {roomtype.Capacity}|";
                         }
                         }
                 }

@@ -17,14 +17,6 @@ namespace Tests
             this.output = output;
         }
 
-         public static readonly object[][] ShowMoreInfoData =
-        {
-            new object[] {false, 22, null},
-            new object[] {false, DateTime.Now.Day, DateTime.Now.Day},
-            new object[] {true, DateTime.Now.Day, (DateTime.Now.Day + 1)}
-        };
-    
-
         [Fact]
         public void Test_If_CreateMonth_Creates_Correct_Month_Based_On_The_Current_Month()
         {
@@ -64,71 +56,73 @@ namespace Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory, MemberData(nameof(ShowMoreInfoData))]
-        public void Test_If_ShowMoreInfo_Returns_Correct_Value(bool expected, int currentDay, int previousDateClicked)
-        {
-            //Arrange
-            Dashboard dashboard = new Dashboard();
-            //Act
-            dashboard.CreateMonth();
-            dashboard.DayClicked = previousDateClicked;
-            dashboard.ShowMoreInfo(currentDay);
-            //Assert
-            Assert.Equal(expected, dashboard.CheckForAlternateClick);
-        }
-
-        //[Fact]
-        //public void Test_If_UpdateUiMissingDataWarning_Returns_Warning()
-        //{
-        //    //Arrange
-        //    Dashboard dashboard = new Dashboard();
-        //    Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
-        //    {
-        //        { "hotel1", "tag1" }
-        //    };
-        //    RoomType roomType = new RoomType(1);
-        //    //Act
-        //    BookingSite bookingSite = new BookingSite("hotel1", "single", "https://www.url.com", hotelStrings);
-
-        //    bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Price = 0;
-
-        //    dashboard.UpdateUiMissingDataWarning(bookingSite);
-
-        //    List<WarningMessage> test = new List<WarningMessage>();
-        //    test.Add(new WarningMessage($"On date: {DateTime.Now.Date} hotel: {bookingSite.Name}, with roomtype: {bookingSite.Type}|", bookingSite.Name));
-
-        //    //Assert.Equal(test, dashboard.WarningMessage);
-
-        //    Assert.Equal(test)
-        //}
-
         [Fact]
-        public void Test_If_UpdateUiMissingData_Returns_Correct_Values_In_WarningMessage()
+        public void Test_If_UpdateUiMissingData_Returns_Correct_Date_In_WarningMessage()
         {
             Dashboard dashboard = new Dashboard();
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                { "hotel1", "tag1" }
+                { "hotel", "tag" }
             };
             BookingSite bookingSite = new BookingSite("hotel1", "single", "https://www.url.com", hotelStrings);
+
+            bookingSite.DataScraper.StartScraping(10);
 
             bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Price = 0;
 
             dashboard.UpdateUiMissingDataWarning(bookingSite);
 
-            var dash = dashboard.WarningMessage.First().ListofWarnings;
+            string dash = dashboard.WarningMessage.First().ListofWarnings;
 
-            var expected = bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Date.ToString();
-
-            for(int i = 0; i < expected.Length; i++)
-            {
-                output.WriteLine(dash);
-            }
-
+            string expected = bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Date.ToString();
 
             Assert.Contains(expected, dash);
+        }
 
+        [Fact]
+        public void Test_If_UpdateUiMissingData_Returns_Correct_HotelName_In_WarningMessage()
+        {
+            Dashboard dashboard = new Dashboard();
+            Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
+            {
+                {"hotel", "tag" }
+            };
+            BookingSite bookingSite = new BookingSite("hotel", "single", "https://www.url.com", hotelStrings);
 
+            bookingSite.DataScraper.StartScraping(10);
+
+            bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Price = 0;
+
+            dashboard.UpdateUiMissingDataWarning(bookingSite);
+
+            string dash = dashboard.WarningMessage.First().ListofWarnings;
+
+            string expected = bookingSite.HotelsList.First().Name;
+
+            Assert.Contains(expected, dash);
+        }
+
+        [Fact]
+        public void Test_If_UpdateUiMissingData_Returns_Correct_RoomType_In_WarningMessage()
+        {
+            Dashboard dashboard = new Dashboard();
+            Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
+            {
+                {"hotel", "tag" }
+            };
+            BookingSite bookingSite = new BookingSite("hotel", "single", "https://www.url.com", hotelStrings);
+
+            bookingSite.DataScraper.StartScraping(10);
+
+            bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Price = 0;
+
+            dashboard.UpdateUiMissingDataWarning(bookingSite);
+
+            string dash = dashboard.WarningMessage.First().ListofWarnings;
+
+            string expected = bookingSite.HotelsList.First().RoomTypes.First().Capacity.ToString();
+
+            Assert.Contains(expected, dash);
         }
     }
 }
