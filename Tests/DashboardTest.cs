@@ -5,20 +5,19 @@ using HotelPriceScout.Data.Model;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit.Abstractions;
-using Dapper;
 
 namespace Tests
 {
     public class DashboardTest
     {
-        private ITestOutputHelper _testOutputHelper;
-        public void XUnitTestClass(ITestOutputHelper testOutputHelper)
+        private readonly ITestOutputHelper output;
+
+        public DashboardTest(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            this.output = output;
         }
 
-
-        public static readonly object[][] ShowMoreInfoData =
+         public static readonly object[][] ShowMoreInfoData =
         {
             new object[] {false, 22, null},
             new object[] {false, DateTime.Now.Day, DateTime.Now.Day},
@@ -114,17 +113,22 @@ namespace Tests
             BookingSite bookingSite = new BookingSite("hotel1", "single", "https://www.url.com", hotelStrings);
 
             bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Price = 0;
-            WarningMessage warningMessage = new WarningMessage("", "");
 
             dashboard.UpdateUiMissingDataWarning(bookingSite);
 
-            string dash = string.Join(", ", warningMessage.ListofWarnings);
+            var dash = dashboard.WarningMessage.First().ListofWarnings;
 
-            Assert.Equal("deez", dash);
+            var expected = bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Date.ToString();
 
-            //Assert.All(dashboard.WarningMessage,
-              //  ListofWarnings => Assert.Contains($"{DateTime.Now.Date}", ListofWarnings.ToString())
-                //); ;
+            for(int i = 0; i < expected.Length; i++)
+            {
+                output.WriteLine(dash);
+            }
+
+
+            Assert.Contains(expected, dash);
+
+
         }
     }
 }
