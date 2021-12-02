@@ -48,7 +48,8 @@
         </select>
     </div>
     <div class="col-lg-6">
-        <div class="dropdown" id="selected-hotels">
+        <div class="dropdown" id="selected-hotels" data-toggle="tooltip"
+        title="All hotels on the dropdown list are selected by default">
             <button class="btn dropbtn" @onclick="()=>dropdown=!dropdown">Select hotels <span id="arrow" class="@(dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
             <div class="dropdown-content @(dropdown == true ? "ontop" : "d-none")">
                 <div class="bold HotelOptions @(Dashboard.SelectedHotels.Contains("All") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("All"); OnClickUpdate("update Hotel");}'>All</div>
