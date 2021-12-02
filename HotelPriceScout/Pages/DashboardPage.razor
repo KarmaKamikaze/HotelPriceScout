@@ -5,7 +5,6 @@
 @inject IDashboard Dashboard
 @inject ISqliteDataAccess _db
 
-
 <div class="row topLayer">
     <div class="col-md-12 d-inline-flex topLayer">
         <h1 class="noneselect H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
@@ -46,12 +45,11 @@
             <option value="1">1 adult</option>
             <option value="2">2 adults</option>
             <option value="4">4 adults</option>
-            
         </select>
     </div>
     <div class="col-lg-6">
-
-        <div class="dropdown" id="selected-hotels">
+        <div class="dropdown" id="selected-hotels" data-toggle="tooltip"
+        title="All hotels on the dropdown list are selected by default">
             <button class="btn dropbtn" id="selected-hotels-button" @onclick="()=>dropdown=!dropdown">Select hotels <span id="arrow" class="@(dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
             <div class="dropdown-content @(dropdown == true ? "ontop" : "d-none")">
                 <div class="bold HotelOptions @(Dashboard.SelectedHotels.Contains("All") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("All"); OnClickUpdate("update Hotel");}'>All</div>
@@ -151,7 +149,6 @@
         </table>
     </div>
 
-
     @if (Dashboard.DayClicked != 0)
     {
         Dashboard.GenerateThermometer(monthData, marketPriceList);
@@ -212,21 +209,14 @@
                 }
             </div>
         </div>
-        thermometerIsOpen = true;
-    }
-    else
-    {
-        thermometerIsOpen = false;
     }
 </div>
 
-
-
 @if (Dashboard.BoolExceptionPopup)
 {
-    @foreach (var item in Dashboard.WarningMessage)
+    @foreach (var item in Dashboard.WarningMessages)
     {
-        string[] ArrayOfWarnings = item.ListofWarnings.Split("|");
+        string[] ArrayOfWarnings = item.ConcatenatedWarningString.Split("|");
         <div @key="item" class="noneselect modal fade show d-block " id="@item"  role="dialog">
             <div class="modal-dialog modal-dialog-centered " role="document">
                 <div class="modal-content shadow-lg">
@@ -243,14 +233,12 @@
 
 @code
 {
-
     private void RemoveCard(WarningMessage popup)
     {
-        Dashboard.WarningMessage.Remove(popup);
+        Dashboard.WarningMessages.Remove(popup);
     }
     private bool dropdown = false;
     decimal marketPrice;
-    private bool thermometerIsOpen = false;
     List<PriceModel> marketPriceList = new List<PriceModel>();
     decimal kompasPrice;
     private int adultsPicked = 1;
@@ -305,6 +293,5 @@
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
 
         Dashboard.CreateMonth();
-
     }
 }

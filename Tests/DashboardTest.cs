@@ -1,18 +1,22 @@
 ﻿using System;
 using Xunit;
 using HotelPriceScout.Data.Interface;
+using HotelPriceScout.Data.Model;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit.Abstractions;
 
 namespace Tests
 {
     public class DashboardTest
     {
-        public static readonly object[][] ShowMoreInfoData =
+        public static IEnumerable<object[]> Getvalues =>
+            new List<object[]>
         {
-            new object[] {false, 22, null},
-            new object[] {false, DateTime.Now.Day, DateTime.Now.Day},
-            new object[] {true, DateTime.Now.Day, (DateTime.Now.Day + 1)}
+                new object[] {DateTime.Now.Date.ToString()},
+                new object[] {"hotel"},
+                new object[] {"1"}
         };
-
 
         [Fact]
         public void Test_If_CreateMonth_Creates_Correct_Month_Based_On_The_Current_Month()
@@ -53,17 +57,25 @@ namespace Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory, MemberData(nameof(ShowMoreInfoData))]
-        public void Test_If_ShowMoreInfo_Returns_Correct_Value(bool expected, int currentDay, int previousDateClicked)
+        [Theory, MemberData(nameof(Getvalues))]
+        public void Test_If_UpdateUiMissingData_Returns_Correct_Values_In_WarningMessage(string expectedSubstring)
         {
-            //Arrange
             Dashboard dashboard = new Dashboard();
-            //Act
-            dashboard.CreateMonth();
-            dashboard.DayClicked = previousDateClicked;
-            dashboard.ShowMoreInfo(currentDay);
-            //Assert
-            Assert.Equal(expected, dashboard.CheckForAlternateClick);
+            Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
+            {
+                {"hotel", "tag" }
+            };
+            BookingSite bookingSite = new BookingSite("bookingSite", "single", "https://www.url.com", hotelStrings);
+
+            bookingSite.DataScraper.StartScraping(10);
+
+            bookingSite.HotelsList.First().RoomTypes.First().Prices.First().Price = 0;
+
+            dashboard.UpdateUiMissingDataWarning(bookingSite);
+
+            string actual = dashboard.WarningMessages.First().ConcatenatedWarningString;
+
+            Assert.Contains(expectedSubstring, actual);
         }
     }
 }

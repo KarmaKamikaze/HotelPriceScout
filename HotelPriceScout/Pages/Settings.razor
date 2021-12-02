@@ -12,44 +12,57 @@
             </div>
         </div>
         <div class="text-center col h4">
-            <label>Margin value percent</label>
+            <label>
+                Margin value percent
+            </label>
         </div>
         <div class="text-center col p-3">
-            <input type="number" id="margin" class="form-control" min="1" @bind="SettingsManager.MarginDropdown">
+            <input data-toggle="tooltip"
+                   title="Choose how big of a percent difference in price you want to be notified about"
+                   type="number" id="margin" class="form-control" min="1" @bind="SettingsManager.MarginDropdown">
         </div>
         <div class="text-center col h4">
-            <label>Amount of notifications per day</label>
+            <label>
+                Amount of notifications per day
+            </label>
         </div>
         <div class="text-center col p-3">
-            <select id="notification-amount" class="form-control" @bind="SettingsManager.NotificationAmountDropdown">
-                @for (int i=0; i<=3; i++)
+            <select data-toggle="tooltip"
+                    title="Choose the amount of times per day you want to be notified through an email,
+if your price is outside the set margin" id="notification-amount" class="form-control" @bind="SettingsManager.NotificationAmountDropdown">
+                @for (int i = 0; i <= 3; i++)
                 {
                     <option value="@i">@i.ToString()</option>
                 }
             </select>
         </div>
-      
+
         @if (SettingsManager.NotificationAmountDropdown > 0)
         {
             <div class="text-center col h4">
-                <label>Notification time</label>
+                <label>
+                    Notification time
+                </label>
             </div>
             <div class="text-center col p-3">
-                <input type="time" id="notification-time-1" class="form-control timepicker" @bind="SettingsManager.TimeValueDropdown">
+                <input data-toggle="tooltip"
+                   title="Choose the first time of the day you want to be notified" type="time" id="notification-time-1" class="form-control timepicker" @bind="SettingsManager.TimeValueDropdown">
             </div>
         }
-      
+
         @if (SettingsManager.NotificationAmountDropdown > 1)
         {
             <div class="text-center col p-3">
-                <input type="time" id="notification-time-2" class="form-control timepicker" @bind="SettingsManager.TimeValue2Dropdown">
+                <input data-toggle="tooltip"
+                   title="Choose the second time of the day you want to be notified" type="time" id="notification-time-2" class="form-control timepicker" @bind="SettingsManager.TimeValue2Dropdown">
             </div>
         }
-      
+
         @if (SettingsManager.NotificationAmountDropdown > 2)
         {
             <div class="text-center col p-3">
-                <input type="time" id="notification-time-3" class="form-control timepicker" @bind="SettingsManager.TimeValue3Dropdown">
+                <input data-toggle="tooltip"
+                   title="Choose the third time of the day you want to be notified" type="time" id="notification-time-3" class="form-control timepicker" @bind="SettingsManager.TimeValue3Dropdown">
             </div>
         }
 
@@ -98,7 +111,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" id="confirm-stop-button" class="form-control border border-dark" @onclick="StopProgram">Yes </button>
-                            <button type="button"  id="decline-stop-button" class="form-control border border-dark" @onclick="()=>SettingsManager.stopPopup = false"> No </button>
+                            <button type="button" id="decline-stop-button" class="form-control border border-dark" @onclick="()=>SettingsManager.stopPopup = false"> No </button>
 
                         </div>
                     </div>
@@ -178,7 +191,7 @@
         SettingsManager.SetScoutSettings(false);
         Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();
-        
+
         SettingsManager.updatePopup = !SettingsManager.updatePopup;
         SettingsManager.updateYes = !SettingsManager.updateYes;
         StateHasChanged();
