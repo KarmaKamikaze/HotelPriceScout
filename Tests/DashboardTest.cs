@@ -57,7 +57,7 @@ namespace Tests
             {
                 { "hotel", "tag" }
             };
-            BookingSite bookingSite = new BookingSite("hotel", "single", "https://www.url.com", hotelStrings);
+            BookingSite bookingSite = new BookingSite("bookingSite", "single", "https://www.url.com", hotelStrings);
 
             bookingSite.DataScraper.StartScraping(10);
 
@@ -80,7 +80,7 @@ namespace Tests
             {
                 {"hotel", "tag" }
             };
-            BookingSite bookingSite = new BookingSite("hotel", "single", "https://www.url.com", hotelStrings);
+            BookingSite bookingSite = new BookingSite("bookingSite", "single", "https://www.url.com", hotelStrings);
 
             bookingSite.DataScraper.StartScraping(10);
 
@@ -103,7 +103,7 @@ namespace Tests
             {
                 {"hotel", "tag" }
             };
-            BookingSite bookingSite = new BookingSite("hotel", "single", "https://www.url.com", hotelStrings);
+            BookingSite bookingSite = new BookingSite("bookingSite", "single", "https://www.url.com", hotelStrings);
 
             bookingSite.DataScraper.StartScraping(10);
 
@@ -118,4 +118,4 @@ namespace Tests
             Assert.Contains(expected, dash);
         }
     }
-
+}
