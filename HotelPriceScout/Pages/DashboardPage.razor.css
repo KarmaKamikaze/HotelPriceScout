@@ -129,45 +129,105 @@ body {
     }
 }
 
-#DateAndArrow {
+.DateAndArrow {
     font-weight: 700;
     font-size: 24px;
 }
 
-#MarketPrice {
+.MarketPrice {
     font-weight: 700;
     text-align: right;
     font-size: small;
     opacity: 0.8;
 }
 
-#YouPrice {
+.YouPrice {
     text-align: right;
     font-size: small;
     font-weight: 700;
 }
 
-#ArrowSize {
+.ArrowSize {
     font-size: 30px;
 }
 
-#H1MonthAndYear {
+.H1MonthAndYear {
     width: 350px;
 }
 
-#H1Date {
+.H1Date {
     height: fit-content;
     text-align: right;
 }
 
-#Weekdays {
+.Weekdays {
     width: 14%
 }
 
-#HeightOfTdFirstRow {
+.HeightOfTdFirstRow {
     Height: 100px;
 }
 
-#HeightOfTd {
+.HeightOfTd {
     Height: 100.5px;
+}
+.selected {
+    background-color: rgba(150, 211, 255, .7);
+    color: black;
+}
+
+#arrow {
+    font-size:12px;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.HotelOptions {
+    cursor: pointer;
+    padding: 5px;
+}
+
+.ontop {
+    z-index: auto !important;
+}
+
+.dropbtn {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    columns: 2;
+}
+
+.dropdown-content {
+    position: absolute;
+    background-color: white;
+    min-width: 560px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    columns: 2;
+    display: block;
+    z-index: 5;
+}
+
+.noneselect {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
 }

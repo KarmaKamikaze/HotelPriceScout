@@ -15,13 +15,13 @@
             <label>Margin value percent</label>
         </div>
         <div class="text-center col p-3">
-            <input type="number" id="margin" class="form-control numericpicker" min="1" @bind="SettingsManager.MarginDropdown">
+            <input type="number" id="margin" class="form-control" min="1" @bind="SettingsManager.MarginDropdown">
         </div>
         <div class="text-center col h4">
-            <label>Amount of notifications</label>
+            <label>Amount of notifications per day</label>
         </div>
         <div class="text-center col p-3">
-            <select id="notification-amount" class="form-control selectpicker" @bind="SettingsManager.NotificationAmountDropdown">
+            <select id="notification-amount" class="form-control" @bind="SettingsManager.NotificationAmountDropdown">
                 @for (int i=0; i<=3; i++)
                 {
                     <option value="@i">@i.ToString()</option>
@@ -30,7 +30,6 @@
         </div>
       
         @if (SettingsManager.NotificationAmountDropdown > 0)
-
         {
             <div class="text-center col h4">
                 <label>Notification time</label>
@@ -41,7 +40,6 @@
         }
       
         @if (SettingsManager.NotificationAmountDropdown > 1)
-
         {
             <div class="text-center col p-3">
                 <input type="time" id="notification-time-2" class="form-control timepicker" @bind="SettingsManager.TimeValue2Dropdown">
@@ -49,7 +47,6 @@
         }
       
         @if (SettingsManager.NotificationAmountDropdown > 2)
-
         {
             <div class="text-center col p-3">
                 <input type="time" id="notification-time-3" class="form-control timepicker" @bind="SettingsManager.TimeValue3Dropdown">
@@ -57,23 +54,25 @@
         }
 
         @if (SettingsManager.showStart)
-
         {
-            <div class=""><button type="button" class="shadow p-2 rounded btn btn-success col" @onclick="StartProgram"> Start program</button></div>
+            <div class=""><button type="button" id="start-button" class="shadow p-2 rounded btn btn-success col" @onclick="StartProgram"> Start program</button></div>
         }
 
         @if (SettingsManager.startPopup)
         {
+            <div class="modal-backdrop">
+            </div>
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
+                    <div class="modal-content p-2 shadow bg-white rounded">
                         <div class="modal-body">
-                            <h4 class="modal-title" id="titleLabel">Settings have been set</h4>
-                            <h5 class="modal-title" id="titleLabel">Going to dashboard in @timer seconds</h5>
+                            <h4 class="modal-title text-center" id="titleLabel">Settings have been set</h4>
+                            <h5 class="modal-title text-center" id="titleLabel">Going to dashboard in @timer seconds</h5>
                         </div>
                         <div class="modal-footer">
-                            <NavLink class="form-control border border-dark" @onclick="@SettingsManager.ModalStartPopUp" href="/Dashboard">Go to dashboard </NavLink>
-                            <button type="button" class="form-control border border-dark" @onclick="@SettingsManager.ModalStartPopUp"> Stay </button>
+                            <NavLink id="go-to-dashboard-button" class="form-control border border-dark" @onclick="()=>SettingsManager.startPopup=false" href="/Dashboard" style="text-decoration: none; color: #495057; text-align: center;">Go to dashboard</NavLink>
+                            <button type="button" id="stay-button" class="form-control border border-dark" @onclick="()=>SettingsManager.startPopup=false"> Stay </button>
+
                         </div>
                     </div>
                 </div>
@@ -82,21 +81,25 @@
         @if (SettingsManager.showStop)
         {
             <div class="d-flex">
-                <button type="button" class="shadow p-3 rounded btn btn-danger col p-3" data-bs-toggle="modal" @onkeydown="@SettingsManager.EscapeStop" @onclick="SettingsManager.ModalStopPopUp"> Stop program</button>
-                <button type="button" class="shadow p-3  rounded btn btn-primary col p-3" data-bs-toggle="modal" @onkeydown="@SettingsManager.EscapeUpdate" @onclick="SettingsManager.ModalUpdatePopUp">Update program</button>
+                <button type="button" id="stop-button" class="shadow p-2 rounded btn btn-danger col p-2" data-bs-toggle="modal" @onkeydown="(args)=>SettingsManager.EscapePopUp(args, ref SettingsManager.stopPopup)" @onclick="()=>SettingsManager.stopPopup = true"> Stop program</button>
+                <button type="button" id="update-button" class="shadow p-2 rounded btn btn-primary col p-2" data-bs-toggle="modal" @onkeydown="(args)=>SettingsManager.EscapePopUp(args, ref SettingsManager.updatePopup)" @onclick="()=>SettingsManager.updatePopup = true">Update program</button>
+
             </div>
         }
         @if (SettingsManager.stopPopup)
         {
+            <div class="modal-backdrop">
+            </div>
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
+                    <div class="modal-content p-2 shadow bg-white rounded">
                         <div class="modal-header">
                             <h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="form-control border border-dark" @onclick="StopProgram">Yes </button>
-                            <button type="button" class="form-control border border-dark" @onclick="SettingsManager.ModalStopPopUp"> No </button>
+                            <button type="button" id="confirm-stop-button" class="form-control border border-dark" @onclick="StopProgram">Yes </button>
+                            <button type="button"  id="decline-stop-button" class="form-control border border-dark" @onclick="()=>SettingsManager.stopPopup = false"> No </button>
+
                         </div>
                     </div>
                 </div>
@@ -105,15 +108,17 @@
 
         @if (SettingsManager.updatePopup)
         {
+            <div class="modal-backdrop">
+            </div>
             <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
+                    <div class="modal-content p-2 shadow bg-white rounded">
                         <div class="modal-header">
                             <h5 class="modal-title" id="titleLabel">Are you sure you want to update the program?</h5>
                         </div>
                         <div class=modal-footer>
                             <button type="button" class="form-control border border-dark" @onclick="UpdateProgram">Yes</button>
-                            <button type="button" class="form-control border border-dark" @onclick="SettingsManager.ModalUpdatePopUp">No</button>
+                            <button type="button" class="form-control border border-dark" @onclick="()=>SettingsManager.updatePopup = false">No</button>
                         </div>
                     </div>
                 </div>
@@ -121,11 +126,13 @@
         }
         @if (SettingsManager.updateYes)
         {
-            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+            <div class="modal-backdrop">
+            </div>
+            <div class="modal show d-block" id="Modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <h2 class="modal-title" id="titleLabel">The program has been updated!</h2>
+                            <h2 class="modal-title text-center" id="titleLabel">The program has been updated!</h2>
                         </div>
                     </div>
                 </div>
@@ -160,12 +167,19 @@
         Program.ScoutSharedService.ScoutRunning = false;
         SettingsManager.SetStopScoutSettings();
         Program.ScoutSharedService.Scout.StopScout();
+        Program.ScoutSharedService.Scout = null;
         StateHasChanged();
     }
 
     private async void UpdateProgram()
     {
-        SettingsManager.SetUpdateScoutSettings();
+        Program.ScoutSharedService.Scout.StopScout();
+        Program.ScoutSharedService.Scout = null;
+        SettingsManager.SetScoutSettings(false);
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
+        Program.ScoutSharedService.Scout.StartScout();
+        
+        SettingsManager.updatePopup = !SettingsManager.updatePopup;
         SettingsManager.updateYes = !SettingsManager.updateYes;
         StateHasChanged();
         await Task.Delay(1500);
@@ -176,7 +190,7 @@
     private async void StartProgram()
     {
         Program.ScoutSharedService.ScoutRunning = true;
-        SettingsManager.SetStartScoutSettings();
+        SettingsManager.SetScoutSettings(true);
         Countdown();
         Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();

@@ -57,6 +57,10 @@ namespace HotelPriceScout.Data.Model
         public void StopScout()
         {
             MarginValue = 0;
+            foreach (ITimeKeeper timeKeeper in Timers.TimeKeepers)
+            {
+                timeKeeper.Timer.Elapsed -= OnTimeToNotify;
+            }
             NotificationTimes = null;
             BookingSites = null;
         }

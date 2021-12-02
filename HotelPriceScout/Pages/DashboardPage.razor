@@ -5,73 +5,76 @@
 @inject IDashboard Dashboard
 @inject ISqliteDataAccess _db
 
-
 <div class="row topLayer">
     <div class="col-md-12 d-inline-flex topLayer">
-        <h1 id="H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
+        <h1 class="noneselect H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
         @if (Dashboard.MonthsAway > 0)
         {
             <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Previous"); }'>
-                <span class="oi oi-arrow-thick-left" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-left"></span>
             </button>
         }
         else
         {
             <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
-                <span class="oi oi-arrow-thick-left" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-left"></span>
             </button>
         }
         @if (Dashboard.MonthsAway < 3)
         {
             <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Next"); }'>
-                <span class="oi oi-arrow-thick-right" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-right"></span>
             </button>
         }
         else
         {
             <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
-                <span class="oi oi-arrow-thick-right" id="ArrowSize"></span>
+                <span class="ArrowSize oi oi-arrow-thick-right"></span>
             </button>
         }
         <div class="col-md-8 @(Dashboard.DetermineAnimation())">
-            <h1 id="H1Date">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1>
+            <h1 class="noneselect H1Date">@(Dashboard.DayClicked != 0 ? Dashboard.ShowCurrentDayAsString() : "")</h1>
         </div>
     </div>
 </div>
 
 
-<div class="row col-md-7 d-inline-flex topLayer">
+<div class="noneselect row col-md-7 d-inline-flex topLayer">
     <div class="col-md-4">
-        <select id="number-of-adults" class="form-control selectpicker" @bind="adultsPicked" placeholder="1 adult" @onclick='() => OnClickUpdate("Update")'>
+        <select id="number-of-adults" class="form-control" @bind="adultsPicked" placeholder="1 adult" @onclick='() => OnClickUpdate("Update")'>
             <option value="1">1 adult</option>
             <option value="2">2 adults</option>
             <option value="4">4 adults</option>
-            
         </select>
     </div>
     <div class="col-lg-6">
-        <select id="selected-hotels" class="form-control selectpicker" multiple>
-            @foreach (string hotel in listOfHotels)
-            {
-                <option @onclick='() => { SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</option>
-            }
-        </select>
+        <div class="dropdown" id="selected-hotels">
+            <button class="btn dropbtn" @onclick="()=>dropdown=!dropdown">Select hotels <span id="arrow" class="@(dropdown == true ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></span></button>
+            <div class="dropdown-content @(dropdown == true ? "ontop" : "d-none")">
+                <div class="bold HotelOptions @(Dashboard.SelectedHotels.Contains("All") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("All"); OnClickUpdate("update Hotel");}'>All</div>
+                <div class="bold HotelOptions @(Dashboard.SelectedHotels.Contains("Local") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("Local"); OnClickUpdate("update Hotel");}'>Local</div>
+                <div class="bold HotelOptions @(Dashboard.SelectedHotels.Contains("No budget") ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged("No budget"); OnClickUpdate("update Hotel");}'>No budget</div>
+                @foreach (string hotel in Dashboard.ListOfHotels)
+                {
+                    <div class="HotelOptions @(Dashboard.SelectedHotels.Contains(hotel) ? "selected" : "")" @onclick='() => { Dashboard.SelectedHotelsChanged(hotel); OnClickUpdate("update Hotel");}'>@hotel</div>
+                }
+            </div>
+        </div>
     </div>
-
 </div>
 
-<div class="row">
+<div class="noneselect row">
     <div class="col-md-8 ">
         <table class="table table-bordered table-sm col calendar shadow bg-white">
             <thead>
             <tr>
-                <th id="Weekdays"> Monday</th>
-                <th id="Weekdays"> Tuesday</th>
-                <th id="Weekdays"> Wednesday</th>
-                <th id="Weekdays"> Thursday</th>
-                <th id="Weekdays"> Friday</th>
-                <th id="Weekdays"> Saturday</th>
-                <th id="Weekdays"> Sunday</th>
+                <th class="Weekdays"> Monday</th>
+                <th class="Weekdays"> Tuesday</th>
+                <th class="Weekdays"> Wednesday</th>
+                <th class="Weekdays"> Thursday</th>
+                <th class="Weekdays"> Friday</th>
+                <th class="Weekdays"> Saturday</th>
+                <th class="Weekdays"> Sunday</th>
             </tr>
             </thead>
             <tbody>
@@ -87,17 +90,17 @@
                     marketPrice = Dashboard.GetSingleDayMarketPrice(monthMarketData, day);
                     marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                     kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
-                    <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTdFirstRow"
+                    <td class="HeightOfTdFirstRow @(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))"
                         @onclick="@(() => { Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
-                        <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
+                        <div class="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                             @i
                             <span class="@(marketPrice == 0 ? "d-none" : "") @(Dashboard.ArrowDecider(marketPrice, kompasPrice))"></span>
                         </div>
                         <div class="@(marketPrice == 0 ? "d-none" : "")">
-                            <div id="YouPrice" class="@(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
+                            <div class="YouPrice @(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
                                 You: <span>@(decimal.ToInt32(kompasPrice)),-</span>
                             </div>
-                            <div id="MarketPrice">
+                            <div class="MarketPrice">
                                 Market: <span>@(decimal.ToInt32(marketPrice)),-</span>
                             </div>
                         </div>
@@ -117,18 +120,18 @@
                             marketPrice = Dashboard.GetSingleDayMarketPrice(monthMarketData, day);
                             marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                             kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
-                            <td class="@(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))" id="HeightOfTd"
+                            <td class="HeightOfTd @(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))"
                                 @onclick="@(() => {Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
-                                <div id="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
+                                <div class="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                                     @(i + j)
                                     <span class="@(marketPrice == 0 ? "d-none" : "")
                                               @(Dashboard.ArrowDecider(marketPrice, kompasPrice))"></span>
                                 </div>
                                 <div class="@(marketPrice == 0 ? "d-none" : "")">
-                                    <div id="YouPrice" class="@(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
+                                    <div class="YouPrice @(Dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice))">
                                         You: <span>@(decimal.ToInt32(kompasPrice)),-</span>
                                     </div>
-                                    <div id="MarketPrice">
+                                    <div class="MarketPrice">
                                         Market: <span>@(decimal.ToInt32(marketPrice)),-</span>
                                     </div>
                                 </div>
@@ -144,7 +147,6 @@
             </tbody>
         </table>
     </div>
-
 
     @if (Dashboard.DayClicked != 0)
     {
@@ -167,7 +169,7 @@
                                 item.Price >= Dashboard.MarketPriceItem.Price - Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price))
                             {
                                 <tr>
-                                    <td class="col text-right @(item.HotelName == "Gns. Marked" || item.HotelName == "Kompas Hotel Aalborg" ? "boldFont" : "")">
+                                    <td class="col text-right @(item.HotelName == "Average Market Price" || item.HotelName == "Kompas Hotel Aalborg" ? "boldFont" : "")">
                                         @item.HotelName <span class="oi oi-arrow-right text-center"></span>
                                     </td>
                                     <td class="table-info text-center">@(decimal.ToInt32(item.Price)),-</td>
@@ -206,22 +208,15 @@
                 }
             </div>
         </div>
-        thermometerIsOpen = true;
-    }
-    else
-    {
-        thermometerIsOpen = false;
     }
 </div>
 
-
-
 @if (Dashboard.BoolExceptionPopup)
 {
-    @foreach (var item in Dashboard.WarningMessage)
+    @foreach (var item in Dashboard.WarningMessages)
     {
-        string[] ArrayOfWarnings = item.ListofWarnings.Split("|");
-        <div @key="item" class="modal fade show d-block " id="@item"  role="dialog">
+        string[] ArrayOfWarnings = item.ConcatenatedWarningString.Split("|");
+        <div @key="item" class="noneselect modal fade show d-block " id="@item"  role="dialog">
             <div class="modal-dialog modal-dialog-centered " role="document">
                 <div class="modal-content shadow-lg">
                     <div class="modal-body"> <pre><span class="e-icons e-circle-info"></span>   <b>Warning!</b></pre>
@@ -239,91 +234,13 @@
 {
     private void RemoveCard(WarningMessage popup)
     {
-        Dashboard.WarningMessage.Remove(popup);
+        Dashboard.WarningMessages.Remove(popup);
     }
-    public bool thermometerIsOpen = false;
+    private bool dropdown = false;
     decimal marketPrice;
-    List<PriceModel> marketPriceList = new();
+    List<PriceModel> marketPriceList = new List<PriceModel>();
     decimal kompasPrice;
     private int adultsPicked = 1;
-    private List<string> selectedHotels = new List<string>();
-    private List<string> listOfHotels = new List<string>();
-
-    void SelectedHotelsChanged(string hotel)
-    {
-        if (selectedHotels.Contains(hotel))
-        {
-            switch (hotel)
-            {
-                case "Local":
-                    selectedHotels.Remove("Cabinn Aalborg");
-                    selectedHotels.Remove("Slotshotellet Aalborg");
-                    selectedHotels.Remove("Kompas Hotel Aalborg");
-                    selectedHotels.Remove(hotel);
-                    break;
-                case "No budget":
-                    selectedHotels.Remove("Kompas Hotel Aalborg");
-                    selectedHotels.Remove("Slotshotellet Aalborg");
-                    selectedHotels.Remove("Milling Hotel Aalborg");
-                    selectedHotels.Remove("Aalborg Airport Hotel");
-                    selectedHotels.Remove("Helnan Phønix Hotel");
-                    selectedHotels.Remove("Hotel Schellsminde");
-                    selectedHotels.Remove("Radisson Blu Limfjord Hotel Aalborg");
-                    selectedHotels.Remove("Comwell Hvide Hus Aalborg");
-                    selectedHotels.Remove("Scandic Aalborg Øst");
-                    selectedHotels.Remove("Scandic Aalborg City");
-                    selectedHotels.Remove(hotel);
-                    break;
-                case "Cabinn Aalborg" or "Slotshotellet Aalborg" or "Kompas Hotel Aalborg":
-                {
-                    if (!selectedHotels.Contains("Local"))
-                    {
-                        selectedHotels.Remove(hotel);
-                    }
-                    break;
-                }
-                case "Kompas Hotel Aalborg" or "Slotshotellet Aalborg" or "Milling Hotel Aalborg"
-                    or "Aalborg Airport Hotel" or "Helnan Phønix Hotel" or "Hotel Schellsminde" or "Radisson Blu Limfjord Hotel Aalborg"
-                    or "Comwell Hvide Hus Aalborg" or "Scandic Aalborg Øst" or "Scandic Aalborg City":
-                {
-                    if (!selectedHotels.Contains("No budget"))
-                    {
-                        selectedHotels.Remove(hotel);
-                    }
-                    break;
-                }
-                default:
-                    selectedHotels.Remove(hotel);
-                    break;
-            }
-        }
-        else
-        {
-            selectedHotels.Add(hotel);
-            switch (hotel)
-            {
-                case "Local":
-                    selectedHotels.Add("Cabinn Aalborg");
-                    selectedHotels.Add("Slotshotellet Aalborg");
-                    selectedHotels.Add("Kompas Hotel Aalborg");
-                    break;
-                case "No budget":
-                    selectedHotels.Add("Kompas Hotel Aalborg");
-                    selectedHotels.Add("Slotshotellet Aalborg");
-                    selectedHotels.Add("Milling Hotel Aalborg");
-                    selectedHotels.Add("Aalborg Airport Hotel");
-                    selectedHotels.Add("Helnan Phønix Hotel");
-                    selectedHotels.Add("Hotel Schellsminde");
-                    selectedHotels.Add("Radisson Blu Limfjord Hotel Aalborg");
-                    selectedHotels.Add("Comwell Hvide Hus Aalborg");
-                    selectedHotels.Add("Scandic Aalborg Øst");
-                    selectedHotels.Add("Scandic Aalborg City");
-                    break;
-            }
-        }
-        selectedHotels = selectedHotels.Distinct().ToList();
-
-    }
 
     IEnumerable<PriceModel> monthData;
     IEnumerable<PriceModel> monthMarketData;
@@ -340,31 +257,29 @@
                 Dashboard.MonthsAway++;
                 Dashboard.CreateMonth();
                 Dashboard.NextMonth();
-                //Dashboard.UpdateUiMissingDataWarning(Program.ScoutSharedService.Scout.BookingSites.First());
+                dropdown = false;
                 break;
             case "Previous":
                 Dashboard.DayClicked = 0;
                 Dashboard.MonthsAway--;
                 Dashboard.CreateMonth();
                 Dashboard.PreviousMonth();
+                dropdown = false;
                 break;
             case "update Hotel":
                 marketPriceList.Clear();
                 break;
         }
-        monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", selectedHotels);
+        monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", Dashboard.SelectedHotels);
         monthMarketData = Program.ScoutSharedService.Scout.RunComparatorForSelectedHotels(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, monthData);
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
+
     }
 
     protected override async Task OnInitializedAsync()
     {
-        listOfHotels = (await _db.LoadStaticHotelResources("total")).ToList(); //Loads list of hotels to the dropdown
-
-    //Adds the 2 extra options
-        listOfHotels.Add("Local");
-        listOfHotels.Add("No budget");
-
+        Dashboard.ListOfHotels = (await _db.LoadStaticHotelResources("total")).ToList(); 
+        
         Program.ScoutSharedService.Scout.RunComparator("dashboard");
 
         foreach (BookingSite bookingSite in Program.ScoutSharedService.Scout.BookingSites)
@@ -372,7 +287,7 @@
             bookingSite.DataScraper.SendMissingDataWarning += Dashboard.UpdateUiMissingDataWarning;
         }
 
-        monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", selectedHotels);
+        monthData = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Select Prices", Dashboard.SelectedHotels);
         monthMarketData = Program.ScoutSharedService.Scout.RunComparatorForSelectedHotels(Dashboard.ToDay.Date, Dashboard.LastDayOfMonth.Date, monthData);
         monthKompasPrices = await Dashboard.RetrieveSelectDataFromDb(adultsPicked, "Kompas Prices");
 

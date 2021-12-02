@@ -10,13 +10,13 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard : IDashboard
     {
-        public List<WarningMessage> WarningMessage { get; set; } = new List<WarningMessage>();
+        public List<WarningMessage> WarningMessages { get; set; } = new List<WarningMessage>();
         public bool BoolExceptionPopup { get; set; } = false;
         public List<PriceModel> PriceList { get; private set; }
         public PriceModel MarketPriceItem { get; private set; }
         private const int DataUnavailable = 0;
         public int TempAniDate { get; set; }
-        public bool CheckForAlternateClick { get; private set; } = true;
+        private bool CheckForAlternateClick { get; set; } = true;
         public string MonthName { get; private set; } = "";
         public DateTime MonthEnd { get; private set; }
         public int MonthsAway { get; set; }
@@ -27,8 +27,32 @@ namespace HotelPriceScout.Data.Interface
         private DateTime TempDate { get; set; }
         public DateTime ToDay { get; } = DateTime.Now;
         private DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
-        public DateTime LastDayOfMonth { get; private set; } = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1).AddDays(-1);
+        public DateTime LastDayOfMonth { get; private set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
+            DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
         private readonly ISqliteDataAccess _db = new SqliteDataAccess();
+        public List<string> SelectedHotels { get; set; } = new List<string>();
+        public List<string> ListOfHotels { get; set; }
+
+        private List<string> LocalList { get; } = new List<string>()
+        {
+            "Cabinn Aalborg",
+            "Slotshotellet Aalborg",
+            "Kompas Hotel Aalborg"
+        };
+
+        private List<string> NoBudgetList { get; } = new List<string>()
+        {
+            "Slotshotellet Aalborg",
+            "Kompas Hotel Aalborg",
+            "Milling Hotel Aalborg",
+            "Aalborg Airport Hotel",
+            "Helnan Phønix Hotel",
+            "Hotel Scheelsminde",
+            "Radisson Blu Limfjord Hotel Aalborg",
+            "Comwell Hvide Hus Aalborg",
+            "Scandic Aalborg Øst",
+            "Scandic Aalborg City"
+        };
         
         public decimal GetSingleDayMarketPrice(IEnumerable<PriceModel> multipleMarketPrices, int specificDay)
         {   
@@ -43,8 +67,8 @@ namespace HotelPriceScout.Data.Interface
         public async Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
         {              
             IEnumerable<PriceModel> dataList = await _db.RetrieveDataFromDb("*", $"RoomType{roomType}",
-                                         $" Date >= '{(ToDay.Date).ToString("yyyy-MM-dd")}' AND " +
-                                         $"Date <= '{(LastDayOfMonth.Date).ToString("yyyy-MM-dd")}'");
+                                         $" Date >= '{ToDay.ToString("yyyy-MM-dd")}' AND " +
+                                         $"Date <= '{LastDayOfMonth.ToString("yyyy-MM-dd")}'");
             List<PriceModel> resultDataList = new();
             switch (wantedOutput)
             {
@@ -88,6 +112,7 @@ namespace HotelPriceScout.Data.Interface
             PriceList.Sort();
             
         }
+        
         public void UpdateUiMissingDataWarning(BookingSite bookingSite)
         {
             string warnings = "";
@@ -107,10 +132,101 @@ namespace HotelPriceScout.Data.Interface
             }
             WarningMessage.Add(new WarningMessage(warnings, bookingSite.Name));
         }
+        
+        public void SelectedHotelsChanged(string hotel)
+        {
+            if (SelectedHotels.Contains(hotel))
+            {
+                SelectedHotels.Remove(hotel);
+                switch (hotel)
+                {
+                    case "All":
+                        SelectedHotels.Clear();
+                        break;
+                    case "Local":
+                        foreach (string hotelString in LocalList)
+                        {
+                            if (!SelectedHotels.Contains("No budget") || hotelString == "Cabinn Aalborg")
+                            {
+                                SelectedHotels.Remove(hotelString);
+                            }
+                        }
+                        break;
+                    case "No budget":
+                        foreach (string hotelString in NoBudgetList)
+                        {
+                            if (!SelectedHotels.Contains("Local") || (hotelString != "Slotshotellet Aalborg" && hotelString != "Kompas Hotel Aalborg"))
+                            {
+                                SelectedHotels.Remove(hotelString);
+                            }
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                SelectedHotels.Add(hotel);
+                switch (hotel)
+                {
+                    case "All":
+                        foreach (string hotelString in ListOfHotels)
+                        {
+                            SelectedHotels.Add(hotelString);
+                        }
+                        break;
+                    case "Local":
+                        foreach (string hotelString in LocalList)
+                        {
+                            SelectedHotels.Add(hotelString);
+                        }
+                        break;
+                    case "No budget":
+                        foreach (string hotelString in NoBudgetList)
+                        {
+                            SelectedHotels.Add(hotelString);
+                        }
+                        break;
+                }
+            }
+
+            int allCount = ListOfHotels.Count(hotelString => SelectedHotels.Contains(hotelString));
+            if (allCount == ListOfHotels.Count)
+            {
+                SelectedHotels.Add("All");
+            }
+            else
+            {
+                SelectedHotels.Remove("All");
+            }
+
+            int noBudgetCount = NoBudgetList.Count(hotelString => SelectedHotels.Contains(hotelString));
+            if (noBudgetCount == NoBudgetList.Count)
+            {
+                SelectedHotels.Add("No budget");
+            }
+            else
+            {
+                SelectedHotels.Remove("No budget");
+            }
+        
+            int localCount = LocalList.Count(hotelString => SelectedHotels.Contains(hotelString));
+            if (localCount == LocalList.Count)
+            {
+                SelectedHotels.Add("Local");
+            }
+            else
+            {
+                SelectedHotels.Remove("Local");
+            }
+
+            SelectedHotels = SelectedHotels.Distinct().ToList();
+        }
+
         public string ShowCurrentDayAsString()
         {
-            return DayClicked.ToString("") + ". " + MonthName + " " + Year.ToString("");
+            return DayClicked.ToString("") + ". " + MonthName;
         }
+        
         public void CreateMonth()
         {
             TempDate = DateTime.Now.AddMonths(MonthsAway);
@@ -141,6 +257,7 @@ namespace HotelPriceScout.Data.Interface
             if(NumDummyColumn == 0)
             {NumDummyColumn = 7;}
         }
+        
         public string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice)
         {
 
@@ -158,6 +275,7 @@ namespace HotelPriceScout.Data.Interface
 
             return "";
         }
+        
         public string ArrowDecider(decimal marketPrice, decimal kompasPrice)
         {
             decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
@@ -174,12 +292,14 @@ namespace HotelPriceScout.Data.Interface
 
             return "oi oi-minus";
         }
+        
         public decimal CurrentMargin(decimal marketPrice)
         {
             decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
 
             return result;
         }
+        
         public void ShowMoreInfo(int dayClicked)
         {
             if (new DateTime(Year, Month, dayClicked, 23, 59, 59) >= DateTime.Now && 
@@ -200,11 +320,13 @@ namespace HotelPriceScout.Data.Interface
                 CheckForAlternateClick = false;
             }
         }
+        
         public void NextMonth()
         { 
             StartOfMonth = StartOfMonth.AddMonths(1);
             LastDayOfMonth = StartOfMonth.AddMonths(1).AddDays(-1);
         }
+        
         public void PreviousMonth()
         {
             StartOfMonth = StartOfMonth.AddMonths(-1);

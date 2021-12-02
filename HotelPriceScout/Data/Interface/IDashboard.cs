@@ -8,12 +8,11 @@ namespace HotelPriceScout.Data.Interface
 {
     public interface IDashboard
     {
-        List<WarningMessage> WarningMessage { get; set; }
+        List<WarningMessage> WarningMessages { get; set; }
         bool BoolExceptionPopup { get; set; }
         List<PriceModel> PriceList { get; }
         PriceModel MarketPriceItem { get; }
         int TempAniDate { get; set; }
-        bool CheckForAlternateClick { get; }
         string MonthName { get; }
         DateTime MonthEnd { get; }
         int MonthsAway { get; set; }
@@ -23,6 +22,9 @@ namespace HotelPriceScout.Data.Interface
         int DayClicked { get; set; }
         DateTime ToDay { get; }
         DateTime LastDayOfMonth { get; }
+        List<string> SelectedHotels { get; set; }
+        List<string> ListOfHotels { get; set; }
+        
         decimal GetSingleDayMarketPrice(IEnumerable<PriceModel> multipleMarketPrices, int specificDay);
 
         Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(int roomType, string wantedOutput, [Optional] List<string>  selectedHotels);
@@ -32,6 +34,7 @@ namespace HotelPriceScout.Data.Interface
         void UpdateUiMissingDataWarning(BookingSite bookingSite);
         string ShowCurrentDayAsString();
         void CreateMonth();
+        void SelectedHotelsChanged(string hotel);
         string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice);
         string ArrowDecider(decimal marketPrice, decimal kompasPrice);
         decimal CurrentMargin(decimal marketPrice);
