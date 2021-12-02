@@ -10,13 +10,6 @@ namespace Tests
 {
     public class DashboardTest
     {
-        private readonly ITestOutputHelper output;
-
-        public DashboardTest(ITestOutputHelper output)
-        {
-            this.output = output;
-        }
-
         [Fact]
         public void Test_If_CreateMonth_Creates_Correct_Month_Based_On_The_Current_Month()
         {
@@ -125,4 +118,4 @@ namespace Tests
             Assert.Contains(expected, dash);
         }
     }
-}
+
