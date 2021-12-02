@@ -225,7 +225,7 @@ namespace HotelPriceScout.Data.Interface
 
         public string ShowCurrentDayAsString()
         {
-            return DayClicked.ToString("") + ". " + MonthName + " " + Year.ToString("");
+            return DayClicked.ToString("") + ". " + MonthName;
         }
         
         public void CreateMonth()
