@@ -57,7 +57,7 @@ namespace Tests
             {
                 { "hotel", "tag" }
             };
-            BookingSite bookingSite = new BookingSite("hotel1", "single", "https://www.url.com", hotelStrings);
+            BookingSite bookingSite = new BookingSite("hotel", "single", "https://www.url.com", hotelStrings);
 
             bookingSite.DataScraper.StartScraping(10);
 
