@@ -8,53 +8,13 @@ namespace Tests
 {
     public class TimeKeeperTest
     {
-        public static readonly object[][] TimeKeeperDailyTriggerData =
-        {
-            new object[]
-            {
-                1, 0,
-                (new TimeSpan(24, 00, 00) -
-                 TimeSpan.Parse(DateTime.Now.ToString("HH:mm", CultureInfo.InvariantCulture)) +
-                 new TimeSpan(1, 0, 0)).TotalMilliseconds
-            },
-            new object[]
-            {
-                0, 1,
-                (new TimeSpan(24, 00, 00) -
-                 TimeSpan.Parse(DateTime.Now.ToString("HH:mm", CultureInfo.InvariantCulture)) +
-                 new TimeSpan(0, 1, 0)).TotalMilliseconds
-            },
-            new object[]
-            {
-                1, 10,
-                (new TimeSpan(24, 00, 00) -
-                 TimeSpan.Parse(DateTime.Now.ToString("HH:mm", CultureInfo.InvariantCulture)) +
-                 new TimeSpan(1, 10, 0)).TotalMilliseconds
-            },
-            new object[]
-            {
-                0, 0,
-                (new TimeSpan(24, 00, 00) -
-                 TimeSpan.Parse(DateTime.Now.ToString("HH:mm", CultureInfo.InvariantCulture)) +
-                 new TimeSpan(0, 0, 0)).TotalMilliseconds
-            }, 
-            new object[]
-            {
-                100, 100,
-                (-TimeSpan.Parse(DateTime.Now.ToString("HH:mm", CultureInfo.InvariantCulture)) +
-                 new TimeSpan(100, 100, 0)).TotalMilliseconds
-            }
-        };
-        
         [Fact]
         public void TimeKeeperMinuteTriggerConstructorCreatesTimerTest()
         {
             //Arrange
             int minutes = 10;
 
-            void Receiver(object obj, ElapsedEventArgs args)
-            {
-            };
+            void Receiver(object obj, ElapsedEventArgs args){}
 
             //Act
             ITimeKeeper timeKeeper = new TimeKeeper(minutes, Receiver);
@@ -70,9 +30,7 @@ namespace Tests
         public void TimeKeeperMinuteTriggerConstructorCreatesTimerWithCorrectIntervalTest(int minutes, double expected)
         {
             //Arrange
-            void Receiver(object obj, ElapsedEventArgs args)
-            {
-            };
+            void Receiver(object obj, ElapsedEventArgs args){}
 
             //Act
             ITimeKeeper timeKeeper = new TimeKeeper(minutes, Receiver);
@@ -88,10 +46,8 @@ namespace Tests
             int hourOfDay = 10;
             int minuteOfDay = 10;
 
-            void Receiver(object obj, ElapsedEventArgs args)
-            {
-            };
-            
+            void Receiver(object obj, ElapsedEventArgs args) {}
+
             //Act
             ITimeKeeper timeKeeper = new TimeKeeper(hourOfDay, minuteOfDay, Receiver);
 
@@ -99,15 +55,30 @@ namespace Tests
             Assert.IsType<Timer>(timeKeeper.Timer);
         }
 
-        [Theory, MemberData((nameof(TimeKeeperDailyTriggerData)))]
-        public void TimeKeeperDailyTriggerConstructorCreatesTimerWithCorrectIntervalTest(int hours, int minutes,
-            double expected)
+        [Theory]
+        [InlineData(1,0)]
+        [InlineData(0,1)]
+        [InlineData(1,10)]
+        [InlineData(0,0)]
+        [InlineData(100,100)]
+        public void TimeKeeperDailyTriggerConstructorCreatesTimerWithCorrectIntervalTest(int hours, int minutes)
         {
             //Arrange
-            void Receiver(object obj, ElapsedEventArgs args)
-            {
-            };
+            void Receiver(object obj, ElapsedEventArgs args){}
+            double expected;
             
+            if (hours > 24)
+            {
+                expected = (-TimeSpan.Parse(DateTime.Now.ToString("HH:mm", CultureInfo.InvariantCulture)) +
+                           new TimeSpan(hours, minutes, 0)).TotalMilliseconds;
+            }
+            else
+            {
+                expected = (new TimeSpan(24, 00, 00) -
+                                   TimeSpan.Parse(DateTime.Now.ToString("HH:mm", CultureInfo.InvariantCulture)) +
+                                   new TimeSpan(hours, minutes, 0)).TotalMilliseconds;
+            }
+
             //Act
             ITimeKeeper timeKeeper = new TimeKeeper(hours, minutes, Receiver);
 
