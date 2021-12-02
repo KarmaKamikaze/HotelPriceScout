@@ -117,17 +117,17 @@ namespace HotelPriceScout.Data.Interface
         {
             string warnings = "";
 
-            foreach (var hotel in bookingSite.HotelsList)
+            foreach (Hotel hotel in bookingSite.HotelsList)
             {
-                foreach (var roomtype in hotel.RoomTypes)
+                foreach (RoomType roomType in hotel.RoomTypes)
                 { 
-                    foreach(var price in roomtype.Prices)
+                    foreach(RoomTypePrice price in roomType.Prices)
                     {
                         if(price.Price == 0)
                         {
-                            warnings += $"On date: {price.Date} hotel: {hotel.Name}, with roomtype: {roomtype.Capacity}|";
+                            warnings += $"On date: {price.Date} hotel: {hotel.Name}, with roomtype: {roomType.Capacity}|";
                         }
-                        }
+                    }
                 }
             }
             WarningMessages.Add(new WarningMessage(warnings, bookingSite.Name));
@@ -286,7 +286,6 @@ namespace HotelPriceScout.Data.Interface
 
             if (kompasPrice < (marketPrice - result))
             {
-                
                 return "oi oi-caret-top";
             }
 
@@ -296,7 +295,6 @@ namespace HotelPriceScout.Data.Interface
         public decimal CurrentMargin(decimal marketPrice)
         {
             decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
-
             return result;
         }
         
