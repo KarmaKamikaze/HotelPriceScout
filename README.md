@@ -73,7 +73,7 @@ The Settings page has the following functionality:
 
 After navigating to the Dashboard page, either by clicking "Go to dashboard" in the pop-up triggered by starting the program or by clicking the "Home" button in the top-right corner once the program is started, the interface will appear like the image below:
 
-![Optional Text](https://github.com/KarmaKamikaze/HotelPriceScout/blob/dev/.github/images/dashboardPage.PNG)
+![Optional Text](https://github.com/KarmaKamikaze/HotelPriceScout/blob/dev/.github/images/dashboardPageNew.PNG)
 
 The Dashboard page has the following functionality:
 
