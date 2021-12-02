@@ -127,7 +127,7 @@ namespace HotelPriceScout.Data.Interface
                         {
                             warnings += $"On date: {price.Date} hotel: {hotel.Name}, with roomtype: {roomtype.Capacity}|";
                         }
-                        }
+                    }
                 }
             }
             WarningMessages.Add(new WarningMessage(warnings, bookingSite.Name));
