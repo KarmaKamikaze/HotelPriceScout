@@ -18,9 +18,6 @@ namespace Tests
                 new object[] {"1"}
         };
 
-
-
-
         [Fact]
         public void Test_If_CreateMonth_Creates_Correct_Month_Based_On_The_Current_Month()
         {
