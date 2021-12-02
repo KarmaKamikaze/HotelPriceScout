@@ -130,7 +130,7 @@ namespace HotelPriceScout.Data.Interface
                         }
                 }
             }
-            WarningMessage.Add(new WarningMessage(warnings, bookingSite.Name));
+            WarningMessages.Add(new WarningMessage(warnings, bookingSite.Name));
         }
         
         public void SelectedHotelsChanged(string hotel)
