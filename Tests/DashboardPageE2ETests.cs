@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using Bunit.Extensions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
@@ -13,13 +15,7 @@ namespace Tests
     [Collection("E2E")]
     public class DashboardPageE2ETests
     {
-        private readonly ITestOutputHelper _output; // TODO: Remove output and constructor
 
-        public DashboardPageE2ETests(ITestOutputHelper output)
-        {
-            _output = output;
-        }
-        
         [Fact]
         public void DashboardPageShouldRedirectToDashboardWhenHomeLogoIsPressed()
         {
@@ -119,6 +115,202 @@ namespace Tests
         }
 
         [Fact]
+        public void DashboardPageFilterDropdownShouldSelectAllHotelsIfAllOptionsIsPressed()
+        {
+            using IWebDriver driver = Setup();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
+            wait.Until(webDriver => webDriver.FindElement(By.Id("selected-hotels-button"))).Click();
+            Thread.Sleep(1000); // wait to ensure all options are displayed
+            ReadOnlyCollection<IWebElement> hotelFilters =
+                wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            hotelFilters.Single(option => option.Text == "All").Click();
+            Thread.Sleep(1000); // wait to ensure all options are selected
+            hotelFilters = wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            bool allOptionsSelected = hotelFilters.All(option => option.GetAttribute("class").Contains("selected"));
+            
+            Assert.True(allOptionsSelected);
+            Teardown(driver);
+        }
+        
+        [Fact]
+        public void DashboardPageFilterDropdownShouldSelectLocalHotelsIfLocalOptionIsPressed()
+        {
+            using IWebDriver driver = Setup();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
+            wait.Until(webDriver => webDriver.FindElement(By.Id("selected-hotels-button"))).Click();
+            Thread.Sleep(1000); // wait to ensure all options are displayed
+            ReadOnlyCollection<IWebElement> hotelFilters =
+                wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            hotelFilters.Single(option => option.Text == "Local").Click();
+            Thread.Sleep(1000); // wait to ensure local options are selected
+            hotelFilters = wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            IEnumerable<IWebElement> selectedFilters =
+                hotelFilters.Where(option => option.GetAttribute("class").Contains("selected")).ToList();
+            bool localSelected = selectedFilters.All(option =>
+                option.Text is "Local" or "Cabinn Aalborg" or "Kompas Hotel Aalborg" or "Slotshotellet Aalborg");
+            bool isDistinctAndLocalSelected = selectedFilters.Distinct().Count() == 4 && localSelected;
+            
+            Assert.True(isDistinctAndLocalSelected);
+            Teardown(driver);
+        }
+        
+        [Fact]
+        public void DashboardPageFilterDropdownShouldSelectNoBudgetHotelsIfNoBudgetOptionIsPressed()
+        {
+            using IWebDriver driver = Setup();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
+            wait.Until(webDriver => webDriver.FindElement(By.Id("selected-hotels-button"))).Click();
+            Thread.Sleep(1000); // wait to ensure all options are displayed
+            ReadOnlyCollection<IWebElement> hotelFilters =
+                wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            hotelFilters.Single(option => option.Text == "No budget").Click();
+            Thread.Sleep(1000); // wait to ensure no budget options are selected
+            hotelFilters = wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            IEnumerable<IWebElement> selectedFilters =
+                hotelFilters.Where(option => option.GetAttribute("class").Contains("selected")).ToList();
+            bool noBudgetSelected = selectedFilters.All(option =>
+                option.Text is "No budget" or "Kompas Hotel Aalborg" or "Slotshotellet Aalborg" or
+                    "Aalborg Airport Hotel" or "Comwell Hvide Hus Aalborg" or "Helnan Phønix Hotel" or
+                    "Hotel Scheelsminde" or "Milling Hotel Aalborg" or "Radisson Blu Limfjord Hotel Aalborg" or 
+                    "Scandic Aalborg City" or "Scandic Aalborg Øst");
+            bool isDistinctAndLocalSelected = selectedFilters.Distinct().Count() == 11 && noBudgetSelected;
+            
+            Assert.True(isDistinctAndLocalSelected);
+            Teardown(driver);
+        }
+        
+        [Fact]
+        public void DashboardPageFilterDropdownShouldDeselectAllHotelsIfAllOptionsIsPressedAfterSelectingAllOptions()
+        {
+            using IWebDriver driver = Setup();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
+            wait.Until(webDriver => webDriver.FindElement(By.Id("selected-hotels-button"))).Click();
+            Thread.Sleep(1000); // wait to ensure all options are displayed
+            ReadOnlyCollection<IWebElement> hotelFilters =
+                wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            hotelFilters.Single(option => option.Text == "All").Click(); // Select all
+            hotelFilters.Single(option => option.Text == "All").Click(); // Deselect all
+            Thread.Sleep(1000); // wait to ensure all options are selected then deselected
+            hotelFilters = wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            IEnumerable<IWebElement> filters =
+                hotelFilters.Where(option => option.GetAttribute("class").Contains("selected")).ToList();
+            bool noOptionsSelected = filters.IsNullOrEmpty();
+            
+            Assert.True(noOptionsSelected);
+            Teardown(driver);
+        }
+        
+        [Fact]
+        public void DashboardPageFilterDropdownShouldDeselectLocalHotelsIfLocalOptionIsPressedAfterSelectingLocalOption()
+        {
+            using IWebDriver driver = Setup();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
+            wait.Until(webDriver => webDriver.FindElement(By.Id("selected-hotels-button"))).Click();
+            Thread.Sleep(1000); // wait to ensure all options are displayed
+            ReadOnlyCollection<IWebElement> hotelFilters =
+                wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            hotelFilters.Single(option => option.Text == "Local").Click(); // Select local
+            hotelFilters.Single(option => option.Text == "Local").Click(); // Deselect local
+            Thread.Sleep(1000); // wait to ensure local option are selected then deselected
+            hotelFilters = wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            IEnumerable<IWebElement> filters =
+                hotelFilters.Where(option => option.GetAttribute("class").Contains("selected")).ToList();
+            bool noOptionsSelected = filters.IsNullOrEmpty();
+            
+            Assert.True(noOptionsSelected);
+            Teardown(driver);
+        }
+        
+        [Fact]
+        public void DashboardPageFilterDropdownShouldDeselectNoBudgetHotelsIfNoBudgetOptionIsPressedAfterSelectingNoBudgetOption()
+        {
+            using IWebDriver driver = Setup();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
+            wait.Until(webDriver => webDriver.FindElement(By.Id("selected-hotels-button"))).Click();
+            Thread.Sleep(1000); // wait to ensure all options are displayed
+            ReadOnlyCollection<IWebElement> hotelFilters =
+                wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            hotelFilters.Single(option => option.Text == "No budget").Click(); // Select no budget
+            hotelFilters.Single(option => option.Text == "No budget").Click(); // Deselect no budget
+            Thread.Sleep(1000); // wait to ensure no budget option are selected then deselected
+            hotelFilters = wait.Until(webDriver => webDriver.FindElements(By.ClassName("HotelOptions")));
+            IEnumerable<IWebElement> filters =
+                hotelFilters.Where(option => option.GetAttribute("class").Contains("selected")).ToList();
+            bool noOptionsSelected = filters.IsNullOrEmpty();
+            
+            Assert.True(noOptionsSelected);
+            Teardown(driver);
+        }
+
+        [Fact]
+        public void DashboardPageCalendarForwardArrowShouldMoveCalendarOneMonthForward()
+        {
+            using IWebDriver driver = Setup();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
+            wait.Until(webDriver => webDriver.FindElement(By.Id("next-month-button"))).Click();
+            Thread.Sleep(1000); // wait to ensure new month is displayed
+            string expectedMonthAndYear = DateTime.Today.AddMonths(1).ToString("MMMM yyyy");
+            string actualMonthAndYear = wait.Until(webDriver => webDriver.FindElement(By.ClassName("H1MonthAndYear"))).Text;
+            
+            Assert.Equal(expectedMonthAndYear, actualMonthAndYear);
+            Teardown(driver);
+        }
+        
+        [Fact]
+        public void DashboardPageCalendarBackwardArrowShouldMoveCalendarOneMonthBackIfAlreadyMovedForward()
+        {
+            using IWebDriver driver = Setup();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
+            wait.Until(webDriver => webDriver.FindElement(By.Id("next-month-button"))).Click(); // Move forward
+            wait.Until(webDriver => webDriver.FindElement(By.Id("previous-month-button"))).Click(); // Move backward
+            Thread.Sleep(1000); // wait to ensure new month is displayed
+            string expectedMonthAndYear = DateTime.Today.ToString("MMMM yyyy");
+            string actualMonthAndYear = wait.Until(webDriver => webDriver.FindElement(By.ClassName("H1MonthAndYear"))).Text;
+            
+            Assert.Equal(expectedMonthAndYear, actualMonthAndYear);
+            Teardown(driver);
+        }
+        
+        [Fact]
+        public void DashboardPageCalendarBackwardArrowShouldBeDisabledOnCurrentMonth()
+        {
+            using IWebDriver driver = Setup();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
+            bool backwardArrowEnabled = wait.Until(webDriver => webDriver.FindElement(By.Id("previous-month-button"))).Enabled;
+
+            Assert.False(backwardArrowEnabled);
+            Teardown(driver);
+        }
+        
+        [Fact]
+        public void DashboardPageCalendarForwardButtonShouldDisableAfterThreePressesFromDefault()
+        {
+            using IWebDriver driver = Setup();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
+            IWebElement forwardButton = wait.Until(webDriver => webDriver.FindElement(By.Id("next-month-button")));
+            for (int i = 1; i <= 3; i++)
+            {
+                Thread.Sleep(500); // wait between each click
+                forwardButton.Click();
+            }
+            Thread.Sleep(500); // wait for last button to render
+            bool forwardArrowEnabled = wait.Until(webDriver => webDriver.FindElement(By.Id("next-month-button"))).Enabled;
+            
+            Assert.False(forwardArrowEnabled);
+            Teardown(driver);
+        }
+
+        [Fact]
         public void DashboardPageShouldContainEveryWeekday()
         {
             using IWebDriver driver = Setup();
@@ -169,6 +361,8 @@ namespace Tests
             
             wait.Until(webDriver => webDriver.FindElement(By.Id("stop-button"))).Click();
             wait.Until(webDriver => webDriver.FindElement(By.Id("confirm-stop-button"))).Click();
+            driver.Close();
+            driver.Quit();
         }
     }
 }

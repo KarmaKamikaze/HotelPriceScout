@@ -10,25 +10,25 @@
         <h1 class="noneselect H1MonthAndYear">@Dashboard.MonthName @Dashboard.Year</h1>
         @if (Dashboard.MonthsAway > 0)
         {
-            <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Previous"); }'>
+            <button type="button" id="previous-month-button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Previous"); }'>
                 <span class="ArrowSize oi oi-arrow-thick-left"></span>
             </button>
         }
         else
         {
-            <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
+            <button type="button" id="previous-month-button" class="btn btn-default btn-lg topLayer" disabled>
                 <span class="ArrowSize oi oi-arrow-thick-left"></span>
             </button>
         }
         @if (Dashboard.MonthsAway < 3)
         {
-            <button type="button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Next"); }'>
+            <button type="button" id="next-month-button" class="btn btn-default btn-lg topLayer" @onclick='() => { OnClickUpdate("Next"); }'>
                 <span class="ArrowSize oi oi-arrow-thick-right"></span>
             </button>
         }
         else
         {
-            <button id="BtnDisable" type="button" class="btn btn-default btn-lg topLayer" disabled>
+            <button type="button" id="next-month-button" class="btn btn-default btn-lg topLayer" disabled>
                 <span class="ArrowSize oi oi-arrow-thick-right"></span>
             </button>
         }
@@ -111,7 +111,7 @@
 
             @for (int i = 8 - Dashboard.NumDummyColumn + 1; i <= Dashboard.MonthEnd.Day; i += 7)
             {
-                <tr class="clik rows">
+                <tr class="rows">
                     @for (int j = 0; j < 7; j++)
                     {
                         @if (i + j <= Dashboard.MonthEnd.Day)
