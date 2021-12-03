@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using DataAccessLibrary;
 using HotelPriceScout.Data.Model;
 
 namespace HotelPriceScout.Data.Interface

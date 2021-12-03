@@ -91,7 +91,7 @@
                     marketPrice = Dashboard.GetSingleDayMarketPrice(monthMarketData, day);
                     marketPriceList.Add(new PriceModel(marketPrice, dateConcatenated));
                     kompasPrice = Dashboard.GetSingleDayKompasPrice(monthKompasPrices, day);
-                    <td class="HeightOfTdFirstRow @(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))"
+                    <td class="HeightOfTd @(Dashboard.ToDay.ToString("yyyy-MM-dd") == dateConcatenated.ToString("yyyy-MM-dd") ? "bg-warning" : "") @(Dashboard.DetermineFocus(day))"
                         @onclick="@(() => { Dashboard.ShowMoreInfo(day); marketPriceList.Clear(); })">
                         <div class="DateAndArrow" style="@(marketPrice == 0 ? "opacity: 0.3;" : "")">
                             @i
@@ -153,7 +153,7 @@
     {
         Dashboard.GenerateThermometer(monthData, marketPriceList);
         marketPriceList.Clear();
-        <div class="@(Dashboard.DetermineAnimation()) col-md-4 table-borderless bottomLayer">
+        <div id="price-thermometer" class="@(Dashboard.DetermineAnimation()) col-md-4 table-borderless bottomLayer">
             <div class="row col d-flex justify-content-center">
                 @if (Dashboard.PriceList == null)
                 {

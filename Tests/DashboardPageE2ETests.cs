@@ -8,7 +8,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Tests
 {
@@ -270,6 +269,7 @@ namespace Tests
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
             
             wait.Until(webDriver => webDriver.FindElement(By.Id("next-month-button"))).Click(); // Move forward
+            Thread.Sleep(500); // wait for calendar to switch
             wait.Until(webDriver => webDriver.FindElement(By.Id("previous-month-button"))).Click(); // Move backward
             Thread.Sleep(1000); // wait to ensure new month is displayed
             string expectedMonthAndYear = DateTime.Today.ToString("MMMM yyyy");
@@ -338,6 +338,32 @@ namespace Tests
                 .Text.Split('\n')[0];
 
             Assert.Equal(expectedHighlightDate, actualHighlightedDate);
+            Teardown(driver);
+        }
+        
+        [Fact]
+        public void DashboardPageShouldNotContainPriceThermometerDefaultAtLoad()
+        {
+            using IWebDriver driver = Setup();
+
+            void Action() => driver.FindElement(By.Id("price-thermometer"));
+
+            Assert.Throws<NoSuchElementException>(Action);
+            Teardown(driver);
+        }
+        
+        [Fact]
+        public void DashboardPageShouldPopOutPriceThermometerWhenADateIsClicked()
+        {
+            using IWebDriver driver = Setup();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
+            Thread.Sleep(500); // wait for calendar to appear
+            wait.Until(webDriver => webDriver.FindElement(By.ClassName("bg-warning"))).Click(); // Click today
+            Thread.Sleep(1000); // wait for price thermometer to animate
+            IWebElement priceThermometer = wait.Until(webDriver => webDriver.FindElement(By.Id("price-thermometer")));
+
+            Assert.NotNull(priceThermometer);
             Teardown(driver);
         }
 
