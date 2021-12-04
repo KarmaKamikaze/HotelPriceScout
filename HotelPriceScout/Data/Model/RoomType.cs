@@ -26,7 +26,7 @@ namespace HotelPriceScout.Data.Model
             }
         }
 
-        public List<RoomTypePrice> Prices { get; init; }
+        public List<RoomTypePrice> Prices { get; }
 
         private List<RoomTypePrice> CreateThreeMonthsPrices()
         {

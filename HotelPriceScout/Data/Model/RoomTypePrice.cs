@@ -4,7 +4,6 @@ namespace HotelPriceScout.Data.Model
 {
   public class RoomTypePrice
   {
-
     private readonly DateTime _date;
     private decimal _price;
 
@@ -12,6 +11,7 @@ namespace HotelPriceScout.Data.Model
     {
       Date = date;
     }
+    
     public RoomTypePrice(DateTime date, decimal price) : this(date)
     {
       Price = price;

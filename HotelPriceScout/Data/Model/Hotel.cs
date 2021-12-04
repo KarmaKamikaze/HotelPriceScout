@@ -16,7 +16,7 @@ namespace HotelPriceScout.Data.Model
 
         public string Name { get; }
 
-        public IEnumerable<RoomType> RoomTypes { get; init; }
+        public IEnumerable<RoomType> RoomTypes { get; }
 
         private IEnumerable<RoomType> CreateRoomTypes()
 

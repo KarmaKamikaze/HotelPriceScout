@@ -31,7 +31,6 @@ namespace HotelPriceScout.Data.Model
                     throw new ArgumentOutOfRangeException(
                         $"{nameof(value)} must be either \"single\" or \"multi\".");
                 }
-
                 _type = value;
             }
         }
@@ -51,7 +50,7 @@ namespace HotelPriceScout.Data.Model
 
         public IDataScraper DataScraper { get; }
 
-        public IEnumerable<Hotel> HotelsList { get; init; }
+        public IEnumerable<Hotel> HotelsList { get; }
 
         private IEnumerable<Hotel> CreateHotels(Dictionary<string, string> hotelsStrings)
         {
