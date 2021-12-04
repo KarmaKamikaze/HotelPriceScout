@@ -135,35 +135,7 @@ namespace HotelPriceScout.Data.Interface
         
         public void SelectedHotelsChanged(string hotel)
         {
-            if (SelectedHotels.Contains(hotel))
-            {
-                SelectedHotels.Remove(hotel);
-                switch (hotel)
-                {
-                    case "All":
-                        SelectedHotels.Clear();
-                        break;
-                    case "Local":
-                        foreach (string hotelString in LocalList)
-                        {
-                            if (!SelectedHotels.Contains("No budget") || hotelString == "Cabinn Aalborg")
-                            {
-                                SelectedHotels.Remove(hotelString);
-                            }
-                        }
-                        break;
-                    case "No budget":
-                        foreach (string hotelString in NoBudgetList)
-                        {
-                            if (!SelectedHotels.Contains("Local") || (hotelString != "Slotshotellet Aalborg" && hotelString != "Kompas Hotel Aalborg"))
-                            {
-                                SelectedHotels.Remove(hotelString);
-                            }
-                        }
-                        break;
-                }
-            }
-            else
+            if (!SelectedHotels.Contains(hotel))
             {
                 SelectedHotels.Add(hotel);
                 switch (hotel)
@@ -184,6 +156,34 @@ namespace HotelPriceScout.Data.Interface
                         foreach (string hotelString in NoBudgetList)
                         {
                             SelectedHotels.Add(hotelString);
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                SelectedHotels.Remove(hotel);
+                switch (hotel)
+                {
+                    case "All":
+                        SelectedHotels.Clear();
+                        break;
+                    case "Local":
+                        foreach (string hotelString in LocalList)
+                        {
+                            if (!SelectedHotels.Contains("No budget") || (hotelString != "Slotshotellet Aalborg" && hotelString != "Kompas Hotel Aalborg"))
+                            {
+                                SelectedHotels.Remove(hotelString);
+                            }
+                        }
+                        break;
+                    case "No budget":
+                        foreach (string hotelString in NoBudgetList)
+                        {
+                            if (!SelectedHotels.Contains("Local") || (hotelString != "Slotshotellet Aalborg" && hotelString != "Kompas Hotel Aalborg"))
+                            {
+                                SelectedHotels.Remove(hotelString);
+                            }
                         }
                         break;
                 }

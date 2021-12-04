@@ -10,13 +10,61 @@ namespace Tests
 {
     public class DashboardTest
     {
-        public static IEnumerable<object[]> Getvalues =>
-            new List<object[]>
+        private static List<string> listOfHotels = new List<string>()
         {
+            "Cabinn Aalborg",
+            "Slotshotellet Aalborg",
+            "Kompas Hotel Aalborg",
+            "Aalborg Airport Hotel",
+            "Comwell Hvide Hus Aalborg",
+            "Helnan Phønix Hotel",
+            "Hotel Jomfru Ane",
+            "Hotel Scheelsminde",
+            "Milling Hotel Aalborg",
+            "Prinsen Hotel",
+            "Radisson Blu Limfjord Hotel Aalborg",
+            "Room Rent Prinsen",
+            "Scandic Aalborg Øst",
+            "Scandic Aalborg City",
+            "Zleep Hotel Aalborg"
+        };
+
+        private static List<string> localList = new List<string>()
+        {
+            "Cabinn Aalborg",
+            "Slotshotellet Aalborg",
+            "Kompas Hotel Aalborg"
+        };
+
+        private static List<string> noBudgetList = new List<string>()
+        {
+            "Slotshotellet Aalborg",
+            "Kompas Hotel Aalborg",
+            "Milling Hotel Aalborg",
+            "Aalborg Airport Hotel",
+            "Helnan Phønix Hotel",
+            "Hotel Scheelsminde",
+            "Radisson Blu Limfjord Hotel Aalborg",
+            "Comwell Hvide Hus Aalborg",
+            "Scandic Aalborg Øst",
+            "Scandic Aalborg City"
+        };
+
+        public static IEnumerable<object[]> FilterOptions =>
+            new List<object[]>
+            {
+                new object[] {"All", listOfHotels},
+                new object[] {"Local", localList},
+                new object[] {"No budget", noBudgetList}
+            };
+        
+        public static IEnumerable<object[]> GetValues =>
+            new List<object[]>
+            {
                 new object[] {DateTime.Now.Date.ToString()},
                 new object[] {"hotel"},
                 new object[] {"1"}
-        };
+            };
 
         [Fact]
         public void Test_If_CreateMonth_Creates_Correct_Month_Based_On_The_Current_Month()
@@ -33,7 +81,8 @@ namespace Tests
         [InlineData("low", 100, 1)]
         [InlineData("high", 1, 100)]
         [InlineData("", 0, 0)]
-        public void Test_If_ChangeTextColorBasedOnMargin_Returns_Correct_Expected_Value(string expected, int marketPrice, int kompasPrice)
+        public void Test_If_ChangeTextColorBasedOnMargin_Returns_Correct_Expected_Value(string expected,
+            int marketPrice, int kompasPrice)
         {
             //Arrange
             Dashboard dashboard = new Dashboard();
@@ -57,13 +106,13 @@ namespace Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory, MemberData(nameof(Getvalues))]
+        [Theory, MemberData(nameof(GetValues))]
         public void Test_If_UpdateUiMissingData_Returns_Correct_Values_In_WarningMessage(string expectedSubstring)
         {
             Dashboard dashboard = new Dashboard();
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
-                {"hotel", "tag" }
+                {"hotel", "tag"}
             };
             BookingSite bookingSite = new BookingSite("bookingSite", "single", "https://www.url.com", hotelStrings);
 
@@ -76,6 +125,150 @@ namespace Tests
             string actual = dashboard.WarningMessages.First().ConcatenatedWarningString;
 
             Assert.Contains(expectedSubstring, actual);
+        }
+
+        [Theory]
+        [InlineData("All")]
+        [InlineData("Local")]
+        [InlineData("No budget")]
+        [InlineData("Cabinn Aalborg")]
+        [InlineData("Hotel")]
+        public void SelectedHotelsChangedAddsHotelOptionToList(string option)
+        {
+            //Arrange
+            IDashboard dashboard = new Dashboard();
+            dashboard.ListOfHotels = listOfHotels;
+
+            //Act
+            dashboard.SelectedHotelsChanged(option);
+            
+            //Assert
+            Assert.Contains(option, dashboard.SelectedHotels);
+        }
+
+        [Theory]
+        [InlineData("All")]
+        [InlineData("Local")]
+        [InlineData("No budget")]
+        [InlineData("Cabinn Aalborg")]
+        [InlineData("Hotel")]
+        public void SelectedHotelsChangedRemovesHotelOptionWhenAlreadyInList(string option)
+        {
+            //Arrange
+            IDashboard dashboard = new Dashboard();
+            dashboard.ListOfHotels = listOfHotels;
+
+            //Act
+            dashboard.SelectedHotelsChanged(option);
+            dashboard.SelectedHotelsChanged(option);
+            
+            //Assert
+            Assert.DoesNotContain(option, dashboard.SelectedHotels);
+        }
+        
+        [Theory]
+        [MemberData(nameof(FilterOptions))]
+        public void SelectedHotelsChangedAddsRelevantHotelsWhenFilterOptionIsSelected(string option, List<string> expectedList)
+        {
+            //Arrange
+            IDashboard dashboard = new Dashboard();
+            dashboard.ListOfHotels = listOfHotels;
+
+            //Act
+            dashboard.SelectedHotelsChanged(option);
+            
+            //Assert
+            Assert.All(expectedList, hotel => Assert.Contains(hotel, dashboard.SelectedHotels));
+        }
+
+        [Theory]
+        [InlineData("All")]
+        [InlineData("Local")]
+        [InlineData("No budget")]
+        public void SelectedHotelsChangedUnselectingFilterOptionUnselectsRelevantOptions(string filterOption)
+        {
+            //Arrange
+            IDashboard dashboard = new Dashboard();
+            dashboard.ListOfHotels = listOfHotels;
+            
+            //Act
+            dashboard.SelectedHotelsChanged(filterOption);
+            dashboard.SelectedHotelsChanged(filterOption);
+            
+            //Assert
+            Assert.Empty(dashboard.SelectedHotels);
+        }
+
+        [Theory]
+        [InlineData("Local", "No budget")]
+        [InlineData("No budget", "Local")]
+        public void
+            SelectedHotelsChangedUnselectingFilterOptionDoesNotUnselectSharedHotelsWhenOtherFiltersAreSelected(string filterToRemove, string filterToKeep)
+        {
+            //Arrange
+            IDashboard dashboard = new Dashboard();
+            dashboard.ListOfHotels = listOfHotels;
+            
+            //Act
+            dashboard.SelectedHotelsChanged(filterToRemove);
+            dashboard.SelectedHotelsChanged(filterToKeep);
+            dashboard.SelectedHotelsChanged(filterToRemove);
+            
+            //Assert
+            bool sharedHotelsNotRemoved = dashboard.SelectedHotels.Contains("Kompas Hotel Aalborg") &&
+                                          dashboard.SelectedHotels.Contains("Slotshotellet Aalborg");
+            Assert.True(sharedHotelsNotRemoved);
+        }
+
+        [Theory]
+        [MemberData(nameof(FilterOptions))]
+        public void SelectedHotelsChangedAutomaticallyAddsFilterOptionsWhenRelevantHotelsAreAdded(string expectedFilter, List<string> hotels)
+        {
+            //Arrange
+            IDashboard dashboard = new Dashboard();
+            dashboard.ListOfHotels = listOfHotels;
+            
+            //Act
+            foreach (string hotel in hotels)
+            {
+                dashboard.SelectedHotelsChanged(hotel);
+            }
+            
+            //Assert
+            Assert.Contains(expectedFilter, dashboard.SelectedHotels);
+        }
+        
+        [Theory]
+        [MemberData(nameof(FilterOptions))]
+        public void SelectedHotelsChangedAutomaticallyRemovesFilterOptionsWhenRelevantHotelsAreNotInList(string filter, List<string> filterHotels)
+        {
+            //Arrange
+            IDashboard dashboard = new Dashboard();
+            dashboard.ListOfHotels = listOfHotels;
+            
+            //Act
+            dashboard.SelectedHotelsChanged(filter);
+            dashboard.SelectedHotelsChanged(filterHotels.First());
+            
+            //Assert
+            Assert.DoesNotContain(filter, dashboard.SelectedHotels);
+        }
+        
+        [Fact]
+        public void SelectedHotelsIsAlwaysDistinctAfterAddingHotels()
+        {
+            //Arrange
+            IDashboard dashboard = new Dashboard();
+            dashboard.ListOfHotels = listOfHotels;
+            
+            //Act
+            dashboard.SelectedHotelsChanged("Local");
+            dashboard.SelectedHotelsChanged("No budget");
+            dashboard.SelectedHotelsChanged("All");
+            
+            //Assert
+            bool isDistinct = dashboard.SelectedHotels.Count == dashboard.SelectedHotels.Distinct().Count();
+            Assert.True(isDistinct);
         }
     }
 }
