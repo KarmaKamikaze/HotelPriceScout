@@ -6,7 +6,6 @@
 
     <ItemGroup>
       <PackageReference Include="Blazored.Modal" Version="4.1.0" />
-      <PackageReference Include="IronWebScraper" Version="2021.9.0" />
       <PackageReference Include="MailKit" Version="2.15.0" />
       <PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" />
     </ItemGroup>
