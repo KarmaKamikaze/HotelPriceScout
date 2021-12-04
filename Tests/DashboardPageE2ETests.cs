@@ -175,9 +175,9 @@ namespace Tests
                     "Aalborg Airport Hotel" or "Comwell Hvide Hus Aalborg" or "Helnan Phønix Hotel" or
                     "Hotel Scheelsminde" or "Milling Hotel Aalborg" or "Radisson Blu Limfjord Hotel Aalborg" or 
                     "Scandic Aalborg City" or "Scandic Aalborg Øst");
-            bool isDistinctAndLocalSelected = selectedFilters.Distinct().Count() == 11 && noBudgetSelected;
+            bool isDistinctAndNoBudgetSelected = selectedFilters.Distinct().Count() == 11 && noBudgetSelected;
             
-            Assert.True(isDistinctAndLocalSelected);
+            Assert.True(isDistinctAndNoBudgetSelected);
             Teardown(driver);
         }
         
