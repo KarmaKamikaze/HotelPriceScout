@@ -15,7 +15,7 @@ namespace DataAccessLibrary
         {
             using IDbConnection connection = new SQLiteConnection(ConnectionString);
             IEnumerable<string> output = await connection.QueryAsync<string>(
-                $"select HotelName from StaticDataHotels WHERE {group.ToLower()} = TRUE", 
+                $"SELECT HotelName FROM StaticDataHotels WHERE {group.ToLower()} = TRUE", 
                 new DynamicParameters());
             IEnumerable<string> resources = output.ToList();
 
@@ -24,15 +24,13 @@ namespace DataAccessLibrary
 
         public async Task<IEnumerable<PriceModel>> RetrieveDataFromDb(string column, string table, string value)
         {
-
             using IDbConnection connection = new SQLiteConnection(ConnectionString);
             IEnumerable<PriceModel> output = await connection.QueryAsync<PriceModel>(
-                $"Select {column} From {table} Where {value}", new DynamicParameters());
+                $"SELECT {column} FROM {table} WHERE {value}", new DynamicParameters());
 
             List<PriceModel> resources = output.ToList();
 
             return resources;
-
         }
 
         public async Task<IEnumerable<(string, string, string, Dictionary<string, string>)>> LoadStaticBookingSiteResources()
@@ -40,7 +38,7 @@ namespace DataAccessLibrary
             using IDbConnection connection = new SQLiteConnection(ConnectionString);
             IEnumerable<(string, string, string, string)> output = 
                 await connection.QueryAsync<(string, string, string, string)>(
-                    "select * from StaticDataBookingSites", new DynamicParameters());
+                    "SELECT * FROM StaticDataBookingSites", new DynamicParameters());
 
             var resources = new List<(string, string, string, Dictionary<string, string>)>();
 
