@@ -280,6 +280,8 @@
     protected override async Task OnInitializedAsync()
     {
         Dashboard.ListOfHotels = (await _db.LoadStaticHotelResources("total")).ToList(); 
+        Dashboard.LocalList = (await _db.LoadStaticHotelResources("local")).ToList(); 
+        Dashboard.NoBudgetList = (await _db.LoadStaticHotelResources("nobudget")).ToList(); 
         
         Program.ScoutSharedService.Scout.RunComparator("dashboard");
 

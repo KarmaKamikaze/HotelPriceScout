@@ -9,11 +9,11 @@ namespace HotelPriceScout.Data.Interface
 {
     public interface IDashboard
     {
-        List<WarningMessage> WarningMessages { get; set; }
-        bool BoolExceptionPopup { get; set; }
+        List<WarningMessage> WarningMessages { get; }
+        bool BoolExceptionPopup { get; set; } //This is used for error occurence in scraping!
         List<PriceModel> PriceList { get; }
         PriceModel MarketPriceItem { get; }
-        int TempAniDate { get; set; }
+        int TempAniDate { set; }
         string MonthName { get; }
         DateTime MonthEnd { get; }
         int MonthsAway { get; set; }
@@ -23,15 +23,16 @@ namespace HotelPriceScout.Data.Interface
         int DayClicked { get; set; }
         DateTime ToDay { get; }
         DateTime LastDayOfMonth { get; }
-        List<string> SelectedHotels { get; set; }
+        List<string> SelectedHotels { get; }
         List<string> ListOfHotels { get; set; }
-        
+        List<string> LocalList { set; }
+        List<string> NoBudgetList { set; }
         decimal GetSingleDayMarketPrice(IEnumerable<PriceModel> multipleMarketPrices, int specificDay);
 
         Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(int roomType, string wantedOutput, [Optional] List<string>  selectedHotels);
 
         decimal GetSingleDayKompasPrice(IEnumerable<PriceModel> calendarKompasPrices, int specificDay);
-        void GenerateThermometer(IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice);
+        void GenerateThermometer(IEnumerable<PriceModel> monthData, IEnumerable<PriceModel> avgMarketPrice);
         void UpdateUiMissingDataWarning(BookingSite bookingSite);
         string ShowCurrentDayAsString();
         void CreateMonth();

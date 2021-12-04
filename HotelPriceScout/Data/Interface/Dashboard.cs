@@ -10,7 +10,7 @@ namespace HotelPriceScout.Data.Interface
 {
     public class Dashboard : IDashboard
     {
-        public List<WarningMessage> WarningMessages { get; set; } = new List<WarningMessage>();
+        public List<WarningMessage> WarningMessages { get; } = new List<WarningMessage>();
         public bool BoolExceptionPopup { get; set; } = false;
         public List<PriceModel> PriceList { get; private set; }
         public PriceModel MarketPriceItem { get; private set; }
@@ -23,8 +23,10 @@ namespace HotelPriceScout.Data.Interface
         public int Month { get; private set; }
         public int DayClicked { get; set; }
         public DateTime ToDay { get; } = DateTime.Now;
-        public List<string> SelectedHotels { get; set; } = new List<string>();
+        public List<string> SelectedHotels { get; private set; } = new List<string>();
         public List<string> ListOfHotels { get; set; }
+        public List<string> LocalList { get; set; }
+        public List<string> NoBudgetList { get; set; } 
         public DateTime LastDayOfMonth { get; private set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
             DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
         private DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
@@ -32,26 +34,6 @@ namespace HotelPriceScout.Data.Interface
         private const int DataUnavailable = 0;
         private bool CheckForAlternateClick { get; set; } = true;
         private readonly ISqliteDataAccess _db = new SqliteDataAccess();
-        private List<string> LocalList { get; } = new List<string>()
-        {
-            "Cabinn Aalborg",
-            "Slotshotellet Aalborg",
-            "Kompas Hotel Aalborg"
-        };
-
-        private List<string> NoBudgetList { get; } = new List<string>()
-        {
-            "Slotshotellet Aalborg",
-            "Kompas Hotel Aalborg",
-            "Milling Hotel Aalborg",
-            "Aalborg Airport Hotel",
-            "Helnan Phønix Hotel",
-            "Hotel Scheelsminde",
-            "Radisson Blu Limfjord Hotel Aalborg",
-            "Comwell Hvide Hus Aalborg",
-            "Scandic Aalborg Øst",
-            "Scandic Aalborg City"
-        };
         
         public decimal GetSingleDayMarketPrice(IEnumerable<PriceModel> multipleMarketPrices, int specificDay)
         {   
@@ -103,7 +85,7 @@ namespace HotelPriceScout.Data.Interface
             return DataUnavailable;
         }
 
-        public void GenerateThermometer(IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice)
+        public void GenerateThermometer(IEnumerable<PriceModel> monthData, IEnumerable<PriceModel> avgMarketPrice)
         {
             DateTime todayDate = new DateTime(Year, Month, DayClicked);
             decimal marketPrice = (avgMarketPrice.Where(date => date.Date == todayDate)).Single().Price;
@@ -171,7 +153,7 @@ namespace HotelPriceScout.Data.Interface
                     case "Local":
                         foreach (string hotelString in LocalList)
                         {
-                            if (!SelectedHotels.Contains("No budget") || (hotelString != "Slotshotellet Aalborg" && hotelString != "Kompas Hotel Aalborg"))
+                            if (!SelectedHotels.Contains("No budget") || !LocalList.Intersect(NoBudgetList).Contains(hotelString))
                             {
                                 SelectedHotels.Remove(hotelString);
                             }
@@ -180,7 +162,7 @@ namespace HotelPriceScout.Data.Interface
                     case "No budget":
                         foreach (string hotelString in NoBudgetList)
                         {
-                            if (!SelectedHotels.Contains("Local") || (hotelString != "Slotshotellet Aalborg" && hotelString != "Kompas Hotel Aalborg"))
+                            if (!SelectedHotels.Contains("Local") || !NoBudgetList.Intersect(LocalList).Contains(hotelString))
                             {
                                 SelectedHotels.Remove(hotelString);
                             }

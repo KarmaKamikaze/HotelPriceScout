@@ -9,7 +9,7 @@ namespace Tests
 {
     public class DashboardTest
     {
-        private static List<string> listOfHotels = new List<string>()
+        private static readonly List<string> listOfHotels = new List<string>()
         {
             "Cabinn Aalborg",
             "Slotshotellet Aalborg",
@@ -28,14 +28,14 @@ namespace Tests
             "Zleep Hotel Aalborg"
         };
 
-        private static List<string> localList = new List<string>()
+        private static readonly List<string> localList = new List<string>()
         {
             "Cabinn Aalborg",
             "Slotshotellet Aalborg",
             "Kompas Hotel Aalborg"
         };
 
-        private static List<string> noBudgetList = new List<string>()
+        private static readonly List<string> noBudgetList = new List<string>()
         {
             "Slotshotellet Aalborg",
             "Kompas Hotel Aalborg",
@@ -135,8 +135,7 @@ namespace Tests
         public void SelectedHotelsChangedAddsHotelOptionToList(string option)
         {
             //Arrange
-            IDashboard dashboard = new Dashboard();
-            dashboard.ListOfHotels = listOfHotels;
+            IDashboard dashboard = SetupDashboard();
 
             //Act
             dashboard.SelectedHotelsChanged(option);
@@ -154,8 +153,7 @@ namespace Tests
         public void SelectedHotelsChangedRemovesHotelOptionWhenAlreadyInList(string option)
         {
             //Arrange
-            IDashboard dashboard = new Dashboard();
-            dashboard.ListOfHotels = listOfHotels;
+            IDashboard dashboard = SetupDashboard();
 
             //Act
             dashboard.SelectedHotelsChanged(option);
@@ -170,8 +168,7 @@ namespace Tests
         public void SelectedHotelsChangedAddsRelevantHotelsWhenFilterOptionIsSelected(string option, List<string> expectedList)
         {
             //Arrange
-            IDashboard dashboard = new Dashboard();
-            dashboard.ListOfHotels = listOfHotels;
+            IDashboard dashboard = SetupDashboard();
 
             //Act
             dashboard.SelectedHotelsChanged(option);
@@ -187,9 +184,7 @@ namespace Tests
         public void SelectedHotelsChangedUnselectingFilterOptionUnselectsRelevantOptions(string filterOption)
         {
             //Arrange
-            IDashboard dashboard = new Dashboard();
-            dashboard.ListOfHotels = listOfHotels;
-            
+            IDashboard dashboard = SetupDashboard();
             //Act
             dashboard.SelectedHotelsChanged(filterOption);
             dashboard.SelectedHotelsChanged(filterOption);
@@ -205,9 +200,7 @@ namespace Tests
             SelectedHotelsChangedUnselectingFilterOptionDoesNotUnselectSharedHotelsWhenOtherFiltersAreSelected(string filterToRemove, string filterToKeep)
         {
             //Arrange
-            IDashboard dashboard = new Dashboard();
-            dashboard.ListOfHotels = listOfHotels;
-            
+            IDashboard dashboard = SetupDashboard();
             //Act
             dashboard.SelectedHotelsChanged(filterToRemove);
             dashboard.SelectedHotelsChanged(filterToKeep);
@@ -224,8 +217,7 @@ namespace Tests
         public void SelectedHotelsChangedAutomaticallyAddsFilterOptionsWhenRelevantHotelsAreAdded(string expectedFilter, List<string> hotels)
         {
             //Arrange
-            IDashboard dashboard = new Dashboard();
-            dashboard.ListOfHotels = listOfHotels;
+            IDashboard dashboard = SetupDashboard();
             
             //Act
             foreach (string hotel in hotels)
@@ -242,8 +234,7 @@ namespace Tests
         public void SelectedHotelsChangedAutomaticallyRemovesFilterOptionsWhenRelevantHotelsAreNotInList(string filter, List<string> filterHotels)
         {
             //Arrange
-            IDashboard dashboard = new Dashboard();
-            dashboard.ListOfHotels = listOfHotels;
+            IDashboard dashboard = SetupDashboard();
             
             //Act
             dashboard.SelectedHotelsChanged(filter);
@@ -257,8 +248,7 @@ namespace Tests
         public void SelectedHotelsIsAlwaysDistinctAfterAddingHotels()
         {
             //Arrange
-            IDashboard dashboard = new Dashboard();
-            dashboard.ListOfHotels = listOfHotels;
+            IDashboard dashboard = SetupDashboard();
             
             //Act
             dashboard.SelectedHotelsChanged("Local");
@@ -269,5 +259,18 @@ namespace Tests
             bool isDistinct = dashboard.SelectedHotels.Count == dashboard.SelectedHotels.Distinct().Count();
             Assert.True(isDistinct);
         }
+
+        private static IDashboard SetupDashboard()
+        {
+            return new Dashboard
+            {
+                ListOfHotels = listOfHotels,
+                LocalList = localList,
+                NoBudgetList = noBudgetList
+            };
+        }
     }
+    
+    
+    
 }
