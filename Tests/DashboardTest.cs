@@ -69,7 +69,7 @@ namespace Tests
         public void Test_If_CreateMonth_Creates_Correct_Month_Based_On_The_Current_Month()
         {
             //Arrange
-            Dashboard dashboard = new Dashboard();
+            IDashboard dashboard = new Dashboard();
             //Act
             dashboard.CreateMonth();
             //Assert
@@ -84,7 +84,7 @@ namespace Tests
             int marketPrice, int kompasPrice)
         {
             //Arrange
-            Dashboard dashboard = new Dashboard();
+            IDashboard dashboard = new Dashboard();
             //Act
             string actual = dashboard.ChangeTextColorBasedOnMargin(marketPrice, kompasPrice);
             //Assert
@@ -98,7 +98,7 @@ namespace Tests
         public void Test_If_ArrowDecider_Returns_Correct_Value(string expected, int marketPrice, int kompasPrice)
         {
             //Arrange
-            Dashboard dashboard = new Dashboard();
+            IDashboard dashboard = new Dashboard();
             //Act
             string actual = dashboard.ArrowDecider(marketPrice, kompasPrice);
             //Assert
@@ -108,7 +108,7 @@ namespace Tests
         [Theory, MemberData(nameof(GetValues))]
         public void Test_If_UpdateUiMissingData_Returns_Correct_Values_In_WarningMessage(string expectedSubstring)
         {
-            Dashboard dashboard = new Dashboard();
+            IDashboard dashboard = new Dashboard();
             Dictionary<string, string> hotelStrings = new Dictionary<string, string>()
             {
                 {"hotel", "tag"}
