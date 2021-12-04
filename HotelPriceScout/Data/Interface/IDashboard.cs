@@ -38,7 +38,6 @@ namespace HotelPriceScout.Data.Interface
         void SelectedHotelsChanged(string hotel);
         string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice);
         string ArrowDecider(decimal marketPrice, decimal kompasPrice);
-        decimal CurrentMargin(decimal marketPrice);
         void ShowMoreInfo(int dayClicked);
         void NextMonth();
         void PreviousMonth();
