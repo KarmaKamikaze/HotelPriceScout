@@ -4,7 +4,6 @@ using HotelPriceScout.Data.Interface;
 using HotelPriceScout.Data.Model;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit.Abstractions;
 
 namespace Tests
 {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace HotelPriceScout.Data.Model
 {
-
     public class RoomType
     {
         private readonly int _capacity;

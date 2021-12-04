@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Timers;
 using HotelPriceScout.Data.Function;
 
-
 namespace HotelPriceScout.Data.Model
 {
     public class Scout : IScout

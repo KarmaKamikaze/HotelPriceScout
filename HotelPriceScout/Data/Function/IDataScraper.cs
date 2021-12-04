@@ -1,4 +1,3 @@
-using System;
 using HotelPriceScout.Data.Model;
 
 namespace HotelPriceScout.Data.Function
