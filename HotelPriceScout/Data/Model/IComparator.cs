@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DataAccessLibrary;
 
 namespace HotelPriceScout.Data.Model
 {

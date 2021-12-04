@@ -4,8 +4,6 @@ using MimeKit;
 using MimeKit.Text;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration.Abstractions;
 using System.Globalization;
 using System.Linq;
 using System.IO;

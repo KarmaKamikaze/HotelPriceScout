@@ -4,7 +4,6 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using HotelPriceScout.Data.Model;
 
 namespace DataAccessLibrary
 {
