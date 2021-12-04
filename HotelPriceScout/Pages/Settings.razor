@@ -66,12 +66,12 @@ if your price is outside the set margin" id="notification-amount" class="form-co
             </div>
         }
 
-        @if (SettingsManager.showStart)
+        @if (SettingsManager.ShowStart)
         {
             <div class=""><button type="button" id="start-button" class="shadow p-2 rounded btn btn-success col" @onclick="StartProgram"> Start program</button></div>
         }
 
-        @if (SettingsManager.startPopup)
+        @if (SettingsManager.StartPopup)
         {
             <div class="modal-backdrop">
             </div>
@@ -83,23 +83,23 @@ if your price is outside the set margin" id="notification-amount" class="form-co
                             <h5 class="modal-title text-center" id="titleLabel">Going to dashboard in @timer seconds</h5>
                         </div>
                         <div class="modal-footer">
-                            <NavLink id="go-to-dashboard-button" class="form-control border border-dark" @onclick="()=>SettingsManager.startPopup=false" href="/Dashboard" style="text-decoration: none; color: #495057; text-align: center;">Go to dashboard</NavLink>
-                            <button type="button" id="stay-button" class="form-control border border-dark" @onclick="()=>SettingsManager.startPopup=false"> Stay </button>
+                            <NavLink id="go-to-dashboard-button" class="form-control border border-dark" @onclick="()=>SettingsManager.StartPopup=false" href="/Dashboard" style="text-decoration: none; color: #495057; text-align: center;">Go to dashboard</NavLink>
+                            <button type="button" id="stay-button" class="form-control border border-dark" @onclick="()=>SettingsManager.StartPopup=false"> Stay </button>
 
                         </div>
                     </div>
                 </div>
             </div>
         }
-        @if (SettingsManager.showStop)
+        @if (SettingsManager.ShowStop)
         {
             <div class="d-flex">
-                <button type="button" id="stop-button" class="shadow p-2 rounded btn btn-danger col p-2" data-bs-toggle="modal" @onkeydown="(args)=>SettingsManager.EscapePopUp(args, ref SettingsManager.stopPopup)" @onclick="()=>SettingsManager.stopPopup = true"> Stop program</button>
-                <button type="button" id="update-button" class="shadow p-2 rounded btn btn-primary col p-2" data-bs-toggle="modal" @onkeydown="(args)=>SettingsManager.EscapePopUp(args, ref SettingsManager.updatePopup)" @onclick="()=>SettingsManager.updatePopup = true">Update program</button>
+                <button type="button" id="stop-button" class="shadow p-2 rounded btn btn-danger col p-2" data-bs-toggle="modal" @onkeydown='(args) => { if (args.Code == "Escape") SettingsManager.StopPopup = false; }' @onclick="()=>SettingsManager.StopPopup = true"> Stop program</button>
+                <button type="button" id="update-button" class="shadow p-2 rounded btn btn-primary col p-2" data-bs-toggle="modal" @onkeydown='(args) => { if (args.Code == "Escape") SettingsManager.UpdatePopup = false; }' @onclick="()=>SettingsManager.UpdatePopup = true">Update program</button>
 
             </div>
         }
-        @if (SettingsManager.stopPopup)
+        @if (SettingsManager.StopPopup)
         {
             <div class="modal-backdrop">
             </div>
@@ -111,7 +111,7 @@ if your price is outside the set margin" id="notification-amount" class="form-co
                         </div>
                         <div class="modal-footer">
                             <button type="button" id="confirm-stop-button" class="form-control border border-dark" @onclick="StopProgram">Yes </button>
-                            <button type="button" id="decline-stop-button" class="form-control border border-dark" @onclick="()=>SettingsManager.stopPopup = false"> No </button>
+                            <button type="button" id="decline-stop-button" class="form-control border border-dark" @onclick="()=>SettingsManager.StopPopup = false"> No </button>
 
                         </div>
                     </div>
@@ -119,7 +119,7 @@ if your price is outside the set margin" id="notification-amount" class="form-co
             </div>
         }
 
-        @if (SettingsManager.updatePopup)
+        @if (SettingsManager.UpdatePopup)
         {
             <div class="modal-backdrop">
             </div>
@@ -131,13 +131,13 @@ if your price is outside the set margin" id="notification-amount" class="form-co
                         </div>
                         <div class=modal-footer>
                             <button type="button" class="form-control border border-dark" @onclick="UpdateProgram">Yes</button>
-                            <button type="button" class="form-control border border-dark" @onclick="()=>SettingsManager.updatePopup = false">No</button>
+                            <button type="button" class="form-control border border-dark" @onclick="()=>SettingsManager.UpdatePopup = false">No</button>
                         </div>
                     </div>
                 </div>
             </div>
         }
-        @if (SettingsManager.updateYes)
+        @if (SettingsManager.UpdateYes)
         {
             <div class="modal-backdrop">
             </div>
@@ -163,14 +163,14 @@ if your price is outside the set margin" id="notification-amount" class="form-co
         {
             await Task.Delay(1000);
             StateHasChanged();
-            if (SettingsManager.startPopup == false)
+            if (SettingsManager.StartPopup == false)
             {
                 break;
             }
         }
         if (timer <= 0)
         {
-            SettingsManager.startPopup = !SettingsManager.startPopup;
+            SettingsManager.StartPopup = !SettingsManager.StartPopup;
             NavManager.NavigateTo("/Dashboard");
         }
     }
@@ -192,11 +192,11 @@ if your price is outside the set margin" id="notification-amount" class="form-co
         Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
         Program.ScoutSharedService.Scout.StartScout();
 
-        SettingsManager.updatePopup = !SettingsManager.updatePopup;
-        SettingsManager.updateYes = !SettingsManager.updateYes;
+        SettingsManager.UpdatePopup = !SettingsManager.UpdatePopup;
+        SettingsManager.UpdateYes = !SettingsManager.UpdateYes;
         StateHasChanged();
         await Task.Delay(1500);
-        SettingsManager.updateYes = !SettingsManager.updateYes;
+        SettingsManager.UpdateYes = !SettingsManager.UpdateYes;
         StateHasChanged();
     }
 

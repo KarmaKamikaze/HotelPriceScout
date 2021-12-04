@@ -2,8 +2,8 @@
 {
     public class WarningMessage
     {
-        public string BookingSite { get; set; }
-        public string ConcatenatedWarningString { get; set; }
+        public string BookingSite { get; }
+        public string ConcatenatedWarningString { get; }
 
         public WarningMessage(string concatenatedWarning, string bookingSite)
         {
