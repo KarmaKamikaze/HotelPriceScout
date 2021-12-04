@@ -210,9 +210,9 @@ namespace HotelPriceScout.Data.Model
             List<PriceModel> listOfSingleDatePrices = new();
             for (DateTime tempDate = startDate; tempDate <= endDate; tempDate = tempDate.AddDays(1))
             {
-                tempList.AddRange(from item in dataList
-                    where item.Date == tempDate
-                    select item.Price);
+                tempList.AddRange(from marketPrice in dataList
+                    where marketPrice.Date == tempDate
+                    select marketPrice.Price);
                 PriceModel singleDayMarketPrice = new PriceModel(tempList.Average(), tempDate);
                 tempList.Clear();
                 listOfSingleDatePrices.Add(singleDayMarketPrice);
