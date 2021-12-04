@@ -14,9 +14,7 @@ namespace HotelPriceScout.Data.Interface
         public bool BoolExceptionPopup { get; set; } = false;
         public List<PriceModel> PriceList { get; private set; }
         public PriceModel MarketPriceItem { get; private set; }
-        private const int DataUnavailable = 0;
         public int TempAniDate { get; set; }
-        private bool CheckForAlternateClick { get; set; } = true;
         public string MonthName { get; private set; } = "";
         public DateTime MonthEnd { get; private set; }
         public int MonthsAway { get; set; }
@@ -24,15 +22,16 @@ namespace HotelPriceScout.Data.Interface
         public int Year { get; private set; }
         public int Month { get; private set; }
         public int DayClicked { get; set; }
-        private DateTime TempDate { get; set; }
         public DateTime ToDay { get; } = DateTime.Now;
-        private DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
-        public DateTime LastDayOfMonth { get; private set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
-            DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
-        private readonly ISqliteDataAccess _db = new SqliteDataAccess();
         public List<string> SelectedHotels { get; set; } = new List<string>();
         public List<string> ListOfHotels { get; set; }
-
+        public DateTime LastDayOfMonth { get; private set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
+            DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+        private DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
+        private DateTime TempDate { get; set; }
+        private const int DataUnavailable = 0;
+        private bool CheckForAlternateClick { get; set; } = true;
+        private readonly ISqliteDataAccess _db = new SqliteDataAccess();
         private List<string> LocalList { get; } = new List<string>()
         {
             "Cabinn Aalborg",
@@ -64,12 +63,13 @@ namespace HotelPriceScout.Data.Interface
             }
             return DataUnavailable;
         }
+        
         public async Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(int roomType, string wantedOutput, [Optional] List<string>  selectedHotels)
         {              
             IEnumerable<PriceModel> dataList = await _db.RetrieveDataFromDb("*", $"RoomType{roomType}",
                                          $" Date >= '{ToDay.ToString("yyyy-MM-dd")}' AND " +
                                          $"Date <= '{LastDayOfMonth.ToString("yyyy-MM-dd")}'");
-            List<PriceModel> resultDataList = new();
+            List<PriceModel> resultDataList = new List<PriceModel>();
             switch (wantedOutput)
             {
                 case "Select Prices" when selectedHotels != null && selectedHotels.Any():
@@ -87,7 +87,7 @@ namespace HotelPriceScout.Data.Interface
                         select item);
                     return resultDataList;
                 default:
-                    throw new Exception("Fatal error: Method Called without WantedOutput parameter");
+                    throw new ArgumentException("Fatal error: Method Called without viable WantedOutput parameter");
             }
         }
         
@@ -105,7 +105,7 @@ namespace HotelPriceScout.Data.Interface
 
         public void GenerateThermometer(IEnumerable<PriceModel> monthData, List<PriceModel> avgMarketPrice)
         {
-            DateTime todayDate = new(Year, Month, DayClicked);
+            DateTime todayDate = new DateTime(Year, Month, DayClicked);
             decimal marketPrice = (avgMarketPrice.Where(date => date.Date == todayDate)).Single().Price;
             PriceList = PriceMeterGenerator.PriceListGenerator(todayDate, monthData, marketPrice);
             MarketPriceItem = PriceMeterGenerator.MarketFinder(PriceList);
@@ -254,13 +254,14 @@ namespace HotelPriceScout.Data.Interface
 
             NumDummyColumn = Convert.ToInt32(monthStart.DayOfWeek);
 
-            if(NumDummyColumn == 0)
-            {NumDummyColumn = 7;}
+            if (NumDummyColumn == 0)
+            {
+                NumDummyColumn = 7;
+            }
         }
         
         public string ChangeTextColorBasedOnMargin(decimal marketPrice, decimal kompasPrice)
         {
-
             decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
 
             if (kompasPrice > (marketPrice + result))
@@ -279,6 +280,7 @@ namespace HotelPriceScout.Data.Interface
         public string ArrowDecider(decimal marketPrice, decimal kompasPrice)
         {
             decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
+            
             if (kompasPrice > (marketPrice + result))
             {
                 return "oi oi-caret-bottom";
@@ -291,13 +293,7 @@ namespace HotelPriceScout.Data.Interface
 
             return "oi oi-minus";
         }
-        
-        public decimal CurrentMargin(decimal marketPrice)
-        {
-            decimal result = (marketPrice / 100) * SettingsManager.MarginPicked;
-            return result;
-        }
-        
+
         public void ShowMoreInfo(int dayClicked)
         {
             if (new DateTime(Year, Month, dayClicked, 23, 59, 59) >= DateTime.Now && 

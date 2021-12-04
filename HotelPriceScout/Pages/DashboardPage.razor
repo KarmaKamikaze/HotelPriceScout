@@ -166,8 +166,8 @@
                     <table class="table table-sm table-borderless noHover shadow bg-white">
                         @foreach (PriceModel item in Dashboard.PriceList)
                         {
-                            if (item.Price <= Dashboard.MarketPriceItem.Price + Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price) &&
-                                item.Price >= Dashboard.MarketPriceItem.Price - Dashboard.CurrentMargin(Dashboard.MarketPriceItem.Price))
+                            if (item.Price <= Dashboard.MarketPriceItem.Price*(Convert.ToDecimal(SettingsManager.MarginPicked)/100) &&
+                                item.Price >= Dashboard.MarketPriceItem.Price*(Convert.ToDecimal(SettingsManager.MarginPicked)/100))
                             {
                                 <tr>
                                     <td class="col text-right @(item.HotelName == "Average Market Price" || item.HotelName == "Kompas Hotel Aalborg" ? "boldFont" : "")">
