@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HotelPriceScout.Data.Model
+namespace DataAccessLibrary
 {
     public class PriceModel : IComparable<PriceModel> 
     {

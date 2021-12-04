@@ -2,6 +2,7 @@
 using HotelPriceScout.Data.Model;
 using System.Linq;
 using System;
+using DataAccessLibrary;
 
 namespace HotelPriceScout.Data.Interface
 {

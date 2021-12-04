@@ -41,8 +41,7 @@ namespace HotelPriceScout.Data.Model
             ISqliteDataAccess bookingSiteDB = new SqliteDataAccess();
             IEnumerable<(string, string, string, Dictionary<string, string>)> bookingSitesData = await bookingSiteDB.LoadStaticBookingSiteResources();
             scout.BookingSites = scout.CreateBookingSites(bookingSitesData);
-            scout.UpdateTimeDetermination(false);
-            
+
             return scout;
         }
 
@@ -52,6 +51,7 @@ namespace HotelPriceScout.Data.Model
             {
                 bookingSite.DataScraper.StartScraping(MarginValue);
             }
+            UpdateTimeDetermination(false);
         }
         
         public void StopScout()
