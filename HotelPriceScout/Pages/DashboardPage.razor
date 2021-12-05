@@ -273,6 +273,8 @@
     private void RemoveCard(WarningMessage popup)
     {
         _dashboard.WarningMessages.Remove(popup);
+        if (_dashboard.WarningMessages.Count == 0)
+            _dashboard.BoolExceptionPopup = false;
     }
 
     // Needs to be here. It can not be moved to Dashboard as we can not call variables made in this scope.

@@ -113,6 +113,7 @@ namespace HotelPriceScout.Data.Interface
                 }
             }
             WarningMessages.Add(new WarningMessage(warnings, bookingSite.Name));
+            BoolExceptionPopup = true;
         }
         
         public void SelectedHotelsChanged(string hotel)
