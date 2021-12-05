@@ -69,7 +69,7 @@ namespace HotelPriceScout.Data.Interface
                         select item);
                     return resultDataList;
                 default:
-                    throw new ArgumentException("Fatal error: Method Called without viable WantedOutput parameter");
+                    throw new ArgumentException("Fatal error: Method called without viable WantedOutput parameter");
             }
         }
         
