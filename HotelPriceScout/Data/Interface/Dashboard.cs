@@ -24,9 +24,9 @@ namespace HotelPriceScout.Data.Interface
         public int DayClicked { get; set; }
         public DateTime ToDay { get; } = DateTime.Now;
         public List<string> SelectedHotels { get; private set; } = new List<string>();
-        public List<string> ListOfHotels { get; set; }
-        public List<string> LocalList { get; set; }
-        public List<string> NoBudgetList { get; set; } 
+        public IEnumerable<string> ListOfHotels { get; set; }
+        public IEnumerable<string> LocalList { get; set; }
+        public IEnumerable<string> NoBudgetList { get; set; } 
         public DateTime LastDayOfMonth { get; private set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
             DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
         private DateTime StartOfMonth { get; set; } =  new DateTime(DateTime.Now.Year, DateTime.Now.Month,1);
@@ -172,7 +172,7 @@ namespace HotelPriceScout.Data.Interface
             }
 
             int allCount = ListOfHotels.Count(hotelString => SelectedHotels.Contains(hotelString));
-            if (allCount == ListOfHotels.Count)
+            if (allCount == ListOfHotels.Count())
             {
                 SelectedHotels.Add("All");
             }
@@ -182,7 +182,7 @@ namespace HotelPriceScout.Data.Interface
             }
 
             int noBudgetCount = NoBudgetList.Count(hotelString => SelectedHotels.Contains(hotelString));
-            if (noBudgetCount == NoBudgetList.Count)
+            if (noBudgetCount == NoBudgetList.Count())
             {
                 SelectedHotels.Add("No budget");
             }
@@ -192,7 +192,7 @@ namespace HotelPriceScout.Data.Interface
             }
         
             int localCount = LocalList.Count(hotelString => SelectedHotels.Contains(hotelString));
-            if (localCount == LocalList.Count)
+            if (localCount == LocalList.Count())
             {
                 SelectedHotels.Add("Local");
             }

@@ -24,9 +24,9 @@ namespace HotelPriceScout.Data.Interface
         DateTime ToDay { get; }
         DateTime LastDayOfMonth { get; }
         List<string> SelectedHotels { get; }
-        List<string> ListOfHotels { get; set; }
-        List<string> LocalList { set; }
-        List<string> NoBudgetList { set; }
+        IEnumerable<string> ListOfHotels { get; set; }
+        IEnumerable<string> LocalList { set; }
+        IEnumerable<string> NoBudgetList { set; }
         decimal GetSingleDayMarketPrice(IEnumerable<PriceModel> multipleMarketPrices, int specificDay);
 
         Task<IEnumerable<PriceModel>> RetrieveSelectDataFromDb(int roomType, string wantedOutput, [Optional] List<string>  selectedHotels);
