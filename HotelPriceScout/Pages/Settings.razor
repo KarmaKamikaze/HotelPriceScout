@@ -1,0 +1,228 @@
+@page "/Settings"
+@using HotelPriceScout.Data.Interface
+@using HotelPriceScout.Data.Model
+@inject NavigationManager NavManager
+@inject SettingsManager SettingsManager
+
+<div class="row">
+    <div class="col-xl-4 offset-xl-4 col-sm-7 offset-sm-2 p-2 shadow bg-white rounded">
+        <div class="row">
+            <div class="text-center col">
+                <h1 class="display-5">Settings</h1>
+            </div>
+        </div>
+        <div class="text-center col h4">
+            <label>
+                Margin value percent
+            </label>
+        </div>
+        <div class="text-center col p-3">
+            <input data-toggle="tooltip"
+                   title="Choose how big of a percent difference in price you want to be notified about"
+                   type="number" id="margin" class="form-control" min="1" @bind="SettingsManager.MarginDropdown">
+        </div>
+        <div class="text-center col h4">
+            <label>
+                Amount of notifications per day
+            </label>
+        </div>
+        <div class="text-center col p-3">
+            <select data-toggle="tooltip"
+                    title="Choose the amount of times per day you want to be notified through email, 
+if your price is outside the set margin" id="notification-amount" class="form-control" 
+                    @bind="SettingsManager.NotificationAmountDropdown">
+                @for (int i = 0; i <= 3; i++)
+                {
+                    <option value="@i">@i.ToString()</option>
+                }
+            </select>
+        </div>
+
+        @if (SettingsManager.NotificationAmountDropdown > 0)
+        {
+            <div class="text-center col h4">
+                <label>
+                    Notification time
+                </label>
+            </div>
+            <div class="text-center col p-3">
+                <input data-toggle="tooltip"
+                       title="Choose the first time of the day you want to be notified" type="time" id="notification-time-1" 
+                       class="form-control timepicker" @bind="SettingsManager.TimeValueDropdown">
+            </div>
+        }
+
+        @if (SettingsManager.NotificationAmountDropdown > 1)
+        {
+            <div class="text-center col p-3">
+                <input data-toggle="tooltip"
+                       title="Choose the second time of the day you want to be notified" type="time" id="notification-time-2" 
+                       class="form-control timepicker" @bind="SettingsManager.TimeValue2Dropdown">
+            </div>
+        }
+
+        @if (SettingsManager.NotificationAmountDropdown > 2)
+        {
+            <div class="text-center col p-3">
+                <input data-toggle="tooltip"
+                       title="Choose the third time of the day you want to be notified" type="time" id="notification-time-3" 
+                       class="form-control timepicker" @bind="SettingsManager.TimeValue3Dropdown">
+            </div>
+        }
+
+        @if (SettingsManager.ShowStart)
+        {
+            <div class=""><button type="button" id="start-button" class="shadow p-2 rounded btn btn-success col" 
+                                  @onclick="StartProgram">Start program</button></div>
+        }
+
+        @if (SettingsManager.StartPopup)
+        {
+            <div class="modal-backdrop">
+            </div>
+            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content p-2 shadow bg-white rounded">
+                        <div class="modal-body">
+                            <h4 class="modal-title text-center" id="titleLabel">Settings have been set</h4>
+                            <h5 class="modal-title text-center" id="titleLabel">Redirecting to dashboard in @timer seconds</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <NavLink id="go-to-dashboard-button" class="form-control border border-dark"
+                                     @onclick="() => SettingsManager.StartPopup = false" href="/Dashboard" style="text-decoration: none; color: #495057; text-align: center;">
+                                Go to dashboard
+                            </NavLink>
+                            <button type="button" id="stay-button" class="form-control border border-dark"
+                                    @onclick="() => SettingsManager.StartPopup = false">
+                                Stay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (SettingsManager.ShowStop)
+        {
+            <div class="d-flex">
+                <button type="button" id="stop-button" class="shadow p-2 rounded btn btn-danger col p-2" 
+                        data-bs-toggle="modal" @onkeydown='(args) => { if (args.Code == "Escape") SettingsManager.StopPopup = false; }' 
+                        @onclick="()=>SettingsManager.StopPopup = true">Stop program</button>
+                <button type="button" id="update-button" class="shadow p-2 rounded btn btn-primary col p-2" 
+                        data-bs-toggle="modal" @onkeydown='(args) => { if (args.Code == "Escape") SettingsManager.UpdatePopup = false; }' 
+                        @onclick="()=>SettingsManager.UpdatePopup = true">Update program</button>
+            </div>
+        }
+        @if (SettingsManager.StopPopup)
+        {
+            <div class="modal-backdrop">
+            </div>
+            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content p-2 shadow bg-white rounded">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="titleLabel">Are you sure you want to stop the program?</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="confirm-stop-button" class="form-control border border-dark"
+                                    @onclick="StopProgram">
+                                Yes
+                            </button>
+                            <button type="button" id="decline-stop-button" class="form-control border border-dark"
+                                    @onclick="() => SettingsManager.StopPopup = false">
+                                No
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (SettingsManager.UpdatePopup)
+        {
+            <div class="modal-backdrop">
+            </div>
+            <div class="modal fade show d-block" id="Modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content p-2 shadow bg-white rounded">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="titleLabel">Are you sure you want to update the program?</h5>
+                        </div>
+                        <div class=modal-footer>
+                            <button type="button" class="form-control border border-dark" @onclick="UpdateProgram">Yes</button>
+                            <button type="button" class="form-control border border-dark" @onclick="()=>SettingsManager.UpdatePopup = false">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (SettingsManager.UpdateYes)
+        {
+            <div class="modal-backdrop"></div>
+            <div class="modal show d-block" id="Modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h2 class="modal-title text-center" id="titleLabel">The program has been updated!</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private int timer;
+    private async void Countdown()
+    {
+        for (timer = 10; timer >= 0; timer--)
+        {
+            await Task.Delay(1000);
+            StateHasChanged();
+            if (SettingsManager.StartPopup == false)
+            {
+                break;
+            }
+        }
+        if (timer <= 0)
+        {
+            SettingsManager.StartPopup = !SettingsManager.StartPopup;
+            NavManager.NavigateTo("/Dashboard");
+        }
+    }
+
+    private void StopProgram()
+    {
+        Program.ScoutSharedService.ScoutRunning = false;
+        SettingsManager.SetStopScoutSettings();
+        Program.ScoutSharedService.Scout.StopScout();
+        Program.ScoutSharedService.Scout = null;
+        StateHasChanged();
+    }
+
+    private async void UpdateProgram()
+    {
+        Program.ScoutSharedService.Scout.StopScout();
+        Program.ScoutSharedService.Scout = null;
+        SettingsManager.SetScoutSettings(false);
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
+        Program.ScoutSharedService.Scout.StartScout();
+
+        SettingsManager.UpdatePopup = !SettingsManager.UpdatePopup;
+        SettingsManager.UpdateYes = !SettingsManager.UpdateYes;
+        StateHasChanged();
+        await Task.Delay(1500);
+        SettingsManager.UpdateYes = !SettingsManager.UpdateYes;
+        StateHasChanged();
+    }
+
+    private async void StartProgram()
+    {
+        Program.ScoutSharedService.ScoutRunning = true;
+        SettingsManager.SetScoutSettings(true);
+        Countdown();
+        Program.ScoutSharedService.Scout = await Scout.CreateScoutAsync(SettingsManager.MarginPicked, SettingsManager.GetNotificationTimes());
+        Program.ScoutSharedService.Scout.StartScout();
+        StateHasChanged();
+    }
+}

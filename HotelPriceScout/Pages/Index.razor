@@ -1,0 +1,10 @@
+@page "/"
+@inject NavigationManager NavManager
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        NavManager.NavigateTo(Program.ScoutSharedService.ScoutRunning ? "/Dashboard" : "/Settings");
+    }
+}

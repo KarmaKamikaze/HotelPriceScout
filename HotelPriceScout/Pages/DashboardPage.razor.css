@@ -1,0 +1,229 @@
+.table td:hover {
+    background-color: #F2F2F2;
+}
+
+.Background-Lightblue {
+    background-color: #dbefff !important;
+}
+
+.Background-none {
+    background-color: none;
+}
+
+#BtnDisable {
+    opacity: 0.1;
+}
+
+.bg-warning {
+    background-color: #fffee0 !important;
+}
+
+.boldFont {
+    font-weight: 700;
+}
+
+::-webkit-scrollbar {
+    display: none !important;
+}
+
+.rightHandDate {
+    font-weight: 500;
+    font-size: 40px !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+body {
+    overflow-y: hidden !important;
+}
+
+.noHover {
+    pointer-events: none;
+}
+
+.table-danger {
+    background-color: rgba(255, 0, 0, .7);
+}
+
+.table-info {
+    background-color: rgba(150, 211, 255, .7);
+}
+
+.table-success {
+    background-color: rgba(0, 204, 54, .7);
+}
+
+.gnsColor {
+    background-color: lightblue;
+}
+
+.high {
+    color: red !important;
+    font-weight: 700 !important;
+}
+
+.low {
+    color: #00cc36 !important;
+    font-weight: 700 !important;
+}
+
+.oi-caret-bottom {
+    color: red;
+}
+
+.oi-caret-top {
+    color: #00cc36 !important;
+}
+
+.noMargin {
+    margin: 0 !important;
+}
+
+.table-borderless tr:nth-child(odd) {
+    background-color: #e0e0e0;
+}
+
+.bottomLayer {
+    z-index: -1;
+}
+
+.topLayer {
+    z-index: 1;
+}
+
+.calendar {
+    background-color: white !important;
+}
+
+.animation1 {
+    animation-fill-mode: forwards;
+    animation-name: animation;
+    animation-duration: 0.5s;
+    position: relative;
+}
+
+.animation2 {
+    animation-fill-mode: forwards;
+    animation-name: animation2;
+    animation-duration: 0.5s;
+    position: relative;
+}
+
+@keyframes animation {
+    0% {
+        left: -33%;
+        opacity: 0;
+    }
+    100% {
+        left: 0%;
+    } 
+}
+
+
+@keyframes animation2 {
+    0% {
+        left: 0%;
+    }
+    100% {
+        left: -33%;
+        opacity: 0;
+    }
+}
+
+.DateAndArrow {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.MarketPrice {
+    font-weight: 700;
+    text-align: right;
+    font-size: small;
+    opacity: 0.8;
+}
+
+.YouPrice {
+    text-align: right;
+    font-size: small;
+    font-weight: 700;
+}
+
+.ArrowSize {
+    font-size: 30px;
+}
+
+.H1MonthAndYear {
+    width: 350px;
+}
+
+.H1Date {
+    height: fit-content;
+    text-align: right;
+}
+
+.Weekdays {
+    width: 14%
+}
+
+.HeightOfTd {
+    Height: 100.5px;
+}
+.selected {
+    background-color: rgba(150, 211, 255, .7);
+    color: black;
+}
+
+#arrow {
+    font-size:12px;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.HotelOptions {
+    cursor: pointer;
+    padding: 5px;
+}
+
+.ontop {
+    z-index: auto !important;
+}
+
+.dropbtn {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    columns: 2;
+}
+
+.dropdown-content {
+    position: absolute;
+    background-color: white;
+    min-width: 560px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    columns: 2;
+    display: block;
+    z-index: 5;
+}
+
+.noneselect {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
