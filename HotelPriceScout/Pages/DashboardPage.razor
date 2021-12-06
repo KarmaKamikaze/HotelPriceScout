@@ -330,11 +330,31 @@
         _dashboard.CreateMonth();
     }
 
-     private static void FireWarningMessage(KeyboardEventArgs args)
-     {
-         if (args.CtrlKey && args.Key == "b")
-         {
-             Console.WriteLine("Made it!");
+    private BookingSite WarningBookingSiteOne { get; } = new BookingSite("Expedia.com", "multi", 
+        "https://www.expedia.com", new Dictionary<string, string>
+    {
+        {"Slotshotellet Aalborg", "ho226056"},
+    });
+    private BookingSite WarningBookingSiteTwo { get; } = new BookingSite("Hotels.com", "multi", 
+        "https://www.hotels.com", new Dictionary<string, string>
+        {
+            {"Cabinn Aalborg", "ho328448"},
+        });
+
+    private void FireWarningMessage(KeyboardEventArgs args)
+    {
+        if (args.CtrlKey && args.Key == "b")
+        {
+            WarningBookingSiteOne.DataScraper.StartScraping(15);
+            WarningBookingSiteOne.HotelsList.Single(hotel => hotel.Name == "Slotshotellet Aalborg").
+                RoomTypes.Single(type => type.Capacity == 1).Prices.First().Price = 0;
+            WarningBookingSiteOne.HotelsList.Single(hotel => hotel.Name == "Slotshotellet Aalborg").
+                RoomTypes.Single(type => type.Capacity == 1).Prices.Last().Price = 0;
+            _dashboard.UpdateUiMissingDataWarning(WarningBookingSiteOne);
+            WarningBookingSiteTwo.DataScraper.StartScraping(15);
+            WarningBookingSiteTwo.HotelsList.Single(hotel => hotel.Name == "Cabinn Aalborg").
+                RoomTypes.Single(type => type.Capacity == 1).Prices.First().Price = 0;
+            _dashboard.UpdateUiMissingDataWarning(WarningBookingSiteTwo);
          }
      }
 }

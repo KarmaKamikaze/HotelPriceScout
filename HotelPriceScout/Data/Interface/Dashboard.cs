@@ -2,6 +2,7 @@ using DataAccessLibrary;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Globalization;
 using HotelPriceScout.Data.Model;
 using System.Runtime.InteropServices;
 using System.Linq;
@@ -107,7 +108,7 @@ namespace HotelPriceScout.Data.Interface
                     {
                         if(price.Price == 0)
                         {
-                            warnings += $"On date: {price.Date} hotel: {hotel.Name}, with roomtype: {roomType.Capacity}|";
+                            warnings += $"On date: {price.Date.ToString("d", new CultureInfo("da-DK"))} {hotel.Name}, with room type: {roomType.Capacity}|";
                         }
                     }
                 }
