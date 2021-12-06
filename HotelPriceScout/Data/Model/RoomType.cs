@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace HotelPriceScout.Data.Model
 {
-
     public class RoomType
     {
         private readonly int _capacity;
@@ -27,7 +26,7 @@ namespace HotelPriceScout.Data.Model
             }
         }
 
-        public List<RoomTypePrice> Prices { get; init; }
+        public List<RoomTypePrice> Prices { get; }
 
         private List<RoomTypePrice> CreateThreeMonthsPrices()
         {

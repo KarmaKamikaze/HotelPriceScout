@@ -31,7 +31,7 @@ namespace Tests
             BookingSite bookingSite = new BookingSite("bookingsite", "single", "https://url.com", hotelStrings);
 
             //Act
-            PseudoScraper pseudoScraper = new PseudoScraper(bookingSite);
+            IDataScraper pseudoScraper = new PseudoScraper(bookingSite);
 
             //Assert
             Assert.Equal(bookingSite, pseudoScraper.BookingSite);
@@ -50,7 +50,7 @@ namespace Tests
                 { "hotel1", "tag1" }
             };
             BookingSite bookingSite = new BookingSite("bookingsite", "single", "https://url.com", hotelStrings);
-            PseudoScraper pseudoScraper = new PseudoScraper(bookingSite);
+            IDataScraper pseudoScraper = new PseudoScraper(bookingSite);
 
             //Act
             pseudoScraper.StartScraping(margin);

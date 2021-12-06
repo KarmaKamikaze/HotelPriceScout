@@ -18,9 +18,7 @@ namespace Tests
         {
             //Arrange
             IEnumerable<DateTime> notificationTimes = new DateTime[count];
-            void Receiver(object obj, ElapsedEventArgs args)
-            {
-            };
+            void Receiver(object obj, ElapsedEventArgs args) {}
 
             //Act
             ITimeMonitor timeMonitor = new TimeMonitor(notificationTimes, Receiver);

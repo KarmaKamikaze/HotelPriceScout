@@ -57,7 +57,6 @@ namespace Tests
             Assert.Equal(tag, hotel.Tag);
         }
 
-
         [Fact]
         public void RoomTypesCorrectLengthConstructorTest()
         {

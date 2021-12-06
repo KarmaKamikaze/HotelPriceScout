@@ -7,7 +7,6 @@ using Blazored.Modal;
 using DataAccessLibrary;
 using HotelPriceScout.Data.Interface;
 
-
 namespace HotelPriceScout
 {
     public class Startup

@@ -25,19 +25,13 @@ namespace HotelPriceScout.Data.Interface
         private static DateTime TimeValuePicked { get; set; }
         private static DateTime TimeValue2Picked { get; set; }
         private static DateTime TimeValue3Picked { get; set; }
-        public bool startPopup = false;
-        public bool updateYes = false;
-        public static bool showStop = false;
-        public static bool showStart = true;
-        public bool stopPopup = false;
-        public bool updatePopup = false;
-
-        private static void ReverseMultipleBooleans(ref bool a, ref bool b, ref bool c)
-        {
-            a = !a;
-            b = !b;
-            c = !c;
-        }
+        public bool StartPopup { get; set; } = false;
+        public bool UpdateYes { get; set; } = false;
+        public static bool ShowStop { get; private set; } = false;
+        public static bool ShowStart { get; private set; } = true;
+        public bool StopPopup { get; set; } = false;
+        public bool UpdatePopup { get; set; } = false;
+        
         public IEnumerable<DateTime> GetNotificationTimes()
         {
             List<DateTime> result = new List<DateTime>();
@@ -64,7 +58,9 @@ namespace HotelPriceScout.Data.Interface
         {
             if (check)
             {
-                ReverseMultipleBooleans(ref startPopup, ref showStop, ref showStart);
+                StartPopup = !StartPopup;
+                ShowStop = !ShowStop;
+                ShowStart = !ShowStart;
             }
 
             MarginPicked = MarginDropdown;
@@ -76,21 +72,14 @@ namespace HotelPriceScout.Data.Interface
         }
         public void SetStopScoutSettings()
         {
-            ReverseMultipleBooleans(ref showStart, ref showStop, ref stopPopup);
+            ShowStart = !ShowStart;
+            ShowStop = !ShowStop;
+            StopPopup = !StopPopup;
             TimeValuePicked = default;
             TimeValue2Picked = default;
             TimeValue3Picked = default;
             MarginPicked = 1;
             NotificationPicked = 1;
         }
-
-        public void EscapePopUp(KeyboardEventArgs e, ref bool valueCheck)
-        {
-            if (e.Code == "Escape" && valueCheck)
-            {
-                valueCheck = false;
-            }
-        }
-        
     }
 }
