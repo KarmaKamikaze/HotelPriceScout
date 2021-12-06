@@ -257,6 +257,11 @@
         </div>
     }
 }
+<div class="row">
+    <div class="col-12">
+        <input type="button" style="background: none; border: none;" class="col" @onkeypress="FireWarningMessage">
+    </div>
+</div>
 
 @code
 {
@@ -324,4 +329,12 @@
 
         _dashboard.CreateMonth();
     }
+
+     private static void FireWarningMessage(KeyboardEventArgs args)
+     {
+         if (args.CtrlKey && args.Key == "b")
+         {
+             Console.WriteLine("Made it!");
+         }
+     }
 }
